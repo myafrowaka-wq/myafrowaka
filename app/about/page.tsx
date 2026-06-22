@@ -93,7 +93,7 @@ export default function AboutPage() {
 
           <h2>Our Standards</h2>
           <p>
-            Africa is not a country. Every guide names the specific country, province, and city. Not &ldquo;a destination in East Africa&rdquo; but &ldquo;Bwindi Impenetrable National Park in southwestern Uganda, approximately 82 kilometres south of Kabale town.&rdquo;
+            Africa is not a country. Every guide names the specific country, province, and city. Not &ldquo;a destination in East Africa&rdquo; but &ldquo;Simien Mountains National Park in the Amhara region of Ethiopia, approximately 100 kilometres north of Gondar by road.&rdquo;
           </p>
           <p>
             No em-dashes. No filler sentences. No &ldquo;breathtaking views.&rdquo; No &ldquo;must-visit destination.&rdquo; We use language that is precise because precision is a form of respect, for the places and the people who visit them.
