@@ -1,3 +1,1 @@
-import { testItem } from './testItem'
-
-export const schemaTypes = [testItem]
+export const schemaTypes: never[] = []
