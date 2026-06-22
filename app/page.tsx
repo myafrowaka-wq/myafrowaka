@@ -129,7 +129,7 @@ export default async function HomePage() {
       <section className="max-w-2xl mx-auto px-4 py-16 text-center">
         <h2 className="font-display text-3xl text-charcoal mb-3">Get Africa in Your Inbox</h2>
         <p className="text-charcoal/60 mb-6">New destination guides, travel tips, and hidden gems. No spam. Unsubscribe any time.</p>
-        <form className="flex gap-2 max-w-md mx-auto" onSubmit={e => e.preventDefault()}>
+        <form className="flex gap-2 max-w-md mx-auto" action="#">
           <input
             type="email"
             placeholder="your@email.com"
