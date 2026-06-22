@@ -4,7 +4,7 @@ import { PortableText } from 'next-sanity'
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { ATTRACTION_BY_SLUG_QUERY, ALL_PUBLISHED_SLUGS_QUERY } from '@/sanity/lib/queries'
-import Badge from '@/components/Badge'
+import { Badge } from '@/components/Badge'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
