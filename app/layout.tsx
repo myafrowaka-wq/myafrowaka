@@ -8,6 +8,7 @@ const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
+  axes: ["opsz"],
 });
 
 const outfit = Outfit({
@@ -24,25 +25,41 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MyAfroWaka – Discover Africa's Greatest Attractions",
-  description: "Your guide to Africa's most remarkable places. Verified travel guides for 557 attractions across the continent.",
+  title: {
+    default: "MyAfroWaka – Africa Explained by Africans",
+    template: "%s – MyAfroWaka",
+  },
+  description:
+    "557 verified travel guides across 47 African countries. From the Pyramids of Giza to the gorilla forests of Uganda, written by people who live here.",
+  metadataBase: new URL("https://myafrowaka.com"),
+  openGraph: {
+    siteName: "MyAfroWaka",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
       className={`${fraunces.variable} ${outfit.variable} ${spaceMono.variable}`}
     >
-      <body className="min-h-screen flex flex-col">
-          <Nav />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </body>
+      <body className="min-h-screen flex flex-col bg-cream text-charcoal">
+        <Nav />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }

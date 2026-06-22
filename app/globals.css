@@ -2,77 +2,101 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  /* Brand colours */
-  --color-ochre: #B55D39;
+  /* ── Core brand ─────────────────────────────────────────────── */
+  --color-ochre:     #B55D39;
+  --color-ochre-50:  #EFE0D4;
   --color-ochre-050: #EFE0D4;
   --color-ochre-100: #E6CBBB;
   --color-ochre-200: #D9AF9A;
   --color-ochre-300: #CB9075;
+  --color-ochre-400: #C0784A;
+  --color-ochre-500: #B55D39;
   --color-ochre-600: #984F31;
   --color-ochre-700: #7E4329;
   --color-ochre-800: #643722;
 
-  --color-gold: #D5A942;
-  --color-gold-050: #F3E9D5;
-  --color-gold-100: #EEDFBE;
-  --color-gold-200: #E8D19E;
-  --color-gold-300: #E1C27B;
-  --color-gold-600: #B28E38;
-  --color-gold-700: #93752F;
-  --color-gold-800: #745D26;
+  --color-gold:      #D5A942;
+  --color-gold-50:   #F3E9D5;
+  --color-gold-050:  #F3E9D5;
+  --color-gold-100:  #EEDFBE;
+  --color-gold-200:  #E8D19E;
+  --color-gold-300:  #E1C27B;
+  --color-gold-400:  #DAC061;
+  --color-gold-500:  #D5A942;
+  --color-gold-600:  #B28E38;
+  --color-gold-700:  #93752F;
+  --color-gold-800:  #745D26;
 
-  --color-moss: #3F6A3D;
-  --color-moss-050: #E1E2D4;
-  --color-moss-100: #C7CFBC;
-  --color-moss-200: #A4B59C;
-  --color-moss-300: #7E9877;
-  --color-moss-600: #375A34;
-  --color-moss-700: #304C2C;
-  --color-moss-800: #2A3E24;
+  --color-moss:      #3F6A3D;
+  --color-moss-50:   #E1E2D4;
+  --color-moss-050:  #E1E2D4;
+  --color-moss-100:  #C7CFBC;
+  --color-moss-200:  #A4B59C;
+  --color-moss-300:  #7E9877;
+  --color-moss-400:  #5F8458;
+  --color-moss-500:  #3F6A3D;
+  --color-moss-600:  #375A34;
+  --color-moss-700:  #304C2C;
+  --color-moss-800:  #2A3E24;
 
-  --color-crimson: #A22E29;
+  --color-crimson:     #A22E29;
+  --color-crimson-50:  #EDDAD2;
   --color-crimson-050: #EDDAD2;
   --color-crimson-100: #E1BFB7;
   --color-crimson-200: #D19A93;
   --color-crimson-300: #BF716A;
+  --color-crimson-400: #B24F49;
+  --color-crimson-500: #A22E29;
   --color-crimson-600: #882924;
   --color-crimson-700: #72241F;
   --color-crimson-800: #5B201A;
 
-  --color-charcoal: #29251A;
+  --color-charcoal:     #29251A;
+  --color-charcoal-50:  #DED9D0;
   --color-charcoal-050: #DED9D0;
   --color-charcoal-100: #C1BDB3;
   --color-charcoal-200: #9A968C;
   --color-charcoal-300: #6F6B60;
+  --color-charcoal-400: #4D4940;
+  --color-charcoal-500: #29251A;
   --color-charcoal-600: #252117;
   --color-charcoal-700: #221E15;
   --color-charcoal-800: #1E1B12;
 
-  /* Surfaces */
-  --color-cream: #F7F2E9;
-  --color-sand: #EFE7D6;
-  --color-slate: #3B403E;
-  --color-ink: #1A1813;
+  /* ── Surfaces ────────────────────────────────────────────────── */
+  --color-cream:    #F7F2E9;
+  --color-sand:     #EFE7D6;
+  --color-slate:    #3B403E;
+  --color-ink:      #1A1813;
   --color-ink-soft: #262219;
-  --color-line: #D9CDB6;
+  --color-line:     #D9CDB6;
 
-  /* Typography */
+  /* ── Typography ──────────────────────────────────────────────── */
   --font-display: 'Fraunces', Georgia, serif;
-  --font-sans: 'Outfit', system-ui, sans-serif;
-  --font-mono: 'Space Mono', monospace;
+  --font-sans:    'Outfit', system-ui, sans-serif;
+  --font-mono:    'Space Mono', monospace;
 
-  /* Radius */
+  /* ── Radius ──────────────────────────────────────────────────── */
   --radius-s: 8px;
   --radius-m: 14px;
   --radius-l: 22px;
 
-  /* Shadows */
+  /* ── Shadows ─────────────────────────────────────────────────── */
   --shadow-soft: 0 1px 2px rgba(20,17,11,.06), 0 8px 28px rgba(20,17,11,.10);
   --shadow-lift: 0 2px 6px rgba(20,17,11,.10), 0 22px 60px rgba(20,17,11,.18);
 }
+
+html { scroll-behavior: smooth; }
 
 body {
   background-color: #F7F2E9;
   color: #29251A;
   font-family: 'Outfit', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: #D5A942;
+  color: #29251A;
 }

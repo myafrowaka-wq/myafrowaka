@@ -48,6 +48,27 @@ interface Attraction {
   nearbyCities?: { name: string; slug: string }[]
 }
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function QuickFact({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <tr className="border-b border-line last:border-0">
+      <td className="py-3 pr-4 font-mono text-[10px] uppercase tracking-[0.12em] text-ochre-600 w-40 align-top pt-3.5">
+        {label}
+      </td>
+      <td className="py-3 text-[13px] text-charcoal/80 font-sans leading-relaxed">{value}</td>
+    </tr>
+  )
+}
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="font-display text-2xl md:text-3xl text-charcoal mb-4 mt-12 pb-2 border-b border-line">
+      {children}
+    </h2>
+  )
+}
+
 // ── Static params ─────────────────────────────────────────────────────────────
 
 export async function generateStaticParams() {
@@ -61,14 +82,14 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params
-  const attraction = await client.fetch<Attraction | null>(ATTRACTION_BY_SLUG_QUERY, { slug })
-  if (!attraction) return {}
+  const a = await client.fetch<Attraction | null>(ATTRACTION_BY_SLUG_QUERY, { slug })
+  if (!a) return {}
   return {
-    title: attraction.metaTitle || `${attraction.name} – MyAfroWaka`,
-    description: attraction.metaDescription || attraction.editorialSummary || '',
+    title: a.metaTitle || `${a.name} – MyAfroWaka`,
+    description: a.metaDescription || a.editorialSummary || '',
     openGraph: {
-      title: attraction.metaTitle || attraction.name,
-      description: attraction.metaDescription || attraction.editorialSummary || '',
+      title: a.metaTitle || a.name,
+      description: a.metaDescription || a.editorialSummary || '',
       type: 'article',
     },
   }
@@ -78,13 +99,18 @@ export async function generateMetadata(
 
 function buildJsonLd(a: Attraction) {
   const breadcrumbs = [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://myafrowaka.com' },
+    { '@type': 'ListItem', position: 1, name: 'Home',       item: 'https://myafrowaka.com' },
     ...(a.country ? [{ '@type': 'ListItem', position: 2, name: a.country.name, item: `https://myafrowaka.com/countries/${a.country.slug}` }] : []),
-    ...(a.city ? [{ '@type': 'ListItem', position: 3, name: a.city.name, item: `https://myafrowaka.com/cities/${a.city.slug}` }] : []),
-    { '@type': 'ListItem', position: (a.country ? 1 : 0) + (a.city ? 1 : 0) + 2, name: a.name, item: `https://myafrowaka.com/attractions/${a.slug.current}` },
+    ...(a.city    ? [{ '@type': 'ListItem', position: 3, name: a.city.name,    item: `https://myafrowaka.com/cities/${a.city.slug}` }]    : []),
+    {
+      '@type': 'ListItem',
+      position: (a.country ? 1 : 0) + (a.city ? 1 : 0) + 2,
+      name: a.name,
+      item: `https://myafrowaka.com/attractions/${a.slug.current}`,
+    },
   ]
 
-  const schemas: unknown[] = [
+  return [
     {
       '@context': 'https://schema.org',
       '@type': 'TouristAttraction',
@@ -98,7 +124,9 @@ function buildJsonLd(a: Attraction) {
         address: { '@type': 'PostalAddress', streetAddress: a.addressDirections },
       } : {}),
       ...(a.country ? { containedInPlace: { '@type': 'Country', name: a.country.name } } : {}),
-      ...(a.unescoStatus ? { additionalProperty: { '@type': 'PropertyValue', name: 'UNESCO Status', value: a.unescoStatus } } : {}),
+      ...(a.unescoStatus ? {
+        additionalProperty: { '@type': 'PropertyValue', name: 'UNESCO Status', value: a.unescoStatus },
+      } : {}),
     },
     {
       '@context': 'https://schema.org',
@@ -106,27 +134,6 @@ function buildJsonLd(a: Attraction) {
       itemListElement: breadcrumbs,
     },
   ]
-
-  return schemas
-}
-
-// ── Helper components ─────────────────────────────────────────────────────────
-
-function QuickFact({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <tr className="border-b border-sand">
-      <td className="py-3 pr-4 font-mono text-xs uppercase tracking-wider text-ochre-600 w-40 align-top">{label}</td>
-      <td className="py-3 text-sm text-charcoal">{value}</td>
-    </tr>
-  )
-}
-
-function SectionHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="font-display text-2xl md:text-3xl text-charcoal mb-4 mt-10 pb-2 border-b-2 border-ochre-200">
-      {children}
-    </h2>
-  )
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
@@ -143,39 +150,48 @@ export default async function AttractionPage(
     ? a.secondaryKeywords.split('|').map(s => s.trim()).filter(Boolean)
     : []
 
+  const locationParts = [a.city?.name, a.subRegionProvince, a.country?.name].filter(Boolean)
+
   return (
     <>
-      {/* JSON-LD */}
       {jsonLd.map((schema, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
       ))}
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      {/* ── Hero band ──────────────────────────────────────────────── */}
+      <div className="bg-sand border-b border-line">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 md:py-12">
 
-        {/* Breadcrumb */}
-        <nav className="font-mono text-xs uppercase tracking-wider text-charcoal/50 mb-6 flex flex-wrap gap-1 items-center">
-          <Link href="/" className="hover:text-ochre-600 transition-colors">Home</Link>
-          {a.country && (
-            <>
-              <span>/</span>
-              <Link href={`/countries/${a.country.slug}`} className="hover:text-ochre-600 transition-colors">{a.country.name}</Link>
-            </>
-          )}
-          {a.city && (
-            <>
-              <span>/</span>
-              <Link href={`/cities/${a.city.slug}`} className="hover:text-ochre-600 transition-colors">{a.city.name}</Link>
-            </>
-          )}
-          <span>/</span>
-          <span className="text-charcoal">{a.name}</span>
-        </nav>
+          {/* Breadcrumb */}
+          <nav className="font-mono text-[10px] uppercase tracking-[0.12em] text-charcoal/40 mb-5 flex flex-wrap gap-1 items-center">
+            <Link href="/" className="hover:text-ochre-600 transition-colors">Home</Link>
+            {a.country && (
+              <>
+                <span>/</span>
+                <Link href={`/countries/${a.country.slug}`} className="hover:text-ochre-600 transition-colors">
+                  {a.country.name}
+                </Link>
+              </>
+            )}
+            {a.city && (
+              <>
+                <span>/</span>
+                <Link href={`/cities/${a.city.slug}`} className="hover:text-ochre-600 transition-colors">
+                  {a.city.name}
+                </Link>
+              </>
+            )}
+            <span>/</span>
+            <span className="text-charcoal">{a.name}</span>
+          </nav>
 
-        {/* Hero */}
-        <header className="mb-8">
           {/* Type badges */}
-          {a.type && a.type.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-3">
+          {(a.type && a.type.length > 0) && (
+            <div className="flex flex-wrap gap-2 mb-4">
               {a.unescoStatus && <Badge variant="unesco">UNESCO</Badge>}
               {a.type.map(t => (
                 <Badge key={t} variant="tag">{t.replace('UNESCO World Heritage Site | ', '')}</Badge>
@@ -184,36 +200,44 @@ export default async function AttractionPage(
           )}
 
           {/* H1 */}
-          <h1 className="font-display text-4xl md:text-5xl text-charcoal leading-tight mb-3">
+          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-charcoal leading-[1.05] tracking-tight mb-4">
             {a.name}
           </h1>
 
           {/* Location line */}
-          {(a.city || a.country) && (
-            <p className="font-mono text-sm text-ochre-600 uppercase tracking-widest mb-4">
-              {[a.city?.name, a.subRegionProvince, a.country?.name].filter(Boolean).join(' · ')}
+          {locationParts.length > 0 && (
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-ochre-600 mb-5">
+              {locationParts.join(' · ')}
             </p>
           )}
 
           {/* Editorial summary */}
           {a.editorialSummary && (
-            <p className="text-lg text-charcoal/80 leading-relaxed border-l-4 border-ochre-400 pl-4 italic">
+            <p className="font-sans text-lg md:text-xl text-charcoal/70 leading-relaxed max-w-2xl border-l-2 border-ochre-300 pl-5">
               {a.editorialSummary}
             </p>
           )}
-        </header>
+        </div>
+      </div>
 
-        {/* Quick Overview Table */}
-        <section className="bg-sand rounded-xl p-6 mb-8">
-          <h2 className="font-mono text-xs uppercase tracking-widest text-ochre-600 mb-4">Quick Overview</h2>
+      {/* ── Main content ───────────────────────────────────────────── */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+
+        {/* Quick Overview */}
+        <section className="bg-white border border-line rounded-2xl p-6 mb-10">
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ochre-600 mb-4">Quick Overview</p>
           <table className="w-full">
             <tbody>
               {a.country && <QuickFact label="Country" value={a.country.name} />}
               {a.continentRegion && <QuickFact label="Region" value={a.continentRegion} />}
               {a.type && a.type.length > 0 && (
                 <QuickFact label="Type" value={
-                  <span className="flex flex-wrap gap-1">
-                    {a.type.map(t => <span key={t} className="bg-ochre-100 text-ochre-800 text-xs px-2 py-0.5 rounded">{t}</span>)}
+                  <span className="flex flex-wrap gap-1.5">
+                    {a.type.map(t => (
+                      <span key={t} className="bg-ochre-50 text-ochre-700 text-[11px] font-mono px-2.5 py-0.5 rounded-full border border-ochre-200">
+                        {t}
+                      </span>
+                    ))}
                   </span>
                 } />
               )}
@@ -222,19 +246,21 @@ export default async function AttractionPage(
                 <QuickFact label="Suitable For" value={a.suitableFor.join(' · ')} />
               )}
               {a.difficultyAccessLevel && <QuickFact label="Difficulty" value={a.difficultyAccessLevel} />}
-              {(a.entryFeeDisplayText || (a.entryFeeInternational != null)) && (
+              {(a.entryFeeDisplayText || a.entryFeeInternational != null) && (
                 <QuickFact label="Entry Fee" value={
                   a.entryFeeDisplayText || (
                     a.entryFeeInternational === 0
-                      ? 'Free'
+                      ? 'Free admission'
                       : `From $${a.entryFeeInternational} USD (international)`
                   )
                 } />
               )}
               {a.bestTimeToVisit && <QuickFact label="Best Time" value={a.bestTimeToVisit} />}
-              {a.timeNeeded != null && <QuickFact label="Time Needed" value={`${a.timeNeeded} hours minimum`} />}
+              {a.timeNeeded != null && (
+                <QuickFact label="Time Needed" value={`${a.timeNeeded} hour${a.timeNeeded !== 1 ? 's' : ''} minimum`} />
+              )}
               {a.nearestAirportIATA && (
-                <QuickFact label="Nearest Airport" value={
+                <QuickFact label="Airport" value={
                   `${a.nearestAirportIATA}${a.nearestAirportDistanceKm ? ` · ${a.nearestAirportDistanceKm} km away` : ''}`
                 } />
               )}
@@ -242,57 +268,55 @@ export default async function AttractionPage(
           </table>
         </section>
 
-        {/* Article Body (rich text from Sanity) */}
+        {/* Article body or fallback */}
         {a.articleBody && a.articleBody.length > 0 ? (
           <div className="prose prose-lg max-w-none
-            prose-headings:font-display prose-headings:text-charcoal
-            prose-h2:text-3xl prose-h2:mt-10 prose-h2:pb-2 prose-h2:border-b-2 prose-h2:border-ochre-200
-            prose-h3:text-xl prose-h3:text-ochre-800
-            prose-p:text-charcoal/85 prose-p:leading-relaxed
+            prose-headings:font-display prose-headings:text-charcoal prose-headings:tracking-tight
+            prose-h2:text-3xl prose-h2:mt-12 prose-h2:pb-2 prose-h2:border-b prose-h2:border-line
+            prose-h3:text-xl prose-h3:text-ochre-700
+            prose-p:text-charcoal/80 prose-p:leading-relaxed prose-p:font-sans
             prose-a:text-ochre-600 prose-a:no-underline hover:prose-a:underline
             prose-strong:text-charcoal prose-strong:font-semibold
-            prose-ul:text-charcoal/85 prose-li:leading-relaxed
-            prose-blockquote:border-l-4 prose-blockquote:border-ochre-400 prose-blockquote:italic prose-blockquote:text-charcoal/70">
+            prose-ul:text-charcoal/80 prose-li:leading-relaxed
+            prose-blockquote:border-l-4 prose-blockquote:border-ochre-300
+            prose-blockquote:italic prose-blockquote:text-charcoal/65 prose-blockquote:not-italic">
             <PortableText value={a.articleBody as Parameters<typeof PortableText>[0]['value']} />
           </div>
         ) : (
-          /* Fallback sections when no article body yet */
           <div className="space-y-2">
 
-            {/* Section 4: How to Get There */}
             {a.gettingThere && (
               <section>
                 <SectionHeading>How to Get There</SectionHeading>
-                <p className="text-charcoal/85 leading-relaxed whitespace-pre-line">{a.gettingThere}</p>
+                <p className="font-sans text-charcoal/80 leading-relaxed whitespace-pre-line">{a.gettingThere}</p>
                 {a.addressDirections && (
-                  <div className="mt-4 bg-sand rounded-lg p-4 font-mono text-sm text-charcoal/70">
-                    <span className="text-ochre-600 uppercase text-xs tracking-wider block mb-1">Address</span>
+                  <div className="mt-4 bg-sand rounded-xl p-4 font-mono text-sm text-charcoal/70">
+                    <span className="text-ochre-600 uppercase text-[10px] tracking-[0.14em] block mb-1">Address</span>
                     {a.addressDirections}
                   </div>
                 )}
               </section>
             )}
 
-            {/* Section 5: Entry Fees */}
             {(a.entryFeeDisplayText || a.entryFeeInternational != null) && (
               <section>
                 <SectionHeading>Entry Fees and Opening Hours</SectionHeading>
                 {a.entryFeeDisplayText ? (
-                  <p className="text-charcoal/85 leading-relaxed whitespace-pre-line">{a.entryFeeDisplayText}</p>
+                  <p className="font-sans text-charcoal/80 leading-relaxed whitespace-pre-line">{a.entryFeeDisplayText}</p>
                 ) : (
-                  <div className="flex gap-6">
-                    {a.entryFeeInternational !== undefined && (
+                  <div className="flex gap-8">
+                    {a.entryFeeInternational != null && (
                       <div>
-                        <span className="font-mono text-xs uppercase tracking-wider text-ochre-600 block">International</span>
-                        <span className="text-2xl font-display text-charcoal">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-ochre-600 block mb-1">International</span>
+                        <span className="font-display text-3xl text-charcoal">
                           {a.entryFeeInternational === 0 ? 'Free' : `$${a.entryFeeInternational}`}
                         </span>
                       </div>
                     )}
-                    {a.entryFeeLocal !== undefined && (
+                    {a.entryFeeLocal != null && (
                       <div>
-                        <span className="font-mono text-xs uppercase tracking-wider text-ochre-600 block">Local / Resident</span>
-                        <span className="text-2xl font-display text-charcoal">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-ochre-600 block mb-1">Local / Resident</span>
+                        <span className="font-display text-3xl text-charcoal">
                           {a.entryFeeLocal === 0 ? 'Free' : `$${a.entryFeeLocal}`}
                         </span>
                       </div>
@@ -302,24 +326,22 @@ export default async function AttractionPage(
               </section>
             )}
 
-            {/* Section 6: Best Time to Visit */}
             {a.bestTimeToVisit && (
               <section>
                 <SectionHeading>Best Time to Visit</SectionHeading>
-                <p className="text-charcoal/85 leading-relaxed whitespace-pre-line">{a.bestTimeToVisit}</p>
+                <p className="font-sans text-charcoal/80 leading-relaxed whitespace-pre-line">{a.bestTimeToVisit}</p>
               </section>
             )}
 
-            {/* Section 9: Nearby Attractions */}
             {a.nearbyCities && a.nearbyCities.length > 0 && (
               <section>
                 <SectionHeading>Nearby Cities</SectionHeading>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2">
                   {a.nearbyCities.map(city => (
                     <Link
                       key={city.slug}
                       href={`/cities/${city.slug}`}
-                      className="bg-sand hover:bg-ochre-100 text-charcoal text-sm px-4 py-2 rounded-full border border-ochre-200 transition-colors"
+                      className="bg-sand hover:bg-ochre-50 text-charcoal/80 text-sm font-sans px-4 py-2 rounded-full border border-line hover:border-ochre-200 transition-colors"
                     >
                       {city.name}
                     </Link>
@@ -328,19 +350,23 @@ export default async function AttractionPage(
               </section>
             )}
 
-            {/* Section 13: FAQ (from secondary keywords) */}
             {secondaryKws.length > 0 && (
               <section>
                 <SectionHeading>Frequently Asked Questions</SectionHeading>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {secondaryKws.slice(0, 6).map((kw, i) => (
-                    <details key={i} className="border border-ochre-200 rounded-lg group">
-                      <summary className="px-5 py-4 cursor-pointer font-semibold text-charcoal list-none flex justify-between items-center">
+                    <details
+                      key={i}
+                      className="border border-line rounded-xl group overflow-hidden"
+                    >
+                      <summary className="px-5 py-4 cursor-pointer font-semibold font-sans text-charcoal list-none flex justify-between items-center hover:bg-sand/40 transition-colors">
                         <span>{kw.charAt(0).toUpperCase() + kw.slice(1)}?</span>
-                        <span className="text-ochre-400 group-open:rotate-180 transition-transform">▾</span>
+                        <span className="text-ochre-400 group-open:rotate-180 transition-transform duration-200 text-lg leading-none ml-3">
+                          &#x2304;
+                        </span>
                       </summary>
-                      <div className="px-5 pb-4 text-charcoal/70 text-sm">
-                        Full answer coming soon. This attraction is being prepared for publication.
+                      <div className="px-5 pb-4 pt-1 text-sm text-charcoal/65 font-sans leading-relaxed border-t border-line">
+                        Full answer coming soon. This attraction guide is being prepared for publication.
                       </div>
                     </details>
                   ))}
@@ -352,10 +378,13 @@ export default async function AttractionPage(
 
         {/* Experience tags */}
         {a.experienceTags && a.experienceTags.length > 0 && (
-          <div className="mt-10 pt-6 border-t border-sand">
-            <span className="font-mono text-xs uppercase tracking-widest text-charcoal/40 mr-3">Experiences</span>
+          <div className="mt-12 pt-6 border-t border-line">
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-charcoal/35 mr-3">Tagged</span>
             {a.experienceTags.map(tag => (
-              <span key={tag} className="inline-block bg-moss-100 text-moss-800 text-xs font-mono px-3 py-1 rounded-full mr-2 mb-2">
+              <span
+                key={tag}
+                className="inline-block bg-moss-50 text-moss-700 text-[11px] font-mono px-3 py-1 rounded-full mr-2 mb-2 border border-moss-100"
+              >
                 {tag}
               </span>
             ))}
@@ -364,7 +393,7 @@ export default async function AttractionPage(
 
         {/* Last verified */}
         {a.lastVerifiedDate && (
-          <p className="mt-8 font-mono text-xs text-charcoal/30 uppercase tracking-wider">
+          <p className="mt-8 font-mono text-[10px] text-charcoal/30 uppercase tracking-[0.14em]">
             Last verified: {a.lastVerifiedDate}
           </p>
         )}
