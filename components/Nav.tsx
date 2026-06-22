@@ -5,76 +5,63 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 
-// ─── mega menu data ──────────────────────────────────────────────────────────
+// ─── data ─────────────────────────────────────────────────────────────────────
 
-const DESTINATIONS_MEGA = [
+const REGIONS = [
   {
-    region: 'East Africa',
-    color:  '#3F6A3D',
-    href:   '/search?region=East+Africa',
-    countries: ['Kenya', 'Tanzania', 'Ethiopia', 'Uganda', 'Rwanda'],
+    region: 'East Africa', color: '#3F6A3D', href: '/search?region=East+Africa',
+    countries: ['Kenya', 'Tanzania', 'Ethiopia', 'Uganda', 'Rwanda', 'Mozambique'],
+    image: 'https://picsum.photos/seed/east-africa-nav/400/260',
   },
   {
-    region: 'West Africa',
-    color:  '#B55D39',
-    href:   '/search?region=West+Africa',
-    countries: ['Nigeria', 'Ghana', 'Senegal', 'Ivory Coast', 'Mali'],
+    region: 'West Africa', color: '#B55D39', href: '/search?region=West+Africa',
+    countries: ['Nigeria', 'Ghana', 'Senegal', 'Ivory Coast', 'Mali', 'Benin'],
+    image: 'https://picsum.photos/seed/west-africa-nav/400/260',
   },
   {
-    region: 'North Africa',
-    color:  '#A22E29',
-    href:   '/search?region=North+Africa',
+    region: 'North Africa', color: '#A22E29', href: '/search?region=North+Africa',
     countries: ['Egypt', 'Morocco', 'Tunisia', 'Algeria', 'Libya'],
+    image: 'https://picsum.photos/seed/north-africa-nav/400/260',
   },
   {
-    region: 'Southern Africa',
-    color:  '#29251A',
-    href:   '/search?region=Southern+Africa',
+    region: 'Southern Africa', color: '#29251A', href: '/search?region=Southern+Africa',
     countries: ['South Africa', 'Zimbabwe', 'Zambia', 'Botswana', 'Namibia'],
+    image: 'https://picsum.photos/seed/southern-africa-nav/400/260',
   },
   {
-    region: 'Central Africa',
-    color:  '#B28E38',
-    href:   '/search?region=Central+Africa',
+    region: 'Central Africa', color: '#B28E38', href: '/search?region=Central+Africa',
     countries: ['DR Congo', 'Cameroon', 'Gabon', 'Republic of Congo'],
+    image: 'https://picsum.photos/seed/central-africa-nav/400/260',
   },
   {
-    region: 'Indian Ocean Islands',
-    color:  '#3B403E',
-    href:   '/search?region=Indian+Ocean+Islands',
-    countries: ['Madagascar', 'Mauritius', 'Seychelles', 'Comoros'],
+    region: 'Indian Ocean Islands', color: '#3B403E', href: '/search?region=Indian+Ocean+Islands',
+    countries: ['Madagascar', 'Mauritius', 'Seychelles', 'Comoros', 'Zanzibar'],
+    image: 'https://picsum.photos/seed/indian-ocean-nav/400/260',
   },
 ]
 
-const EXPERIENCES_MEGA = [
-  { label: 'Safari Adventures',    href: '/search?q=safari',   icon: '🦁' },
-  { label: 'Cultural Experiences', href: '/search?q=culture',  icon: '🏛️' },
-  { label: 'Beach Getaways',       href: '/search?q=beach',    icon: '🏖️' },
-  { label: 'Food & Drinks',        href: '/search?q=food',     icon: '🍲' },
-  { label: 'Historical Sites',     href: '/search?q=history',  icon: '🏺' },
-  { label: 'Hiking & Nature',      href: '/search?q=hiking',   icon: '🥾' },
-  { label: 'City Escapes',         href: '/search?q=city',     icon: '🏙️' },
-  { label: 'Wildlife & Nature',    href: '/search?q=wildlife', icon: '🐘' },
-]
-
-const MEDIA_MEGA = [
-  { label: 'Destination Guides',   href: '/search',            icon: '📖' },
-  { label: 'Heritage & Culture',   href: '/search?q=culture',  icon: '🏛️' },
-  { label: 'Safari Reports',       href: '/search?q=safari',   icon: '🦒' },
-  { label: 'Travel Planning Tips', href: '/about',             icon: '✈️' },
+const EXPERIENCES = [
+  { label: 'Safari Adventures',    href: '/search?q=safari',   icon: '🦁', desc: 'Big Five, Great Migration, private reserves' },
+  { label: 'Cultural Experiences', href: '/search?q=culture',  icon: '🏛️', desc: 'Traditions, ceremonies, local life' },
+  { label: 'Beach Getaways',       href: '/search?q=beach',    icon: '🏖️', desc: 'Indian Ocean, Atlantic coastlines' },
+  { label: 'Food and Drink',       href: '/search?q=food',     icon: '🍲', desc: 'Jollof, tagines, nyama choma' },
+  { label: 'Historical Sites',     href: '/search?q=history',  icon: '🏺', desc: 'Ancient kingdoms, World Heritage sites' },
+  { label: 'Hiking and Nature',    href: '/search?q=hiking',   icon: '🥾', desc: 'Simien, Rwenzori, Table Mountain' },
+  { label: 'City Breaks',          href: '/search?q=city',     icon: '🏙️', desc: 'Nairobi, Cape Town, Accra, Lagos' },
+  { label: 'Wildlife',             href: '/search?q=wildlife', icon: '🐘', desc: 'Gorillas, elephants, marine life' },
 ]
 
 const LANGUAGES = [
-  { code: 'EN', label: 'English',    flag: '🇬🇧' },
-  { code: 'FR', label: 'Français',   flag: '🇫🇷' },
-  { code: 'PT', label: 'Português',  flag: '🇵🇹' },
-  { code: 'SW', label: 'Kiswahili',  flag: '🇰🇪' },
-  { code: 'AR', label: 'عربي',       flag: '🇪🇬' },
+  { code: 'EN', label: 'English',   flag: '🇬🇧' },
+  { code: 'FR', label: 'Français',  flag: '🇫🇷' },
+  { code: 'PT', label: 'Português', flag: '🇵🇹' },
+  { code: 'SW', label: 'Kiswahili', flag: '🇰🇪' },
+  { code: 'AR', label: 'عربي',      flag: '🇪🇬' },
 ]
 
-type Dropdown = 'destinations' | 'experiences' | 'media' | 'lang' | 'mobile-dest' | 'mobile-exp' | null
+type PanelKey = 'destinations' | 'experiences' | 'media' | null
 
-// ─── theme toggle ────────────────────────────────────────────────────────────
+// ─── theme toggle ─────────────────────────────────────────────────────────────
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -85,8 +72,8 @@ function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      aria-label="Toggle dark mode"
-      className="w-8 h-8 rounded-full flex items-center justify-center text-cream/70 hover:text-cream hover:bg-white/10 transition-colors"
+      aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      className="w-8 h-8 rounded-full flex items-center justify-center text-cream/60 hover:text-cream hover:bg-white/10 transition-all"
     >
       {theme === 'dark' ? (
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -101,240 +88,178 @@ function ThemeToggle() {
   )
 }
 
-// ─── component ───────────────────────────────────────────────────────────────
+// ─── component ────────────────────────────────────────────────────────────────
 
 export default function Nav() {
-  const [open, setOpen]         = useState<Dropdown>(null)
-  const [mobileOpen, setMobile] = useState(false)
-  const [lang, setLang]         = useState('EN')
-  const navRef = useRef<HTMLElement>(null)
+  const [panel, setPanel]         = useState<PanelKey>(null)
+  const [langOpen, setLangOpen]   = useState(false)
+  const [mobile, setMobile]       = useState(false)
+  const [mobileAcc, setMobileAcc] = useState<string | null>(null)
+  const [lang, setLang]           = useState('EN')
+
+  const openTimer  = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const navRef     = useRef<HTMLElement>(null)
+
+  const hoverOpen  = (key: PanelKey) => {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    openTimer.current = setTimeout(() => setPanel(key), 60)
+  }
+  const hoverClose = () => {
+    if (openTimer.current) clearTimeout(openTimer.current)
+    closeTimer.current = setTimeout(() => setPanel(null), 180)
+  }
+  const keepOpen = () => { if (closeTimer.current) clearTimeout(closeTimer.current) }
 
   useEffect(() => {
     const fn = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
-        setOpen(null)
+        setPanel(null); setLangOpen(false); setMobile(false)
       }
     }
     document.addEventListener('mousedown', fn)
     return () => document.removeEventListener('mousedown', fn)
   }, [])
 
-  const toggle = (key: Dropdown) => setOpen(p => p === key ? null : key)
-  const close  = () => { setOpen(null); setMobile(false) }
+  const close = () => { setPanel(null); setLangOpen(false); setMobile(false) }
 
-  const chevron = (up: boolean) => (
-    <svg className={`w-3 h-3 transition-transform duration-150 ${up ? 'rotate-180' : ''}`}
-      fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+  const ni = 'flex items-center gap-1 px-3 py-2 text-[13px] font-sans font-medium text-cream/75 hover:text-cream transition-colors rounded-lg hover:bg-white/8 whitespace-nowrap cursor-pointer'
+
+  const chevron = (active: boolean) => (
+    <svg className={`w-3 h-3 mt-0.5 transition-transform duration-150 ${active ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
     </svg>
   )
 
-  /* Nav item class (white text on dark bg) */
-  const ni = 'flex items-center gap-1 px-3 py-2 text-[13px] font-sans text-cream/75 hover:text-cream transition-colors rounded-lg hover:bg-white/8 whitespace-nowrap'
-
   return (
-    <header
-      ref={navRef}
-      className="sticky top-0 z-50"
-      style={{ backgroundColor: '#1C3D20' }}
-    >
-      {/* ── Main bar ── */}
+    <header ref={navRef} className="sticky top-0 z-50 bg-[#1C3D20]" style={{ boxShadow: '0 2px 20px rgba(0,0,0,0.28)' }}>
+
+      {/* ── Main bar ───────────────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[66px] flex items-center justify-between gap-4">
 
-        {/* Logo */}
+        {/* Logo — keep brand colours, no filter */}
         <Link href="/" onClick={close} className="shrink-0">
-          <Image
-            src="/logo.png"
-            alt="MyAfroWaka"
-            width={176}
-            height={46}
-            priority
-            className="h-9 w-auto brightness-0 invert"
-          />
+          <Image src="/logo.png" alt="MyAfroWaka" width={176} height={46} priority className="h-9 w-auto" />
         </Link>
 
-        {/* Desktop nav items */}
-        <nav className="hidden lg:flex items-center gap-0.5">
-
-          {/* DESTINATIONS */}
-          <div className="relative">
-            <button onClick={() => toggle('destinations')} className={ni}>
-              Destinations {chevron(open === 'destinations')}
-            </button>
+        {/* Desktop nav */}
+        <nav className="hidden lg:flex items-center gap-0">
+          <div className="relative" onMouseEnter={() => hoverOpen('destinations')} onMouseLeave={hoverClose}>
+            <button className={ni}>Destinations {chevron(panel === 'destinations')}</button>
           </div>
-
-          {/* EXPERIENCES */}
-          <div className="relative">
-            <button onClick={() => toggle('experiences')} className={ni}>
-              Experiences {chevron(open === 'experiences')}
-            </button>
+          <div className="relative" onMouseEnter={() => hoverOpen('experiences')} onMouseLeave={hoverClose}>
+            <button className={ni}>Experiences {chevron(panel === 'experiences')}</button>
           </div>
-
-          <Link href="/search"  onClick={close} className={ni}>Plan Your Trip</Link>
-
-          {/* MEDIA */}
-          <div className="relative">
-            <button onClick={() => toggle('media')} className={ni}>
-              Media {chevron(open === 'media')}
-            </button>
+          <Link href="/search" onClick={close} className={ni}>Plan a Trip</Link>
+          <div className="relative" onMouseEnter={() => hoverOpen('media')} onMouseLeave={hoverClose}>
+            <button className={ni}>Guides {chevron(panel === 'media')}</button>
           </div>
-
-          <Link href="/about"   onClick={close} className={ni}>About Us</Link>
+          <Link href="/about"   onClick={close} className={ni}>About</Link>
           <Link href="/contact" onClick={close} className={ni}>Contact</Link>
         </nav>
 
         {/* Right cluster */}
         <div className="flex items-center gap-1 shrink-0">
-
-          {/* Search */}
-          <Link href="/search"
-            className="hidden lg:flex w-8 h-8 rounded-full items-center justify-center text-cream/65 hover:text-cream hover:bg-white/10 transition-colors"
-            aria-label="Search">
+          <Link href="/search" aria-label="Search"
+            className="hidden lg:flex w-8 h-8 rounded-full items-center justify-center text-cream/60 hover:text-cream hover:bg-white/10 transition-all">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
           </Link>
 
-          {/* Language switcher */}
+          {/* Language */}
           <div className="hidden lg:block relative">
-            <button
-              onClick={() => toggle('lang')}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-mono text-cream/65 hover:text-cream hover:bg-white/10 rounded-full transition-colors"
-            >
+            <button onClick={() => setLangOpen(v => !v)}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-mono text-cream/60 hover:text-cream hover:bg-white/10 rounded-full transition-all">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-                  d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802"/>
               </svg>
-              {lang}
-              {chevron(open === 'lang')}
+              {lang} {chevron(langOpen)}
             </button>
-            {open === 'lang' && (
-              <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-[#211E17] border border-line dark:border-white/10 rounded-2xl py-2 shadow-[var(--shadow-lift)]">
+            {langOpen && (
+              <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-[#1E1B14] border border-line dark:border-white/10 rounded-2xl py-2 shadow-[0_8px_40px_rgba(0,0,0,0.18)]">
                 {LANGUAGES.map(l => (
-                  <button
-                    key={l.code}
-                    onClick={() => { setLang(l.code); setOpen(null) }}
-                    className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-sans hover:bg-cream dark:hover:bg-white/5 transition-colors ${lang === l.code ? 'text-ochre-600 font-medium' : 'text-charcoal dark:text-cream/75'}`}
-                  >
-                    <span>{l.flag}</span>
-                    <span>{l.label}</span>
-                    {lang === l.code && (
-                      <svg className="w-3.5 h-3.5 ml-auto text-ochre-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                      </svg>
-                    )}
+                  <button key={l.code} onClick={() => { setLang(l.code); setLangOpen(false) }}
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-sans hover:bg-cream dark:hover:bg-white/5 transition-colors ${lang === l.code ? 'text-ochre-600 font-medium' : 'text-charcoal/70 dark:text-cream/65'}`}>
+                    <span>{l.flag}</span><span>{l.label}</span>
+                    {lang === l.code && <svg className="w-3.5 h-3.5 ml-auto text-ochre-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>}
                   </button>
                 ))}
-                {lang !== 'EN' && (
-                  <p className="mx-4 mt-2 pt-2 border-t border-line dark:border-white/10 font-mono text-[9px] uppercase tracking-[0.12em] text-charcoal/35 dark:text-cream/30">
-                    Translations coming soon
-                  </p>
-                )}
+                {lang !== 'EN' && <p className="mx-4 mt-2 pt-2 border-t border-line dark:border-white/10 font-mono text-[9px] uppercase tracking-[0.12em] text-charcoal/30">Translation coming soon</p>}
               </div>
             )}
           </div>
 
-          {/* Theme toggle */}
-          <div className="hidden lg:flex">
-            <ThemeToggle />
-          </div>
+          <div className="hidden lg:flex"><ThemeToggle /></div>
 
-          {/* Plan a Trip CTA */}
-          <Link
-            href="/search"
-            className="hidden lg:inline-flex items-center bg-crimson hover:bg-crimson-600 text-cream text-[11px] font-mono font-bold uppercase tracking-[0.14em] px-5 py-2.5 rounded-full transition-colors whitespace-nowrap ml-2"
-          >
+          <Link href="/search" onClick={close}
+            className="hidden lg:inline-flex items-center bg-crimson hover:bg-crimson-600 text-cream text-[11px] font-mono font-bold uppercase tracking-[0.13em] px-5 py-2.5 rounded-full transition-colors ml-2 whitespace-nowrap">
             Plan a Trip
           </Link>
 
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setMobile(v => !v)}
-            className="lg:hidden w-9 h-9 rounded-full flex items-center justify-center text-cream hover:bg-white/10 transition-colors ml-1"
-            aria-label="Menu"
-          >
-            {mobileOpen ? (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+          <button onClick={() => setMobile(v => !v)} aria-label="Menu"
+            className="lg:hidden w-9 h-9 rounded-full flex items-center justify-center text-cream hover:bg-white/10 transition-colors ml-1">
+            {mobile ? (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
             ) : (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/></svg>
             )}
           </button>
         </div>
       </div>
 
-      {/* ══ MEGA MENU — DESTINATIONS ══════════════════════════════════ */}
-      {open === 'destinations' && (
+      {/* ══ MEGA — DESTINATIONS ══════════════════════════════════════════════ */}
+      {panel === 'destinations' && (
         <div
-          className="absolute top-full left-0 w-full bg-white dark:bg-[#1A1813] border-b border-line dark:border-white/10"
-          style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.18)' }}
+          className="absolute top-full left-0 w-full bg-white dark:bg-[#181510] border-b border-line dark:border-white/8 mega-panel"
+          style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
+          onMouseEnter={keepOpen} onMouseLeave={hoverClose}
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-            <div className="grid grid-cols-7 gap-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+            <div className="grid grid-cols-12 gap-8">
 
               {/* 6 region columns */}
-              {DESTINATIONS_MEGA.map(r => (
-                <div key={r.region} className="col-span-1">
-                  <Link
-                    href={r.href} onClick={close}
-                    className="flex items-center gap-2 mb-3 group"
-                  >
-                    <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: r.color }} />
-                    <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-charcoal/50 dark:text-cream/45 group-hover:text-ochre-600 transition-colors">
-                      {r.region}
-                    </span>
-                  </Link>
-                  <ul className="space-y-1.5">
-                    {r.countries.map(c => (
-                      <li key={c}>
-                        <Link
-                          href={`/search?q=${encodeURIComponent(c)}`}
-                          onClick={close}
-                          className="text-[13px] font-sans text-charcoal/70 dark:text-cream/65 hover:text-ochre-600 dark:hover:text-ochre-400 transition-colors"
-                        >
-                          {c}
+              <div className="col-span-9 grid grid-cols-3 gap-x-8 gap-y-6">
+                {REGIONS.map(r => (
+                  <div key={r.region}>
+                    <Link href={r.href} onClick={close} className="group flex items-center gap-2 mb-3">
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: r.color }}/>
+                      <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/40 dark:text-cream/35 group-hover:text-ochre-600 transition-colors">{r.region}</span>
+                    </Link>
+                    <ul className="space-y-2">
+                      {r.countries.map(c => (
+                        <li key={c}>
+                          <Link href={`/search?q=${encodeURIComponent(c)}`} onClick={close}
+                            className="text-[13px] font-sans text-charcoal/65 dark:text-cream/60 hover:text-ochre-600 dark:hover:text-ochre-400 transition-colors">
+                            {c}
+                          </Link>
+                        </li>
+                      ))}
+                      <li>
+                        <Link href={r.href} onClick={close} className="text-[11px] font-mono text-ochre-500 hover:text-ochre-600 transition-colors mt-0.5 inline-block">
+                          More &rarr;
                         </Link>
                       </li>
-                    ))}
-                    <li>
-                      <Link
-                        href={r.href} onClick={close}
-                        className="text-[11px] font-mono text-ochre-500 hover:text-ochre-600 transition-colors"
-                      >
-                        All {r.region.split(' ')[0]} &rarr;
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              ))}
-
-              {/* Featured column */}
-              <div className="col-span-1 pl-6 border-l border-line dark:border-white/10">
-                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-charcoal/40 dark:text-cream/35 mb-3">
-                  Top Pick
-                </p>
-                <Link href="/search?q=Egypt" onClick={close}
-                  className="group block rounded-xl overflow-hidden border border-line dark:border-white/10 hover:border-ochre-300 transition-colors">
-                  <div className="relative h-28 bg-sand dark:bg-[#211E17]">
-                    <Image
-                      src="https://images.unsplash.com/photo-ONVA6s03hg8?auto=format&fit=crop&w=300&h=180&q=80"
-                      alt="Pyramids of Giza, Egypt"
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                    </ul>
                   </div>
-                  <div className="p-3">
-                    <p className="font-display text-sm text-charcoal dark:text-cream group-hover:text-ochre-600 transition-colors">Egypt</p>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-charcoal/40 dark:text-cream/35 mt-0.5">North Africa</p>
+                ))}
+              </div>
+
+              {/* Featured */}
+              <div className="col-span-3 border-l border-line dark:border-white/8 pl-8 flex flex-col">
+                <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/35 dark:text-cream/30 mb-4">Featured</p>
+                <Link href="/search?q=Egypt" onClick={close} className="group relative rounded-2xl overflow-hidden flex-1 min-h-[200px] block">
+                  <Image src="https://picsum.photos/seed/egypt-mega-feat/400/280" alt="Egypt" fill className="object-cover group-hover:scale-105 transition-transform duration-500"/>
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent"/>
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-gold-400 mb-1">North Africa</p>
+                    <p className="font-display text-lg text-cream leading-tight">Egypt</p>
+                    <p className="font-sans text-[11px] text-cream/55 mt-0.5">14 verified guides</p>
                   </div>
                 </Link>
                 <Link href="/search" onClick={close}
-                  className="mt-4 block text-center bg-crimson hover:bg-crimson-600 text-cream font-mono text-[10px] uppercase tracking-[0.12em] px-4 py-2.5 rounded-full transition-colors">
-                  Browse all 557 attractions
+                  className="mt-4 block text-center bg-crimson hover:bg-crimson-600 text-cream font-mono text-[10px] uppercase tracking-[0.12em] px-4 py-3 rounded-xl transition-colors">
+                  All 557 attractions &rarr;
                 </Link>
               </div>
             </div>
@@ -342,177 +267,154 @@ export default function Nav() {
         </div>
       )}
 
-      {/* ══ MEGA MENU — EXPERIENCES ════════════════════════════════════ */}
-      {open === 'experiences' && (
+      {/* ══ MEGA — EXPERIENCES ═══════════════════════════════════════════════ */}
+      {panel === 'experiences' && (
         <div
-          className="absolute top-full left-0 w-full bg-white dark:bg-[#1A1813] border-b border-line dark:border-white/10"
-          style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.18)' }}
+          className="absolute top-full left-0 w-full bg-white dark:bg-[#181510] border-b border-line dark:border-white/8 mega-panel"
+          style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
+          onMouseEnter={keepOpen} onMouseLeave={hoverClose}
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-            <div className="grid grid-cols-4 gap-6">
-              <div className="col-span-3 grid grid-cols-4 gap-4">
-                {EXPERIENCES_MEGA.map(e => (
-                  <Link
-                    key={e.label} href={e.href} onClick={close}
-                    className="group flex items-center gap-3 p-3 rounded-xl hover:bg-cream dark:hover:bg-white/5 transition-colors border border-transparent hover:border-line dark:hover:border-white/10"
-                  >
-                    <span className="text-2xl shrink-0">{e.icon}</span>
-                    <span className="text-[13px] font-sans text-charcoal/75 dark:text-cream/70 group-hover:text-charcoal dark:group-hover:text-cream transition-colors leading-tight">
-                      {e.label}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-              <div className="pl-6 border-l border-line dark:border-white/10">
-                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-charcoal/40 dark:text-cream/35 mb-3">
-                  Featured Experience
-                </p>
-                <Link href="/search?q=safari" onClick={close}
-                  className="group block rounded-xl overflow-hidden border border-line dark:border-white/10 hover:border-ochre-300 transition-colors">
-                  <div className="relative h-32 bg-sand dark:bg-[#211E17]">
-                    <Image
-                      src="https://images.unsplash.com/photo-kjOBqwMUnWw?auto=format&fit=crop&w=300&h=200&q=80"
-                      alt="Hot air balloon safari over African savannah"
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="p-3">
-                    <p className="font-display text-sm text-charcoal dark:text-cream group-hover:text-ochre-600 transition-colors">Safari Adventures</p>
-                    <p className="font-sans text-[11px] text-charcoal/45 dark:text-cream/40 mt-0.5">East & Southern Africa</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ══ MEGA MENU — MEDIA ══════════════════════════════════════════ */}
-      {open === 'media' && (
-        <div
-          className="absolute top-full left-0 w-full bg-white dark:bg-[#1A1813] border-b border-line dark:border-white/10"
-          style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.18)' }}
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-            <div className="grid grid-cols-5 gap-8">
-              <div className="col-span-2">
-                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-charcoal/40 dark:text-cream/35 mb-4">
-                  Explore Our Content
-                </p>
-                <div className="space-y-2">
-                  {MEDIA_MEGA.map(m => (
-                    <Link
-                      key={m.label} href={m.href} onClick={close}
-                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-cream dark:hover:bg-white/5 transition-colors"
-                    >
-                      <span className="text-xl">{m.icon}</span>
-                      <span className="text-[13px] font-sans text-charcoal/75 dark:text-cream/70 hover:text-charcoal dark:hover:text-cream transition-colors">
-                        {m.label}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              <div className="col-span-3 pl-8 border-l border-line dark:border-white/10">
-                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-charcoal/40 dark:text-cream/35 mb-4">
-                  Latest Published
-                </p>
-                <div className="space-y-3">
-                  {[
-                    { title: 'Pyramids of Giza: The Complete Guide', tag: 'North Africa', slug: 'pyramids-of-giza' },
-                    { title: 'Bwindi Impenetrable Forest: Mountain Gorilla Guide', tag: 'East Africa', slug: 'bwindi-impenetrable-national-park' },
-                    { title: 'Table Mountain: Everything You Need to Know', tag: 'Southern Africa', slug: 'table-mountain' },
-                  ].map(a => (
-                    <Link
-                      key={a.title} href={`/attractions/${a.slug}`} onClick={close}
-                      className="flex items-start gap-3 group"
-                    >
-                      <div className="shrink-0 w-1 h-12 bg-ochre-300 rounded-full mt-1" />
-                      <div>
-                        <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-ochre-500 mb-0.5">{a.tag}</p>
-                        <p className="text-[13px] font-sans text-charcoal/75 dark:text-cream/70 group-hover:text-ochre-600 dark:group-hover:text-ochre-400 transition-colors leading-snug">
-                          {a.title}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ══ MOBILE DRAWER ══════════════════════════════════════════════ */}
-      {mobileOpen && (
-        <div className="lg:hidden border-t border-white/10 bg-[#1C3D20]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2">
-
-            <button onClick={() => toggle('mobile-dest')}
-              className="w-full flex items-center justify-between px-3 py-3.5 text-sm font-sans text-cream/80 border-b border-white/10">
-              <span>Destinations</span>{chevron(open === 'mobile-dest')}
-            </button>
-            {open === 'mobile-dest' && (
-              <div className="py-2 border-b border-white/10">
-                {DESTINATIONS_MEGA.map(r => (
-                  <Link key={r.region} href={r.href} onClick={close}
-                    className="flex items-center gap-3 px-5 py-2.5 text-sm text-cream/65 hover:text-cream transition-colors">
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: r.color }} />
-                    {r.region}
-                  </Link>
-                ))}
-              </div>
-            )}
-
-            <button onClick={() => toggle('mobile-exp')}
-              className="w-full flex items-center justify-between px-3 py-3.5 text-sm font-sans text-cream/80 border-b border-white/10">
-              <span>Experiences</span>{chevron(open === 'mobile-exp')}
-            </button>
-            {open === 'mobile-exp' && (
-              <div className="py-2 border-b border-white/10">
-                {EXPERIENCES_MEGA.slice(0, 6).map(e => (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+            <div className="grid grid-cols-12 gap-8">
+              <div className="col-span-8 grid grid-cols-4 gap-3">
+                {EXPERIENCES.map(e => (
                   <Link key={e.label} href={e.href} onClick={close}
-                    className="flex items-center gap-3 px-5 py-2.5 text-sm text-cream/65 hover:text-cream transition-colors">
+                    className="group flex items-start gap-3 p-3 rounded-xl hover:bg-cream dark:hover:bg-white/5 border border-transparent hover:border-line dark:hover:border-white/8 transition-colors">
+                    <span className="text-2xl mt-0.5 shrink-0">{e.icon}</span>
+                    <div>
+                      <p className="text-[13px] font-sans font-medium text-charcoal/80 dark:text-cream/75 group-hover:text-ochre-600 dark:group-hover:text-ochre-400 transition-colors leading-tight">{e.label}</p>
+                      <p className="font-sans text-[11px] text-charcoal/40 dark:text-cream/35 mt-1 leading-snug">{e.desc}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              <div className="col-span-4 border-l border-line dark:border-white/8 pl-8">
+                <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/35 dark:text-cream/30 mb-4">Top Experience</p>
+                <Link href="/search?q=safari" onClick={close} className="group relative block rounded-2xl overflow-hidden h-48 mb-4">
+                  <Image src="https://picsum.photos/seed/safari-mega-feat/400/300" alt="Safari" fill className="object-cover group-hover:scale-105 transition-transform duration-500"/>
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent"/>
+                  <div className="absolute bottom-0 p-4">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-gold-400 mb-1">Most Popular</p>
+                    <p className="font-display text-base text-cream">Safari Adventures</p>
+                  </div>
+                </Link>
+                <p className="font-sans text-[12px] text-charcoal/50 dark:text-cream/40 leading-relaxed">
+                  From dawn game drives in the Maasai Mara to gorilla treks in Bwindi, Africa&apos;s wildlife is unlike anywhere else.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ══ MEGA — GUIDES ════════════════════════════════════════════════════ */}
+      {panel === 'media' && (
+        <div
+          className="absolute top-full left-0 w-full bg-white dark:bg-[#181510] border-b border-line dark:border-white/8 mega-panel"
+          style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
+          onMouseEnter={keepOpen} onMouseLeave={hoverClose}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+            <div className="grid grid-cols-3 gap-6">
+              {[
+                { title: 'Pyramids of Giza: The Complete Guide', tag: 'Egypt', slug: 'pyramids-of-giza', img: 'https://picsum.photos/seed/giza-mega-guide/280/180' },
+                { title: 'Bwindi: Mountain Gorilla Trekking Guide', tag: 'Uganda', slug: 'bwindi-impenetrable-national-park', img: 'https://picsum.photos/seed/bwindi-mega-guide/280/180' },
+                { title: 'Table Mountain: Cape Town Complete Guide', tag: 'South Africa', slug: 'table-mountain', img: 'https://picsum.photos/seed/table-mtn-mega/280/180' },
+              ].map(a => (
+                <Link key={a.slug} href={`/attractions/${a.slug}`} onClick={close}
+                  className="group flex gap-4 p-3 rounded-xl hover:bg-cream dark:hover:bg-white/5 transition-colors">
+                  <div className="relative w-24 h-16 rounded-xl overflow-hidden shrink-0">
+                    <Image src={a.img} alt={a.title} fill className="object-cover"/>
+                  </div>
+                  <div>
+                    <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-ochre-500 mb-1">{a.tag}</p>
+                    <p className="text-[13px] font-sans text-charcoal/75 dark:text-cream/70 group-hover:text-ochre-600 dark:group-hover:text-ochre-400 transition-colors leading-snug">{a.title}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="mt-6 pt-5 border-t border-line dark:border-white/8 flex justify-between items-center">
+              <p className="font-sans text-sm text-charcoal/40 dark:text-cream/35">557 destination guides, written by Africans.</p>
+              <Link href="/search" onClick={close} className="font-mono text-[10px] uppercase tracking-[0.12em] text-ochre-500 hover:text-ochre-600 transition-colors">
+                Browse all &rarr;
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ══ MOBILE DRAWER ════════════════════════════════════════════════════ */}
+      {mobile && (
+        <div className="lg:hidden border-t border-white/10 bg-[#172F19] max-h-[80vh] overflow-y-auto">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            {/* Mobile search */}
+            <form action="/search" method="GET" className="py-4">
+              <div className="flex bg-white/10 rounded-xl overflow-hidden">
+                <input name="q" type="search" placeholder="Search destinations..."
+                  className="flex-1 bg-transparent text-cream placeholder-cream/35 text-sm font-sans px-4 py-3 focus:outline-none"/>
+                <button type="submit" className="px-4 text-cream/60">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                  </svg>
+                </button>
+              </div>
+            </form>
+
+            {/* Accordion */}
+            {[
+              {
+                key: 'destinations', label: 'Destinations',
+                children: REGIONS.map(r => (
+                  <Link key={r.region} href={r.href} onClick={close}
+                    className="flex items-center gap-3 pl-6 pr-4 py-3 text-sm text-cream/60 hover:text-cream transition-colors border-b border-white/5">
+                    <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: r.color }}/>{r.region}
+                  </Link>
+                )),
+              },
+              {
+                key: 'experiences', label: 'Experiences',
+                children: EXPERIENCES.slice(0, 6).map(e => (
+                  <Link key={e.label} href={e.href} onClick={close}
+                    className="flex items-center gap-3 pl-6 pr-4 py-3 text-sm text-cream/60 hover:text-cream transition-colors border-b border-white/5">
                     <span>{e.icon}</span>{e.label}
                   </Link>
-                ))}
-              </div>
-            )}
-
-            {[
-              { label: 'Plan Your Trip', href: '/search' },
-              { label: 'About Us',       href: '/about'  },
-              { label: 'Contact',        href: '/contact'},
+                )),
+              },
             ].map(item => (
-              <Link key={item.label} href={item.href} onClick={close}
-                className="flex px-3 py-3.5 text-sm font-sans text-cream/80 border-b border-white/10">
-                {item.label}
-              </Link>
+              <div key={item.key} className="border-b border-white/10">
+                <button onClick={() => setMobileAcc(mobileAcc === item.key ? null : item.key)}
+                  className="w-full flex items-center justify-between px-2 py-4 text-sm font-sans font-medium text-cream/85">
+                  {item.label} {chevron(mobileAcc === item.key)}
+                </button>
+                {mobileAcc === item.key && <div className="border-t border-white/8">{item.children}</div>}
+              </div>
             ))}
 
-            {/* Mobile theme + language */}
-            <div className="flex items-center justify-between px-3 py-4">
+            {[
+              { label: 'Plan a Trip', href: '/search'  },
+              { label: 'About Us',   href: '/about'   },
+              { label: 'Contact',    href: '/contact' },
+            ].map(i => (
+              <Link key={i.label} href={i.href} onClick={close}
+                className="flex px-2 py-4 text-sm font-sans font-medium text-cream/85 border-b border-white/10">{i.label}</Link>
+            ))}
+
+            <div className="flex items-center justify-between px-2 py-4">
               <div className="flex items-center gap-2">
-                <ThemeToggle />
-                <span className="text-cream/50 text-[11px] font-mono">Toggle dark mode</span>
+                <ThemeToggle/>
+                <span className="text-cream/40 text-[11px] font-mono">Dark mode</span>
               </div>
-              <select
-                value={lang}
-                onChange={e => setLang(e.target.value)}
-                className="bg-white/10 text-cream text-[11px] font-mono border border-white/15 rounded-full px-3 py-1.5 focus:outline-none"
-              >
+              <select value={lang} onChange={e => setLang(e.target.value)}
+                className="bg-white/10 text-cream text-[11px] font-mono border border-white/15 rounded-full px-3 py-1.5 focus:outline-none">
                 {LANGUAGES.map(l => (
-                  <option key={l.code} value={l.code} className="text-charcoal bg-white">
-                    {l.flag} {l.code}
-                  </option>
+                  <option key={l.code} value={l.code} className="text-charcoal bg-white">{l.flag} {l.code}</option>
                 ))}
               </select>
             </div>
 
-            <div className="py-3 pb-4">
+            <div className="py-4">
               <Link href="/search" onClick={close}
-                className="block text-center bg-crimson hover:bg-crimson-600 text-cream text-[11px] font-mono font-bold uppercase tracking-[0.14em] py-3.5 rounded-full transition-colors">
+                className="block text-center bg-crimson hover:bg-crimson-600 text-cream text-[11px] font-mono font-bold uppercase tracking-[0.14em] py-4 rounded-xl transition-colors">
                 Plan a Trip
               </Link>
             </div>
