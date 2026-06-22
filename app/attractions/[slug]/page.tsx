@@ -222,7 +222,7 @@ export default async function AttractionPage(
                 <QuickFact label="Suitable For" value={a.suitableFor.join(' · ')} />
               )}
               {a.difficultyAccessLevel && <QuickFact label="Difficulty" value={a.difficultyAccessLevel} />}
-              {(a.entryFeeDisplayText || a.entryFeeInternational !== undefined) && (
+              {(a.entryFeeDisplayText || (a.entryFeeInternational != null)) && (
                 <QuickFact label="Entry Fee" value={
                   a.entryFeeDisplayText || (
                     a.entryFeeInternational === 0
@@ -232,7 +232,7 @@ export default async function AttractionPage(
                 } />
               )}
               {a.bestTimeToVisit && <QuickFact label="Best Time" value={a.bestTimeToVisit} />}
-              {a.timeNeeded !== undefined && <QuickFact label="Time Needed" value={`${a.timeNeeded} hours minimum`} />}
+              {a.timeNeeded != null && <QuickFact label="Time Needed" value={`${a.timeNeeded} hours minimum`} />}
               {a.nearestAirportIATA && (
                 <QuickFact label="Nearest Airport" value={
                   `${a.nearestAirportIATA}${a.nearestAirportDistanceKm ? ` · ${a.nearestAirportDistanceKm} km away` : ''}`
@@ -274,7 +274,7 @@ export default async function AttractionPage(
             )}
 
             {/* Section 5: Entry Fees */}
-            {(a.entryFeeDisplayText || a.entryFeeInternational !== undefined) && (
+            {(a.entryFeeDisplayText || a.entryFeeInternational != null) && (
               <section>
                 <SectionHeading>Entry Fees and Opening Hours</SectionHeading>
                 {a.entryFeeDisplayText ? (

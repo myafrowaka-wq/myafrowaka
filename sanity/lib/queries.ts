@@ -1,5 +1,5 @@
 export const ATTRACTION_BY_SLUG_QUERY = `
-  *[_type == "attraction" && slug.current == $slug][0]{
+  *[_type == "attraction" && slug.current == $slug && contentStatus == "Published"][0]{
     _id,
     attractionId,
     name,
