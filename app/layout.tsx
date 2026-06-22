@@ -3,6 +3,8 @@ import { Fraunces, Outfit, Space_Mono } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -30,15 +32,46 @@ export const metadata: Metadata = {
     template: "%s – MyAfroWaka",
   },
   description:
-    "557 verified travel guides across 47 African countries. From the Pyramids of Giza to the gorilla forests of Uganda, written by people who live here.",
+    "557 verified travel guides across 47 African countries. From the Pyramids of Giza to the gorilla forests of Uganda. Written by Africans, for the world.",
   metadataBase: new URL("https://myafrowaka.com"),
+  keywords: ["Africa travel", "African destinations", "travel guides Africa", "safari", "Egypt", "Kenya", "Morocco"],
   openGraph: {
     siteName: "MyAfroWaka",
     type: "website",
     locale: "en_US",
+    url: "https://myafrowaka.com",
+    title: "MyAfroWaka – Discover Africa Beyond the Stereotype",
+    description:
+      "Verified travel guides to 557 African attractions across 47 countries. No fabrications. Written by Africans.",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-GNqLWDUKwDk?auto=format&fit=crop&w=1200&h=630&q=80",
+        width: 1200,
+        height: 630,
+        alt: "African wildlife silhouette against golden sunset sky",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    site: "@myafrowaka_",
+    creator: "@myafrowaka_",
+    title: "MyAfroWaka – Discover Africa Beyond the Stereotype",
+    description: "557 verified travel guides across 47 African countries.",
+    images: ["https://images.unsplash.com/photo-GNqLWDUKwDk?auto=format&fit=crop&w=1200&h=630&q=80"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://myafrowaka.com",
   },
   icons: {
     icon: "/icon.png",
@@ -53,12 +86,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${fraunces.variable} ${outfit.variable} ${spaceMono.variable}`}
     >
-      <body className="min-h-screen flex flex-col bg-cream text-charcoal">
-        <Nav />
-        <main className="flex-1">{children}</main>
-        <Footer />
+      <body className="min-h-screen flex flex-col">
+        <ThemeProvider>
+          <Nav />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <ScrollToTop />
+        </ThemeProvider>
       </body>
     </html>
   );
