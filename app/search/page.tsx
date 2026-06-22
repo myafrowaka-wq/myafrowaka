@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from 'next-sanity'
@@ -24,7 +24,7 @@ interface Attraction {
 
 const REGIONS = ['North Africa', 'West Africa', 'East Africa', 'Southern Africa', 'Central Africa', 'Indian Ocean Islands']
 
-export default function SearchPage() {
+function SearchInner() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [all, setAll] = useState<Attraction[]>([])
@@ -63,7 +63,6 @@ export default function SearchPage() {
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="font-display text-3xl text-charcoal mb-6">Search Attractions</h1>
 
-      {/* Filters */}
       <div className="flex flex-col md:flex-row gap-3 mb-8">
         <input
           type="search"
@@ -82,12 +81,10 @@ export default function SearchPage() {
         </select>
       </div>
 
-      {/* Results count */}
       <p className="font-mono text-xs uppercase tracking-wider text-charcoal/40 mb-6">
         {loading ? 'Loading…' : `${filtered.length} attraction${filtered.length !== 1 ? 's' : ''} found`}
       </p>
 
-      {/* Grid */}
       {loading ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -128,5 +125,22 @@ export default function SearchPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="h-10 bg-sand rounded-xl w-48 mb-6 animate-pulse" />
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="bg-sand rounded-xl h-40 animate-pulse" />
+          ))}
+        </div>
+      </div>
+    }>
+      <SearchInner />
+    </Suspense>
   )
 }
