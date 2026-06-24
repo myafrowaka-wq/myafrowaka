@@ -7,6 +7,7 @@ import Link from 'next/link'
 const SLIDES = [
   {
     tag: 'Egypt',
+    issue: 'Issue 01',
     headline: 'The Pyramids of Giza Still Defy Explanation.',
     body: 'Built over 4,500 years ago, the Great Pyramid was the tallest man-made structure on Earth for 3,800 years. Our complete guide covers permits, best viewing times, and what the tour operators skip.',
     slug: 'pyramids-of-giza',
@@ -14,6 +15,7 @@ const SLIDES = [
   },
   {
     tag: 'Uganda',
+    issue: 'Issue 02',
     headline: 'Eye to Eye with Earth\'s Last Mountain Gorillas.',
     body: 'Bwindi Impenetrable Forest shelters half the world\'s remaining mountain gorilla population. Trekking here is one of the rarest encounters left in modern travel.',
     slug: 'bwindi-impenetrable-national-park',
@@ -21,6 +23,7 @@ const SLIDES = [
   },
   {
     tag: 'South Africa',
+    issue: 'Issue 03',
     headline: 'Table Mountain: Above the Cloud, Below the Stars.',
     body: 'Cape Town\'s flat-topped summit rises 1,085 metres and hosts more plant species than the entire United Kingdom. The hike up is as extraordinary as the view from the top.',
     slug: 'table-mountain',
@@ -28,6 +31,7 @@ const SLIDES = [
   },
   {
     tag: 'Tanzania',
+    issue: 'Issue 04',
     headline: 'The Serengeti Migration: Nothing Prepares You.',
     body: '1.5 million wildebeest and 250,000 zebras crossing an ancient circuit through Tanzania and Kenya. The largest land animal movement on Earth, and it runs every year without fail.',
     slug: 'serengeti-national-park',
@@ -35,6 +39,7 @@ const SLIDES = [
   },
   {
     tag: 'Morocco',
+    issue: 'Issue 05',
     headline: 'Marrakech: A City That Remembers Everything.',
     body: 'The medina was built in the 11th century and is still lived in the same way. Souks, riads, and the call to prayer at dawn. A city that layers centuries without hiding any of them.',
     slug: 'djemaa-el-fna-marrakech',
@@ -51,7 +56,7 @@ export function EditorialSlider() {
 
   useEffect(() => {
     if (paused) return
-    const id = setInterval(next, 6000)
+    const id = setInterval(next, 6500)
     return () => clearInterval(id)
   }, [next, paused])
 
@@ -63,10 +68,10 @@ export function EditorialSlider() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Full-bleed image — desktop: absolutely stretches right to screen edge */}
+      {/* Desktop full-bleed image — absolutely stretches from 50% to right screen edge */}
       <div
         key={`img-${current}`}
-        className="hidden lg:block absolute inset-y-0 left-1/2 right-0 animate-fade-in"
+        className="hidden lg:block absolute inset-y-0 left-[45%] right-0 animate-fade-in"
         aria-hidden="true"
       >
         <Image
@@ -74,36 +79,51 @@ export function EditorialSlider() {
           alt={slide.headline}
           fill
           className="object-cover"
-          sizes="55vw"
+          sizes="60vw"
           priority={current === 0}
         />
-        {/* Gradient blend: dark on the left (meeting text), transparent on right */}
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/55 to-ink/10 pointer-events-none" />
-        {/* Subtle vignette on top and bottom */}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/30 via-transparent to-ink/15 pointer-events-none" />
+        {/* Gradient: dark on the text side, reveals image on the right */}
+        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/5 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-ink/20 pointer-events-none" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-0 min-h-[560px]">
+        <div className="grid lg:grid-cols-2 gap-0 min-h-[620px]">
 
           {/* Text side */}
-          <div className="py-18 lg:py-24 pr-0 lg:pr-16 flex flex-col justify-center">
+          <div className="py-20 lg:py-28 pr-0 lg:pr-20 flex flex-col justify-center">
+
+            {/* Editorial overline: issue + country */}
+            <div key={`tag-${current}`} className="flex items-center gap-3 mb-8 animate-fade-in">
+              <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-cream/30">{slide.issue}</span>
+              <span className="w-8 h-px bg-gold-400 opacity-50"/>
+              <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-gold-400">{slide.tag}</span>
+            </div>
+
+            {/* Dramatically large headline — $10K editorial scale */}
             <h2
               key={`title-${current}`}
-              className="font-display font-bold text-4xl sm:text-5xl text-cream leading-tight mb-5 animate-fade-in"
+              className="font-display font-extrabold text-cream animate-fade-in mb-6"
+              style={{
+                fontSize: 'clamp(36px, 5.5vw, 76px)',
+                lineHeight: '0.95',
+                letterSpacing: '-0.025em',
+              }}
             >
               {slide.headline}
             </h2>
+
             <p
               key={`body-${current}`}
-              className="font-sans text-[16px] text-cream/65 leading-relaxed mb-8 max-w-md animate-fade-in"
+              className="font-sans text-[16px] text-cream/68 leading-relaxed mb-10 max-w-md animate-fade-in"
             >
               {slide.body}
             </p>
-            <div className="flex flex-wrap gap-3 mb-10">
+
+            <div className="flex flex-wrap gap-3 mb-12">
               <Link
                 href={`/attractions/${slide.slug}`}
-                className="inline-flex items-center gap-2 bg-crimson hover:bg-crimson-600 text-cream font-mono text-[11px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-all hover:scale-[1.03] active:scale-[0.98]"
+                className="inline-flex items-center gap-2 bg-crimson hover:bg-crimson-600 text-cream font-mono text-[11px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-all btn-magnetic"
               >
                 Read the full guide
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,7 +134,7 @@ export function EditorialSlider() {
                 href={`/search?q=${encodeURIComponent(slide.tag)}`}
                 className="inline-flex items-center border border-white/20 hover:border-white/40 text-cream/70 hover:text-cream font-mono text-[11px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-colors"
               >
-                Explore {slide.tag}
+                All {slide.tag} guides
               </Link>
             </div>
 
@@ -130,7 +150,7 @@ export function EditorialSlider() {
               <div className="flex gap-2 items-center">
                 {SLIDES.map((_, i) => (
                   <button key={i} onClick={() => setCurrent(i)} aria-label={`Go to slide ${i + 1}`}
-                    className={`h-1 rounded-full transition-all duration-400 ${i === current ? 'w-8 bg-gold-400' : 'w-2 bg-white/25 hover:bg-white/45'}`}
+                    className={`h-px rounded-full transition-all duration-500 ${i === current ? 'w-10 bg-gold-400' : 'w-3 bg-white/25 hover:bg-white/45 h-px'}`}
                   />
                 ))}
               </div>
@@ -142,25 +162,25 @@ export function EditorialSlider() {
                 </svg>
               </button>
 
-              <span className="font-mono text-[10px] text-cream/25 ml-1">
-                {current + 1} / {SLIDES.length}
+              <span className="font-mono text-[10px] text-cream/22 tabular-nums ml-1">
+                {String(current + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
               </span>
             </div>
           </div>
 
-          {/* Mobile image — block below text on small screens */}
+          {/* Mobile image — block below text, rounded edges */}
           <div
             key={`img-mob-${current}`}
-            className="relative min-h-[260px] lg:hidden animate-fade-in mb-1"
+            className="relative min-h-[260px] lg:hidden animate-fade-in mb-2 rounded-2xl overflow-hidden"
           >
             <Image
               src={slide.img}
               alt={slide.headline}
               fill
-              className="object-cover rounded-2xl"
+              className="object-cover"
               sizes="100vw"
             />
-            <div className="absolute inset-0 bg-ink/40 rounded-2xl" />
+            <div className="absolute inset-0 bg-ink/40" />
           </div>
         </div>
       </div>
