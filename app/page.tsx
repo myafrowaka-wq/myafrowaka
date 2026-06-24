@@ -10,10 +10,8 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'MyAfroWaka – Discover Africa Beyond the Stereotype',
   description:
-    'Verified travel guides to 557 destinations across 47 African countries. Written by Africans, fact-checked, zero fabrications. Explore by region, experience, or country.',
+    'Verified travel guides across Africa written by people who live here. Explore destinations, experiences, and insider knowledge from every corner of the continent.',
 }
-
-// ─── GROQ queries ──────────────────────────────────────────────────────────
 
 const FEATURED_QUERY = `
   *[_type == "attraction" && contentStatus == "Published"] | order(_updatedAt desc)[0..7]{
@@ -35,33 +33,29 @@ const GUIDES_QUERY = `
   }
 `
 
-// ─── types ────────────────────────────────────────────────────────────────
-
 type GuideItem = {
   name: string; slug: string; continentRegion: string
-  editorialSummary: string; image: string; readTime: number; country: string; date: string
+  editorialSummary: string; image: string; country: string; date: string
 }
-type DestItem = { name: string; slug: string; region: string; flag: string; count: number; color: string; image: string }
+type DestItem = { name: string; slug: string; region: string; flag: string; color: string; image: string }
 type AttrItem = { slug: string; name: string; editorialSummary?: string; continentRegion?: string; country?: { name: string } }
 
-// ─── static fallback data ─────────────────────────────────────────────────
-
 const FALLBACK_DESTINATIONS: DestItem[] = [
-  { name: 'Egypt',        slug: 'egypt',        region: 'North Africa',    flag: '🇪🇬', count: 14, color: '#A22E29', image: 'https://picsum.photos/seed/egypt-dest/900/1200'    },
-  { name: 'Kenya',        slug: 'kenya',        region: 'East Africa',     flag: '🇰🇪', count: 18, color: '#3F6A3D', image: 'https://picsum.photos/seed/kenya-dest/900/1200'    },
-  { name: 'South Africa', slug: 'south-africa', region: 'Southern Africa', flag: '🇿🇦', count: 12, color: '#29251A', image: 'https://picsum.photos/seed/capetown-dest/900/1200' },
-  { name: 'Tanzania',     slug: 'tanzania',     region: 'East Africa',     flag: '🇹🇿', count: 9,  color: '#B28E38', image: 'https://picsum.photos/seed/tanzania-dest/900/1200' },
-  { name: 'Morocco',      slug: 'morocco',      region: 'North Africa',    flag: '🇲🇦', count: 22, color: '#8C4A28', image: 'https://picsum.photos/seed/morocco-dest/900/1200'  },
-  { name: 'Ghana',        slug: 'ghana',        region: 'West Africa',     flag: '🇬🇭', count: 11, color: '#3B403E', image: 'https://picsum.photos/seed/ghana-dest/900/1200'    },
+  { name: 'Egypt',        slug: 'egypt',        region: 'North Africa',    flag: '🇪🇬', color: '#A22E29', image: 'https://picsum.photos/seed/egypt-dest/900/1200'    },
+  { name: 'Kenya',        slug: 'kenya',        region: 'East Africa',     flag: '🇰🇪', color: '#3F6A3D', image: 'https://picsum.photos/seed/kenya-dest/900/1200'    },
+  { name: 'South Africa', slug: 'south-africa', region: 'Southern Africa', flag: '🇿🇦', color: '#29251A', image: 'https://picsum.photos/seed/capetown-dest/900/1200' },
+  { name: 'Tanzania',     slug: 'tanzania',     region: 'East Africa',     flag: '🇹🇿', color: '#B28E38', image: 'https://picsum.photos/seed/tanzania-dest/900/1200' },
+  { name: 'Morocco',      slug: 'morocco',      region: 'North Africa',    flag: '🇲🇦', color: '#8C4A28', image: 'https://picsum.photos/seed/morocco-dest/900/1200'  },
+  { name: 'Ghana',        slug: 'ghana',        region: 'West Africa',     flag: '🇬🇭', color: '#3B403E', image: 'https://picsum.photos/seed/ghana-dest/900/1200'    },
 ]
 
 const EXPERIENCES = [
-  { label: 'Safari',    slug: 'safari',  desc: 'The Big Five and beyond',              image: 'https://picsum.photos/seed/safari-exp-v2/600/800'   },
-  { label: 'Culture',   slug: 'culture', desc: 'Living traditions across the continent', image: 'https://picsum.photos/seed/culture-exp-v2/600/800'  },
-  { label: 'Beach',     slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',      image: 'https://picsum.photos/seed/beach-exp-v2/600/800'    },
-  { label: 'History',   slug: 'history', desc: 'Ancient kingdoms and World Heritage',   image: 'https://picsum.photos/seed/history-exp-v2/600/800'  },
-  { label: 'Hiking',    slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',  image: 'https://picsum.photos/seed/hiking-exp-v2/600/800'   },
-  { label: 'Food',      slug: 'food',    desc: 'Tagines, jollof, nyama choma',          image: 'https://picsum.photos/seed/food-exp-v2/600/800'     },
+  { label: 'Safari',    slug: 'safari',  desc: 'The Big Five and beyond',                image: 'https://picsum.photos/seed/safari-exp-v2/600/800'   },
+  { label: 'Culture',   slug: 'culture', desc: 'Living traditions across the continent',  image: 'https://picsum.photos/seed/culture-exp-v2/600/800'  },
+  { label: 'Beach',     slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',        image: 'https://picsum.photos/seed/beach-exp-v2/600/800'    },
+  { label: 'History',   slug: 'history', desc: 'Ancient kingdoms and World Heritage',     image: 'https://picsum.photos/seed/history-exp-v2/600/800'  },
+  { label: 'Hiking',    slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',    image: 'https://picsum.photos/seed/hiking-exp-v2/600/800'   },
+  { label: 'Food',      slug: 'food',    desc: 'Tagines, jollof, nyama choma',            image: 'https://picsum.photos/seed/food-exp-v2/600/800'     },
 ]
 
 const FALLBACK_GUIDES: GuideItem[] = [
@@ -69,25 +63,25 @@ const FALLBACK_GUIDES: GuideItem[] = [
     name: 'Pyramids of Giza: The Complete Travel Guide',
     slug: 'pyramids-of-giza', continentRegion: 'North Africa', country: 'Egypt',
     editorialSummary: 'The last surviving Wonder of the Ancient World, standing on the Giza Plateau outside Cairo. Everything you need to know before you visit.',
-    image: 'https://picsum.photos/seed/giza-guide-v2/900/1100', readTime: 12, date: '2026-06-01',
+    image: 'https://picsum.photos/seed/giza-guide-v2/900/1100', date: '2026-06-01',
   },
   {
     name: 'Bwindi Impenetrable Forest: Mountain Gorilla Encounter',
     slug: 'bwindi-impenetrable-national-park', continentRegion: 'East Africa', country: 'Uganda',
     editorialSummary: 'Home to half the world mountain gorilla population, Bwindi covers 321 square kilometres of southwestern Uganda.',
-    image: 'https://picsum.photos/seed/bwindi-guide-v2/900/1100', readTime: 10, date: '2026-05-15',
+    image: 'https://picsum.photos/seed/bwindi-guide-v2/900/1100', date: '2026-05-15',
   },
   {
     name: 'Table Mountain: Everything You Need to Know',
     slug: 'table-mountain', continentRegion: 'Southern Africa', country: 'South Africa',
     editorialSummary: 'Cape Town iconic flat-topped summit rises 1,085 metres above sea level and harbours more plant species than the entire United Kingdom.',
-    image: 'https://picsum.photos/seed/table-mtn-v2/900/1100', readTime: 9, date: '2026-05-01',
+    image: 'https://picsum.photos/seed/table-mtn-v2/900/1100', date: '2026-05-01',
   },
   {
     name: 'Serengeti National Park: The Migration Guide',
     slug: 'serengeti-national-park', continentRegion: 'East Africa', country: 'Tanzania',
     editorialSummary: 'The Great Migration moves 1.5 million wildebeest and 250,000 zebras in a continuous annual circuit across Tanzania and Kenya.',
-    image: 'https://picsum.photos/seed/serengeti-v2/900/1100', readTime: 14, date: '2026-04-20',
+    image: 'https://picsum.photos/seed/serengeti-v2/900/1100', date: '2026-04-20',
   },
 ]
 
@@ -98,8 +92,6 @@ function fmt(d: string) {
   return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
-// ─── page ─────────────────────────────────────────────────────────────────
-
 export default async function HomePage() {
   const [featured, topCountries, guides] = await Promise.all([
     client.fetch(FEATURED_QUERY).catch(() => []),
@@ -109,8 +101,8 @@ export default async function HomePage() {
 
   const destinations: DestItem[] = topCountries.filter((c: { count: number }) => c.count > 0).length > 0
     ? topCountries.filter((c: { count: number }) => c.count > 0).slice(0, 6).map(
-        (c: { name: string; slug: string; continentRegion: string; flagEmoji: string; count: number }, i: number): DestItem => ({
-          name: c.name, slug: c.slug, region: c.continentRegion, flag: c.flagEmoji || '🌍', count: c.count,
+        (c: { name: string; slug: string; continentRegion: string; flagEmoji: string }, i: number): DestItem => ({
+          name: c.name, slug: c.slug, region: c.continentRegion, flag: c.flagEmoji || '🌍',
           color: FALLBACK_DESTINATIONS[i % 6].color, image: FALLBACK_DESTINATIONS[i % 6].image,
         })
       )
@@ -120,58 +112,40 @@ export default async function HomePage() {
     ? guides.slice(0, 4).map(
         (g: { name: string; slug: string; continentRegion: string; editorialSummary: string; _updatedAt: string; country?: { name: string } }, i: number): GuideItem => ({
           name: g.name, slug: g.slug, continentRegion: g.continentRegion, editorialSummary: g.editorialSummary,
-          image: FALLBACK_GUIDES[i % 4].image, readTime: FALLBACK_GUIDES[i % 4].readTime,
-          country: g.country?.name ?? 'Africa', date: g._updatedAt ?? FALLBACK_GUIDES[i % 4].date,
+          image: FALLBACK_GUIDES[i % 4].image, country: g.country?.name ?? 'Africa', date: g._updatedAt ?? FALLBACK_GUIDES[i % 4].date,
         })
       )
     : FALLBACK_GUIDES
 
   return (
     <>
-      {/* ══════════════════════════════════════════════════════════════
-          HERO — full-commitment editorial layout
-          $10K: Large headline dominates, nothing competes for attention
-          on mobile; Plan a Trip card lives to the right on desktop.
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
       <section className="relative min-h-[94vh] flex items-center overflow-hidden">
-
-        <HeroBackground
-          src="https://picsum.photos/seed/myafrowaka-hero-v2/1920/1080"
-          alt="African landscape at golden hour"
-        />
-        {/* Heavy left gradient so text always pops — editorial POV */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#070F09]/96 via-[#0A1A0C]/88 to-[#0E2010]/55" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#070F09]/60 via-transparent to-[#070F09]/15" />
+        <HeroBackground src="https://picsum.photos/seed/myafrowaka-hero-v2/1920/1080" alt="African landscape at golden hour"/>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#070F09]/96 via-[#0A1A0C]/88 to-[#0E2010]/55"/>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#070F09]/60 via-transparent to-[#070F09]/15"/>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-20 lg:py-28">
           <div className="grid lg:grid-cols-7 gap-10 lg:gap-16 items-center">
 
-            {/* Left col: spans 4/7 — headline dominates */}
             <div className="lg:col-span-4">
-              {/* Editorial overline */}
-              <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-gold-400 mb-6 flex items-center gap-3">
-                <span className="inline-block w-8 h-px bg-gold-400 opacity-60"/>
-                Africa Travel, Unfiltered
-              </p>
-
-              {/* Headline — dramatically large with tight tracking */}
+              {/* Headline — 2 lines on desktop */}
               <h1
                 className="font-display font-extrabold text-cream mb-7 tracking-hero"
-                style={{ fontSize: 'clamp(52px, 7.5vw, 96px)', lineHeight: '0.9' }}
+                style={{ fontSize: 'clamp(36px, 5vw, 62px)', lineHeight: '0.92' }}
               >
                 <TypewriterHero
-                  speed={30}
+                  speed={32}
                   lines={[
-                    { text: 'Explore Africa' },
-                    { text: ' One Adventure' },
-                    { text: ' at a Time.' },
+                    { text: 'Explore Africa,' },
+                    { text: ' One Adventure at a Time.' },
                   ]}
                 />
               </h1>
 
-              {/* Editorial sub-headline: larger, more distinct from body */}
+              {/* Sub-headline */}
               <p className="font-display font-medium text-cream/75 mb-10 max-w-lg leading-relaxed"
-                style={{ fontSize: 'clamp(15px, 2vw, 19px)' }}>
+                style={{ fontSize: 'clamp(13px, 1.5vw, 16px)' }}>
                 Discover hidden gems. Plan your dream trips.
                 Get insider travel tips from explorers who live and breathe Africa.
               </p>
@@ -193,7 +167,6 @@ export default async function HomePage() {
                 </div>
               </form>
 
-              {/* Popular searches */}
               <div className="flex flex-wrap gap-2 items-center">
                 <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-cream/30 mr-1">Popular:</span>
                 {POPULAR_SEARCHES.map(q => (
@@ -205,107 +178,52 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right col: spans 3/7 — Plan a Trip, slightly smaller footprint */}
             <div className="lg:col-span-3">
               <PlanTripCard />
             </div>
           </div>
         </div>
 
-        {/* Bottom: subtle scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
           <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-cream">Scroll</span>
           <div className="w-px h-8 bg-gradient-to-b from-cream to-transparent"/>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          EDITORIAL BRAND STRIP — restrained, signals commitment
-          $10K: A thin strip that reads as intention, not decoration.
-      ══════════════════════════════════════════════════════════════ */}
-      <div className="bg-ink border-b border-white/6 py-4 overflow-hidden">
-        <div className="marquee-wrap">
-          <div className="marquee-track">
-            {Array.from({ length: 2 }).map((_, rep) => (
-              <div key={rep} className="flex items-center gap-12 px-8">
-                {[
-                  '557 Verified Guides',
-                  '47 African Countries',
-                  'Zero Fabrications',
-                  'Written from Inside the Continent',
-                  'Fact-Checked by Locals',
-                  '50+ Published Articles',
-                ].map(item => (
-                  <span key={item} className="flex items-center gap-12 shrink-0">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-cream/45 whitespace-nowrap">{item}</span>
-                    <span className="w-1 h-1 rounded-full bg-gold-400/40 shrink-0"/>
-                  </span>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ══════════════════════════════════════════════════════════════
-          DESTINATIONS — editorial photo grid
-          $10K: Not a uniform 6-col grid. Lead with a featured card.
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ══ DESTINATIONS ══════════════════════════════════════════════════════ */}
       <section className="py-24 lg:py-32 bg-cream dark-flip-bg" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-          {/* Section header with editorial number */}
           <div className="flex items-end justify-between mb-12">
-            <div>
-              <span className="section-num text-charcoal dark-flip-text block mb-3">01 / Destinations</span>
-              <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
-                style={{ fontSize: 'clamp(30px, 4vw, 52px)', lineHeight: '1.0' }}>
-                Where Will You<br className="hidden sm:block"/> Go Next?
-              </h2>
-            </div>
+            <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
+              style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
+              Where Will You Go Next?
+            </h2>
             <Link href="/search"
               className="inline-link link-arrow hidden sm:inline-flex font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors">
-              All 47 countries
+              All destinations
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
           </div>
 
-          {/* Editorial grid: one featured (tall 2-row) + 5 regular */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 lg:grid-rows-2 gap-3 sm:gap-4">
-
-            {/* Featured: spans 2 cols + 2 rows on desktop */}
-            <Link href={`/search?q=${encodeURIComponent(destinations[0].name)}`}
-              className="card-zoom group relative rounded-2xl overflow-hidden col-span-2 sm:col-span-1 lg:col-span-2 lg:row-span-2 aspect-[4/3] sm:aspect-[3/4] lg:aspect-auto shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500">
-              <div className="absolute inset-0" style={{ backgroundColor: destinations[0].color }}/>
-              <Image src={destinations[0].image} alt={destinations[0].name} fill
-                sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,34vw"
-                className="object-cover img-editorial mix-blend-multiply opacity-60 img-inner"/>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/20 to-transparent"/>
-              <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
-                <p className="font-mono text-[8px] uppercase tracking-[0.16em] text-cream/60 mb-1">{destinations[0].flag} {destinations[0].region}</p>
-                <h3 className="font-display font-bold text-xl sm:text-3xl lg:text-4xl text-cream group-hover:text-gold-300 transition-colors leading-tight"
-                  style={{ letterSpacing: '-0.02em' }}>
-                  {destinations[0].name}
-                </h3>
-                <p className="font-mono text-[9px] text-cream/45 mt-2">{destinations[0].count} guides</p>
-              </div>
-            </Link>
-
-            {/* 5 regular cards */}
-            {destinations.slice(1).map((d: DestItem) => (
+          {/* Uniform 3-col grid — no spanning, no white gaps */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+            {destinations.map((d: DestItem, i: number) => (
               <Link key={d.name} href={`/search?q=${encodeURIComponent(d.name)}`}
-                className="card-zoom group relative rounded-2xl overflow-hidden aspect-[3/4] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500">
+                className={`card-zoom group relative rounded-2xl overflow-hidden shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500
+                  ${i === 0 ? 'aspect-[3/4] sm:row-span-2' : 'aspect-[3/4]'}`}>
                 <div className="absolute inset-0" style={{ backgroundColor: d.color }}/>
-                <Image src={d.image} alt={d.name} fill sizes="(max-width:640px) 50vw,(max-width:1024px) 33vw,17vw"
+                <Image src={d.image} alt={d.name} fill
+                  sizes="(max-width:640px) 50vw,33vw"
                   className="object-cover img-editorial mix-blend-multiply opacity-60 img-inner"/>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/10 to-transparent"/>
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-cream/55 mb-1">{d.flag} {d.region.split(' ')[0]}</p>
-                  <h3 className="font-display font-bold text-sm sm:text-base text-cream group-hover:text-gold-300 transition-colors leading-tight"
-                    style={{ letterSpacing: '-0.015em' }}>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/20 to-transparent"/>
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+                  <p className="font-mono text-[8px] uppercase tracking-[0.16em] text-cream/60 mb-1">{d.flag} {d.region}</p>
+                  <h3 className={`font-display font-bold text-cream group-hover:text-gold-300 transition-colors leading-tight
+                    ${i === 0 ? 'text-xl sm:text-2xl' : 'text-sm sm:text-base'}`}
+                    style={{ letterSpacing: '-0.02em' }}>
                     {d.name}
                   </h3>
-                  <p className="font-mono text-[9px] text-cream/40 mt-1">{d.count} guides</p>
                 </div>
               </Link>
             ))}
@@ -313,26 +231,18 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          EDITORIAL SPOTLIGHT — auto-advancing slider, full-bleed
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ══ EDITORIAL SPOTLIGHT ════════════════════════════════════════════════ */}
       <EditorialSlider />
 
-      {/* ══════════════════════════════════════════════════════════════
-          LATEST TRAVEL GUIDES — masonry layout
-          $10K: Guide body text larger, country/date bolder, breathing room.
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ══ LATEST TRAVEL GUIDES ══════════════════════════════════════════════ */}
       <section className="py-24 lg:py-32 bg-sand dark-flip-surf" id="guides" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
           <div className="flex items-end justify-between mb-12">
-            <div>
-              <span className="section-num text-charcoal dark-flip-text block mb-3">02 / Guides</span>
-              <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
-                style={{ fontSize: 'clamp(30px, 4vw, 52px)', lineHeight: '1.0' }}>
-                Latest Travel<br className="hidden sm:block"/> Guides
-              </h2>
-            </div>
+            <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
+              style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
+              Latest Travel Guides
+            </h2>
             <Link href="/search"
               className="inline-link link-arrow hidden sm:inline-flex font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors">
               All guides
@@ -342,7 +252,7 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
 
-            {/* Card 1: Tall (spans 2 rows) — photo-first overlay */}
+            {/* Card 1: Tall photo-first */}
             <Link href={`/attractions/${displayGuides[0].slug}`}
               className="card-zoom group relative rounded-3xl overflow-hidden lg:row-span-2 min-h-[400px] lg:min-h-[580px] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500 flex flex-col">
               <Image src={displayGuides[0].image} alt={displayGuides[0].name} fill
@@ -369,13 +279,13 @@ export default async function HomePage() {
               </div>
             </Link>
 
-            {/* Cards 2 and 3: right column, stacked */}
-            {[displayGuides[1], displayGuides[2]].map((g, idx) => (
+            {/* Cards 2 and 3 */}
+            {[displayGuides[1], displayGuides[2]].map((g) => (
               <Link key={g.slug} href={`/attractions/${g.slug}`}
                 className="card-zoom group bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300 flex flex-col">
                 <div className="relative h-48 shrink-0 overflow-hidden">
                   <Image src={g.image} alt={g.name} fill sizes="(max-width:640px) 100vw,50vw"
-                    className="object-cover img-editorial img-inner" data-delay={idx === 1 ? '100' : '0'}/>
+                    className="object-cover img-editorial img-inner"/>
                   <div className="absolute top-3 left-3">
                     <span className="bg-white/92 backdrop-blur font-mono text-[8px] uppercase tracking-[0.14em] text-charcoal/60 px-2.5 py-1 rounded-full">
                       {g.continentRegion}
@@ -395,8 +305,7 @@ export default async function HomePage() {
                   <p className="font-sans text-[15px] text-charcoal/65 dark-flip-muted leading-relaxed line-clamp-2 mb-4">
                     {g.editorialSummary}
                   </p>
-                  <div className="flex items-center justify-between pt-4 border-t border-line dark-flip-border">
-                    <span className="font-mono text-[10px] text-charcoal/40 dark-flip-muted">{g.readTime} min read</span>
+                  <div className="flex items-center justify-end pt-4 border-t border-line dark-flip-border">
                     <span className="link-arrow inline-link font-mono text-[10px] text-crimson">
                       Read
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
@@ -406,7 +315,7 @@ export default async function HomePage() {
               </Link>
             ))}
 
-            {/* Card 4: Wide horizontal (spans 2 cols) */}
+            {/* Card 4: Wide horizontal */}
             <Link href={`/attractions/${displayGuides[3].slug}`}
               className="card-zoom group bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300 lg:col-span-2 flex flex-col sm:flex-row">
               <div className="relative h-52 sm:h-auto sm:w-72 lg:w-96 shrink-0 overflow-hidden">
@@ -432,7 +341,7 @@ export default async function HomePage() {
                   {displayGuides[3].editorialSummary}
                 </p>
                 <div className="flex items-center justify-between pt-4 border-t border-line dark-flip-border">
-                  <span className="font-mono text-[10px] text-charcoal/40 dark-flip-muted">{displayGuides[3].readTime} min read</span>
+                  <span className="font-mono text-[10px] text-charcoal/40 dark-flip-muted">{fmt(displayGuides[3].date)}</span>
                   <span className="link-arrow inline-link font-mono text-[10px] text-crimson">
                     Read the guide
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
@@ -442,61 +351,35 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {/* View all — editorial link style */}
+          {/* View all — solid button, more prominent */}
           <div className="mt-12 flex justify-center">
             <Link href="/search"
-              className="inline-link link-arrow border border-charcoal/20 dark-flip-border hover:border-crimson text-charcoal/55 dark-flip-muted hover:text-crimson font-display font-semibold text-[13px] px-8 py-3.5 rounded-full transition-all hover:scale-[1.02]">
-              View all travel guides
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+              className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(26,24,19,0.22)] hover:shadow-[0_8px_36px_rgba(26,24,19,0.32)]">
+              View All Travel Guides
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          EDITORIAL PULL QUOTE — $10K: anchor point, creates hierarchy
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 lg:py-28 bg-ink overflow-hidden" data-reveal>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <div className="w-8 h-px bg-gold-400 mx-auto mb-8 opacity-60"/>
-          <blockquote
-            className="font-display font-bold text-cream leading-tight mb-8 tracking-editorial"
-            style={{ fontSize: 'clamp(22px, 3.5vw, 42px)', letterSpacing: '-0.02em' }}>
-            "Africa is not a destination. It is a conversation that never ends. We are here to help you start it."
-          </blockquote>
-          <div className="w-8 h-px bg-gold-400 mx-auto mb-6 opacity-60"/>
-          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-cream/35">MyAfroWaka Editorial Team</p>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════
-          EXPERIENCES — photo grid
-          $10K: Varied sizing breaks the uniform-grid template feel.
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ══ EXPERIENCES ════════════════════════════════════════════════════════ */}
       <section className="py-24 lg:py-32 bg-cream dark-flip-bg" id="experiences" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
           <div className="flex items-end justify-between mb-12">
-            <div>
-              <span className="section-num text-charcoal dark-flip-text block mb-3">03 / Experiences</span>
-              <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
-                style={{ fontSize: 'clamp(30px, 4vw, 52px)', lineHeight: '1.0' }}>
-                Explore by<br className="hidden sm:block"/> Experience
-              </h2>
-            </div>
+            <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
+              style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
+              Explore by Experience
+            </h2>
           </div>
 
-          {/*
-            Editorial grid: first card is wide (col-span-2),
-            the rest are single. Breaks the "6 equal cards" template.
-          */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            {EXPERIENCES.map((e, i) => (
+          {/* Uniform 3-col grid — all 6 cards fill perfectly, no gaps */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+            {EXPERIENCES.map((e) => (
               <Link key={e.slug} href={`/search?q=${encodeURIComponent(e.slug)}`}
-                className={`card-zoom group relative rounded-2xl overflow-hidden hover:shadow-[var(--shadow-lift)] transition-shadow duration-500
-                  ${i === 0 ? 'col-span-2 aspect-video sm:aspect-[21/9] lg:aspect-video' : 'aspect-[3/4]'}`}>
+                className="card-zoom group relative rounded-2xl overflow-hidden aspect-[3/4] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500">
                 <Image src={e.image} alt={e.label} fill
-                  sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,25vw"
+                  sizes="(max-width:640px) 50vw,33vw"
                   className="object-cover img-editorial img-inner"/>
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/92 via-ink/25 to-transparent"/>
                 <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
@@ -512,21 +395,16 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          FEATURED ATTRACTIONS — Sanity-powered with pagination
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ══ FEATURED ATTRACTIONS ════════════════════════════════════════════════ */}
       {(featured as AttrItem[]).length > 0 && (
         <section className="py-24 lg:py-32 bg-sand dark-flip-surf" data-reveal>
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
             <div className="flex items-end justify-between mb-12">
-              <div>
-                <span className="section-num text-charcoal dark-flip-text block mb-3">04 / Attractions</span>
-                <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
-                  style={{ fontSize: 'clamp(30px, 4vw, 52px)', lineHeight: '1.0' }}>
-                  Featured<br className="hidden sm:block"/> Attractions
-                </h2>
-              </div>
+              <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
+                style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
+                Featured Attractions
+              </h2>
               <Link href="/search"
                 className="inline-link link-arrow hidden sm:inline-flex font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors">
                 Browse all
@@ -571,9 +449,7 @@ export default async function HomePage() {
               {[1, 2, 3, 4, 5].map(n => (
                 <Link key={n} href={n === 1 ? '/search' : `/search?page=${n}`}
                   className={`w-10 h-10 rounded-xl flex items-center justify-center font-display font-semibold text-[13px] transition-all
-                    ${n === 1
-                      ? 'bg-ink text-cream shadow-[var(--shadow-soft)]'
-                      : 'border border-line dark-flip-border text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson'}`}>
+                    ${n === 1 ? 'bg-ink text-cream shadow-[var(--shadow-soft)]' : 'border border-line dark-flip-border text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson'}`}>
                   {n}
                 </Link>
               ))}
@@ -591,16 +467,14 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ══════════════════════════════════════════════════════════════
-          PHOTO GALLERY — social feed strip
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ══ INSTAGRAM GALLERY ══════════════════════════════════════════════════ */}
       <section className="py-24 lg:py-28 bg-cream dark-flip-bg" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between mb-8">
             <div>
               <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-crimson mb-2">@myafrowaka_</p>
               <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
-                style={{ fontSize: 'clamp(26px, 3.5vw, 44px)' }}>
+                style={{ fontSize: 'clamp(20px, 2.5vw, 34px)' }}>
                 Follow Our Journey
               </h2>
             </div>
@@ -610,7 +484,6 @@ export default async function HomePage() {
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </a>
           </div>
-
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
             {GALLERY_SEEDS.map(seed => (
               <a key={seed} href="https://instagram.com/myafrowaka_" target="_blank" rel="noopener noreferrer"
@@ -628,20 +501,18 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          CTA BANNER — committed, not hedging
-      ══════════════════════════════════════════════════════════════ */}
+      {/* ══ CTA BANNER ═════════════════════════════════════════════════════════ */}
       <section className="relative py-28 lg:py-36 overflow-hidden" data-reveal>
         <Image src="https://picsum.photos/seed/cta-v2/1920/700" alt="" fill className="object-cover img-editorial"/>
         <div className="absolute inset-0 bg-ink/88"/>
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <span className="section-num text-cream/40 block mb-4">MyAfroWaka</span>
           <h2 className="font-display font-extrabold text-cream mb-6 tracking-hero"
-            style={{ fontSize: 'clamp(32px, 5vw, 64px)', lineHeight: '0.92' }}>
-            Your African Adventure<br/> Starts Here.
+            style={{ fontSize: 'clamp(28px, 4vw, 52px)', lineHeight: '0.94' }}>
+            Your African Adventure Starts Here.
           </h2>
-          <p className="font-sans text-cream/68 text-lg mb-10 max-w-lg mx-auto leading-relaxed">
-            557 verified guides across 47 countries. No stereotypes, no guesswork. Just Africa, told honestly.
+          <p className="font-sans text-cream/68 text-base mb-10 max-w-lg mx-auto leading-relaxed">
+            From ancient wonders to rooftop bars. From gorilla forests to Sahara sand dunes.
+            Every journey across this continent starts with knowing where to go.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/search"

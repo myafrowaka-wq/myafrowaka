@@ -293,7 +293,7 @@ export default function Nav() {
                 </div>
                 <Link href="/search" onClick={close}
                   className="mt-7 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
-                  View all 47 countries
+                  View all countries
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </Link>
               </div>
@@ -341,7 +341,7 @@ export default function Nav() {
                 </div>
                 <Link href="/search" onClick={close}
                   className="mt-5 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
-                  Browse all 557 guides
+                  Browse all guides
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </Link>
               </div>
@@ -392,12 +392,12 @@ export default function Nav() {
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-gold-400 mb-1">North Africa</p>
                     <p className="font-display font-bold text-lg text-cream leading-tight">Egypt</p>
-                    <p className="font-sans text-[11px] text-cream/55 mt-0.5">14 verified guides</p>
+                    <p className="font-sans text-[11px] text-cream/55 mt-0.5">North Africa</p>
                   </div>
                 </Link>
                 <Link href="/search" onClick={close}
                   className="mt-4 block text-center bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[11px] uppercase tracking-[0.10em] px-4 py-3 rounded-xl transition-colors">
-                  All 557 attractions &rarr;
+                  Browse all attractions &rarr;
                 </Link>
               </div>
             </div>
@@ -454,30 +454,92 @@ export default function Nav() {
           style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
           onMouseEnter={keepOpen} onMouseLeave={hoverClose}
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-            <div className="grid grid-cols-3 gap-6">
-              {[
-                { title: 'Pyramids of Giza: The Complete Guide',      tag: 'Egypt',        slug: 'pyramids-of-giza',                 img: 'https://picsum.photos/seed/giza-mega-guide/280/180'   },
-                { title: 'Bwindi: Mountain Gorilla Trekking Guide',   tag: 'Uganda',       slug: 'bwindi-impenetrable-national-park', img: 'https://picsum.photos/seed/bwindi-mega-guide/280/180' },
-                { title: 'Table Mountain: Cape Town Complete Guide',  tag: 'South Africa', slug: 'table-mountain',                   img: 'https://picsum.photos/seed/table-mtn-mega/280/180'    },
-              ].map(a => (
-                <Link key={a.slug} href={`/attractions/${a.slug}`} onClick={close}
-                  className="group flex gap-4 p-3 rounded-xl hover:bg-sand dark:hover:bg-white/5 transition-colors">
-                  <div className="relative w-24 h-16 rounded-xl overflow-hidden shrink-0">
-                    <Image src={a.img} alt={a.title} fill className="object-cover"/>
-                  </div>
-                  <div>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-ochre-500 mb-1">{a.tag}</p>
-                    <p className="font-display font-semibold text-[14px] text-charcoal/80 dark:text-cream/75 group-hover:text-ochre-600 dark:group-hover:text-ochre-400 transition-colors leading-snug">{a.title}</p>
-                  </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+            <div className="grid grid-cols-12 gap-8">
+
+              {/* Col 1: Browse by type */}
+              <div className="col-span-3">
+                <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Type</p>
+                <ul className="space-y-2">
+                  {[
+                    { label: 'Safari and Wildlife',   q: 'safari'   },
+                    { label: 'Historical Sites',      q: 'history'  },
+                    { label: 'Beach and Islands',     q: 'beach'    },
+                    { label: 'Mountain and Hiking',   q: 'hiking'   },
+                    { label: 'Cultural Experiences',  q: 'culture'  },
+                    { label: 'Food and Markets',      q: 'food'     },
+                    { label: 'City Breaks',           q: 'city'     },
+                    { label: 'UNESCO Heritage Sites', q: 'UNESCO'   },
+                  ].map(t => (
+                    <li key={t.q}>
+                      <Link href={`/search?q=${t.q}`} onClick={close}
+                        className="flex items-center gap-2 font-sans text-[14px] text-charcoal/70 dark:text-cream/65 hover:text-crimson dark:hover:text-crimson-300 transition-colors py-0.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0 opacity-60"/>
+                        {t.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Col 2: Browse by region shortcut */}
+              <div className="col-span-3 border-l border-line dark:border-white/8 pl-8">
+                <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Region</p>
+                <ul className="space-y-2">
+                  {[
+                    { label: 'East Africa',          href: '/search?region=East+Africa'          },
+                    { label: 'West Africa',          href: '/search?region=West+Africa'          },
+                    { label: 'North Africa',         href: '/search?region=North+Africa'         },
+                    { label: 'Southern Africa',      href: '/search?region=Southern+Africa'      },
+                    { label: 'Central Africa',       href: '/search?region=Central+Africa'       },
+                    { label: 'Indian Ocean Islands', href: '/search?region=Indian+Ocean+Islands' },
+                  ].map(r => (
+                    <li key={r.label}>
+                      <Link href={r.href} onClick={close}
+                        className="font-sans text-[14px] text-charcoal/70 dark:text-cream/65 hover:text-crimson dark:hover:text-crimson-300 transition-colors block py-0.5">
+                        {r.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link href="/search" onClick={close}
+                  className="mt-5 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
+                  All destinations
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </Link>
-              ))}
-            </div>
-            <div className="mt-6 pt-5 border-t border-line dark:border-white/8 flex justify-between items-center">
-              <p className="font-sans text-sm text-charcoal/45 dark:text-cream/38">557 destination guides, written from inside Africa.</p>
-              <Link href="/search" onClick={close} className="font-mono text-[10px] uppercase tracking-[0.12em] text-ochre-500 hover:text-ochre-600 transition-colors">
-                Browse all &rarr;
-              </Link>
+              </div>
+
+              {/* Col 3+4: Featured guides */}
+              <div className="col-span-6 border-l border-line dark:border-white/8 pl-8">
+                <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Featured Guides</p>
+                <div className="space-y-3">
+                  {[
+                    { title: 'Pyramids of Giza: The Complete Guide',     tag: 'Egypt',    slug: 'pyramids-of-giza',               img: 'https://picsum.photos/seed/giza-mega-guide/280/180'   },
+                    { title: 'Bwindi: Mountain Gorilla Trekking Guide',  tag: 'Uganda',   slug: 'bwindi-impenetrable-national-park', img: 'https://picsum.photos/seed/bwindi-mega-guide/280/180' },
+                    { title: 'Serengeti: The Great Migration Guide',     tag: 'Tanzania', slug: 'serengeti-national-park',         img: 'https://picsum.photos/seed/serengeti-mega/280/180'    },
+                  ].map(a => (
+                    <Link key={a.slug} href={`/attractions/${a.slug}`} onClick={close}
+                      className="group flex items-center gap-4 p-3 rounded-xl hover:bg-sand dark:hover:bg-white/5 transition-colors">
+                      <div className="relative w-20 h-14 rounded-xl overflow-hidden shrink-0">
+                        <Image src={a.img} alt={a.title} fill className="object-cover"/>
+                      </div>
+                      <div>
+                        <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-crimson mb-1">{a.tag}</p>
+                        <p className="font-display font-semibold text-[13px] text-charcoal/80 dark:text-cream/75 group-hover:text-crimson transition-colors leading-snug">{a.title}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                <div className="mt-5 pt-4 border-t border-line dark:border-white/8 flex items-center justify-between">
+                  <p className="font-sans text-[12px] text-charcoal/40 dark:text-cream/35">Destination guides, written from inside Africa.</p>
+                  <Link href="/search" onClick={close}
+                    className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-ochre-500 hover:text-ochre-600 transition-colors">
+                    Browse all
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                  </Link>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

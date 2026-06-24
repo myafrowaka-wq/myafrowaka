@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
+/* Issue 03 (South Africa) removed per request — kept 01, 02, 04, 05 */
 const SLIDES = [
   {
     tag: 'Egypt',
@@ -20,14 +21,6 @@ const SLIDES = [
     body: 'Bwindi Impenetrable Forest shelters half the world\'s remaining mountain gorilla population. Trekking here is one of the rarest encounters left in modern travel.',
     slug: 'bwindi-impenetrable-national-park',
     img: 'https://picsum.photos/seed/bwindi-editorial-spotlight/1200/900',
-  },
-  {
-    tag: 'South Africa',
-    issue: 'Issue 03',
-    headline: 'Table Mountain: Above the Cloud, Below the Stars.',
-    body: 'Cape Town\'s flat-topped summit rises 1,085 metres and hosts more plant species than the entire United Kingdom. The hike up is as extraordinary as the view from the top.',
-    slug: 'table-mountain',
-    img: 'https://picsum.photos/seed/table-mtn-editorial/1200/900',
   },
   {
     tag: 'Tanzania',
@@ -68,7 +61,7 @@ export function EditorialSlider() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Desktop full-bleed image — absolutely stretches from 50% to right screen edge */}
+      {/* Desktop full-bleed image */}
       <div
         key={`img-${current}`}
         className="hidden lg:block absolute inset-y-0 left-[45%] right-0 animate-fade-in"
@@ -82,32 +75,30 @@ export function EditorialSlider() {
           sizes="60vw"
           priority={current === 0}
         />
-        {/* Gradient: dark on the text side, reveals image on the right */}
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/5 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-ink/20 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/5 pointer-events-none"/>
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-ink/20 pointer-events-none"/>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-0 min-h-[620px]">
+        <div className="grid lg:grid-cols-2 gap-0 min-h-[580px]">
 
-          {/* Text side */}
           <div className="py-20 lg:py-28 pr-0 lg:pr-20 flex flex-col justify-center">
 
-            {/* Editorial overline: issue + country */}
+            {/* Overline */}
             <div key={`tag-${current}`} className="flex items-center gap-3 mb-8 animate-fade-in">
               <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-cream/30">{slide.issue}</span>
               <span className="w-8 h-px bg-gold-400 opacity-50"/>
               <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-gold-400">{slide.tag}</span>
             </div>
 
-            {/* Dramatically large headline — $10K editorial scale */}
+            {/* Headline — reduced to fit 3 lines comfortably */}
             <h2
               key={`title-${current}`}
               className="font-display font-extrabold text-cream animate-fade-in mb-6"
               style={{
-                fontSize: 'clamp(36px, 5.5vw, 76px)',
-                lineHeight: '0.95',
-                letterSpacing: '-0.025em',
+                fontSize: 'clamp(28px, 3.8vw, 54px)',
+                lineHeight: '1.0',
+                letterSpacing: '-0.022em',
               }}
             >
               {slide.headline}
@@ -115,7 +106,7 @@ export function EditorialSlider() {
 
             <p
               key={`body-${current}`}
-              className="font-sans text-[16px] text-cream/68 leading-relaxed mb-10 max-w-md animate-fade-in"
+              className="font-sans text-[15px] text-cream/68 leading-relaxed mb-10 max-w-md animate-fade-in"
             >
               {slide.body}
             </p>
@@ -138,9 +129,9 @@ export function EditorialSlider() {
               </Link>
             </div>
 
-            {/* Navigation controls */}
+            {/* Controls */}
             <div className="flex items-center gap-4">
-              <button onClick={prev} aria-label="Previous article"
+              <button onClick={prev} aria-label="Previous"
                 className="w-10 h-10 rounded-full border border-white/20 hover:border-white/45 flex items-center justify-center text-cream/60 hover:text-cream transition-colors">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
@@ -149,13 +140,13 @@ export function EditorialSlider() {
 
               <div className="flex gap-2 items-center">
                 {SLIDES.map((_, i) => (
-                  <button key={i} onClick={() => setCurrent(i)} aria-label={`Go to slide ${i + 1}`}
-                    className={`h-px rounded-full transition-all duration-500 ${i === current ? 'w-10 bg-gold-400' : 'w-3 bg-white/25 hover:bg-white/45 h-px'}`}
+                  <button key={i} onClick={() => setCurrent(i)} aria-label={`Slide ${i + 1}`}
+                    className={`h-px rounded-full transition-all duration-500 ${i === current ? 'w-10 bg-gold-400' : 'w-3 bg-white/25 hover:bg-white/45'}`}
                   />
                 ))}
               </div>
 
-              <button onClick={next} aria-label="Next article"
+              <button onClick={next} aria-label="Next"
                 className="w-10 h-10 rounded-full border border-white/20 hover:border-white/45 flex items-center justify-center text-cream/60 hover:text-cream transition-colors">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
@@ -168,19 +159,13 @@ export function EditorialSlider() {
             </div>
           </div>
 
-          {/* Mobile image — block below text, rounded edges */}
+          {/* Mobile image */}
           <div
             key={`img-mob-${current}`}
-            className="relative min-h-[260px] lg:hidden animate-fade-in mb-2 rounded-2xl overflow-hidden"
+            className="relative min-h-[240px] lg:hidden animate-fade-in mb-2 rounded-2xl overflow-hidden"
           >
-            <Image
-              src={slide.img}
-              alt={slide.headline}
-              fill
-              className="object-cover"
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-ink/40" />
+            <Image src={slide.img} alt={slide.headline} fill className="object-cover" sizes="100vw"/>
+            <div className="absolute inset-0 bg-ink/40"/>
           </div>
         </div>
       </div>
