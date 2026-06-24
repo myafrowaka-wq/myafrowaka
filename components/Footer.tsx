@@ -62,29 +62,6 @@ export default function Footer() {
   return (
     <footer className="bg-[#131009]" role="contentinfo">
 
-      {/* ── Newsletter strip ──────────────────────────────────────── */}
-      <div className="border-b border-white/6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-          <div className="grid sm:grid-cols-2 gap-8 items-center">
-            <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-gold-400 mb-2">Stay Informed</p>
-              <h3 className="font-display text-2xl text-cream leading-snug">
-                Africa in your inbox, every week.
-              </h3>
-              <p className="font-sans text-sm text-cream/45 mt-2">New destination guides, visa updates, and travel inspiration.</p>
-            </div>
-            <form className="flex gap-2">
-              <input type="email" placeholder="your@email.com"
-                className="flex-1 bg-white/7 border border-white/10 text-cream placeholder-cream/25 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400/50 transition-colors min-w-0"/>
-              <button type="submit"
-                className="shrink-0 bg-gold-500 hover:bg-gold-600 text-ink font-mono font-bold text-[10px] uppercase tracking-[0.14em] px-5 py-3 rounded-xl transition-colors whitespace-nowrap">
-                Subscribe
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-
       {/* ── Main link grid ───────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-8 lg:gap-10">
@@ -92,12 +69,14 @@ export default function Footer() {
           {/* Brand — spans 2 cols on md */}
           <div className="col-span-2">
             <Link href="/" className="inline-block mb-5">
+              {/* White logo — no filter needed on dark background */}
               <Image
-                src="/logo.png"
+                src="/logo-white.png"
                 alt="MyAfroWaka"
-                width={160}
-                height={42}
-                className="h-9 w-auto brightness-0 invert opacity-85"
+                width={320}
+                height={84}
+                quality={90}
+                className="h-9 w-auto opacity-90"
               />
             </Link>
             <p className="font-sans text-sm text-cream/45 leading-relaxed mb-6 max-w-[220px]">
@@ -116,9 +95,9 @@ export default function Footer() {
             </div>
 
             <div className="mt-6 pt-5 border-t border-white/6">
-              <a href="mailto:myafrowaka@gmail.com"
+              <a href="mailto:info@myafrowaka.com"
                 className="font-mono text-[10px] text-cream/35 hover:text-gold-400 transition-colors">
-                myafrowaka@gmail.com
+                info@myafrowaka.com
               </a>
             </div>
           </div>
@@ -177,19 +156,10 @@ export default function Footer() {
       <div className="border-t border-white/6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-
-            <p className="font-mono text-[10px] text-cream/20 uppercase tracking-[0.1em] order-2 sm:order-1">
+            <p className="font-mono text-[10px] text-cream/20 uppercase tracking-[0.1em]">
               &copy; {new Date().getFullYear()} MyAfroWaka. All rights reserved.
             </p>
-
-            {/* Origin badge */}
-            <div className="flex items-center gap-2 order-1 sm:order-2">
-              <span className="font-mono text-[10px] text-cream/20">Made with</span>
-              <span className="text-sm">🌍</span>
-              <span className="font-mono text-[10px] text-cream/20">in Abuja, Nigeria</span>
-            </div>
-
-            <div className="flex items-center gap-4 order-3">
+            <div className="flex items-center gap-4">
               <Link href="/privacy" className="font-mono text-[10px] text-cream/20 hover:text-cream/45 transition-colors uppercase tracking-[0.1em]">Privacy</Link>
               <Link href="/terms"   className="font-mono text-[10px] text-cream/20 hover:text-cream/45 transition-colors uppercase tracking-[0.1em]">Terms</Link>
             </div>

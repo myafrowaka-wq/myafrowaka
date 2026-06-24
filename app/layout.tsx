@@ -6,6 +6,8 @@ import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ScrollRevealInit } from "@/components/ScrollRevealInit";
+import { NewsletterPopup } from "@/components/NewsletterPopup";
+import { CustomCursor } from "@/components/CustomCursor";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -92,11 +94,13 @@ export default function RootLayout({
     >
       <body className="min-h-screen flex flex-col">
         <ThemeProvider>
+          <CustomCursor />
           <ScrollRevealInit />
           <Nav />
           <main className="flex-1">{children}</main>
           <Footer />
           <ScrollToTop />
+          <NewsletterPopup />
         </ThemeProvider>
       </body>
     </html>

@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
-import { AfricaMap } from '@/components/AfricaMap'
 import { EditorialSlider } from '@/components/EditorialSlider'
+import { TypewriterHero } from '@/components/TypewriterHero'
+import { HeroBackground } from '@/components/HeroBackground'
+import { PlanTripCard } from '@/components/PlanTripCard'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -127,33 +129,41 @@ export default async function HomePage() {
   return (
     <>
       {/* ══════════════════════════════════════════════════════════════
-          HERO — image background with dark overlay
+          HERO — mouse parallax background + typewriter headline
       ══════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        <Image
+      <section className="relative min-h-[92vh] flex items-center overflow-hidden">
+
+        {/* Parallax background (client component) */}
+        <HeroBackground
           src="https://picsum.photos/seed/myafrowaka-hero-landscape/1920/1080"
           alt="African landscape"
-          fill
-          priority
-          className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0A1F0D]/92 via-[#0E2410]/82 to-[#122B15]/65" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A1F0D]/40 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0A1F0D]/94 via-[#0E2410]/85 to-[#122B15]/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A1F0D]/50 via-transparent to-transparent" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-24">
           <div className="grid lg:grid-cols-5 gap-12 items-center">
 
             {/* Left: headline + search */}
             <div className="lg:col-span-3">
-              <h1 className="font-display font-extrabold text-5xl sm:text-6xl xl:text-[72px] text-cream leading-[0.9] mb-6 tracking-tight">
-                Discover Africa<br />
-                <span className="text-gold-400">Beyond the</span><br />
-                <span className="text-moss-300">Stereotype.</span>
+              {/* Typewriter headline */}
+              <h1 className="font-display font-extrabold text-5xl sm:text-6xl xl:text-[72px] text-cream leading-[0.95] mb-6 tracking-tight min-h-[5rem] sm:min-h-[6rem] xl:min-h-[7rem]">
+                <TypewriterHero
+                  speed={34}
+                  lines={[
+                    { text: 'Explore Africa' },
+                    { text: ' One Adventure' },
+                    { text: ' at a Time.' },
+                  ]}
+                />
               </h1>
 
-              <p className="font-sans text-lg text-cream/70 max-w-md leading-relaxed mb-10">
-                Every country has a story the headlines never covered. We find the hidden valleys, the ancient cities, and the coastlines without crowds. Guides written from inside the continent, for travellers who want the real thing.
-              </p>
+              {/* Sub-headline: three benefit lines */}
+              <div className="font-sans text-[17px] text-cream/70 max-w-md leading-relaxed mb-10 space-y-1">
+                <p>Discover hidden gems.</p>
+                <p>Plan your dream trips.</p>
+                <p>Get insider travel tips from explorers who live and breathe Africa.</p>
+              </div>
 
               {/* Search */}
               <form action="/search" method="GET" className="relative max-w-xl mb-5">
@@ -166,7 +176,7 @@ export default async function HomePage() {
                   <input name="q" type="search" placeholder="Search destinations, experiences, countries..."
                     className="flex-1 py-4 pr-4 text-sm font-sans text-charcoal placeholder-charcoal/35 bg-transparent focus:outline-none"/>
                   <button type="submit"
-                    className="m-1.5 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[11px] uppercase tracking-[0.10em] px-5 py-3 rounded-xl transition-colors whitespace-nowrap">
+                    className="m-1.5 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[11px] uppercase tracking-[0.10em] px-5 py-3 rounded-xl transition-all hover:scale-[1.03] active:scale-[0.97] btn-magnetic">
                     Search
                   </button>
                 </div>
@@ -183,59 +193,12 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right: Plan a Trip card */}
+            {/* Right: auth-gated Plan a Trip card (client component) */}
             <div className="lg:col-span-2">
-              <div className="bg-white/96 backdrop-blur-sm rounded-3xl p-7 shadow-[0_20px_80px_rgba(0,0,0,0.5)]">
-                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-charcoal/35 mb-5">Plan Your Trip</p>
-
-                <div className="mb-4">
-                  <label className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/35 block mb-1.5">Where to?</label>
-                  <input type="text" name="destination" placeholder="Egypt, Kenya, Morocco..."
-                    className="w-full border border-line rounded-xl px-4 py-3 text-sm font-sans text-charcoal placeholder-charcoal/30 focus:outline-none focus:border-ochre-400 transition-colors bg-cream/40"/>
-                </div>
-                <div className="mb-4">
-                  <label className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/35 block mb-1.5">Type of trip</label>
-                  <input type="text" name="type" placeholder="Safari, beach, cultural..."
-                    className="w-full border border-line rounded-xl px-4 py-3 text-sm font-sans text-charcoal placeholder-charcoal/30 focus:outline-none focus:border-ochre-400 transition-colors bg-cream/40"/>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 mb-5">
-                  <div>
-                    <label className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/35 block mb-1.5">Month</label>
-                    <select className="w-full border border-line rounded-xl px-3 py-3 text-sm font-sans text-charcoal bg-cream/40 focus:outline-none focus:border-ochre-400 appearance-none">
-                      {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map(m => <option key={m}>{m}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/35 block mb-1.5">Duration</label>
-                    <select className="w-full border border-line rounded-xl px-3 py-3 text-sm font-sans text-charcoal bg-cream/40 focus:outline-none focus:border-ochre-400 appearance-none">
-                      {['3-5 days','1 week','2 weeks','3+ weeks'].map(d => <option key={d}>{d}</option>)}
-                    </select>
-                  </div>
-                </div>
-
-                <Link href="/search"
-                  className="block text-center w-full bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[11px] uppercase tracking-[0.12em] py-3.5 rounded-xl transition-colors">
-                  Find My Destination
-                </Link>
-
-                <div className="mt-5 pt-4 border-t border-line flex items-center gap-3">
-                  <div className="flex -space-x-2">
-                    {[1,2,3].map(n => (
-                      <div key={n} className="w-7 h-7 rounded-full border-2 border-white overflow-hidden bg-sand">
-                        <Image src={`https://picsum.photos/seed/hero-avatar-${n}/60/60`} alt="" width={28} height={28} className="object-cover"/>
-                      </div>
-                    ))}
-                  </div>
-                  <p className="font-sans text-[11px] text-charcoal/50">
-                    <strong className="text-charcoal/70">12,400+</strong> travellers exploring Africa
-                  </p>
-                </div>
-              </div>
+              <PlanTripCard />
             </div>
           </div>
         </div>
-        {/* No bottom fade — sharp section transition */}
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
@@ -273,12 +236,12 @@ export default async function HomePage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          EDITORIAL SPOTLIGHT — auto-advancing slider
+          EDITORIAL SPOTLIGHT — auto-advancing slider, full-bleed image
       ══════════════════════════════════════════════════════════════ */}
       <EditorialSlider />
 
       {/* ══════════════════════════════════════════════════════════════
-          LATEST TRAVEL GUIDES — masonry layout
+          LATEST TRAVEL GUIDES — masonry layout, bolder typography
       ══════════════════════════════════════════════════════════════ */}
       <section className="py-20 bg-sand dark-flip-surf" id="guides" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -295,27 +258,23 @@ export default async function HomePage() {
           {/* Masonry grid: tall left card, 2 right cards, wide bottom card */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            {/* Card 1: Tall (spans 2 rows on desktop) — photo-first, content overlay */}
+            {/* Card 1: Tall (spans 2 rows on desktop) */}
             <Link href={`/attractions/${displayGuides[0].slug}`}
               className="group relative rounded-3xl overflow-hidden lg:row-span-2 min-h-[380px] lg:min-h-[560px] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-all duration-400 flex flex-col">
-              <Image
-                src={displayGuides[0].image}
-                alt={displayGuides[0].name}
-                fill
+              <Image src={displayGuides[0].image} alt={displayGuides[0].name} fill
                 sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-700"
-              />
+                className="object-cover group-hover:scale-105 transition-transform duration-700"/>
               <div className="absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/40 to-transparent"/>
               <div className="relative mt-auto p-7">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-gold-400">{displayGuides[0].country}</span>
+                  <span className="font-display font-bold text-[11px] uppercase tracking-[0.10em] text-gold-400">{displayGuides[0].country}</span>
                   <span className="text-white/20">·</span>
-                  <span className="font-mono text-[9px] text-white/35">{fmt(displayGuides[0].date)}</span>
+                  <span className="font-mono text-[10px] font-bold text-white/40">{fmt(displayGuides[0].date)}</span>
                 </div>
                 <h3 className="font-display font-bold text-xl sm:text-2xl text-cream group-hover:text-gold-300 transition-colors leading-snug mb-3">
                   {displayGuides[0].name}
                 </h3>
-                <p className="font-sans text-sm text-cream/60 leading-relaxed line-clamp-2 mb-4">
+                <p className="font-sans text-[15px] text-cream/65 leading-relaxed line-clamp-2 mb-4">
                   {displayGuides[0].editorialSummary}
                 </p>
                 <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-ochre-400 group-hover:translate-x-1 transition-transform">
@@ -339,14 +298,14 @@ export default async function HomePage() {
               </div>
               <div className="p-5 flex flex-col flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-ochre-500">{displayGuides[1].country}</span>
+                  <span className="font-display font-bold text-[11px] uppercase tracking-[0.10em] text-ochre-500">{displayGuides[1].country}</span>
                   <span className="text-charcoal/20 dark-flip-muted">·</span>
-                  <span className="font-mono text-[9px] text-charcoal/35 dark-flip-muted">{fmt(displayGuides[1].date)}</span>
+                  <span className="font-mono text-[10px] font-bold text-charcoal/40 dark-flip-muted">{fmt(displayGuides[1].date)}</span>
                 </div>
                 <h3 className="font-display font-bold text-lg text-charcoal dark-flip-text group-hover:text-ochre-600 transition-colors leading-snug mb-2 flex-1">
                   {displayGuides[1].name}
                 </h3>
-                <p className="font-sans text-sm text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-2 mb-4">
+                <p className="font-sans text-[15px] text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-2 mb-4">
                   {displayGuides[1].editorialSummary}
                 </p>
                 <div className="flex items-center justify-between pt-3 border-t border-line dark-flip-border">
@@ -373,14 +332,14 @@ export default async function HomePage() {
               </div>
               <div className="p-5 flex flex-col flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-ochre-500">{displayGuides[2].country}</span>
+                  <span className="font-display font-bold text-[11px] uppercase tracking-[0.10em] text-ochre-500">{displayGuides[2].country}</span>
                   <span className="text-charcoal/20 dark-flip-muted">·</span>
-                  <span className="font-mono text-[9px] text-charcoal/35 dark-flip-muted">{fmt(displayGuides[2].date)}</span>
+                  <span className="font-mono text-[10px] font-bold text-charcoal/40 dark-flip-muted">{fmt(displayGuides[2].date)}</span>
                 </div>
                 <h3 className="font-display font-bold text-lg text-charcoal dark-flip-text group-hover:text-ochre-600 transition-colors leading-snug mb-2 flex-1">
                   {displayGuides[2].name}
                 </h3>
-                <p className="font-sans text-sm text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-2 mb-4">
+                <p className="font-sans text-[15px] text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-2 mb-4">
                   {displayGuides[2].editorialSummary}
                 </p>
                 <div className="flex items-center justify-between pt-3 border-t border-line dark-flip-border">
@@ -393,7 +352,7 @@ export default async function HomePage() {
               </div>
             </Link>
 
-            {/* Card 4: Wide horizontal (spans 2 columns on desktop) */}
+            {/* Card 4: Wide horizontal (spans 2 cols on desktop) */}
             <Link href={`/attractions/${displayGuides[3].slug}`}
               className="group bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300 lg:col-span-2 flex flex-col sm:flex-row">
               <div className="relative h-52 sm:h-auto sm:w-64 lg:w-80 shrink-0 overflow-hidden">
@@ -407,14 +366,14 @@ export default async function HomePage() {
               </div>
               <div className="p-6 flex flex-col justify-center flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-ochre-500">{displayGuides[3].country}</span>
+                  <span className="font-display font-bold text-[11px] uppercase tracking-[0.10em] text-ochre-500">{displayGuides[3].country}</span>
                   <span className="text-charcoal/20 dark-flip-muted">·</span>
-                  <span className="font-mono text-[9px] text-charcoal/35 dark-flip-muted">{fmt(displayGuides[3].date)}</span>
+                  <span className="font-mono text-[10px] font-bold text-charcoal/40 dark-flip-muted">{fmt(displayGuides[3].date)}</span>
                 </div>
                 <h3 className="font-display font-bold text-xl sm:text-2xl text-charcoal dark-flip-text group-hover:text-ochre-600 transition-colors leading-snug mb-3">
                   {displayGuides[3].name}
                 </h3>
-                <p className="font-sans text-sm text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-3 mb-4">
+                <p className="font-sans text-[15px] text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-3 mb-4">
                   {displayGuides[3].editorialSummary}
                 </p>
                 <div className="flex items-center justify-between pt-4 border-t border-line dark-flip-border">
@@ -425,6 +384,15 @@ export default async function HomePage() {
                   </span>
                 </div>
               </div>
+            </Link>
+          </div>
+
+          {/* View all guides — pagination link */}
+          <div className="mt-10 flex items-center justify-center gap-3">
+            <Link href="/search"
+              className="inline-flex items-center gap-2 border border-charcoal/20 dark-flip-border hover:border-ochre-500 text-charcoal/60 dark-flip-muted hover:text-ochre-600 font-display font-semibold text-[13px] px-7 py-3 rounded-full transition-all hover:scale-[1.02]">
+              View all guides
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
           </div>
         </div>
@@ -457,68 +425,10 @@ export default async function HomePage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          INTERACTIVE MAP + NEWSLETTER — two-column
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 bg-sand dark-flip-surf" id="map-section" data-reveal>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-5 gap-12 items-start">
-
-            {/* Map */}
-            <div className="lg:col-span-3">
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ochre-500 mb-2">Interactive Map</p>
-              <h2 className="font-display font-bold text-3xl text-charcoal dark-flip-text mb-2">Explore Africa by Region</h2>
-              <p className="font-sans text-sm text-charcoal/55 dark-flip-muted mb-8">Click any region to discover destinations, guides, and experiences.</p>
-              <AfricaMap />
-            </div>
-
-            {/* Newsletter */}
-            <div className="lg:col-span-2">
-              <div className="bg-ink rounded-3xl p-8 sticky top-24">
-                <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-gold-400">Newsletter</span>
-                <h3 className="font-display font-bold text-2xl text-cream mt-2 mb-3 leading-snug">
-                  Africa in Your Inbox, Every Week
-                </h3>
-                <p className="font-sans text-sm text-cream/55 leading-relaxed mb-6">
-                  New destination guides, hidden gems, visa updates, and travel inspiration. One email per week, no spam.
-                </p>
-                <form className="space-y-3">
-                  <input type="text" placeholder="Your first name"
-                    className="w-full bg-white/8 border border-white/12 text-cream placeholder-cream/30 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
-                  <input type="email" placeholder="your@email.com"
-                    className="w-full bg-white/8 border border-white/12 text-cream placeholder-cream/30 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
-                  <button type="submit"
-                    className="w-full bg-gold-500 hover:bg-gold-600 text-ink font-display font-bold text-[11px] uppercase tracking-[0.12em] py-3.5 rounded-xl transition-colors">
-                    Subscribe Free
-                  </button>
-                </form>
-                <p className="font-mono text-[9px] text-cream/20 text-center mt-4">No spam. Unsubscribe any time.</p>
-
-                <div className="mt-6 pt-6 border-t border-white/10">
-                  <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-cream/30 mb-3 text-center">Follow Our Journey</p>
-                  <div className="flex items-center justify-center gap-3">
-                    {[
-                      { label: 'Instagram', path: 'M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z', href: 'https://instagram.com/myafrowaka_' },
-                      { label: 'X',         path: 'M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z', href: '#' },
-                      { label: 'TikTok',    path: 'M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z', href: 'https://tiktok.com/@myafrowaka_' },
-                    ].map(s => (
-                      <a key={s.label} href={s.href} aria-label={s.label}
-                        className="w-9 h-9 bg-white/8 hover:bg-white/15 rounded-full flex items-center justify-center text-cream/50 hover:text-cream transition-colors">
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d={s.path}/></svg>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════
-          FEATURED ATTRACTIONS — photo cards (Sanity-powered)
+          FEATURED ATTRACTIONS — photo cards with pagination UI
       ══════════════════════════════════════════════════════════════ */}
       {(featured as AttrItem[]).length > 0 && (
-        <section className="py-20 bg-cream dark-flip-bg" data-reveal>
+        <section className="py-20 bg-sand dark-flip-surf" data-reveal>
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-end justify-between mb-10">
               <div>
@@ -552,6 +462,29 @@ export default async function HomePage() {
                   </div>
                 </Link>
               ))}
+            </div>
+
+            {/* Pagination bar */}
+            <div className="mt-10 flex items-center justify-center gap-2">
+              <button disabled aria-label="Previous page"
+                className="w-9 h-9 rounded-xl border border-line flex items-center justify-center text-charcoal/30 disabled:opacity-40 dark-flip-border">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
+              </button>
+              {[1, 2, 3, 4, 5].map(n => (
+                <Link key={n} href={n === 1 ? '/search' : `/search?page=${n}`}
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center font-display font-semibold text-[13px] transition-colors ${n === 1 ? 'bg-ink text-cream dark-flip-text' : 'border border-line text-charcoal/50 hover:border-ochre-400 hover:text-ochre-600 dark-flip-border dark-flip-muted'}`}>
+                  {n}
+                </Link>
+              ))}
+              <span className="font-mono text-[11px] text-charcoal/30 px-1">...</span>
+              <Link href="/search?page=9"
+                className="w-9 h-9 rounded-xl border border-line flex items-center justify-center font-display font-semibold text-[13px] text-charcoal/50 hover:border-ochre-400 hover:text-ochre-600 transition-colors dark-flip-border dark-flip-muted">
+                9
+              </Link>
+              <Link href="/search?page=2" aria-label="Next page"
+                className="w-9 h-9 rounded-xl border border-line flex items-center justify-center text-charcoal/50 hover:text-ochre-600 hover:border-ochre-400 transition-colors dark-flip-border dark-flip-muted">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/></svg>
+              </Link>
             </div>
           </div>
         </section>
@@ -607,7 +540,7 @@ export default async function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/search"
-              className="inline-flex items-center justify-center gap-2 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-8 py-4 rounded-full transition-colors">
+              className="inline-flex items-center justify-center gap-2 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-8 py-4 rounded-full transition-all hover:scale-[1.03] btn-magnetic">
               Explore Destinations
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>

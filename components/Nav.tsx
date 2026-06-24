@@ -124,7 +124,6 @@ export default function Nav() {
 
   const close = () => { setPanel(null); setLangOpen(false); setMobile(false); setMenuOpen(false) }
 
-  /* Nav item style — Poppins, bigger */
   const ni = 'flex items-center gap-1 px-3 py-2 text-[15px] font-display font-semibold text-cream/80 hover:text-cream transition-colors rounded-lg hover:bg-white/8 whitespace-nowrap cursor-pointer'
 
   const chevron = (active: boolean) => (
@@ -140,32 +139,43 @@ export default function Nav() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[66px] flex items-center justify-between gap-4">
 
         {/* Left cluster: desktop hamburger + logo */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-3 shrink-0">
 
-          {/* Desktop hamburger — left side */}
+          {/* Desktop hamburger — bigger, more stylish */}
           <button
             onClick={() => { setMenuOpen(v => !v); setPanel(null) }}
             aria-label={menuOpen ? 'Close menu' : 'Open full menu'}
-            className="hidden lg:flex flex-col gap-[5px] items-center justify-center w-9 h-9 rounded-full text-cream/70 hover:text-cream hover:bg-white/10 transition-all"
+            aria-expanded={menuOpen}
+            className="hidden lg:flex flex-col gap-[5.5px] items-center justify-center w-11 h-11 rounded-xl text-cream hover:bg-white/10 transition-all group"
           >
             {menuOpen ? (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
               </svg>
             ) : (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>
-              </svg>
+              <>
+                <span className="block h-[2px] rounded-full bg-cream/70 group-hover:bg-cream transition-colors" style={{ width: '22px' }}/>
+                <span className="block h-[2px] rounded-full bg-cream/70 group-hover:bg-cream transition-colors" style={{ width: '16px' }}/>
+                <span className="block h-[2px] rounded-full bg-cream/70 group-hover:bg-cream transition-colors" style={{ width: '20px' }}/>
+              </>
             )}
           </button>
 
-          {/* Logo */}
+          {/* Logo — white version for dark nav */}
           <Link href="/" onClick={close} className="shrink-0">
-            <Image src="/logo.png" alt="MyAfroWaka" width={176} height={46} priority className="h-9 w-auto" />
+            <Image
+              src="/logo-white.png"
+              alt="MyAfroWaka"
+              width={352}
+              height={92}
+              priority
+              quality={90}
+              className="h-9 w-auto"
+            />
           </Link>
         </div>
 
-        {/* Desktop nav items */}
+        {/* Desktop nav items — "Plan a Trip" removed; stays only as CTA button */}
         <nav className="hidden lg:flex items-center gap-0">
           <div className="relative" onMouseEnter={() => hoverOpen('destinations')} onMouseLeave={hoverClose}>
             <button className={ni}>Destinations {chevron(panel === 'destinations')}</button>
@@ -173,7 +183,6 @@ export default function Nav() {
           <div className="relative" onMouseEnter={() => hoverOpen('experiences')} onMouseLeave={hoverClose}>
             <button className={ni}>Experiences {chevron(panel === 'experiences')}</button>
           </div>
-          <Link href="/search" onClick={close} className={ni}>Plan a Trip</Link>
           <div className="relative" onMouseEnter={() => hoverOpen('media')} onMouseLeave={hoverClose}>
             <button className={ni}>Guides {chevron(panel === 'media')}</button>
           </div>
@@ -215,18 +224,28 @@ export default function Nav() {
 
           <div className="hidden lg:flex"><ThemeToggle /></div>
 
+          {/* Sign In / Profile button */}
+          <Link href="/login" onClick={close}
+            className="hidden lg:flex items-center gap-2 text-cream/80 hover:text-cream hover:bg-white/10 text-[13px] font-display font-semibold px-3 py-2 rounded-lg transition-all ml-1 whitespace-nowrap">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
+            </svg>
+            Sign In
+          </Link>
+
+          {/* Plan a Trip CTA */}
           <Link href="/search" onClick={close}
-            className="hidden lg:inline-flex items-center bg-crimson hover:bg-crimson-600 text-cream text-[12px] font-display font-bold uppercase tracking-[0.10em] px-5 py-2.5 rounded-full transition-colors ml-2 whitespace-nowrap">
+            className="hidden lg:inline-flex items-center bg-crimson hover:bg-crimson-600 text-cream text-[12px] font-display font-bold uppercase tracking-[0.10em] px-5 py-2.5 rounded-full transition-all hover:scale-[1.03] active:scale-[0.98] ml-2 whitespace-nowrap">
             Plan a Trip
           </Link>
 
           {/* Mobile hamburger */}
           <button onClick={() => setMobile(v => !v)} aria-label="Menu"
-            className="lg:hidden w-9 h-9 rounded-full flex items-center justify-center text-cream hover:bg-white/10 transition-colors ml-1">
+            className="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-cream hover:bg-white/10 transition-colors ml-1 flex-col gap-[5px]">
             {mobile ? (
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
             ) : (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/></svg>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/></svg>
             )}
           </button>
         </div>
@@ -240,7 +259,6 @@ export default function Nav() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
 
-            {/* Header row */}
             <div className="flex items-center justify-between mb-10">
               <h2 className="font-display font-bold text-3xl text-cream">Explore Africa</h2>
               <button onClick={close} className="w-10 h-10 rounded-full border border-white/15 hover:border-white/35 flex items-center justify-center text-cream/50 hover:text-cream transition-colors">
@@ -341,8 +359,6 @@ export default function Nav() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
             <div className="grid grid-cols-12 gap-8">
-
-              {/* 6 region columns */}
               <div className="col-span-9 grid grid-cols-3 gap-x-8 gap-y-6">
                 {REGIONS.map(r => (
                   <div key={r.region}>
@@ -368,8 +384,6 @@ export default function Nav() {
                   </div>
                 ))}
               </div>
-
-              {/* Featured */}
               <div className="col-span-3 border-l border-line dark:border-white/8 pl-8 flex flex-col">
                 <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-4">Featured</p>
                 <Link href="/search?q=Egypt" onClick={close} className="group relative rounded-2xl overflow-hidden flex-1 min-h-[200px] block">
@@ -400,8 +414,6 @@ export default function Nav() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
             <div className="grid grid-cols-12 gap-8">
-
-              {/* 8 experience tiles — image, not emoji */}
               <div className="col-span-8 grid grid-cols-4 gap-4">
                 {EXPERIENCES.map(e => (
                   <Link key={e.label} href={e.href} onClick={close}
@@ -416,8 +428,6 @@ export default function Nav() {
                   </Link>
                 ))}
               </div>
-
-              {/* Featured experience */}
               <div className="col-span-4 border-l border-line dark:border-white/8 pl-8">
                 <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-4">Top Experience</p>
                 <Link href="/search?q=safari" onClick={close} className="group relative block rounded-2xl overflow-hidden h-52 mb-4">
@@ -478,7 +488,6 @@ export default function Nav() {
         <div className="lg:hidden border-t border-white/10 bg-[#172F19] max-h-[80vh] overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-            {/* Mobile search */}
             <form action="/search" method="GET" className="py-4">
               <div className="flex bg-white/10 rounded-xl overflow-hidden">
                 <input name="q" type="search" placeholder="Search destinations..."
@@ -491,7 +500,6 @@ export default function Nav() {
               </div>
             </form>
 
-            {/* Accordion */}
             {[
               {
                 key: 'destinations', label: 'Destinations',
@@ -525,25 +533,31 @@ export default function Nav() {
             ))}
 
             {[
-              { label: 'Plan a Trip', href: '/search'  },
-              { label: 'About Us',   href: '/about'   },
-              { label: 'Contact',    href: '/contact' },
+              { label: 'Guides',   href: '/search'  },
+              { label: 'About Us', href: '/about'   },
+              { label: 'Contact',  href: '/contact' },
             ].map(i => (
               <Link key={i.label} href={i.href} onClick={close}
                 className="flex px-2 py-4 text-[15px] font-display font-semibold text-cream/85 border-b border-white/10">{i.label}</Link>
             ))}
 
-            <div className="flex items-center justify-between px-2 py-4">
+            <div className="flex items-center justify-between px-2 py-4 border-b border-white/10">
+              <Link href="/login" onClick={close}
+                className="flex items-center gap-2 text-[14px] font-display font-semibold text-cream/80 hover:text-cream transition-colors">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
+                </svg>
+                Sign In
+              </Link>
               <div className="flex items-center gap-2">
                 <ThemeToggle/>
-                <span className="text-cream/40 text-[11px] font-mono">Dark mode</span>
+                <select value={lang} onChange={e => setLang(e.target.value)}
+                  className="bg-white/10 text-cream text-[11px] font-mono border border-white/15 rounded-full px-3 py-1.5 focus:outline-none">
+                  {LANGUAGES.map(l => (
+                    <option key={l.code} value={l.code} className="text-charcoal bg-white">{l.flag} {l.code}</option>
+                  ))}
+                </select>
               </div>
-              <select value={lang} onChange={e => setLang(e.target.value)}
-                className="bg-white/10 text-cream text-[11px] font-mono border border-white/15 rounded-full px-3 py-1.5 focus:outline-none">
-                {LANGUAGES.map(l => (
-                  <option key={l.code} value={l.code} className="text-charcoal bg-white">{l.flag} {l.code}</option>
-                ))}
-              </select>
             </div>
 
             <div className="py-4">
