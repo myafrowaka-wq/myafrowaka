@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
 import { AfricaMap } from '@/components/AfricaMap'
+import { EditorialSlider } from '@/components/EditorialSlider'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -53,12 +54,12 @@ const FALLBACK_DESTINATIONS: DestItem[] = [
 ]
 
 const EXPERIENCES = [
-  { label: 'Safari',    slug: 'safari',   desc: 'The Big Five and beyond',           image: 'https://picsum.photos/seed/safari-exp/600/700'   },
+  { label: 'Safari',    slug: 'safari',   desc: 'The Big Five and beyond',              image: 'https://picsum.photos/seed/safari-exp/600/700'   },
   { label: 'Culture',   slug: 'culture',  desc: 'Living traditions across the continent', image: 'https://picsum.photos/seed/culture-exp/600/700'  },
-  { label: 'Beach',     slug: 'beach',    desc: 'Indian Ocean and Atlantic shores',   image: 'https://picsum.photos/seed/beach-exp/600/700'    },
-  { label: 'History',   slug: 'history',  desc: 'Ancient kingdoms and World Heritage', image: 'https://picsum.photos/seed/history-exp/600/700'  },
-  { label: 'Hiking',    slug: 'hiking',   desc: 'Trails from Simien to Table Mountain', image: 'https://picsum.photos/seed/hiking-exp/600/700'   },
-  { label: 'Food',      slug: 'food',     desc: 'Tagines, jollof, nyama choma',       image: 'https://picsum.photos/seed/food-exp/600/700'     },
+  { label: 'Beach',     slug: 'beach',    desc: 'Indian Ocean and Atlantic shores',      image: 'https://picsum.photos/seed/beach-exp/600/700'    },
+  { label: 'History',   slug: 'history',  desc: 'Ancient kingdoms and World Heritage',   image: 'https://picsum.photos/seed/history-exp/600/700'  },
+  { label: 'Hiking',    slug: 'hiking',   desc: 'Trails from Simien to Table Mountain',  image: 'https://picsum.photos/seed/hiking-exp/600/700'   },
+  { label: 'Food',      slug: 'food',     desc: 'Tagines, jollof, nyama choma',          image: 'https://picsum.photos/seed/food-exp/600/700'     },
 ]
 
 const FALLBACK_GUIDES: GuideItem[] = [
@@ -66,45 +67,29 @@ const FALLBACK_GUIDES: GuideItem[] = [
     name: 'Pyramids of Giza: The Complete Travel Guide',
     slug: 'pyramids-of-giza', continentRegion: 'North Africa', country: 'Egypt',
     editorialSummary: 'The last surviving Wonder of the Ancient World, standing on the Giza Plateau outside Cairo. Everything you need to know before you visit.',
-    image: 'https://picsum.photos/seed/giza-guide-card/800/500', readTime: 12, date: '2026-06-01',
+    image: 'https://picsum.photos/seed/giza-guide-card/800/600', readTime: 12, date: '2026-06-01',
   },
   {
     name: 'Bwindi Impenetrable Forest: Mountain Gorilla Encounter',
     slug: 'bwindi-impenetrable-national-park', continentRegion: 'East Africa', country: 'Uganda',
     editorialSummary: 'Home to half the world mountain gorilla population, Bwindi covers 321 square kilometres of southwestern Uganda.',
-    image: 'https://picsum.photos/seed/bwindi-guide-card/800/500', readTime: 10, date: '2026-05-15',
+    image: 'https://picsum.photos/seed/bwindi-guide-card/800/600', readTime: 10, date: '2026-05-15',
   },
   {
     name: 'Table Mountain: Everything You Need to Know',
     slug: 'table-mountain', continentRegion: 'Southern Africa', country: 'South Africa',
     editorialSummary: 'Cape Town iconic flat-topped summit rises 1,085 metres above sea level and harbours more plant species than the entire United Kingdom.',
-    image: 'https://picsum.photos/seed/table-mtn-guide/800/500', readTime: 9, date: '2026-05-01',
+    image: 'https://picsum.photos/seed/table-mtn-guide/800/600', readTime: 9, date: '2026-05-01',
   },
   {
     name: 'Serengeti National Park: The Migration Guide',
     slug: 'serengeti-national-park', continentRegion: 'East Africa', country: 'Tanzania',
     editorialSummary: 'The Great Migration moves 1.5 million wildebeest and 250,000 zebras in a continuous annual circuit across Tanzania and Kenya.',
-    image: 'https://picsum.photos/seed/serengeti-guide/800/500', readTime: 14, date: '2026-04-20',
-  },
-]
-
-const TESTIMONIALS = [
-  {
-    quote: "I visited 8 African countries in one year, and MyAfroWaka was the only guide I used. Every detail was accurate and nothing felt like it had been copied from Wikipedia.",
-    name: 'Sarah M.', origin: 'London, UK', avatar: 'https://picsum.photos/seed/avatar-sarah/80/80',
-  },
-  {
-    quote: "Finally a platform that treats Africa as 54 distinct countries, not one continent with one story. The Bwindi gorilla trek guide alone was worth bookmarking.",
-    name: 'David O.', origin: 'Lagos, Nigeria', avatar: 'https://picsum.photos/seed/avatar-david/80/80',
-  },
-  {
-    quote: "We planned our entire East Africa itinerary through MyAfroWaka. Three weeks, four countries, zero surprises. Everything matched what the guides said.",
-    name: 'Amina K.', origin: 'Montreal, Canada', avatar: 'https://picsum.photos/seed/avatar-amina/80/80',
+    image: 'https://picsum.photos/seed/serengeti-guide/800/600', readTime: 14, date: '2026-04-20',
   },
 ]
 
 const POPULAR_SEARCHES = ['Victoria Falls', 'Pyramids of Giza', 'Serengeti', 'Zanzibar', 'Gorilla Trek']
-
 const GALLERY_SEEDS = ['gallery-africa-1', 'gallery-africa-2', 'gallery-africa-3', 'gallery-africa-4', 'gallery-africa-5', 'gallery-africa-6']
 
 function fmt(d: string) {
@@ -145,7 +130,6 @@ export default async function HomePage() {
           HERO — image background with dark overlay
       ══════════════════════════════════════════════════════════════ */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Background photo */}
         <Image
           src="https://picsum.photos/seed/myafrowaka-hero-landscape/1920/1080"
           alt="African landscape"
@@ -153,25 +137,22 @@ export default async function HomePage() {
           priority
           className="object-cover"
         />
-        {/* Dark overlay — left heavier so text is readable, right lighter to show image */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A1F0D]/92 via-[#0E2410]/82 to-[#122B15]/65" />
-        {/* Subtle vignette */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A1F0D]/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A1F0D]/40 via-transparent to-transparent" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-24">
           <div className="grid lg:grid-cols-5 gap-12 items-center">
 
             {/* Left: headline + search */}
             <div className="lg:col-span-3">
-              <h1 className="font-display text-5xl sm:text-6xl xl:text-[72px] text-cream leading-[0.9] mb-6 tracking-tight">
+              <h1 className="font-display font-extrabold text-5xl sm:text-6xl xl:text-[72px] text-cream leading-[0.9] mb-6 tracking-tight">
                 Discover Africa<br />
                 <span className="text-gold-400">Beyond the</span><br />
                 <span className="text-moss-300">Stereotype.</span>
               </h1>
 
-              <p className="font-sans text-lg text-cream/65 max-w-md leading-relaxed mb-10">
-                557 verified guides across 47 countries. Written by Africans, for the world.
-                No fabrications. No cliches.
+              <p className="font-sans text-lg text-cream/70 max-w-md leading-relaxed mb-10">
+                Every country has a story the headlines never covered. We find the hidden valleys, the ancient cities, and the coastlines without crowds. Guides written from inside the continent, for travellers who want the real thing.
               </p>
 
               {/* Search */}
@@ -185,7 +166,7 @@ export default async function HomePage() {
                   <input name="q" type="search" placeholder="Search destinations, experiences, countries..."
                     className="flex-1 py-4 pr-4 text-sm font-sans text-charcoal placeholder-charcoal/35 bg-transparent focus:outline-none"/>
                   <button type="submit"
-                    className="m-1.5 bg-crimson hover:bg-crimson-600 text-cream font-mono text-[11px] uppercase tracking-[0.12em] px-5 py-3 rounded-xl transition-colors whitespace-nowrap">
+                    className="m-1.5 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[11px] uppercase tracking-[0.10em] px-5 py-3 rounded-xl transition-colors whitespace-nowrap">
                     Search
                   </button>
                 </div>
@@ -205,9 +186,7 @@ export default async function HomePage() {
             {/* Right: Plan a Trip card */}
             <div className="lg:col-span-2">
               <div className="bg-white/96 backdrop-blur-sm rounded-3xl p-7 shadow-[0_20px_80px_rgba(0,0,0,0.5)]">
-                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-charcoal/35 mb-5">
-                  Plan Your Trip
-                </p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-charcoal/35 mb-5">Plan Your Trip</p>
 
                 <div className="mb-4">
                   <label className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/35 block mb-1.5">Where to?</label>
@@ -236,7 +215,7 @@ export default async function HomePage() {
                 </div>
 
                 <Link href="/search"
-                  className="block text-center w-full bg-crimson hover:bg-crimson-600 text-cream font-mono text-[11px] uppercase tracking-[0.14em] py-3.5 rounded-xl transition-colors">
+                  className="block text-center w-full bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[11px] uppercase tracking-[0.12em] py-3.5 rounded-xl transition-colors">
                   Find My Destination
                 </Link>
 
@@ -256,20 +235,17 @@ export default async function HomePage() {
             </div>
           </div>
         </div>
-
-        {/* Page transition fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-cream dark-flip-bg to-transparent pointer-events-none"/>
+        {/* No bottom fade — sharp section transition */}
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
           TOP DESTINATIONS — photo cards
       ══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 bg-cream dark-flip-bg">
+      <section className="py-20 bg-cream dark-flip-bg" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ochre-500 mb-2">Top Destinations</p>
-              <h2 className="font-display text-3xl sm:text-4xl text-charcoal dark-flip-text">Where Will You Go Next?</h2>
+              <h2 className="font-display font-bold text-3xl sm:text-4xl text-charcoal dark-flip-text">Where Will You Go Next?</h2>
             </div>
             <Link href="/search" className="hidden sm:flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted hover:text-ochre-600 transition-colors">
               All 47 countries
@@ -281,16 +257,13 @@ export default async function HomePage() {
             {destinations.map((d: DestItem) => (
               <Link key={d.name} href={`/search?q=${encodeURIComponent(d.name)}`}
                 className="group relative rounded-2xl overflow-hidden aspect-[3/4] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-all duration-300 hover:-translate-y-1.5">
-                {/* Colour fallback */}
                 <div className="absolute inset-0" style={{ backgroundColor: d.color }}/>
-                {/* Photo */}
                 <Image src={d.image} alt={d.name} fill sizes="(max-width:640px) 50vw,(max-width:1024px) 33vw,17vw"
-                  className="object-cover group-hover:scale-108 transition-transform duration-700 mix-blend-multiply opacity-65"/>
-                {/* Gradient */}
+                  className="object-cover group-hover:scale-110 transition-transform duration-700 mix-blend-multiply opacity-65"/>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/15 to-transparent"/>
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-cream/55 mb-1">{d.flag} {d.region.split(' ')[0]}</p>
-                  <h3 className="font-display text-base sm:text-lg text-cream group-hover:text-gold-300 transition-colors leading-tight">{d.name}</h3>
+                  <h3 className="font-display font-bold text-base sm:text-lg text-cream group-hover:text-gold-300 transition-colors leading-tight">{d.name}</h3>
                   <p className="font-mono text-[9px] text-cream/45 mt-1">{d.count} guides</p>
                 </div>
               </Link>
@@ -300,53 +273,18 @@ export default async function HomePage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          FEATURED SPOTLIGHT — editorial hero banner
+          EDITORIAL SPOTLIGHT — auto-advancing slider
       ══════════════════════════════════════════════════════════════ */}
-      <section className="bg-ink overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-2 gap-0">
-            {/* Text */}
-            <div className="py-16 lg:py-20 pr-0 lg:pr-12 flex flex-col justify-center">
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-gold-400 mb-4">Editor Pick</p>
-              <h2 className="font-display text-4xl sm:text-5xl text-cream leading-tight mb-5">
-                The Pyramids of Giza Still Defy Explanation.
-              </h2>
-              <p className="font-sans text-cream/60 leading-relaxed mb-8 max-w-md">
-                Built over 4,500 years ago, the Great Pyramid of Giza was the tallest man-made structure on Earth for 3,800 years.
-                Our complete guide covers permits, best viewing times, and what tour operators won&apos;t tell you.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Link href="/attractions/pyramids-of-giza"
-                  className="inline-flex items-center gap-2 bg-crimson hover:bg-crimson-600 text-cream font-mono text-[11px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-colors">
-                  Read the full guide
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                </Link>
-                <Link href="/search?q=Egypt"
-                  className="inline-flex items-center border border-white/20 hover:border-white/40 text-cream/70 hover:text-cream font-mono text-[11px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-colors">
-                  Explore Egypt
-                </Link>
-              </div>
-            </div>
-            {/* Image */}
-            <div className="relative min-h-[320px] lg:min-h-0">
-              <Image src="https://picsum.photos/seed/pyramids-editorial-spotlight/800/600"
-                alt="Pyramids of Giza editorial spotlight" fill className="object-cover"/>
-              <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/20 to-transparent lg:block hidden"/>
-              <div className="absolute inset-0 bg-ink/40 lg:hidden"/>
-            </div>
-          </div>
-        </div>
-      </section>
+      <EditorialSlider />
 
       {/* ══════════════════════════════════════════════════════════════
-          LATEST TRAVEL GUIDES — magazine 2×2 grid (no white spaces)
+          LATEST TRAVEL GUIDES — masonry layout
       ══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 bg-sand dark-flip-surf" id="guides">
+      <section className="py-20 bg-sand dark-flip-surf" id="guides" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ochre-500 mb-2">Editorial</p>
-              <h2 className="font-display text-3xl sm:text-4xl text-charcoal dark-flip-text">Latest Travel Guides</h2>
+              <h2 className="font-display font-bold text-3xl sm:text-4xl text-charcoal dark-flip-text">Latest Travel Guides</h2>
             </div>
             <Link href="/search" className="hidden sm:flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted hover:text-ochre-600 transition-colors">
               All guides
@@ -354,44 +292,140 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {/* Uniform 2×2 grid — always complete, no white space */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {displayGuides.map((g: GuideItem) => (
-              <Link key={g.slug} href={`/attractions/${g.slug}`}
-                className="group bg-white dark-flip-card rounded-2xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300 flex flex-col">
-                {/* Photo */}
-                <div className="relative h-52 overflow-hidden shrink-0">
-                  <Image src={g.image} alt={g.name} fill sizes="(max-width:640px) 100vw,50vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"/>
-                  <div className="absolute top-3 left-3">
-                    <span className="bg-white/90 backdrop-blur font-mono text-[9px] uppercase tracking-[0.12em] text-charcoal/65 px-2.5 py-1 rounded-full">
-                      {g.continentRegion}
-                    </span>
-                  </div>
+          {/* Masonry grid: tall left card, 2 right cards, wide bottom card */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            {/* Card 1: Tall (spans 2 rows on desktop) — photo-first, content overlay */}
+            <Link href={`/attractions/${displayGuides[0].slug}`}
+              className="group relative rounded-3xl overflow-hidden lg:row-span-2 min-h-[380px] lg:min-h-[560px] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-all duration-400 flex flex-col">
+              <Image
+                src={displayGuides[0].image}
+                alt={displayGuides[0].name}
+                fill
+                sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/40 to-transparent"/>
+              <div className="relative mt-auto p-7">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-gold-400">{displayGuides[0].country}</span>
+                  <span className="text-white/20">·</span>
+                  <span className="font-mono text-[9px] text-white/35">{fmt(displayGuides[0].date)}</span>
                 </div>
-                {/* Content */}
-                <div className="p-5 flex flex-col flex-1">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-ochre-500">{g.country}</span>
-                    <span className="text-charcoal/20 dark-flip-muted">·</span>
-                    <span className="font-mono text-[9px] text-charcoal/35 dark-flip-muted">{fmt(g.date)}</span>
-                  </div>
-                  <h3 className="font-display text-xl text-charcoal dark-flip-text group-hover:text-ochre-600 transition-colors leading-snug mb-3 flex-1">
-                    {g.name}
-                  </h3>
-                  <p className="font-sans text-sm text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-2 mb-4">
-                    {g.editorialSummary}
-                  </p>
-                  <div className="flex items-center justify-between pt-4 border-t border-line dark-flip-border">
-                    <span className="font-mono text-[10px] text-charcoal/35 dark-flip-muted">{g.readTime} min read</span>
-                    <span className="font-mono text-[10px] text-ochre-500 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                      Read guide
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                    </span>
-                  </div>
+                <h3 className="font-display font-bold text-xl sm:text-2xl text-cream group-hover:text-gold-300 transition-colors leading-snug mb-3">
+                  {displayGuides[0].name}
+                </h3>
+                <p className="font-sans text-sm text-cream/60 leading-relaxed line-clamp-2 mb-4">
+                  {displayGuides[0].editorialSummary}
+                </p>
+                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-ochre-400 group-hover:translate-x-1 transition-transform">
+                  Read guide
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </span>
+              </div>
+            </Link>
+
+            {/* Card 2: Normal top-right */}
+            <Link href={`/attractions/${displayGuides[1].slug}`}
+              className="group bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300 flex flex-col">
+              <div className="relative h-44 shrink-0 overflow-hidden">
+                <Image src={displayGuides[1].image} alt={displayGuides[1].name} fill sizes="(max-width:640px) 100vw,50vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"/>
+                <div className="absolute top-3 left-3">
+                  <span className="bg-white/90 backdrop-blur font-mono text-[9px] uppercase tracking-[0.12em] text-charcoal/65 px-2.5 py-1 rounded-full">
+                    {displayGuides[1].continentRegion}
+                  </span>
                 </div>
-              </Link>
-            ))}
+              </div>
+              <div className="p-5 flex flex-col flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-ochre-500">{displayGuides[1].country}</span>
+                  <span className="text-charcoal/20 dark-flip-muted">·</span>
+                  <span className="font-mono text-[9px] text-charcoal/35 dark-flip-muted">{fmt(displayGuides[1].date)}</span>
+                </div>
+                <h3 className="font-display font-bold text-lg text-charcoal dark-flip-text group-hover:text-ochre-600 transition-colors leading-snug mb-2 flex-1">
+                  {displayGuides[1].name}
+                </h3>
+                <p className="font-sans text-sm text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-2 mb-4">
+                  {displayGuides[1].editorialSummary}
+                </p>
+                <div className="flex items-center justify-between pt-3 border-t border-line dark-flip-border">
+                  <span className="font-mono text-[10px] text-charcoal/35 dark-flip-muted">{displayGuides[1].readTime} min read</span>
+                  <span className="font-mono text-[10px] text-ochre-500 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                    Read
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                  </span>
+                </div>
+              </div>
+            </Link>
+
+            {/* Card 3: Normal middle-right */}
+            <Link href={`/attractions/${displayGuides[2].slug}`}
+              className="group bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300 flex flex-col">
+              <div className="relative h-44 shrink-0 overflow-hidden">
+                <Image src={displayGuides[2].image} alt={displayGuides[2].name} fill sizes="(max-width:640px) 100vw,50vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"/>
+                <div className="absolute top-3 left-3">
+                  <span className="bg-white/90 backdrop-blur font-mono text-[9px] uppercase tracking-[0.12em] text-charcoal/65 px-2.5 py-1 rounded-full">
+                    {displayGuides[2].continentRegion}
+                  </span>
+                </div>
+              </div>
+              <div className="p-5 flex flex-col flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-ochre-500">{displayGuides[2].country}</span>
+                  <span className="text-charcoal/20 dark-flip-muted">·</span>
+                  <span className="font-mono text-[9px] text-charcoal/35 dark-flip-muted">{fmt(displayGuides[2].date)}</span>
+                </div>
+                <h3 className="font-display font-bold text-lg text-charcoal dark-flip-text group-hover:text-ochre-600 transition-colors leading-snug mb-2 flex-1">
+                  {displayGuides[2].name}
+                </h3>
+                <p className="font-sans text-sm text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-2 mb-4">
+                  {displayGuides[2].editorialSummary}
+                </p>
+                <div className="flex items-center justify-between pt-3 border-t border-line dark-flip-border">
+                  <span className="font-mono text-[10px] text-charcoal/35 dark-flip-muted">{displayGuides[2].readTime} min read</span>
+                  <span className="font-mono text-[10px] text-ochre-500 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                    Read
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                  </span>
+                </div>
+              </div>
+            </Link>
+
+            {/* Card 4: Wide horizontal (spans 2 columns on desktop) */}
+            <Link href={`/attractions/${displayGuides[3].slug}`}
+              className="group bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300 lg:col-span-2 flex flex-col sm:flex-row">
+              <div className="relative h-52 sm:h-auto sm:w-64 lg:w-80 shrink-0 overflow-hidden">
+                <Image src={displayGuides[3].image} alt={displayGuides[3].name} fill sizes="(max-width:640px) 100vw,320px"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"/>
+                <div className="absolute top-3 left-3">
+                  <span className="bg-white/90 backdrop-blur font-mono text-[9px] uppercase tracking-[0.12em] text-charcoal/65 px-2.5 py-1 rounded-full">
+                    {displayGuides[3].continentRegion}
+                  </span>
+                </div>
+              </div>
+              <div className="p-6 flex flex-col justify-center flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-ochre-500">{displayGuides[3].country}</span>
+                  <span className="text-charcoal/20 dark-flip-muted">·</span>
+                  <span className="font-mono text-[9px] text-charcoal/35 dark-flip-muted">{fmt(displayGuides[3].date)}</span>
+                </div>
+                <h3 className="font-display font-bold text-xl sm:text-2xl text-charcoal dark-flip-text group-hover:text-ochre-600 transition-colors leading-snug mb-3">
+                  {displayGuides[3].name}
+                </h3>
+                <p className="font-sans text-sm text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-3 mb-4">
+                  {displayGuides[3].editorialSummary}
+                </p>
+                <div className="flex items-center justify-between pt-4 border-t border-line dark-flip-border">
+                  <span className="font-mono text-[10px] text-charcoal/35 dark-flip-muted">{displayGuides[3].readTime} min read</span>
+                  <span className="font-mono text-[10px] text-ochre-500 group-hover:translate-x-1 transition-transform inline-flex items-center gap-2">
+                    Read the guide
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                  </span>
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -399,14 +433,10 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════════════════════════════
           EXPLORE BY EXPERIENCE — photo grid
       ══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 bg-cream dark-flip-bg" id="experiences">
+      <section className="py-20 bg-cream dark-flip-bg" id="experiences" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ochre-500 mb-2">What Moves You</p>
-            <h2 className="font-display text-3xl sm:text-4xl text-charcoal dark-flip-text">Explore by Experience</h2>
-            <p className="mt-3 font-sans text-charcoal/55 dark-flip-muted max-w-lg mx-auto">
-              Africa is not one thing. Choose the experience that speaks to you.
-            </p>
+            <h2 className="font-display font-bold text-3xl sm:text-4xl text-charcoal dark-flip-text">Explore by Experience</h2>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -417,7 +447,7 @@ export default async function HomePage() {
                   className="object-cover group-hover:scale-110 transition-transform duration-700"/>
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent"/>
                 <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <h3 className="font-display text-sm text-cream group-hover:text-gold-300 transition-colors leading-tight">{e.label}</h3>
+                  <h3 className="font-display font-bold text-sm text-cream group-hover:text-gold-300 transition-colors leading-tight">{e.label}</h3>
                   <p className="font-sans text-[11px] text-cream/50 mt-1 leading-tight hidden sm:block">{e.desc}</p>
                 </div>
               </Link>
@@ -429,14 +459,14 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════════════════════════════
           INTERACTIVE MAP + NEWSLETTER — two-column
       ══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 bg-sand dark-flip-surf" id="map-section">
+      <section className="py-20 bg-sand dark-flip-surf" id="map-section" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-5 gap-12 items-start">
 
             {/* Map */}
             <div className="lg:col-span-3">
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ochre-500 mb-2">Interactive Map</p>
-              <h2 className="font-display text-3xl text-charcoal dark-flip-text mb-2">Explore Africa by Region</h2>
+              <h2 className="font-display font-bold text-3xl text-charcoal dark-flip-text mb-2">Explore Africa by Region</h2>
               <p className="font-sans text-sm text-charcoal/55 dark-flip-muted mb-8">Click any region to discover destinations, guides, and experiences.</p>
               <AfricaMap />
             </div>
@@ -445,7 +475,7 @@ export default async function HomePage() {
             <div className="lg:col-span-2">
               <div className="bg-ink rounded-3xl p-8 sticky top-24">
                 <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-gold-400">Newsletter</span>
-                <h3 className="font-display text-2xl text-cream mt-2 mb-3 leading-snug">
+                <h3 className="font-display font-bold text-2xl text-cream mt-2 mb-3 leading-snug">
                   Africa in Your Inbox, Every Week
                 </h3>
                 <p className="font-sans text-sm text-cream/55 leading-relaxed mb-6">
@@ -457,13 +487,12 @@ export default async function HomePage() {
                   <input type="email" placeholder="your@email.com"
                     className="w-full bg-white/8 border border-white/12 text-cream placeholder-cream/30 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
                   <button type="submit"
-                    className="w-full bg-gold-500 hover:bg-gold-600 text-ink font-mono font-bold text-[11px] uppercase tracking-[0.14em] py-3.5 rounded-xl transition-colors">
+                    className="w-full bg-gold-500 hover:bg-gold-600 text-ink font-display font-bold text-[11px] uppercase tracking-[0.12em] py-3.5 rounded-xl transition-colors">
                     Subscribe Free
                   </button>
                 </form>
                 <p className="font-mono text-[9px] text-cream/20 text-center mt-4">No spam. Unsubscribe any time.</p>
 
-                {/* Social */}
                 <div className="mt-6 pt-6 border-t border-white/10">
                   <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-cream/30 mb-3 text-center">Follow Our Journey</p>
                   <div className="flex items-center justify-center gap-3">
@@ -486,37 +515,40 @@ export default async function HomePage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          FEATURED ATTRACTIONS (Sanity-powered, shows if data exists)
+          FEATURED ATTRACTIONS — photo cards (Sanity-powered)
       ══════════════════════════════════════════════════════════════ */}
       {(featured as AttrItem[]).length > 0 && (
-        <section className="py-20 bg-cream dark-flip-bg">
+        <section className="py-20 bg-cream dark-flip-bg" data-reveal>
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-end justify-between mb-10">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ochre-500 mb-2">Curated Picks</p>
-                <h2 className="font-display text-3xl sm:text-4xl text-charcoal dark-flip-text">Featured Attractions</h2>
+                <h2 className="font-display font-bold text-3xl sm:text-4xl text-charcoal dark-flip-text">Featured Attractions</h2>
               </div>
               <Link href="/search" className="hidden sm:flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-charcoal/40 hover:text-ochre-600 transition-colors">
                 Browse all &rarr;
               </Link>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {(featured as AttrItem[]).slice(0, 8).map((a, i) => (
+              {(featured as AttrItem[]).slice(0, 8).map((a) => (
                 <Link key={a.slug} href={`/attractions/${a.slug}`}
-                  className="group bg-white dark-flip-card border border-line dark-flip-border rounded-2xl p-5 hover:shadow-[var(--shadow-lift)] hover:-translate-y-0.5 transition-all duration-200 flex flex-col">
-                  <div className="flex items-start gap-3 mb-3">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0"
-                      style={{ backgroundColor: FALLBACK_DESTINATIONS[i % 6].color + '18' }}>🌍</div>
-                    <div className="min-w-0">
-                      <p className="font-mono text-[8px] uppercase tracking-[0.1em] text-ochre-500">{a.continentRegion}</p>
-                      <h3 className="font-display text-[15px] text-charcoal dark-flip-text group-hover:text-ochre-600 transition-colors leading-tight mt-0.5 line-clamp-2">{a.name}</h3>
-                    </div>
-                  </div>
-                  {a.editorialSummary && (
-                    <p className="font-sans text-[12px] text-charcoal/50 dark-flip-muted leading-relaxed line-clamp-2 flex-1">{a.editorialSummary}</p>
-                  )}
-                  <div className="mt-3 pt-3 border-t border-line dark-flip-border">
-                    {a.country?.name && <span className="font-mono text-[9px] text-charcoal/30 dark-flip-muted">{a.country.name}</span>}
+                  className="group relative rounded-2xl overflow-hidden aspect-[4/5] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-all duration-300 hover:-translate-y-1.5">
+                  <Image
+                    src={`https://picsum.photos/seed/${a.slug}/600/750`}
+                    alt={a.name}
+                    fill
+                    sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,25vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/30 to-transparent"/>
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-gold-400 mb-1">{a.continentRegion}</p>
+                    <h3 className="font-display font-bold text-base text-cream group-hover:text-gold-300 transition-colors leading-tight mb-1">{a.name}</h3>
+                    {a.editorialSummary && (
+                      <p className="font-sans text-[11px] text-cream/55 leading-snug line-clamp-2">{a.editorialSummary}</p>
+                    )}
+                    {a.country?.name && (
+                      <p className="font-mono text-[9px] text-cream/35 mt-2">{a.country.name}</p>
+                    )}
                   </div>
                 </Link>
               ))}
@@ -526,50 +558,14 @@ export default async function HomePage() {
       )}
 
       {/* ══════════════════════════════════════════════════════════════
-          TRAVELLER TESTIMONIALS
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 bg-ink">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-gold-400 mb-2">Real Travellers</p>
-            <h2 className="font-display text-3xl sm:text-4xl text-cream">What People Are Saying</h2>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t, i) => (
-              <div key={i} className="bg-white/5 border border-white/8 rounded-2xl p-6 flex flex-col">
-                {/* Stars */}
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, s) => (
-                    <svg key={s} className="w-4 h-4 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                  ))}
-                </div>
-                <p className="font-sans text-cream/70 text-sm leading-relaxed flex-1 mb-5">&ldquo;{t.quote}&rdquo;</p>
-                <div className="flex items-center gap-3 pt-4 border-t border-white/8">
-                  <div className="w-10 h-10 rounded-full overflow-hidden bg-white/10 shrink-0">
-                    <Image src={t.avatar} alt={t.name} width={40} height={40} className="object-cover"/>
-                  </div>
-                  <div>
-                    <p className="font-sans text-sm font-medium text-cream">{t.name}</p>
-                    <p className="font-mono text-[9px] text-cream/35">{t.origin}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════
           PHOTO GALLERY — "Follow Our Journey"
       ══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 bg-cream dark-flip-bg">
+      <section className="py-20 bg-cream dark-flip-bg" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between mb-8">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ochre-500 mb-2">@myafrowaka_</p>
-              <h2 className="font-display text-3xl sm:text-4xl text-charcoal dark-flip-text">Follow Our Journey</h2>
+              <h2 className="font-display font-bold text-3xl sm:text-4xl text-charcoal dark-flip-text">Follow Our Journey</h2>
             </div>
             <a href="https://instagram.com/myafrowaka_" target="_blank" rel="noopener noreferrer"
               className="hidden sm:flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted hover:text-ochre-600 transition-colors">
@@ -596,74 +592,27 @@ export default async function HomePage() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          STATS BAR
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="bg-charcoal py-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-0 divide-x divide-white/8">
-            {[
-              { n: '54',   label: 'African Countries',      note: 'continent-wide coverage' },
-              { n: '557',  label: 'Guides and Attractions', note: 'fact-checked records'    },
-              { n: '47+',  label: 'Countries Covered',      note: 'active guide library'    },
-              { n: '100%', label: 'Africa-Written',         note: 'by local experts'        },
-            ].map(s => (
-              <div key={s.n} className="px-6 sm:px-10 py-4 text-center first:pl-0 last:pr-0">
-                <p className="font-display text-4xl text-cream">{s.n}</p>
-                <p className="font-sans text-sm text-cream/60 mt-1">{s.label}</p>
-                <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-cream/25 mt-0.5">{s.note}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════
-          TRUST PILLARS
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 bg-sand dark-flip-surf">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ochre-500 mb-2">Our Promise</p>
-            <h2 className="font-display text-3xl sm:text-4xl text-charcoal dark-flip-text">Why Travellers Trust MyAfroWaka</h2>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-6">
-            {[
-              { icon: '✓', title: 'Zero Fabrications', body: 'Every distance, price, opening hour, and historical date in our guides comes from a verified source. If we cannot confirm it, we write [VERIFY].' },
-              { icon: '🌍', title: 'Written by Africans', body: 'Our editorial team lives on the continent. We write about places we have visited, communities we know, and stories we have heard firsthand.' },
-              { icon: '🔄', title: 'Continuously Updated', body: 'Travel conditions change. We flag every guide with its last-verified date and actively refresh content when borders, prices, or access routes change.' },
-            ].map(p => (
-              <div key={p.title} className="bg-white dark-flip-card rounded-2xl p-7 border border-line dark-flip-border hover:shadow-[var(--shadow-soft)] transition-shadow">
-                <div className="w-11 h-11 bg-ochre-50 rounded-xl flex items-center justify-center text-xl mb-5">{p.icon}</div>
-                <h3 className="font-display text-lg text-charcoal dark-flip-text mb-2">{p.title}</h3>
-                <p className="font-sans text-sm text-charcoal/60 dark-flip-muted leading-relaxed">{p.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════
           CTA BANNER
       ══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-24 overflow-hidden">
+      <section className="relative py-24 overflow-hidden" data-reveal>
         <Image src="https://picsum.photos/seed/cta-africa-wide/1920/600" alt="" fill className="object-cover"/>
         <div className="absolute inset-0 bg-ink/85"/>
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-gold-400 mb-4">Ready to explore?</p>
-          <h2 className="font-display text-4xl sm:text-5xl text-cream mb-5 leading-tight">
-            Your African adventure starts here.
+          <h2 className="font-display font-extrabold text-4xl sm:text-5xl text-cream mb-5 leading-tight">
+            Your African Adventure Starts Here.
           </h2>
           <p className="font-sans text-cream/60 text-lg mb-8 max-w-xl mx-auto leading-relaxed">
             557 verified guides across 47 countries. No stereotypes, no guesswork. Just Africa, told honestly.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/search"
-              className="inline-flex items-center justify-center gap-2 bg-crimson hover:bg-crimson-600 text-cream font-mono text-[11px] uppercase tracking-[0.14em] px-8 py-4 rounded-full transition-colors">
+              className="inline-flex items-center justify-center gap-2 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-8 py-4 rounded-full transition-colors">
               Explore Destinations
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
             <Link href="/about"
-              className="inline-flex items-center justify-center border border-white/25 hover:border-white/50 text-cream/75 hover:text-cream font-mono text-[11px] uppercase tracking-[0.14em] px-8 py-4 rounded-full transition-colors">
+              className="inline-flex items-center justify-center border border-white/25 hover:border-white/50 text-cream/75 hover:text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-8 py-4 rounded-full transition-colors">
               Our Story
             </Link>
           </div>

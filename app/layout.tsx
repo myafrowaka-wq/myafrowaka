@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Fraunces, Outfit, Space_Mono } from "next/font/google";
+import { Poppins, Outfit, Space_Mono } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { ScrollRevealInit } from "@/components/ScrollRevealInit";
 
-const fraunces = Fraunces({
+const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
-  axes: ["opsz"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const outfit = Outfit({
@@ -87,10 +88,11 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${fraunces.variable} ${outfit.variable} ${spaceMono.variable}`}
+      className={`${poppins.variable} ${outfit.variable} ${spaceMono.variable}`}
     >
       <body className="min-h-screen flex flex-col">
         <ThemeProvider>
+          <ScrollRevealInit />
           <Nav />
           <main className="flex-1">{children}</main>
           <Footer />
