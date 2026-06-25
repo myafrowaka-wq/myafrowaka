@@ -58,12 +58,6 @@ export default async function LoginPage({
       <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-md">
 
-          {/* Logo — mobile only */}
-          <Link href="/" className="flex justify-center mb-10 lg:hidden">
-            <Image src="/logo-dark.png" alt="MyAfroWaka" width={200} height={52} className="h-10 w-auto dark:hidden"/>
-            <Image src="/logo-white.png" alt="MyAfroWaka" width={200} height={52} className="h-10 w-auto hidden dark:block"/>
-          </Link>
-
           <h1 className="font-display font-bold text-3xl text-charcoal dark-flip-text mb-2" style={{ letterSpacing: '-0.018em' }}>
             {isSignup ? 'Create your account' : 'Welcome back'}
           </h1>
@@ -136,7 +130,7 @@ export default async function LoginPage({
               : <><>No account? </><Link href="/login?tab=signup" className="text-crimson hover:text-crimson-600 font-semibold">Create one free</Link></>}
           </p>
 
-          <p className="font-mono text-[9px] text-charcoal/25 dark-flip-muted text-center mt-8">
+          <p className="font-display text-[9px] text-charcoal/25 dark-flip-muted text-center mt-8">
             By continuing you agree to our{' '}
             <Link href="/terms" className="hover:text-charcoal/50 transition-colors">Terms</Link>{' '}and{' '}
             <Link href="/privacy" className="hover:text-charcoal/50 transition-colors">Privacy Policy</Link>.

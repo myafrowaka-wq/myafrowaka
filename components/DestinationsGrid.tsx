@@ -55,7 +55,7 @@ export function DestinationsGrid() {
       {countries.map(d => (
         <Link
           key={d.name}
-          href={`/search?q=${encodeURIComponent(d.name)}`}
+          href={`/destinations/${d.slug}`}
           className="card-zoom group relative rounded-2xl overflow-hidden aspect-[3/4] lg:aspect-[2/3] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500"
         >
           <div className="absolute inset-0" style={{ backgroundColor: d.color }}/>

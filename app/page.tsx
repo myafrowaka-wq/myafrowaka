@@ -6,6 +6,7 @@ import { TypewriterHero } from '@/components/TypewriterHero'
 import { HeroBackground } from '@/components/HeroBackground'
 import { PlanTripCard } from '@/components/PlanTripCard'
 import { DestinationsGrid } from '@/components/DestinationsGrid'
+import { PopularPills } from '@/components/PopularPills'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -27,10 +28,11 @@ const GUIDES_QUERY = `
     "country": country->{ name, "slug": slug.current }
   }
 `
+const POPULAR_QUERY = `*[_type == "attraction" && contentStatus == "Published"][0..29]{ name, "slug": slug.current }`
 
 type GuideItem = {
   name: string; slug: string; continentRegion: string
-  editorialSummary: string; image: string; country: string; date: string
+  editorialSummary: string; image: string; country: string
 }
 type AttrItem = { slug: string; name: string; editorialSummary?: string; continentRegion?: string; country?: { name: string } }
 
@@ -48,46 +50,44 @@ const FALLBACK_GUIDES: GuideItem[] = [
     name: 'Pyramids of Giza: The Complete Travel Guide',
     slug: 'pyramids-of-giza', continentRegion: 'North Africa', country: 'Egypt',
     editorialSummary: 'The last surviving Wonder of the Ancient World, standing on the Giza Plateau outside Cairo. Everything you need to know before you visit.',
-    image: 'https://picsum.photos/seed/giza-guide-v2/900/1100', date: '2026-06-01',
+    image: 'https://picsum.photos/seed/giza-guide-v2/900/1100',
   },
   {
     name: 'Bwindi Impenetrable Forest: Mountain Gorilla Encounter',
     slug: 'bwindi-impenetrable-national-park', continentRegion: 'East Africa', country: 'Uganda',
     editorialSummary: 'Home to half the world mountain gorilla population, Bwindi covers 321 square kilometres of southwestern Uganda.',
-    image: 'https://picsum.photos/seed/bwindi-guide-v2/900/1100', date: '2026-05-15',
+    image: 'https://picsum.photos/seed/bwindi-guide-v2/900/1100',
   },
   {
     name: 'Table Mountain: Everything You Need to Know',
     slug: 'table-mountain', continentRegion: 'Southern Africa', country: 'South Africa',
     editorialSummary: 'Cape Town iconic flat-topped summit rises 1,085 metres above sea level and harbours more plant species than the entire United Kingdom.',
-    image: 'https://picsum.photos/seed/table-mtn-v2/900/1100', date: '2026-05-01',
+    image: 'https://picsum.photos/seed/table-mtn-v2/900/1100',
   },
   {
     name: 'Serengeti National Park: The Migration Guide',
     slug: 'serengeti-national-park', continentRegion: 'East Africa', country: 'Tanzania',
     editorialSummary: 'The Great Migration moves 1.5 million wildebeest and 250,000 zebras in a continuous annual circuit across Tanzania and Kenya.',
-    image: 'https://picsum.photos/seed/serengeti-v2/900/1100', date: '2026-04-20',
+    image: 'https://picsum.photos/seed/serengeti-v2/900/1100',
   },
 ]
 
-const POPULAR_SEARCHES = ['Victoria Falls', 'Pyramids of Giza', 'Serengeti', 'Zanzibar', 'Gorilla Trek']
 const GALLERY_SEEDS = ['gallery-af-1', 'gallery-af-2', 'gallery-af-3', 'gallery-af-4', 'gallery-af-5', 'gallery-af-6']
 
-function fmt(d: string) {
-  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-}
-
 export default async function HomePage() {
-  const [featured, guides] = await Promise.all([
+  const [featured, guides, popularRaw] = await Promise.all([
     client.fetch(FEATURED_QUERY).catch(() => []),
     client.fetch(GUIDES_QUERY).catch(() => []),
+    client.fetch<{ name: string; slug: string }[]>(POPULAR_QUERY).catch(() => []),
   ])
+
+  const popularAttractions = popularRaw.map((a: { name: string; slug: string }) => ({ label: a.name, slug: a.slug }))
 
   const displayGuides: GuideItem[] = guides.length > 0
     ? guides.slice(0, 4).map(
-        (g: { name: string; slug: string; continentRegion: string; editorialSummary: string; _updatedAt: string; country?: { name: string } }, i: number): GuideItem => ({
+        (g: { name: string; slug: string; continentRegion: string; editorialSummary: string; country?: { name: string } }, i: number): GuideItem => ({
           name: g.name, slug: g.slug, continentRegion: g.continentRegion, editorialSummary: g.editorialSummary,
-          image: FALLBACK_GUIDES[i % 4].image, country: g.country?.name ?? 'Africa', date: g._updatedAt ?? FALLBACK_GUIDES[i % 4].date,
+          image: FALLBACK_GUIDES[i % 4].image, country: g.country?.name ?? 'Africa',
         })
       )
     : FALLBACK_GUIDES
@@ -107,12 +107,13 @@ export default async function HomePage() {
               {/* Headline — 2 lines on desktop AND mobile */}
               <h1
                 className="font-display font-extrabold text-cream mb-7 tracking-hero"
-                style={{ fontSize: 'clamp(28px, 3.8vw, 52px)', lineHeight: '0.94' }}
+                style={{ fontSize: 'clamp(46px, 4.2vw, 64px)', lineHeight: '0.94' }}
               >
                 <TypewriterHero
                   speed={32}
                   lines={[
-                    { text: 'Explore Africa,' },
+                    { text: 'Explore ', noBreakAfter: true },
+                    { text: 'Africa,', className: 'text-crimson' },
                     { text: ' One Adventure at a Time.' },
                   ]}
                 />
@@ -142,14 +143,9 @@ export default async function HomePage() {
                 </div>
               </form>
 
-              <div className="flex flex-wrap gap-2 items-center">
-                <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-cream/30 mr-1">Popular:</span>
-                {POPULAR_SEARCHES.map(q => (
-                  <Link key={q} href={`/search?q=${encodeURIComponent(q)}`}
-                    className="inline-link font-sans text-[12px] text-cream/55 border border-white/15 hover:border-white/35 hover:text-cream/85 rounded-full px-3 py-1 transition-colors">
-                    {q}
-                  </Link>
-                ))}
+              <div>
+                <p className="font-mono text-[9px] uppercase tracking-[0.15em] text-cream/30 mb-3">Popular searches:</p>
+                <PopularPills attractions={popularAttractions} />
               </div>
             </div>
 
@@ -170,20 +166,21 @@ export default async function HomePage() {
       <section className="py-24 lg:py-32 bg-cream dark-flip-bg" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-          <div className="flex items-end justify-between mb-12">
-            <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
-              style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
-              Where Will You Go Next?
-            </h2>
-            <Link href="/search"
-              className="inline-link link-arrow hidden sm:inline-flex font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors">
-              All destinations
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-            </Link>
-          </div>
+          <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial mb-12"
+            style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
+            Where Will You Go Next?
+          </h2>
 
           {/* Client component handles random selection on each load */}
           <DestinationsGrid />
+
+          <div className="mt-10 flex justify-center">
+            <Link href="/search"
+              className="inline-flex items-center gap-2.5 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(180,30,30,0.28)] hover:shadow-[0_8px_36px_rgba(180,30,30,0.38)]">
+              All Destinations
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -218,8 +215,6 @@ export default async function HomePage() {
               <div className="relative mt-auto p-7 lg:p-8">
                 <div className="flex items-center gap-3 mb-3">
                   <span className="font-display font-bold text-[11px] uppercase tracking-[0.12em] text-gold-400">{displayGuides[0].country}</span>
-                  <span className="w-1 h-1 rounded-full bg-white/25"/>
-                  <span className="font-mono text-[10px] font-bold text-white/45">{fmt(displayGuides[0].date)}</span>
                 </div>
                 <h3 className="font-display font-bold text-xl sm:text-2xl text-cream group-hover:text-gold-300 transition-colors leading-snug mb-3"
                   style={{ letterSpacing: '-0.018em' }}>
@@ -251,8 +246,6 @@ export default async function HomePage() {
                 <div className="p-6 flex flex-col flex-1">
                   <div className="flex items-center gap-2.5 mb-3">
                     <span className="font-display font-bold text-[11px] uppercase tracking-[0.12em] text-crimson">{g.country}</span>
-                    <span className="w-1 h-1 rounded-full bg-charcoal/20 dark-flip-border"/>
-                    <span className="font-mono text-[10px] font-bold text-charcoal/45 dark-flip-muted">{fmt(g.date)}</span>
                   </div>
                   <h3 className="font-display font-bold text-lg text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-2 flex-1"
                     style={{ letterSpacing: '-0.015em' }}>
@@ -286,8 +279,6 @@ export default async function HomePage() {
               <div className="p-7 lg:p-8 flex flex-col justify-center flex-1">
                 <div className="flex items-center gap-2.5 mb-3">
                   <span className="font-display font-bold text-[11px] uppercase tracking-[0.12em] text-crimson">{displayGuides[3].country}</span>
-                  <span className="w-1 h-1 rounded-full bg-charcoal/20"/>
-                  <span className="font-mono text-[10px] font-bold text-charcoal/45 dark-flip-muted">{fmt(displayGuides[3].date)}</span>
                 </div>
                 <h3 className="font-display font-bold text-xl sm:text-2xl text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-3"
                   style={{ letterSpacing: '-0.018em' }}>
@@ -296,8 +287,7 @@ export default async function HomePage() {
                 <p className="font-sans text-[15px] text-charcoal/65 dark-flip-muted leading-relaxed line-clamp-3 mb-5">
                   {displayGuides[3].editorialSummary}
                 </p>
-                <div className="flex items-center justify-between pt-4 border-t border-line dark-flip-border">
-                  <span className="font-mono text-[10px] text-charcoal/40 dark-flip-muted">{fmt(displayGuides[3].date)}</span>
+                <div className="flex items-center justify-end pt-4 border-t border-line dark-flip-border">
                   <span className="link-arrow inline-link font-mono text-[10px] text-crimson">
                     Read the guide
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
@@ -462,7 +452,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-ink/88"/>
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="font-display font-extrabold text-cream mb-6 tracking-hero"
-            style={{ fontSize: 'clamp(28px, 4vw, 52px)', lineHeight: '0.94' }}>
+            style={{ fontSize: 'clamp(40px, 4.5vw, 64px)', lineHeight: '0.94' }}>
             Your African Adventure Starts Here.
           </h2>
           <p className="font-sans text-cream/68 text-base mb-10 max-w-lg mx-auto leading-relaxed">

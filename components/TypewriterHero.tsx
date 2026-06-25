@@ -7,7 +7,7 @@ export function TypewriterHero({
   speed = 38,
   className = '',
 }: {
-  lines: { text: string; className?: string }[]
+  lines: { text: string; className?: string; noBreakAfter?: boolean }[]
   speed?: number
   className?: string
 }) {
@@ -25,10 +25,10 @@ export function TypewriterHero({
 
   // Split the typed chars back into lines
   let remaining = charIndex
-  const renderedLines: { text: string; full: string; cls?: string }[] = []
+  const renderedLines: { text: string; full: string; cls?: string; noBreakAfter?: boolean }[] = []
   for (const line of lines) {
     const visible = line.text.slice(0, remaining)
-    renderedLines.push({ text: visible, full: line.text, cls: line.className })
+    renderedLines.push({ text: visible, full: line.text, cls: line.className, noBreakAfter: line.noBreakAfter })
     remaining = Math.max(0, remaining - line.text.length)
   }
 
@@ -37,7 +37,7 @@ export function TypewriterHero({
       {renderedLines.map((l, i) => (
         <span key={i}>
           {l.cls ? <span className={l.cls}>{l.text}</span> : l.text}
-          {i < renderedLines.length - 1 && l.text.length === l.full.length && <br />}
+          {i < renderedLines.length - 1 && !l.noBreakAfter && l.text.length === l.full.length && <br />}
         </span>
       ))}
       {!done && (

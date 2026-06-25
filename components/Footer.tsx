@@ -79,7 +79,7 @@ export default function Footer() {
                 className="h-9 w-auto opacity-90"
               />
             </Link>
-            <p className="font-sans text-sm text-cream/45 leading-relaxed mb-6 max-w-[220px]">
+            <p className="font-sans text-sm text-cream/45 leading-relaxed mb-6 md:max-w-[220px]">
               The destination for discovering Africa greatest attractions, culture, and travel experiences.
               Verified. Specific. Written from inside the continent.
             </p>

@@ -275,7 +275,7 @@ export default function Nav() {
           <NavUserButton close={close} />
 
           {/* Plan a Trip — visible on BOTH mobile and desktop */}
-          <Link href="/search" onClick={close}
+          <Link href="/plan-a-trip" onClick={close}
             className="inline-flex items-center bg-crimson hover:bg-crimson-600 text-cream font-display font-bold uppercase tracking-[0.10em] rounded-full transition-all hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap
               text-[11px] px-4 py-2 ml-1
               lg:text-[12px] lg:px-5 lg:py-2.5 lg:ml-2">
@@ -604,7 +604,7 @@ export default function Nav() {
             </div>
 
             <div className="py-4">
-              <Link href="/search" onClick={close}
+              <Link href="/plan-a-trip" onClick={close}
                 className="block text-center bg-crimson hover:bg-crimson-600 text-cream text-[12px] font-display font-bold uppercase tracking-[0.10em] py-4 rounded-xl transition-colors">
                 Plan a Trip
               </Link>
