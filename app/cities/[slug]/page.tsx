@@ -82,20 +82,6 @@ export default async function CityPage(
       {/* Hero band */}
       <div className="bg-sand border-b border-line">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-12">
-          <nav className="font-mono text-[10px] uppercase tracking-[0.12em] text-charcoal/40 mb-5 flex flex-wrap gap-1 items-center">
-            <Link href="/" className="hover:text-ochre-600 transition-colors">Home</Link>
-            {city.country && (
-              <>
-                <span>/</span>
-                <Link href={`/destinations/${city.country.slug}`} className="hover:text-ochre-600 transition-colors">
-                  {city.country.name}
-                </Link>
-              </>
-            )}
-            <span>/</span>
-            <span className="text-charcoal">{city.name}</span>
-          </nav>
-
           {city.country && (
             <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-ochre-600 mb-2">
               {city.country.name}

@@ -114,14 +114,6 @@ export default async function DestinationPage(
         <div className="absolute inset-0 bg-gradient-to-b from-ink/35 via-ink/60 to-ink/95"/>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">
-          <nav className="flex flex-wrap gap-1 items-center font-mono text-[9px] uppercase tracking-[0.14em] text-cream/40 mb-6">
-            <Link href="/" className="hover:text-cream/75 transition-colors">Home</Link>
-            <span className="text-cream/20">/</span>
-            <Link href="/search" className="hover:text-cream/75 transition-colors">Destinations</Link>
-            <span className="text-cream/20">/</span>
-            <span className="text-cream/65">{dest.name}</span>
-          </nav>
-
           <div className="flex items-end gap-5 flex-wrap mb-4">
             {dest.flagEmoji && (
               <span className="text-5xl leading-none shrink-0">{dest.flagEmoji}</span>

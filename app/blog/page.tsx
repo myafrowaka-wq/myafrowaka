@@ -73,11 +73,6 @@ export default async function BlogPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/20 via-ink/55 to-ink/98"/>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">
-          <nav className="flex flex-wrap gap-1 items-center font-mono text-[9px] uppercase tracking-[0.14em] text-cream/40 mb-6">
-            <Link href="/" className="hover:text-cream/75 transition-colors">Home</Link>
-            <span className="text-cream/20">/</span>
-            <span className="text-cream/65">Blog</span>
-          </nav>
           <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-gold-400 mb-3">
             Stories from the Continent
           </p>

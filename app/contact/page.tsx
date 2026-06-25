@@ -23,7 +23,7 @@ export default function ContactPage() {
   return (
     <>
       {/* ── Hero ────────────────────────────────────────────────────────── */}
-      <div className="relative overflow-hidden min-h-[340px] flex items-end">
+      <div className="relative overflow-hidden min-h-[420px] flex items-center">
         <Image
           src="https://picsum.photos/seed/contact-africa-village-hero/1920/700"
           alt="African cultural destination"
@@ -32,11 +32,11 @@ export default function ContactPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/70 to-ink/95"/>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-14 pt-24">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-20 sm:py-28">
           <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-gold-400 mb-5">Contact</p>
           <h1
             className="font-display font-extrabold text-cream max-w-2xl"
-            style={{ fontSize: 'clamp(26px, 4vw, 54px)', lineHeight: '0.95', letterSpacing: '-0.022em' }}
+            style={{ fontSize: 'clamp(32px, 4vw, 54px)', lineHeight: '0.95', letterSpacing: '-0.022em' }}
           >
             <TypewriterHero
               speed={30}
@@ -76,7 +76,7 @@ export default function ContactPage() {
                       name="name"
                       required
                       placeholder="Amara Okafor"
-                      className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors"
+                      className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 focus:outline-none focus:border-gold-400 transition-colors"
                     />
                   </div>
                   <div>
@@ -88,7 +88,7 @@ export default function ContactPage() {
                       name="email"
                       required
                       placeholder="you@example.com"
-                      className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors"
+                      className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 focus:outline-none focus:border-gold-400 transition-colors"
                     />
                   </div>
                 </div>
@@ -160,20 +160,41 @@ export default function ContactPage() {
               {/* Response time */}
               <div className="bg-sand dark-flip-surf rounded-3xl p-7 border border-line dark-flip-border">
                 <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-charcoal/40 dark-flip-muted mb-4">What to Expect</p>
-                <ul className="space-y-4">
-                  {[
-                    { icon: '⏱', label: 'Response time', val: 'Within 2 business days' },
-                    { icon: '📍', label: 'Based in',      val: 'Abuja, Nigeria' },
-                    { icon: '🌍', label: 'Coverage',      val: 'Pan-African editorial team' },
-                  ].map(item => (
-                    <li key={item.label} className="flex items-start gap-3">
-                      <span className="text-base mt-0.5">{item.icon}</span>
-                      <div>
-                        <p className="font-display font-semibold text-[12px] text-charcoal dark-flip-text">{item.label}</p>
-                        <p className="font-sans text-[12px] text-charcoal/55 dark-flip-muted mt-0.5">{item.val}</p>
-                      </div>
-                    </li>
-                  ))}
+                <ul className="space-y-5">
+                  <li className="flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-xl bg-cream dark-flip-card border border-line dark-flip-border flex items-center justify-center shrink-0">
+                      <svg className="w-4 h-4 text-charcoal/50 dark-flip-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-display font-semibold text-[12px] text-charcoal dark-flip-text">Response time</p>
+                      <p className="font-sans text-[12px] text-charcoal/55 dark-flip-muted mt-0.5">Within 2 business days</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-xl bg-cream dark-flip-card border border-line dark-flip-border flex items-center justify-center shrink-0">
+                      <svg className="w-4 h-4 text-charcoal/50 dark-flip-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-display font-semibold text-[12px] text-charcoal dark-flip-text">Based in</p>
+                      <p className="font-sans text-[12px] text-charcoal/55 dark-flip-muted mt-0.5">Abuja, Nigeria</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-xl bg-cream dark-flip-card border border-line dark-flip-border flex items-center justify-center shrink-0">
+                      <svg className="w-4 h-4 text-charcoal/50 dark-flip-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="font-display font-semibold text-[12px] text-charcoal dark-flip-text">Coverage</p>
+                      <p className="font-sans text-[12px] text-charcoal/55 dark-flip-muted mt-0.5">Pan-African editorial team</p>
+                    </div>
+                  </li>
                 </ul>
               </div>
 

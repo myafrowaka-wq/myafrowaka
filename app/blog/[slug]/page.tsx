@@ -189,14 +189,6 @@ export default async function BlogPostPage(
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/20 via-ink/55 to-ink/97"/>
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">
-          <nav className="flex flex-wrap gap-1 items-center font-mono text-[9px] uppercase tracking-[0.14em] text-cream/40 mb-6">
-            <Link href="/" className="hover:text-cream/75 transition-colors">Home</Link>
-            <span className="text-cream/20">/</span>
-            <Link href="/blog" className="hover:text-cream/75 transition-colors">Blog</Link>
-            <span className="text-cream/20">/</span>
-            <span className="text-cream/65 truncate max-w-[200px]">{post.title}</span>
-          </nav>
-
           {post.category && (
             <span className="inline-block font-mono text-[8px] uppercase tracking-[0.18em] px-3 py-1 rounded-full text-cream mb-4"
               style={{ backgroundColor: accent + 'cc' }}>

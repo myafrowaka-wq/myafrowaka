@@ -28,7 +28,7 @@ const PILLARS = [
   },
   {
     title: 'Travel Planning',
-    body: 'Visas, transport, costs, safety, and the practical information you actually need to move across a continent of 47 countries and 1.4 billion people.',
+    body: 'Visas, transport, costs, safety, and the practical information you actually need to move across a vast and varied continent.',
   },
 ]
 
@@ -42,20 +42,20 @@ const QUICK_LINKS = [
 export default function AboutPage() {
   return (
     <>
-      {/* Hero — background image with dark overlay */}
-      <div className="relative overflow-hidden min-h-[420px] flex items-end">
+      {/* Hero — Ken Burns slow-zoom with vertically centred text */}
+      <div className="relative overflow-hidden min-h-[520px] flex items-center">
         <Image
-          src="https://picsum.photos/seed/africa-tourism-heritage-hero/1920/900"
+          src="https://picsum.photos/seed/africa-heritage-landscape-v2/1920/900"
           alt="African landscape"
           fill
           priority
-          className="object-cover object-center"
+          className="object-cover object-center img-kenburns"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/75 to-ink/95"/>
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/72 to-ink/92"/>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-16 pt-28">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-24 sm:py-32">
           <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-gold-400 mb-5">About MyAfroWaka</p>
-          <h1 className="font-display font-extrabold text-cream max-w-3xl" style={{ fontSize: 'clamp(28px, 4.5vw, 58px)', lineHeight: '0.95', letterSpacing: '-0.025em' }}>
+          <h1 className="font-display font-extrabold text-cream max-w-3xl" style={{ fontSize: 'clamp(32px, 4vw, 52px)', lineHeight: '0.96', letterSpacing: '-0.025em' }}>
             <TypewriterHero
               speed={28}
               lines={[
@@ -64,8 +64,8 @@ export default function AboutPage() {
               ]}
             />
           </h1>
-          <p className="font-display font-medium italic text-gold-300 mt-4 max-w-xl"
-            style={{ fontSize: 'clamp(16px, 2vw, 26px)', letterSpacing: '-0.015em' }}>
+          <p className="font-display font-medium italic text-gold-300 mt-5 max-w-xl"
+            style={{ fontSize: 'clamp(16px, 1.8vw, 24px)', letterSpacing: '-0.015em' }}>
             We&rsquo;re just saying it out loud.
           </p>
         </div>
@@ -124,7 +124,7 @@ export default function AboutPage() {
                   No filler sentences. No &ldquo;breathtaking views.&rdquo; No &ldquo;must-visit destination.&rdquo; We use language that is precise because precision is a form of respect, for the places and the people who visit them.
                 </p>
                 <p className="font-sans text-base leading-relaxed text-charcoal/70 dark-flip-muted">
-                  When a fact cannot be confirmed from a primary source at time of writing, it does not appear as confirmed fact. It is flagged, and resolved before publication.
+                  When a fact cannot be confirmed from a primary source at time of writing, it does not appear as confirmed fact. It is flagged and resolved before publication.
                 </p>
               </div>
             </div>
@@ -223,7 +223,7 @@ export default function AboutPage() {
               <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-charcoal/40 dark-flip-muted mb-5">What We Believe</p>
               <ul className="space-y-4">
                 {[
-                  'Africa is not a monolith. It is 54 countries, thousands of languages, and more variation than most people are taught to expect.',
+                  'Africa is not a monolith. Dozens of countries, thousands of languages, and more variation than most people are taught to expect.',
                   'The best travel writing comes from people who have skin in the game. Not tourists. Residents.',
                   'Accuracy is not optional. A wrong entry fee or a closed attraction is not a typo. It is a broken promise to a reader who planned a trip around it.',
                 ].map((belief, i) => (

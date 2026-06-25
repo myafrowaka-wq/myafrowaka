@@ -179,28 +179,6 @@ export default async function AttractionPage(
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">
 
-          {/* Breadcrumb */}
-          <nav className="flex flex-wrap gap-1 items-center font-mono text-[9px] uppercase tracking-[0.14em] text-cream/45 mb-6">
-            <Link href="/" className="hover:text-cream/80 transition-colors">Home</Link>
-            {a.country && (
-              <>
-                <span className="text-cream/25">/</span>
-                <Link href={`/destinations/${a.country.slug}`} className="hover:text-cream/80 transition-colors">
-                  {a.country.name}
-                </Link>
-              </>
-            )}
-            {a.city && (
-              <>
-                <span className="text-cream/25">/</span>
-                <Link href={`/cities/${a.city.slug}`} className="hover:text-cream/80 transition-colors">
-                  {a.city.name}
-                </Link>
-              </>
-            )}
-            <span className="text-cream/25">/</span>
-            <span className="text-cream/70">{a.name}</span>
-          </nav>
 
           {/* Badges */}
           {(a.unescoStatus || (a.type && a.type.length > 0)) && (

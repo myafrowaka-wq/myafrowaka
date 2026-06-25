@@ -384,6 +384,16 @@ button, a, [role="button"] {
   filter: saturate(1.12) contrast(1.04);
 }
 
+/* Ken Burns slow-zoom hero animation */
+@keyframes kenburns {
+  0%   { transform: scale(1); }
+  100% { transform: scale(1.09); }
+}
+.img-kenburns {
+  animation: kenburns 18s ease-out infinite alternate;
+  transform-origin: center center;
+}
+
 /* ──────────────────────────────────────────────────────────────
    $10K GRAIN TEXTURE — film-grain overlay (CSS, no external file)
 ─────────────────────────────────────────────────────────────── */

@@ -45,11 +45,6 @@ export default async function GuidesPage() {
       {/* ── Header ───────────────────────────────────────────────────── */}
       <div className="bg-ink border-b border-white/8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-12">
-          <nav className="flex flex-wrap gap-1 items-center font-mono text-[9px] uppercase tracking-[0.14em] text-cream/35 mb-6">
-            <Link href="/" className="hover:text-cream/70 transition-colors">Home</Link>
-            <span className="text-cream/15">/</span>
-            <span className="text-cream/55">Guides</span>
-          </nav>
           <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-gold-400 mb-3">Best-of Africa</p>
           <h1
             className="font-display font-extrabold text-cream"
