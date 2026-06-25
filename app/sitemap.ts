@@ -8,12 +8,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // ── Static pages ─────────────────────────────────────────────────────────
   const statics: MetadataRoute.Sitemap = [
-    { url: BASE,             lastModified: now, changeFrequency: 'daily',   priority: 1.0 },
-    { url: `${BASE}/blog`,   lastModified: now, changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${BASE}/about`,  lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE}/contact`,lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${BASE}/privacy`,lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
-    { url: `${BASE}/terms`,  lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
+    { url: BASE,               lastModified: now, changeFrequency: 'daily',   priority: 1.0 },
+    { url: `${BASE}/blog`,     lastModified: now, changeFrequency: 'daily',   priority: 0.9 },
+    { url: `${BASE}/guides`,   lastModified: now, changeFrequency: 'weekly',  priority: 0.85 },
+    { url: `${BASE}/about`,    lastModified: now, changeFrequency: 'monthly', priority: 0.5  },
+    { url: `${BASE}/contact`,  lastModified: now, changeFrequency: 'monthly', priority: 0.4  },
+    { url: `${BASE}/privacy`,  lastModified: now, changeFrequency: 'yearly',  priority: 0.2  },
+    { url: `${BASE}/terms`,    lastModified: now, changeFrequency: 'yearly',  priority: 0.2  },
   ]
 
   // ── Attractions ───────────────────────────────────────────────────────────
@@ -64,5 +65,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  return [...statics, ...attractionEntries, ...postEntries, ...countryEntries, ...cityEntries]
+  // ── Guide (editorial pillar) pages ───────────────────────────────────────
+  const guides = await client.fetch<{ slug: string }[]>(`
+    *[_type == "editorialPillar" && contentStatus == "Published"]{ "slug": slug.current }
+  `).catch(() => [])
+
+  const guideEntries: MetadataRoute.Sitemap = guides.map(g => ({
+    url: `${BASE}/guides/${g.slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.75,
+  }))
+
+  return [...statics, ...attractionEntries, ...postEntries, ...guideEntries, ...countryEntries, ...cityEntries]
 }

@@ -37,6 +37,9 @@ export const ATTRACTION_BY_SLUG_QUERY = `
     "country": country->{ name, "slug": slug.current },
     "city": city->{ name, "slug": slug.current },
     "nearbyCities": nearbyCities[]->{ name, "slug": slug.current },
+    "featuredIn": *[_type == "editorialPillar" && contentStatus == "Published" && references(^._id)]{
+      title, "slug": slug.current
+    }
   }
 `
 
@@ -110,6 +113,45 @@ export const POST_BY_SLUG_QUERY = `
 
 export const ALL_POST_SLUGS_QUERY = `
   *[_type == "post" && contentStatus == "Published"]{ "slug": slug.current }
+`
+
+export const ALL_GUIDES_QUERY = `
+  *[_type == "editorialPillar" && contentStatus == "Published"] | order(title asc) {
+    title,
+    "slug": slug.current,
+    focusKeyword,
+    metaTitle,
+    metaDescription,
+    "itemCount": count(items)
+  }
+`
+
+export const GUIDE_BY_SLUG_QUERY = `
+  *[_type == "editorialPillar" && slug.current == $slug && contentStatus == "Published"][0] {
+    title,
+    "slug": slug.current,
+    focusKeyword,
+    metaTitle,
+    metaDescription,
+    "items": items[]{
+      framingText,
+      "attraction": attraction->{
+        _id,
+        name,
+        "slug": slug.current,
+        type,
+        editorialSummary,
+        continentRegion,
+        lastVerifiedDate,
+        "country": country->{ name, "slug": slug.current },
+        "city": city->{ name }
+      }
+    }
+  }
+`
+
+export const ALL_GUIDE_SLUGS_QUERY = `
+  *[_type == "editorialPillar" && contentStatus == "Published"]{ "slug": slug.current }
 `
 
 export const DESTINATION_BY_SLUG_QUERY = `
