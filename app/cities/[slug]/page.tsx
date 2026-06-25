@@ -64,7 +64,7 @@ export default async function CityPage(
         '@type': 'ListItem',
         position: 2,
         name: city.country.name,
-        item: `https://myafrowaka.com/countries/${city.country.slug}`,
+        item: `https://myafrowaka.com/destinations/${city.country.slug}`,
       }] : []),
       {
         '@type': 'ListItem',
@@ -87,7 +87,7 @@ export default async function CityPage(
             {city.country && (
               <>
                 <span>/</span>
-                <Link href={`/countries/${city.country.slug}`} className="hover:text-ochre-600 transition-colors">
+                <Link href={`/destinations/${city.country.slug}`} className="hover:text-ochre-600 transition-colors">
                   {city.country.name}
                 </Link>
               </>

@@ -97,7 +97,7 @@ export async function generateMetadata(
 function buildJsonLd(a: Attraction) {
   const breadcrumbs = [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://myafrowaka.com' },
-    ...(a.country ? [{ '@type': 'ListItem', position: 2, name: a.country.name, item: `https://myafrowaka.com/countries/${a.country.slug}` }] : []),
+    ...(a.country ? [{ '@type': 'ListItem', position: 2, name: a.country.name, item: `https://myafrowaka.com/destinations/${a.country.slug}` }] : []),
     ...(a.city    ? [{ '@type': 'ListItem', position: 3, name: a.city.name,    item: `https://myafrowaka.com/cities/${a.city.slug}`    }] : []),
     {
       '@type': 'ListItem',
@@ -184,7 +184,7 @@ export default async function AttractionPage(
             {a.country && (
               <>
                 <span className="text-cream/25">/</span>
-                <Link href={`/countries/${a.country.slug}`} className="hover:text-cream/80 transition-colors">
+                <Link href={`/destinations/${a.country.slug}`} className="hover:text-cream/80 transition-colors">
                   {a.country.name}
                 </Link>
               </>
@@ -516,7 +516,7 @@ export default async function AttractionPage(
               {/* Country link */}
               {a.country && (
                 <Link
-                  href={`/countries/${a.country.slug}`}
+                  href={`/destinations/${a.country.slug}`}
                   className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all"
                 >
                   <div>

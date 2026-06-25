@@ -6,5 +6,6 @@ import { author } from './author'
 import { savedAttraction } from './savedAttraction'
 import { comment } from './comment'
 import { userRole } from './userRole'
+import { post } from './post'
 
-export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, comment, userRole]
+export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, comment, userRole, post]

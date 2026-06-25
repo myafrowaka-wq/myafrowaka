@@ -77,3 +77,55 @@ export const CITY_BY_SLUG_QUERY = `
 export const ALL_CITY_SLUGS_QUERY = `
   *[_type == "city"]{ "slug": slug.current }
 `
+
+export const ALL_POSTS_QUERY = `
+  *[_type == "post" && contentStatus == "Published"] | order(publishedAt desc) {
+    title,
+    "slug": slug.current,
+    publishedAt,
+    excerpt,
+    category,
+    tags,
+    coverImage,
+    "author": author->{ name }
+  }
+`
+
+export const POST_BY_SLUG_QUERY = `
+  *[_type == "post" && slug.current == $slug && contentStatus == "Published"][0] {
+    title,
+    "slug": slug.current,
+    publishedAt,
+    excerpt,
+    category,
+    tags,
+    coverImage,
+    body,
+    metaTitle,
+    metaDescription,
+    "author": author->{ name },
+    "featuredCountry": featuredCountry->{ name, "slug": slug.current }
+  }
+`
+
+export const ALL_POST_SLUGS_QUERY = `
+  *[_type == "post" && contentStatus == "Published"]{ "slug": slug.current }
+`
+
+export const DESTINATION_BY_SLUG_QUERY = `
+  *[_type == "country" && slug.current == $slug][0]{
+    name,
+    slug,
+    continentRegion,
+    overview,
+    quickFacts,
+    flagEmoji,
+    "attractions": *[_type == "attraction" && references(^._id) && contentStatus == "Published"]{
+      name, "slug": slug.current, type, continentRegion, editorialSummary, lastVerifiedDate,
+      "city": city->{ name }
+    } | order(name asc),
+    "relatedCountries": *[_type == "country" && continentRegion == ^.continentRegion && slug.current != $slug][0..4]{
+      name, "slug": slug.current, flagEmoji
+    }
+  }
+`
