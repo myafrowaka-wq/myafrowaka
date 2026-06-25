@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { TypewriterHero } from '@/components/TypewriterHero'
 
 export const metadata: Metadata = {
   title: 'About MyAfroWaka – Africa Explained by Africans',
@@ -44,7 +45,7 @@ export default function AboutPage() {
       {/* Hero — background image with dark overlay */}
       <div className="relative overflow-hidden min-h-[420px] flex items-end">
         <Image
-          src="https://picsum.photos/seed/about-africa-hero/1920/900"
+          src="https://picsum.photos/seed/africa-tourism-heritage-hero/1920/900"
           alt="African landscape"
           fill
           priority
@@ -52,17 +53,21 @@ export default function AboutPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/75 to-ink/95"/>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-14 pt-24">
-          <nav className="font-mono text-[10px] uppercase tracking-[0.14em] text-cream/40 mb-6 flex gap-1">
-            <Link href="/" className="hover:text-gold-400 transition-colors">Home</Link>
-            <span>/</span>
-            <span className="text-cream/60">About</span>
-          </nav>
-          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-gold-400 mb-4">About MyAfroWaka</p>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-16 pt-28">
+          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-gold-400 mb-5">About MyAfroWaka</p>
           <h1 className="font-display font-extrabold text-cream max-w-3xl" style={{ fontSize: 'clamp(28px, 4.5vw, 58px)', lineHeight: '0.95', letterSpacing: '-0.025em' }}>
-            Africa Has Always Been This Extraordinary.
-            <span className="block text-gold-300 italic mt-2">We&rsquo;re Just Saying It Out Loud.</span>
+            <TypewriterHero
+              speed={28}
+              lines={[
+                { text: 'Africa Has Always Been' },
+                { text: ' This Extraordinary.' },
+              ]}
+            />
           </h1>
+          <p className="font-display font-medium italic text-gold-300 mt-4 max-w-xl"
+            style={{ fontSize: 'clamp(16px, 2vw, 26px)', letterSpacing: '-0.015em' }}>
+            We&rsquo;re just saying it out loud.
+          </p>
         </div>
       </div>
 

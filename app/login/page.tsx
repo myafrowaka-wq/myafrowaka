@@ -19,33 +19,51 @@ export default async function LoginPage({
   return (
     <div className="min-h-screen bg-cream dark-flip-bg flex">
 
-      {/* Left panel */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        <Image src="https://picsum.photos/seed/login-africa-landscape/900/1200" alt="African landscape" fill priority className="object-cover"/>
-        <div className="absolute inset-0 bg-gradient-to-br from-ink/90 via-ink/70 to-transparent"/>
-        <div className="relative z-10 flex flex-col justify-end p-12">
-          <Link href="/" className="mb-auto pt-4">
-            <Image src="/logo-white.png" alt="MyAfroWaka" width={200} height={52} className="h-10 w-auto"/>
+      {/* ── Left panel (desktop only) ── */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden flex-col">
+        <Image
+          src="https://picsum.photos/seed/login-african-cultural-site-v2/900/1200"
+          alt="African cultural landmark"
+          fill priority
+          className="object-cover object-center"
+        />
+        {/* Strong dark overlay so text is always readable */}
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/60 to-ink/92"/>
+
+        <div className="relative z-10 flex flex-col h-full p-12">
+          {/* Logo — pinned at top */}
+          <Link href="/" className="shrink-0">
+            <Image src="/logo-white.png" alt="MyAfroWaka" width={200} height={52} className="h-9 w-auto"/>
           </Link>
-          <blockquote className="mt-auto">
-            <p className="font-display font-bold text-3xl text-cream leading-snug mb-4">
-              Africa is not a destination. It is a conversation you never want to end.
+
+          {/* Spacer pushes quote to bottom */}
+          <div className="flex-1"/>
+
+          {/* Quote */}
+          <blockquote>
+            <p className="font-display font-bold text-cream leading-snug mb-5"
+              style={{ fontSize: 'clamp(22px, 2.5vw, 32px)', letterSpacing: '-0.018em' }}>
+              Africa is not a destination.
+              <span className="block text-gold-300 italic mt-1">It is a conversation you never want to end.</span>
             </p>
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-gold-400">MyAfroWaka</p>
+            <footer className="font-mono text-[10px] uppercase tracking-[0.16em] text-gold-400/70">
+              MyAfroWaka
+            </footer>
           </blockquote>
         </div>
       </div>
 
-      {/* Right panel */}
+      {/* ── Right panel ── */}
       <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-md">
 
+          {/* Logo — mobile only */}
           <Link href="/" className="flex justify-center mb-10 lg:hidden">
             <Image src="/logo-dark.png" alt="MyAfroWaka" width={200} height={52} className="h-10 w-auto dark:hidden"/>
             <Image src="/logo-white.png" alt="MyAfroWaka" width={200} height={52} className="h-10 w-auto hidden dark:block"/>
           </Link>
 
-          <h1 className="font-display font-bold text-3xl text-charcoal dark-flip-text mb-2">
+          <h1 className="font-display font-bold text-3xl text-charcoal dark-flip-text mb-2" style={{ letterSpacing: '-0.018em' }}>
             {isSignup ? 'Create your account' : 'Welcome back'}
           </h1>
           <p className="font-sans text-sm text-charcoal/55 dark-flip-muted mb-8">
@@ -54,7 +72,7 @@ export default async function LoginPage({
               : 'Sign in to access your saved trips and itineraries.'}
           </p>
 
-          {/* Google only */}
+          {/* Google */}
           <div className="mb-6">
             <button type="button"
               className="w-full flex items-center justify-center gap-3 border border-line dark-flip-border bg-white dark-flip-card hover:bg-sand text-charcoal dark-flip-text font-display font-semibold text-[14px] py-4 rounded-xl transition-colors shadow-sm hover:shadow-[var(--shadow-soft)]">
@@ -78,18 +96,18 @@ export default async function LoginPage({
           <form className="space-y-4">
             {isSignup && (
               <div>
-                <label className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted block mb-1.5">Full Name</label>
+                <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">Full Name</label>
                 <input type="text" placeholder="Your name"
                   className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder-charcoal/30 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
               </div>
             )}
             <div>
-              <label className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted block mb-1.5">Email Address</label>
+              <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">Email Address</label>
               <input type="email" placeholder="your@email.com"
                 className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder-charcoal/30 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
             </div>
             <div>
-              <label className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted block mb-1.5">Password</label>
+              <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">Password</label>
               <input type="password" placeholder={isSignup ? 'Create a strong password' : 'Enter your password'}
                 className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder-charcoal/30 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
             </div>
