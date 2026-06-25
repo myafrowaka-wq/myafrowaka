@@ -19,47 +19,49 @@ export function PlanTripCard() {
   return (
     <>
       <div className="bg-white/96 backdrop-blur-sm rounded-3xl p-7 shadow-[0_20px_80px_rgba(0,0,0,0.5)]">
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-charcoal/35 mb-5">Plan Your Trip</p>
+        <p className="font-display font-bold text-[16px] text-charcoal/85 mb-5" style={{ letterSpacing: '-0.012em' }}>
+          Plan Your Trip
+        </p>
 
         <form onSubmit={handleFind} className="space-y-0">
           <div className="mb-4">
-            <label className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/35 block mb-1.5">Where to?</label>
+            <label className="font-sans text-[11px] font-semibold text-charcoal/65 block mb-1.5">Where to?</label>
             <input
               type="text"
               value={dest}
               onChange={e => setDest(e.target.value)}
               placeholder="Egypt, Kenya, Morocco..."
-              className="w-full border border-line rounded-xl px-4 py-3 text-sm font-sans text-charcoal placeholder-charcoal/30 focus:outline-none focus:border-ochre-400 transition-colors bg-cream/40"
+              className="w-full border border-line rounded-xl px-4 py-3 text-sm font-sans text-charcoal placeholder-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors bg-cream/40"
             />
           </div>
           <div className="mb-4">
-            <label className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/35 block mb-1.5">Type of trip</label>
+            <label className="font-sans text-[11px] font-semibold text-charcoal/65 block mb-1.5">Type of trip</label>
             <input
               type="text"
               value={tripType}
               onChange={e => setTripType(e.target.value)}
               placeholder="Safari, beach, cultural..."
-              className="w-full border border-line rounded-xl px-4 py-3 text-sm font-sans text-charcoal placeholder-charcoal/30 focus:outline-none focus:border-ochre-400 transition-colors bg-cream/40"
+              className="w-full border border-line rounded-xl px-4 py-3 text-sm font-sans text-charcoal placeholder-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors bg-cream/40"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3 mb-5">
             <div>
-              <label className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/35 block mb-1.5">Month</label>
+              <label className="font-sans text-[11px] font-semibold text-charcoal/65 block mb-1.5">Month</label>
               <select
                 value={month}
                 onChange={e => setMonth(e.target.value)}
-                className="w-full border border-line rounded-xl px-3 py-3 text-sm font-sans text-charcoal bg-cream/40 focus:outline-none focus:border-ochre-400 appearance-none"
+                className="w-full border border-line rounded-xl px-3 py-3 text-sm font-sans text-charcoal/80 bg-cream/40 focus:outline-none focus:border-gold-400 appearance-none"
               >
                 {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map(m => <option key={m}>{m}</option>)}
               </select>
             </div>
             <div>
-              <label className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/35 block mb-1.5">Duration</label>
+              <label className="font-sans text-[11px] font-semibold text-charcoal/65 block mb-1.5">Duration</label>
               <select
                 value={duration}
                 onChange={e => setDuration(e.target.value)}
-                className="w-full border border-line rounded-xl px-3 py-3 text-sm font-sans text-charcoal bg-cream/40 focus:outline-none focus:border-ochre-400 appearance-none"
+                className="w-full border border-line rounded-xl px-3 py-3 text-sm font-sans text-charcoal/80 bg-cream/40 focus:outline-none focus:border-gold-400 appearance-none"
               >
                 {['3-5 days','1 week','2 weeks','3+ weeks'].map(d => <option key={d}>{d}</option>)}
               </select>
@@ -68,22 +70,26 @@ export function PlanTripCard() {
 
           <button
             type="submit"
-            className="block w-full text-center bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[11px] uppercase tracking-[0.12em] py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="block w-full text-center bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             Find My Destination
           </button>
         </form>
 
+        {/* Traveller social proof — larger avatars, bolder count */}
         <div className="mt-5 pt-4 border-t border-line flex items-center gap-3">
-          <div className="flex -space-x-2">
-            {[1,2,3].map(n => (
-              <div key={n} className="w-7 h-7 rounded-full border-2 border-white overflow-hidden bg-sand">
-                <Image src={`https://picsum.photos/seed/hero-avatar-${n}/60/60`} alt="" width={28} height={28} className="object-cover"/>
+          <div className="flex -space-x-2.5">
+            {[1, 2, 3, 4].map(n => (
+              <div key={n} className="w-9 h-9 rounded-full border-2 border-white overflow-hidden bg-sand shadow-sm">
+                <Image
+                  src={`https://picsum.photos/seed/traveller-avatar-${n}/72/72`}
+                  alt="" width={36} height={36} className="object-cover"/>
               </div>
             ))}
           </div>
-          <p className="font-sans text-[11px] text-charcoal/50">
-            <strong className="text-charcoal/70">12,400+</strong> travellers exploring Africa
+          <p className="font-sans text-[13px] text-charcoal/55 leading-snug">
+            <strong className="font-bold text-charcoal/80 text-[14px]">Travellers</strong>
+            <span className="block text-[11px]">exploring Africa with intention</span>
           </p>
         </div>
       </div>
@@ -121,7 +127,7 @@ export function PlanTripCard() {
             <div className="space-y-3">
               <Link
                 href="/login"
-                className="flex items-center justify-center gap-2 w-full bg-ink text-cream font-display font-bold text-[13px] py-3.5 rounded-xl transition-all hover:bg-charcoal-600 hover:scale-[1.01]"
+                className="flex items-center justify-center gap-2 w-full bg-ink text-cream font-display font-bold text-[13px] py-3.5 rounded-xl transition-all hover:bg-charcoal hover:scale-[1.01]"
               >
                 Sign in to plan your trip
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

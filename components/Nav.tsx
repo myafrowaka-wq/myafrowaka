@@ -40,17 +40,6 @@ const REGIONS = [
   },
 ]
 
-const EXPERIENCES = [
-  { label: 'Safari Adventures',    href: '/search?q=safari',   img: 'https://picsum.photos/seed/exp-safari/80/80',   desc: 'Big Five, Great Migration, private reserves' },
-  { label: 'Cultural Experiences', href: '/search?q=culture',  img: 'https://picsum.photos/seed/exp-culture/80/80',  desc: 'Traditions, ceremonies, local life' },
-  { label: 'Beach Getaways',       href: '/search?q=beach',    img: 'https://picsum.photos/seed/exp-beach/80/80',    desc: 'Indian Ocean, Atlantic coastlines' },
-  { label: 'Food and Drink',       href: '/search?q=food',     img: 'https://picsum.photos/seed/exp-food/80/80',     desc: 'Jollof, tagines, nyama choma' },
-  { label: 'Historical Sites',     href: '/search?q=history',  img: 'https://picsum.photos/seed/exp-history/80/80',  desc: 'Ancient kingdoms, World Heritage sites' },
-  { label: 'Hiking and Nature',    href: '/search?q=hiking',   img: 'https://picsum.photos/seed/exp-hiking/80/80',   desc: 'Simien, Rwenzori, Table Mountain' },
-  { label: 'City Breaks',          href: '/search?q=city',     img: 'https://picsum.photos/seed/exp-city/80/80',     desc: 'Nairobi, Cape Town, Accra, Lagos' },
-  { label: 'Wildlife',             href: '/search?q=wildlife', img: 'https://picsum.photos/seed/exp-wildlife/80/80', desc: 'Gorillas, elephants, marine life' },
-]
-
 const LANGUAGES = [
   { code: 'EN', label: 'English',   flag: '🇬🇧' },
   { code: 'FR', label: 'Français',  flag: '🇫🇷' },
@@ -59,7 +48,7 @@ const LANGUAGES = [
   { code: 'AR', label: 'Arabic',    flag: '🇪🇬' },
 ]
 
-type PanelKey = 'destinations' | 'experiences' | 'media' | null
+type PanelKey = 'destinations' | 'media' | null
 
 // ─── theme toggle ─────────────────────────────────────────────────────────────
 
@@ -135,13 +124,33 @@ export default function Nav() {
   return (
     <header ref={navRef} className="sticky top-0 z-50 bg-[#1C3D20]" style={{ boxShadow: '0 2px 20px rgba(0,0,0,0.28)' }}>
 
-      {/* ── Main bar ───────────────────────────────────────────────────────── */}
+      {/* ── Main bar ─────────────────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[66px] flex items-center justify-between gap-4">
 
-        {/* Left cluster: desktop hamburger + logo */}
-        <div className="flex items-center gap-3 shrink-0">
+        {/* Left cluster: mobile hamburger + desktop hamburger + logo */}
+        <div className="flex items-center gap-2 lg:gap-3 shrink-0">
 
-          {/* Desktop hamburger — bigger, more stylish */}
+          {/* Mobile hamburger — LEFT SIDE, only visible on mobile */}
+          <button
+            onClick={() => { setMobile(v => !v); setMenuOpen(false) }}
+            aria-label={mobile ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobile}
+            className="lg:hidden flex flex-col gap-[5px] items-center justify-center w-10 h-10 rounded-xl text-cream hover:bg-white/10 transition-all"
+          >
+            {mobile ? (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            ) : (
+              <>
+                <span className="block h-[2px] w-5 rounded-full bg-cream/70"/>
+                <span className="block h-[2px] w-4 rounded-full bg-cream/70"/>
+                <span className="block h-[2px] w-5 rounded-full bg-cream/70"/>
+              </>
+            )}
+          </button>
+
+          {/* Desktop hamburger — opens the full overlay menu */}
           <button
             onClick={() => { setMenuOpen(v => !v); setPanel(null) }}
             aria-label={menuOpen ? 'Close menu' : 'Open full menu'}
@@ -161,7 +170,7 @@ export default function Nav() {
             )}
           </button>
 
-          {/* Logo — white version for dark nav */}
+          {/* Logo */}
           <Link href="/" onClick={close} className="shrink-0">
             <Image
               src="/logo-white.png"
@@ -175,23 +184,23 @@ export default function Nav() {
           </Link>
         </div>
 
-        {/* Desktop nav items — "Plan a Trip" removed; stays only as CTA button */}
+        {/* Desktop nav — Destinations | Guides | Blog | About | Contact */}
         <nav className="hidden lg:flex items-center gap-0">
           <div className="relative" onMouseEnter={() => hoverOpen('destinations')} onMouseLeave={hoverClose}>
             <button className={ni}>Destinations {chevron(panel === 'destinations')}</button>
           </div>
-          <div className="relative" onMouseEnter={() => hoverOpen('experiences')} onMouseLeave={hoverClose}>
-            <button className={ni}>Experiences {chevron(panel === 'experiences')}</button>
-          </div>
           <div className="relative" onMouseEnter={() => hoverOpen('media')} onMouseLeave={hoverClose}>
             <button className={ni}>Guides {chevron(panel === 'media')}</button>
           </div>
+          <Link href="/blog"    onClick={close} className={ni}>Blog</Link>
           <Link href="/about"   onClick={close} className={ni}>About</Link>
           <Link href="/contact" onClick={close} className={ni}>Contact</Link>
         </nav>
 
         {/* Right cluster */}
         <div className="flex items-center gap-1 shrink-0">
+
+          {/* Desktop-only: search icon, language, theme, sign in */}
           <Link href="/search" aria-label="Search"
             className="hidden lg:flex w-8 h-8 rounded-full items-center justify-center text-cream/60 hover:text-cream hover:bg-white/10 transition-all">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -199,7 +208,6 @@ export default function Nav() {
             </svg>
           </Link>
 
-          {/* Language */}
           <div className="hidden lg:block relative">
             <button onClick={() => setLangOpen(v => !v)}
               className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-display font-semibold text-cream/60 hover:text-cream hover:bg-white/10 rounded-full transition-all">
@@ -224,7 +232,6 @@ export default function Nav() {
 
           <div className="hidden lg:flex"><ThemeToggle /></div>
 
-          {/* Sign In / Profile button */}
           <Link href="/login" onClick={close}
             className="hidden lg:flex items-center gap-2 text-cream/80 hover:text-cream hover:bg-white/10 text-[13px] font-display font-semibold px-3 py-2 rounded-lg transition-all ml-1 whitespace-nowrap">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -233,25 +240,17 @@ export default function Nav() {
             Sign In
           </Link>
 
-          {/* Plan a Trip CTA */}
+          {/* Plan a Trip — visible on BOTH mobile and desktop */}
           <Link href="/search" onClick={close}
-            className="hidden lg:inline-flex items-center bg-crimson hover:bg-crimson-600 text-cream text-[12px] font-display font-bold uppercase tracking-[0.10em] px-5 py-2.5 rounded-full transition-all hover:scale-[1.03] active:scale-[0.98] ml-2 whitespace-nowrap">
+            className="inline-flex items-center bg-crimson hover:bg-crimson-600 text-cream font-display font-bold uppercase tracking-[0.10em] rounded-full transition-all hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap
+              text-[11px] px-4 py-2 ml-1
+              lg:text-[12px] lg:px-5 lg:py-2.5 lg:ml-2">
             Plan a Trip
           </Link>
-
-          {/* Mobile hamburger */}
-          <button onClick={() => setMobile(v => !v)} aria-label="Menu"
-            className="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-cream hover:bg-white/10 transition-colors ml-1 flex-col gap-[5px]">
-            {mobile ? (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
-            ) : (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/></svg>
-            )}
-          </button>
         </div>
       </div>
 
-      {/* ══ DESKTOP FULL MENU OVERLAY (hamburger) ════════════════════════════ */}
+      {/* ══ DESKTOP FULL MENU OVERLAY (hamburger) ══════════════════════════════ */}
       {menuOpen && (
         <div
           className="hidden lg:block absolute top-full left-0 w-full bg-[#101E12] z-50 overlay-panel overflow-y-auto"
@@ -298,20 +297,24 @@ export default function Nav() {
                 </Link>
               </div>
 
-              {/* Column 2: Experiences */}
+              {/* Column 2: Guides by type */}
               <div>
-                <p className="font-display font-bold text-lg text-cream mb-6">Experiences</p>
-                <div className="space-y-3">
-                  {EXPERIENCES.map(e => (
-                    <Link key={e.label} href={e.href} onClick={close}
-                      className="group flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors">
-                      <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0">
-                        <Image src={e.img} alt={e.label} fill className="object-cover"/>
-                      </div>
-                      <div>
-                        <p className="font-display font-semibold text-[14px] text-cream/90 group-hover:text-gold-300 transition-colors leading-tight">{e.label}</p>
-                        <p className="font-sans text-[11px] text-cream/40 mt-0.5">{e.desc}</p>
-                      </div>
+                <p className="font-display font-bold text-lg text-cream mb-6">Browse by Type</p>
+                <div className="space-y-2">
+                  {[
+                    { label: 'Safari and Wildlife',    q: 'safari'   },
+                    { label: 'Historical Sites',       q: 'history'  },
+                    { label: 'Beach and Islands',      q: 'beach'    },
+                    { label: 'Mountain and Hiking',    q: 'hiking'   },
+                    { label: 'Cultural Experiences',   q: 'culture'  },
+                    { label: 'Food and Markets',       q: 'food'     },
+                    { label: 'City Breaks',            q: 'city'     },
+                    { label: 'UNESCO Heritage Sites',  q: 'UNESCO'   },
+                  ].map(t => (
+                    <Link key={t.q} href={`/search?q=${t.q}`} onClick={close}
+                      className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-cream/75 hover:text-cream hover:bg-white/5 transition-colors font-sans text-[14px]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0 opacity-60"/>
+                      {t.label}
                     </Link>
                   ))}
                 </div>
@@ -322,10 +325,10 @@ export default function Nav() {
                 <p className="font-display font-bold text-lg text-cream mb-6">Latest Guides</p>
                 <div className="space-y-4">
                   {[
-                    { title: 'Pyramids of Giza: The Complete Guide',        tag: 'Egypt',        slug: 'pyramids-of-giza',                   img: 'https://picsum.photos/seed/giza-mega-guide/280/180'   },
-                    { title: 'Bwindi: Mountain Gorilla Trekking Guide',     tag: 'Uganda',       slug: 'bwindi-impenetrable-national-park',   img: 'https://picsum.photos/seed/bwindi-mega-guide/280/180' },
-                    { title: 'Table Mountain: Cape Town Complete Guide',    tag: 'South Africa', slug: 'table-mountain',                     img: 'https://picsum.photos/seed/table-mtn-mega/280/180'    },
-                    { title: 'Serengeti: The Great Migration Guide',        tag: 'Tanzania',     slug: 'serengeti-national-park',             img: 'https://picsum.photos/seed/serengeti-mega/280/180'    },
+                    { title: 'Pyramids of Giza: The Complete Guide',     tag: 'Egypt',    slug: 'pyramids-of-giza',                 img: 'https://picsum.photos/seed/giza-mega-guide/280/180'   },
+                    { title: 'Bwindi: Mountain Gorilla Trekking Guide',  tag: 'Uganda',   slug: 'bwindi-impenetrable-national-park', img: 'https://picsum.photos/seed/bwindi-mega-guide/280/180' },
+                    { title: 'Table Mountain: Cape Town Complete Guide', tag: 'South Africa', slug: 'table-mountain',               img: 'https://picsum.photos/seed/table-mtn-mega/280/180'    },
+                    { title: 'Serengeti: The Great Migration Guide',     tag: 'Tanzania', slug: 'serengeti-national-park',           img: 'https://picsum.photos/seed/serengeti-mega/280/180'    },
                   ].map(a => (
                     <Link key={a.slug} href={`/attractions/${a.slug}`} onClick={close}
                       className="group flex gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors">
@@ -350,7 +353,7 @@ export default function Nav() {
         </div>
       )}
 
-      {/* ══ MEGA — DESTINATIONS ══════════════════════════════════════════════ */}
+      {/* ══ MEGA — DESTINATIONS ══════════════════════════════════════════════════ */}
       {panel === 'destinations' && (
         <div
           className="absolute top-full left-0 w-full bg-white dark:bg-[#181510] border-b border-line dark:border-white/8 mega-panel"
@@ -405,49 +408,7 @@ export default function Nav() {
         </div>
       )}
 
-      {/* ══ MEGA — EXPERIENCES ═══════════════════════════════════════════════ */}
-      {panel === 'experiences' && (
-        <div
-          className="absolute top-full left-0 w-full bg-white dark:bg-[#181510] border-b border-line dark:border-white/8 mega-panel"
-          style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
-          onMouseEnter={keepOpen} onMouseLeave={hoverClose}
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-            <div className="grid grid-cols-12 gap-8">
-              <div className="col-span-8 grid grid-cols-4 gap-4">
-                {EXPERIENCES.map(e => (
-                  <Link key={e.label} href={e.href} onClick={close}
-                    className="group flex items-start gap-3 p-4 rounded-2xl hover:bg-sand dark:hover:bg-white/5 border border-transparent hover:border-line dark:hover:border-white/8 transition-colors">
-                    <div className="relative w-11 h-11 rounded-xl overflow-hidden shrink-0">
-                      <Image src={e.img} alt={e.label} fill className="object-cover"/>
-                    </div>
-                    <div>
-                      <p className="font-display font-semibold text-[14px] text-charcoal/85 dark:text-cream/80 group-hover:text-ochre-600 dark:group-hover:text-ochre-400 transition-colors leading-tight">{e.label}</p>
-                      <p className="font-sans text-[11px] text-charcoal/45 dark:text-cream/38 mt-1 leading-snug">{e.desc}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-              <div className="col-span-4 border-l border-line dark:border-white/8 pl-8">
-                <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-4">Top Experience</p>
-                <Link href="/search?q=safari" onClick={close} className="group relative block rounded-2xl overflow-hidden h-52 mb-4">
-                  <Image src="https://picsum.photos/seed/safari-mega-feat/400/300" alt="Safari" fill className="object-cover group-hover:scale-105 transition-transform duration-500"/>
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent"/>
-                  <div className="absolute bottom-0 p-4">
-                    <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-gold-400 mb-1">Most Popular</p>
-                    <p className="font-display font-bold text-base text-cream">Safari Adventures</p>
-                  </div>
-                </Link>
-                <p className="font-sans text-[13px] text-charcoal/55 dark:text-cream/45 leading-relaxed">
-                  From dawn game drives in the Maasai Mara to gorilla treks in Bwindi, wildlife encounters unlike anywhere else.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ══ MEGA — GUIDES ════════════════════════════════════════════════════ */}
+      {/* ══ MEGA — GUIDES ════════════════════════════════════════════════════════ */}
       {panel === 'media' && (
         <div
           className="absolute top-full left-0 w-full bg-white dark:bg-[#181510] border-b border-line dark:border-white/8 mega-panel"
@@ -482,7 +443,7 @@ export default function Nav() {
                 </ul>
               </div>
 
-              {/* Col 2: Browse by region shortcut */}
+              {/* Col 2: Browse by region */}
               <div className="col-span-3 border-l border-line dark:border-white/8 pl-8">
                 <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Region</p>
                 <ul className="space-y-2">
@@ -514,9 +475,9 @@ export default function Nav() {
                 <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Featured Guides</p>
                 <div className="space-y-3">
                   {[
-                    { title: 'Pyramids of Giza: The Complete Guide',     tag: 'Egypt',    slug: 'pyramids-of-giza',               img: 'https://picsum.photos/seed/giza-mega-guide/280/180'   },
-                    { title: 'Bwindi: Mountain Gorilla Trekking Guide',  tag: 'Uganda',   slug: 'bwindi-impenetrable-national-park', img: 'https://picsum.photos/seed/bwindi-mega-guide/280/180' },
-                    { title: 'Serengeti: The Great Migration Guide',     tag: 'Tanzania', slug: 'serengeti-national-park',         img: 'https://picsum.photos/seed/serengeti-mega/280/180'    },
+                    { title: 'Pyramids of Giza: The Complete Guide',    tag: 'Egypt',    slug: 'pyramids-of-giza',                 img: 'https://picsum.photos/seed/giza-mega-guide/280/180'   },
+                    { title: 'Bwindi: Mountain Gorilla Trekking Guide', tag: 'Uganda',   slug: 'bwindi-impenetrable-national-park', img: 'https://picsum.photos/seed/bwindi-mega-guide/280/180' },
+                    { title: 'Serengeti: The Great Migration Guide',    tag: 'Tanzania', slug: 'serengeti-national-park',           img: 'https://picsum.photos/seed/serengeti-mega/280/180'    },
                   ].map(a => (
                     <Link key={a.slug} href={`/attractions/${a.slug}`} onClick={close}
                       className="group flex items-center gap-4 p-3 rounded-xl hover:bg-sand dark:hover:bg-white/5 transition-colors">
@@ -539,13 +500,12 @@ export default function Nav() {
                   </Link>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       )}
 
-      {/* ══ MOBILE DRAWER ════════════════════════════════════════════════════ */}
+      {/* ══ MOBILE DRAWER ══════════════════════════════════════════════════════ */}
       {mobile && (
         <div className="lg:hidden border-t border-white/10 bg-[#172F19] max-h-[80vh] overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -562,42 +522,29 @@ export default function Nav() {
               </div>
             </form>
 
-            {[
-              {
-                key: 'destinations', label: 'Destinations',
-                children: REGIONS.map(r => (
-                  <Link key={r.region} href={r.href} onClick={close}
-                    className="flex items-center gap-3 pl-6 pr-4 py-3 text-sm text-cream/60 hover:text-cream transition-colors border-b border-white/5">
-                    <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: r.color }}/>{r.region}
-                  </Link>
-                )),
-              },
-              {
-                key: 'experiences', label: 'Experiences',
-                children: EXPERIENCES.slice(0, 6).map(e => (
-                  <Link key={e.label} href={e.href} onClick={close}
-                    className="flex items-center gap-3 pl-6 pr-4 py-3 text-sm text-cream/60 hover:text-cream transition-colors border-b border-white/5">
-                    <div className="relative w-6 h-6 rounded overflow-hidden shrink-0">
-                      <Image src={e.img} alt={e.label} fill className="object-cover"/>
-                    </div>
-                    {e.label}
-                  </Link>
-                )),
-              },
-            ].map(item => (
-              <div key={item.key} className="border-b border-white/10">
-                <button onClick={() => setMobileAcc(mobileAcc === item.key ? null : item.key)}
-                  className="w-full flex items-center justify-between px-2 py-4 text-[15px] font-display font-semibold text-cream/85">
-                  {item.label} {chevron(mobileAcc === item.key)}
-                </button>
-                {mobileAcc === item.key && <div className="border-t border-white/8">{item.children}</div>}
-              </div>
-            ))}
+            {/* Destinations accordion */}
+            <div className="border-b border-white/10">
+              <button onClick={() => setMobileAcc(mobileAcc === 'destinations' ? null : 'destinations')}
+                className="w-full flex items-center justify-between px-2 py-4 text-[15px] font-display font-semibold text-cream/85">
+                Destinations {chevron(mobileAcc === 'destinations')}
+              </button>
+              {mobileAcc === 'destinations' && (
+                <div className="border-t border-white/8">
+                  {REGIONS.map(r => (
+                    <Link key={r.region} href={r.href} onClick={close}
+                      className="flex items-center gap-3 pl-6 pr-4 py-3 text-sm text-cream/60 hover:text-cream transition-colors border-b border-white/5">
+                      <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: r.color }}/>{r.region}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {[
-              { label: 'Guides',   href: '/search'  },
-              { label: 'About Us', href: '/about'   },
-              { label: 'Contact',  href: '/contact' },
+              { label: 'Guides',   href: '/search' },
+              { label: 'Blog',     href: '/blog'   },
+              { label: 'About',    href: '/about'  },
+              { label: 'Contact',  href: '/contact'},
             ].map(i => (
               <Link key={i.label} href={i.href} onClick={close}
                 className="flex px-2 py-4 text-[15px] font-display font-semibold text-cream/85 border-b border-white/10">{i.label}</Link>

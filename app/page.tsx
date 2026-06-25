@@ -5,6 +5,7 @@ import { EditorialSlider } from '@/components/EditorialSlider'
 import { TypewriterHero } from '@/components/TypewriterHero'
 import { HeroBackground } from '@/components/HeroBackground'
 import { PlanTripCard } from '@/components/PlanTripCard'
+import { DestinationsGrid } from '@/components/DestinationsGrid'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -19,12 +20,6 @@ const FEATURED_QUERY = `
     "country": country->{ name, "slug": slug.current }
   }
 `
-const TOP_COUNTRIES_QUERY = `
-  *[_type == "country"]{
-    name, "slug": slug.current, continentRegion, flagEmoji,
-    "count": count(*[_type == "attraction" && contentStatus == "Published" && references(^._id)])
-  } | order(count desc)[0..5]
-`
 const GUIDES_QUERY = `
   *[_type == "attraction" && contentStatus == "Published" && defined(articleBody) && length(articleBody) > 0]
   | order(_updatedAt desc)[0..3]{
@@ -37,25 +32,15 @@ type GuideItem = {
   name: string; slug: string; continentRegion: string
   editorialSummary: string; image: string; country: string; date: string
 }
-type DestItem = { name: string; slug: string; region: string; flag: string; color: string; image: string }
 type AttrItem = { slug: string; name: string; editorialSummary?: string; continentRegion?: string; country?: { name: string } }
 
-const FALLBACK_DESTINATIONS: DestItem[] = [
-  { name: 'Egypt',        slug: 'egypt',        region: 'North Africa',    flag: '🇪🇬', color: '#A22E29', image: 'https://picsum.photos/seed/egypt-dest/900/1200'    },
-  { name: 'Kenya',        slug: 'kenya',        region: 'East Africa',     flag: '🇰🇪', color: '#3F6A3D', image: 'https://picsum.photos/seed/kenya-dest/900/1200'    },
-  { name: 'South Africa', slug: 'south-africa', region: 'Southern Africa', flag: '🇿🇦', color: '#29251A', image: 'https://picsum.photos/seed/capetown-dest/900/1200' },
-  { name: 'Tanzania',     slug: 'tanzania',     region: 'East Africa',     flag: '🇹🇿', color: '#B28E38', image: 'https://picsum.photos/seed/tanzania-dest/900/1200' },
-  { name: 'Morocco',      slug: 'morocco',      region: 'North Africa',    flag: '🇲🇦', color: '#8C4A28', image: 'https://picsum.photos/seed/morocco-dest/900/1200'  },
-  { name: 'Ghana',        slug: 'ghana',        region: 'West Africa',     flag: '🇬🇭', color: '#3B403E', image: 'https://picsum.photos/seed/ghana-dest/900/1200'    },
-]
-
 const EXPERIENCES = [
-  { label: 'Safari',    slug: 'safari',  desc: 'The Big Five and beyond',                image: 'https://picsum.photos/seed/safari-exp-v2/600/800'   },
-  { label: 'Culture',   slug: 'culture', desc: 'Living traditions across the continent',  image: 'https://picsum.photos/seed/culture-exp-v2/600/800'  },
-  { label: 'Beach',     slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',        image: 'https://picsum.photos/seed/beach-exp-v2/600/800'    },
-  { label: 'History',   slug: 'history', desc: 'Ancient kingdoms and World Heritage',     image: 'https://picsum.photos/seed/history-exp-v2/600/800'  },
-  { label: 'Hiking',    slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',    image: 'https://picsum.photos/seed/hiking-exp-v2/600/800'   },
-  { label: 'Food',      slug: 'food',    desc: 'Tagines, jollof, nyama choma',            image: 'https://picsum.photos/seed/food-exp-v2/600/800'     },
+  { label: 'Safari',    slug: 'safari',  desc: 'The Big Five and beyond',               image: 'https://picsum.photos/seed/exp-safari-rnd/600/800'    },
+  { label: 'Culture',   slug: 'culture', desc: 'Living traditions across the continent', image: 'https://picsum.photos/seed/exp-culture-rnd/600/800'   },
+  { label: 'Beach',     slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',       image: 'https://picsum.photos/seed/exp-beach-rnd/600/800'     },
+  { label: 'History',   slug: 'history', desc: 'Ancient kingdoms and World Heritage',    image: 'https://picsum.photos/seed/exp-history-rnd/600/800'   },
+  { label: 'Hiking',    slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',   image: 'https://picsum.photos/seed/exp-hiking-rnd/600/800'    },
+  { label: 'Food',      slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: 'https://picsum.photos/seed/exp-food-rnd/600/800'      },
 ]
 
 const FALLBACK_GUIDES: GuideItem[] = [
@@ -93,20 +78,10 @@ function fmt(d: string) {
 }
 
 export default async function HomePage() {
-  const [featured, topCountries, guides] = await Promise.all([
+  const [featured, guides] = await Promise.all([
     client.fetch(FEATURED_QUERY).catch(() => []),
-    client.fetch(TOP_COUNTRIES_QUERY).catch(() => []),
     client.fetch(GUIDES_QUERY).catch(() => []),
   ])
-
-  const destinations: DestItem[] = topCountries.filter((c: { count: number }) => c.count > 0).length > 0
-    ? topCountries.filter((c: { count: number }) => c.count > 0).slice(0, 6).map(
-        (c: { name: string; slug: string; continentRegion: string; flagEmoji: string }, i: number): DestItem => ({
-          name: c.name, slug: c.slug, region: c.continentRegion, flag: c.flagEmoji || '🌍',
-          color: FALLBACK_DESTINATIONS[i % 6].color, image: FALLBACK_DESTINATIONS[i % 6].image,
-        })
-      )
-    : FALLBACK_DESTINATIONS
 
   const displayGuides: GuideItem[] = guides.length > 0
     ? guides.slice(0, 4).map(
@@ -121,7 +96,7 @@ export default async function HomePage() {
     <>
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
       <section className="relative min-h-[94vh] flex items-center overflow-hidden">
-        <HeroBackground src="https://picsum.photos/seed/myafrowaka-hero-v2/1920/1080" alt="African landscape at golden hour"/>
+        <HeroBackground src="https://picsum.photos/seed/africa-historical-landmark-hero/1920/1080" alt="African landmark at golden hour"/>
         <div className="absolute inset-0 bg-gradient-to-r from-[#070F09]/96 via-[#0A1A0C]/88 to-[#0E2010]/55"/>
         <div className="absolute inset-0 bg-gradient-to-t from-[#070F09]/60 via-transparent to-[#070F09]/15"/>
 
@@ -129,10 +104,10 @@ export default async function HomePage() {
           <div className="grid lg:grid-cols-7 gap-10 lg:gap-16 items-center">
 
             <div className="lg:col-span-4">
-              {/* Headline — 2 lines on desktop */}
+              {/* Headline — 2 lines on desktop AND mobile */}
               <h1
                 className="font-display font-extrabold text-cream mb-7 tracking-hero"
-                style={{ fontSize: 'clamp(36px, 5vw, 62px)', lineHeight: '0.92' }}
+                style={{ fontSize: 'clamp(28px, 3.8vw, 52px)', lineHeight: '0.94' }}
               >
                 <TypewriterHero
                   speed={32}
@@ -178,7 +153,8 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="lg:col-span-3">
+            {/* PlanTripCard — desktop only */}
+            <div className="hidden lg:block lg:col-span-3">
               <PlanTripCard />
             </div>
           </div>
@@ -190,7 +166,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ══ DESTINATIONS ══════════════════════════════════════════════════════ */}
+      {/* ══ DESTINATIONS — 6 random countries, 1 row desktop, 2 col mobile ════ */}
       <section className="py-24 lg:py-32 bg-cream dark-flip-bg" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
@@ -206,46 +182,26 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {/* Uniform 3-col grid — no spanning, no white gaps */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-            {destinations.map((d: DestItem, i: number) => (
-              <Link key={d.name} href={`/search?q=${encodeURIComponent(d.name)}`}
-                className={`card-zoom group relative rounded-2xl overflow-hidden shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500
-                  ${i === 0 ? 'aspect-[3/4] sm:row-span-2' : 'aspect-[3/4]'}`}>
-                <div className="absolute inset-0" style={{ backgroundColor: d.color }}/>
-                <Image src={d.image} alt={d.name} fill
-                  sizes="(max-width:640px) 50vw,33vw"
-                  className="object-cover img-editorial mix-blend-multiply opacity-60 img-inner"/>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/20 to-transparent"/>
-                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
-                  <p className="font-mono text-[8px] uppercase tracking-[0.16em] text-cream/60 mb-1">{d.flag} {d.region}</p>
-                  <h3 className={`font-display font-bold text-cream group-hover:text-gold-300 transition-colors leading-tight
-                    ${i === 0 ? 'text-xl sm:text-2xl' : 'text-sm sm:text-base'}`}
-                    style={{ letterSpacing: '-0.02em' }}>
-                    {d.name}
-                  </h3>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {/* Client component handles random selection on each load */}
+          <DestinationsGrid />
         </div>
       </section>
 
       {/* ══ EDITORIAL SPOTLIGHT ════════════════════════════════════════════════ */}
       <EditorialSlider />
 
-      {/* ══ LATEST TRAVEL GUIDES ══════════════════════════════════════════════ */}
+      {/* ══ FEATURED ATTRACTIONS (was: Latest Travel Guides) ══════════════════ */}
       <section className="py-24 lg:py-32 bg-sand dark-flip-surf" id="guides" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
           <div className="flex items-end justify-between mb-12">
             <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
               style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
-              Latest Travel Guides
+              Featured Attractions
             </h2>
             <Link href="/search"
               className="inline-link link-arrow hidden sm:inline-flex font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors">
-              All guides
+              All attractions
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
           </div>
@@ -351,18 +307,18 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {/* View all — solid button, more prominent */}
+          {/* View all — prominent solid button */}
           <div className="mt-12 flex justify-center">
             <Link href="/search"
               className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(26,24,19,0.22)] hover:shadow-[0_8px_36px_rgba(26,24,19,0.32)]">
-              View All Travel Guides
+              View All Attractions
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ══ EXPERIENCES ════════════════════════════════════════════════════════ */}
+      {/* ══ EXPLORE BY EXPERIENCE — 1 row 6 cols desktop, 2 col mobile ════════ */}
       <section className="py-24 lg:py-32 bg-cream dark-flip-bg" id="experiences" data-reveal>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
@@ -373,21 +329,21 @@ export default async function HomePage() {
             </h2>
           </div>
 
-          {/* Uniform 3-col grid — all 6 cards fill perfectly, no gaps */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+          {/* 2 col mobile, 6 col desktop — all cards uniform */}
+          <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4">
             {EXPERIENCES.map((e) => (
               <Link key={e.slug} href={`/search?q=${encodeURIComponent(e.slug)}`}
-                className="card-zoom group relative rounded-2xl overflow-hidden aspect-[3/4] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500">
+                className="card-zoom group relative rounded-2xl overflow-hidden aspect-[3/4] lg:aspect-[2/3] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500">
                 <Image src={e.image} alt={e.label} fill
-                  sizes="(max-width:640px) 50vw,33vw"
+                  sizes="(max-width:1024px) 50vw, 17vw"
                   className="object-cover img-editorial img-inner"/>
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/92 via-ink/25 to-transparent"/>
-                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
-                  <h3 className="font-display font-bold text-sm sm:text-base text-cream group-hover:text-gold-300 transition-colors leading-tight"
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+                  <h3 className="font-display font-bold text-sm lg:text-[13px] text-cream group-hover:text-gold-300 transition-colors leading-tight"
                     style={{ letterSpacing: '-0.01em' }}>
                     {e.label}
                   </h3>
-                  <p className="font-sans text-[11px] text-cream/60 mt-1 leading-tight hidden sm:block">{e.desc}</p>
+                  <p className="font-sans text-[10px] text-cream/55 mt-1 leading-tight hidden lg:block">{e.desc}</p>
                 </div>
               </Link>
             ))}
@@ -395,7 +351,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ══ FEATURED ATTRACTIONS ════════════════════════════════════════════════ */}
+      {/* ══ LATEST TRAVEL ATTRACTIONS (was: Featured Attractions) ════════════════ */}
       {(featured as AttrItem[]).length > 0 && (
         <section className="py-24 lg:py-32 bg-sand dark-flip-surf" data-reveal>
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -403,7 +359,7 @@ export default async function HomePage() {
             <div className="flex items-end justify-between mb-12">
               <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
                 style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
-                Featured Attractions
+                Latest Travel Attractions
               </h2>
               <Link href="/search"
                 className="inline-link link-arrow hidden sm:inline-flex font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors">
@@ -440,7 +396,6 @@ export default async function HomePage() {
               ))}
             </div>
 
-            {/* Pagination */}
             <div className="mt-12 flex items-center justify-center gap-2">
               <button disabled aria-label="Previous page"
                 className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/30 disabled:opacity-40">

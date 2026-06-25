@@ -4,11 +4,9 @@ import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-/* Issue 03 (South Africa) removed per request — kept 01, 02, 04, 05 */
 const SLIDES = [
   {
     tag: 'Egypt',
-    issue: 'Issue 01',
     headline: 'The Pyramids of Giza Still Defy Explanation.',
     body: 'Built over 4,500 years ago, the Great Pyramid was the tallest man-made structure on Earth for 3,800 years. Our complete guide covers permits, best viewing times, and what the tour operators skip.',
     slug: 'pyramids-of-giza',
@@ -16,7 +14,6 @@ const SLIDES = [
   },
   {
     tag: 'Uganda',
-    issue: 'Issue 02',
     headline: 'Eye to Eye with Earth\'s Last Mountain Gorillas.',
     body: 'Bwindi Impenetrable Forest shelters half the world\'s remaining mountain gorilla population. Trekking here is one of the rarest encounters left in modern travel.',
     slug: 'bwindi-impenetrable-national-park',
@@ -24,7 +21,6 @@ const SLIDES = [
   },
   {
     tag: 'Tanzania',
-    issue: 'Issue 04',
     headline: 'The Serengeti Migration: Nothing Prepares You.',
     body: '1.5 million wildebeest and 250,000 zebras crossing an ancient circuit through Tanzania and Kenya. The largest land animal movement on Earth, and it runs every year without fail.',
     slug: 'serengeti-national-park',
@@ -32,7 +28,6 @@ const SLIDES = [
   },
   {
     tag: 'Morocco',
-    issue: 'Issue 05',
     headline: 'Marrakech: A City That Remembers Everything.',
     body: 'The medina was built in the 11th century and is still lived in the same way. Souks, riads, and the call to prayer at dawn. A city that layers centuries without hiding any of them.',
     slug: 'djemaa-el-fna-marrakech',
@@ -61,10 +56,10 @@ export function EditorialSlider() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Desktop full-bleed image */}
+      {/* Full-bleed image — desktop: right half. Mobile: entire section background */}
       <div
         key={`img-${current}`}
-        className="hidden lg:block absolute inset-y-0 left-[45%] right-0 animate-fade-in"
+        className="absolute inset-0 lg:inset-y-0 lg:left-[45%] lg:right-0 animate-fade-in"
         aria-hidden="true"
       >
         <Image
@@ -72,11 +67,14 @@ export function EditorialSlider() {
           alt={slide.headline}
           fill
           className="object-cover"
-          sizes="60vw"
+          sizes="(max-width:1024px) 100vw, 60vw"
           priority={current === 0}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/5 pointer-events-none"/>
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-ink/20 pointer-events-none"/>
+        {/* Desktop gradient: fade left so text stays readable */}
+        <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/5 pointer-events-none"/>
+        <div className="hidden lg:block absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-ink/20 pointer-events-none"/>
+        {/* Mobile gradient: heavy dark overlay for readability */}
+        <div className="lg:hidden absolute inset-0 bg-ink/88 pointer-events-none"/>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
@@ -84,14 +82,7 @@ export function EditorialSlider() {
 
           <div className="py-20 lg:py-28 pr-0 lg:pr-20 flex flex-col justify-center">
 
-            {/* Overline */}
-            <div key={`tag-${current}`} className="flex items-center gap-3 mb-8 animate-fade-in">
-              <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-cream/30">{slide.issue}</span>
-              <span className="w-8 h-px bg-gold-400 opacity-50"/>
-              <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-gold-400">{slide.tag}</span>
-            </div>
-
-            {/* Headline — reduced to fit 3 lines comfortably */}
+            {/* Headline */}
             <h2
               key={`title-${current}`}
               className="font-display font-extrabold text-cream animate-fade-in mb-6"
@@ -157,15 +148,6 @@ export function EditorialSlider() {
                 {String(current + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
               </span>
             </div>
-          </div>
-
-          {/* Mobile image */}
-          <div
-            key={`img-mob-${current}`}
-            className="relative min-h-[240px] lg:hidden animate-fade-in mb-2 rounded-2xl overflow-hidden"
-          >
-            <Image src={slide.img} alt={slide.headline} fill className="object-cover" sizes="100vw"/>
-            <div className="absolute inset-0 bg-ink/40"/>
           </div>
         </div>
       </div>
