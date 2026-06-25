@@ -5,5 +5,6 @@ import { editorialPillar } from './editorialPillar'
 import { author } from './author'
 import { savedAttraction } from './savedAttraction'
 import { comment } from './comment'
+import { userRole } from './userRole'
 
-export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, comment]
+export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, comment, userRole]
