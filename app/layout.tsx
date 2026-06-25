@@ -4,6 +4,7 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { SessionProviderWrapper } from "@/components/SessionProviderWrapper";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ScrollRevealInit } from "@/components/ScrollRevealInit";
 import { NewsletterPopup } from "@/components/NewsletterPopup";
@@ -93,15 +94,17 @@ export default function RootLayout({
       className={`${poppins.variable} ${outfit.variable} ${spaceMono.variable}`}
     >
       <body className="min-h-screen flex flex-col">
-        <ThemeProvider>
-          <CustomCursor />
-          <ScrollRevealInit />
-          <Nav />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <ScrollToTop />
-          <NewsletterPopup />
-        </ThemeProvider>
+        <SessionProviderWrapper>
+          <ThemeProvider>
+            <CustomCursor />
+            <ScrollRevealInit />
+            <Nav />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <ScrollToTop />
+            <NewsletterPopup />
+          </ThemeProvider>
+        </SessionProviderWrapper>
       </body>
     </html>
   );

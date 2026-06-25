@@ -7,6 +7,7 @@ import { client } from '@/sanity/lib/client'
 import { ATTRACTION_BY_SLUG_QUERY, ALL_PUBLISHED_SLUGS_QUERY } from '@/sanity/lib/queries'
 import { Badge } from '@/components/Badge'
 import { FaqAccordion } from '@/components/FaqAccordion'
+import { SaveButton } from '@/components/SaveButton'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -495,15 +496,7 @@ export default async function AttractionPage(
                 <p className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-5" style={{ letterSpacing: '-0.012em' }}>
                   Save this attraction to your trip planner.
                 </p>
-                <Link
-                  href="/login"
-                  className="flex items-center justify-center gap-2 w-full bg-crimson hover:bg-crimson/90 text-cream font-display font-bold text-[12px] uppercase tracking-[0.1em] py-3.5 rounded-xl transition-all"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                  </svg>
-                  Save Attraction
-                </Link>
+                <SaveButton slug={slug} />
               </div>
 
               {/* Suitable For */}

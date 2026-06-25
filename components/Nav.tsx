@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
+import { useSession } from 'next-auth/react'
 
 // ─── data ─────────────────────────────────────────────────────────────────────
 
@@ -74,6 +75,45 @@ function ThemeToggle() {
         </svg>
       )}
     </button>
+  )
+}
+
+// ─── user button ──────────────────────────────────────────────────────────────
+
+function NavUserButton({ close }: { close: () => void }) {
+  const { data: session, status } = useSession()
+
+  if (status === 'loading') return <div className="hidden lg:block w-8 h-8"/>
+
+  if (status === 'authenticated' && session?.user) {
+    const u = session.user
+    return (
+      <Link href="/dashboard" onClick={close}
+        className="hidden lg:flex items-center gap-2 hover:bg-white/10 rounded-full pl-0.5 pr-3 py-0.5 transition-all ml-1 group"
+        title={`Signed in as ${u.name}`}>
+        {u.image ? (
+          <Image src={u.image} alt={u.name ?? 'User'} width={30} height={30}
+            className="rounded-full ring-2 ring-gold-400/40"/>
+        ) : (
+          <div className="w-[30px] h-[30px] rounded-full bg-crimson/30 flex items-center justify-center">
+            <span className="font-display font-bold text-[13px] text-cream">{(u.name ?? 'U').charAt(0)}</span>
+          </div>
+        )}
+        <span className="font-display font-semibold text-[12px] text-cream/75 group-hover:text-cream transition-colors max-w-[90px] truncate">
+          {u.name?.split(' ')[0]}
+        </span>
+      </Link>
+    )
+  }
+
+  return (
+    <Link href="/login" onClick={close}
+      className="hidden lg:flex items-center gap-2 text-cream/80 hover:text-cream hover:bg-white/10 text-[13px] font-display font-semibold px-3 py-2 rounded-lg transition-all ml-1 whitespace-nowrap">
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
+      </svg>
+      Sign In
+    </Link>
   )
 }
 
@@ -232,13 +272,7 @@ export default function Nav() {
 
           <div className="hidden lg:flex"><ThemeToggle /></div>
 
-          <Link href="/login" onClick={close}
-            className="hidden lg:flex items-center gap-2 text-cream/80 hover:text-cream hover:bg-white/10 text-[13px] font-display font-semibold px-3 py-2 rounded-lg transition-all ml-1 whitespace-nowrap">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
-            </svg>
-            Sign In
-          </Link>
+          <NavUserButton close={close} />
 
           {/* Plan a Trip — visible on BOTH mobile and desktop */}
           <Link href="/search" onClick={close}
