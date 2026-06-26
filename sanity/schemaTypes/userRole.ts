@@ -10,8 +10,17 @@ export const userRole = defineType({
     defineField({ name: 'userName',  type: 'string',   title: 'Name'      }),
     defineField({
       name: 'role', type: 'string', title: 'Role',
-      options: { list: ['visitor', 'contributor', 'admin'] },
-      initialValue: 'visitor',
+      options: {
+        list: [
+          { title: 'Subscriber',   value: 'subscriber'   },
+          { title: 'Moderator',    value: 'moderator'    },
+          { title: 'Contributor',  value: 'contributor'  },
+          { title: 'Author-Editor',value: 'author-editor'},
+          { title: 'Admin',        value: 'admin'        },
+          { title: 'Visitor (legacy)', value: 'visitor'  },
+        ],
+      },
+      initialValue: 'subscriber',
     }),
     defineField({ name: 'createdAt', type: 'datetime', title: 'Joined At' }),
   ],

@@ -1,0 +1,71 @@
+{
+  "nav": {
+    "destinations": "Destinos",
+    "guides":       "Guias",
+    "blog":         "Jornal",
+    "about":        "Sobre",
+    "contact":      "Contacto",
+    "signIn":       "Entrar",
+    "planATrip":    "Planear"
+  },
+  "common": {
+    "browseAll":    "Ver Tudo",
+    "readMore":     "Ler mais",
+    "learnMore":    "Saber mais",
+    "save":         "Guardar",
+    "saved":        "Guardado",
+    "explore":      "Explorar",
+    "viewAll":      "Ver todos",
+    "by":           "Por",
+    "in":           "em",
+    "published":    "Publicado",
+    "featured":     "Em Destaque",
+    "verified":     "Verificado",
+    "backToTop":    "Voltar ao topo",
+    "close":        "Fechar",
+    "loading":      "A carregar…"
+  },
+  "home": {
+    "heroTagline":      "África Explicada por Africanos",
+    "heroSubheadline":  "Descubra as histórias reais por detrás dos lugares mais notáveis de África — escritas por quem as vive.",
+    "exploreButton":    "Explorar Atrações",
+    "featuredSection":  "Lugares em Destaque",
+    "latestArticles":   "Últimos Artigos do Jornal"
+  },
+  "search": {
+    "placeholder":  "Pesquisar atrações, cidades, países…",
+    "filters":      "Filtros",
+    "noResults":    "Sem resultados",
+    "resultsFor":   "Resultados para"
+  },
+  "auth": {
+    "signIn":             "Entrar",
+    "signUp":             "Criar conta",
+    "signOut":            "Sair",
+    "continueWithGoogle": "Continuar com o Google",
+    "emailLabel":         "Endereço de e-mail",
+    "passwordLabel":      "Palavra-passe",
+    "nameLabel":          "Nome completo",
+    "welcomeBack":        "Bem-vindo",
+    "createAccount":      "Criar a sua conta"
+  },
+  "dashboard": {
+    "title":            "Painel",
+    "overview":         "Visão Geral",
+    "savedAttractions": "Atrações Guardadas",
+    "corrections":      "Correções",
+    "submit":           "Submeter",
+    "articles":         "Artigos",
+    "users":            "Utilizadores",
+    "noSaved":          "A sua lista está vazia",
+    "noSavedDesc":      "Explore os lugares mais notáveis de África e clique no coração para os guardar.",
+    "browseToSave":     "Explorar Atrações"
+  },
+  "footer": {
+    "tagline":  "África explicada por africanos.",
+    "rights":   "Todos os direitos reservados.",
+    "contact":  "Contacto",
+    "privacy":  "Política de Privacidade",
+    "terms":    "Termos de Serviço"
+  }
+}

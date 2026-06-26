@@ -2,22 +2,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { TypewriterHero } from '@/components/TypewriterHero'
+import { ContactForm } from '@/components/ContactForm'
 
 export const metadata: Metadata = {
   title: 'Contact MyAfroWaka – Get in Touch',
   description:
     'Reach the MyAfroWaka team for attraction corrections, partnerships, press requests, or travel questions. We read every message.',
 }
-
-const REASONS = [
-  'General Enquiry',
-  'Partnership / Sponsorship',
-  'Attraction Data Correction',
-  'Press / Media',
-  'Tourism Board Enquiry',
-  'Tip a Destination',
-  'Other',
-]
 
 export default function ContactPage() {
   return (
@@ -60,83 +51,7 @@ export default function ContactPage() {
 
             {/* ── Contact form (2/3) ──────────────────────────────────── */}
             <div className="lg:col-span-2">
-
-              <form
-                className="space-y-6"
-                action={`mailto:info@myafrowaka.com`}
-                method="GET"
-              >
-                <div className="grid sm:grid-cols-2 gap-5">
-                  <div>
-                    <label className="font-display font-semibold text-[13px] text-charcoal/70 dark-flip-muted block mb-2">
-                      Your Name
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      placeholder="Amara Okafor"
-                      className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 focus:outline-none focus:border-gold-400 transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="font-display font-semibold text-[13px] text-charcoal/70 dark-flip-muted block mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      placeholder="you@example.com"
-                      className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 focus:outline-none focus:border-gold-400 transition-colors"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="font-display font-semibold text-[13px] text-charcoal/70 dark-flip-muted block mb-2">
-                    Reason for Contact
-                  </label>
-                  <div className="relative">
-                    <select
-                      name="subject"
-                      className="w-full appearance-none border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text focus:outline-none focus:border-gold-400 transition-colors pr-10"
-                    >
-                      {REASONS.map(r => <option key={r} value={r}>{r}</option>)}
-                    </select>
-                    <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/35 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
-                    </svg>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="font-display font-semibold text-[13px] text-charcoal/70 dark-flip-muted block mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    name="body"
-                    required
-                    rows={6}
-                    placeholder="Tell us what is on your mind. Specific is always better."
-                    className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 resize-none transition-colors"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-2.5 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(162,46,41,0.25)]"
-                >
-                  Send Message
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                  </svg>
-                </button>
-
-                <p className="font-sans text-[12px] text-charcoal/35 dark-flip-muted">
-                  Your message goes directly to the editorial team. We do not use auto-replies.
-                </p>
-              </form>
+              <ContactForm />
             </div>
 
             {/* ── Sidebar (1/3) ────────────────────────────────────────── */}

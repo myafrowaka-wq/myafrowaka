@@ -9,18 +9,33 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
+// ── Demo accounts (public knowledge, shown on login page) ─────────────────────
+
+const DEMO_ACCOUNTS = [
+  { email: 'subscriber@demo.myafrowaka.com',  role: 'Subscriber'   },
+  { email: 'moderator@demo.myafrowaka.com',   role: 'Moderator'    },
+  { email: 'contributor@demo.myafrowaka.com', role: 'Contributor'  },
+  { email: 'author@demo.myafrowaka.com',      role: 'Author-Editor'},
+  { email: 'admin@demo.myafrowaka.com',       role: 'Admin'        },
+]
+
+const DEMO_PASSWORD = 'Demo1234!'
+
+// ── Page ──────────────────────────────────────────────────────────────────────
+
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tab?: string }>
+  searchParams: Promise<{ tab?: string; error?: string }>
 }) {
-  const { tab } = await searchParams
-  const isSignup = tab === 'signup'
+  const { tab, error } = await searchParams
+  const isSignup   = tab === 'signup'
+  const hasError   = error === 'CredentialsSignin'
 
   return (
     <div className="min-h-screen bg-cream dark-flip-bg flex">
 
-      {/* ── Left panel (desktop only) ── */}
+      {/* ── Left panel (desktop only) ─────────────────────────────────── */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden flex-col">
         <Image
           src="https://picsum.photos/seed/login-african-cultural-site-v2/900/1200"
@@ -28,19 +43,13 @@ export default async function LoginPage({
           fill priority
           className="object-cover object-center"
         />
-        {/* Strong dark overlay so text is always readable */}
         <div className="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/60 to-ink/92"/>
 
         <div className="relative z-10 flex flex-col h-full p-12">
-          {/* Logo — pinned at top */}
           <Link href="/" className="shrink-0">
             <Image src="/logo-white.png" alt="MyAfroWaka" width={200} height={52} className="h-9 w-auto"/>
           </Link>
-
-          {/* Spacer pushes quote to bottom */}
           <div className="flex-1"/>
-
-          {/* Quote */}
           <blockquote>
             <p className="font-display font-bold text-cream leading-snug mb-5"
               style={{ fontSize: 'clamp(22px, 2.5vw, 32px)', letterSpacing: '-0.018em' }}>
@@ -54,8 +63,8 @@ export default async function LoginPage({
         </div>
       </div>
 
-      {/* ── Right panel ── */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-6 py-16">
+      {/* ── Right panel ───────────────────────────────────────────────── */}
+      <div className="w-full lg:w-1/2 flex items-start justify-center px-6 py-16 overflow-y-auto">
         <div className="w-full max-w-md">
 
           <h1 className="font-display font-bold text-3xl text-charcoal dark-flip-text mb-2" style={{ letterSpacing: '-0.018em' }}>
@@ -64,14 +73,23 @@ export default async function LoginPage({
           <p className="font-sans text-sm text-charcoal/55 dark-flip-muted mb-8">
             {isSignup
               ? 'Join explorers who travel Africa with intention.'
-              : 'Sign in to access your saved trips and itineraries.'}
+              : 'Sign in to access your saved trips and dashboard.'}
           </p>
+
+          {/* Error message */}
+          {hasError && (
+            <div className="mb-5 bg-crimson/8 border border-crimson/25 rounded-xl px-4 py-3">
+              <p className="font-sans text-[13px] text-crimson">
+                Incorrect email or password. Check the demo accounts below.
+              </p>
+            </div>
+          )}
 
           {/* Google */}
           <div className="mb-6">
             <form action={async () => {
               'use server'
-              await signIn('google', { redirectTo: '/dashboard' })
+              await signIn('google', { redirectTo: '/user-dashboard' })
             }}>
               <button type="submit"
                 className="w-full flex items-center justify-center gap-3 border border-line dark-flip-border bg-white dark-flip-card hover:bg-sand text-charcoal dark-flip-text font-display font-semibold text-[14px] py-4 rounded-xl transition-colors shadow-sm hover:shadow-[var(--shadow-soft)]">
@@ -89,46 +107,85 @@ export default async function LoginPage({
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-line dark-flip-border"/></div>
             <div className="relative flex justify-center">
-              <span className="bg-cream dark-flip-bg px-3 font-mono text-[10px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted">or with email</span>
+              <span className="bg-cream dark-flip-bg px-3 font-mono text-[10px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted">
+                or with email
+              </span>
             </div>
           </div>
 
-          <form className="space-y-4">
-            {isSignup && (
+          {/* Credentials form */}
+          <form action={async (formData: FormData) => {
+            'use server'
+            const email    = formData.get('email')    as string
+            const password = formData.get('password') as string
+            try {
+              await signIn('credentials', { email, password, redirectTo: '/user-dashboard' })
+            } catch (err: unknown) {
+              const msg = err instanceof Error ? err.message : String(err)
+              if (msg.includes('NEXT_REDIRECT')) throw err
+              // Invalid credentials: NextAuth handles redirect to ?error=CredentialsSignin
+              throw err
+            }
+          }}>
+            <div className="space-y-4">
+              {isSignup && (
+                <div>
+                  <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">
+                    Full Name
+                  </label>
+                  <input type="text" name="name" placeholder="Your name"
+                    className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
+                </div>
+              )}
               <div>
-                <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">Full Name</label>
-                <input type="text" placeholder="Your name"
-                  className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder-charcoal/30 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
+                <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">
+                  Email Address
+                </label>
+                <input type="email" name="email" placeholder="your@email.com"
+                  className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
               </div>
-            )}
-            <div>
-              <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">Email Address</label>
-              <input type="email" placeholder="your@email.com"
-                className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder-charcoal/30 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
-            </div>
-            <div>
-              <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">Password</label>
-              <input type="password" placeholder={isSignup ? 'Create a strong password' : 'Enter your password'}
-                className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder-charcoal/30 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
-            </div>
-            {!isSignup && (
-              <div className="flex justify-end">
-                <button type="button" className="font-mono text-[10px] uppercase tracking-[0.12em] text-charcoal/40 hover:text-crimson transition-colors">
-                  Forgot password?
-                </button>
+              <div>
+                <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">
+                  Password
+                </label>
+                <input type="password" name="password" placeholder={isSignup ? 'Create a strong password' : 'Enter your password'}
+                  className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
               </div>
-            )}
-            <button type="submit"
-              className="w-full bg-ink hover:bg-charcoal text-cream font-display font-bold text-[13px] uppercase tracking-[0.10em] py-4 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99]">
-              {isSignup ? 'Create Account' : 'Sign In'}
-            </button>
+
+              <button type="submit"
+                className="w-full bg-ink hover:bg-charcoal text-cream font-display font-bold text-[13px] uppercase tracking-[0.10em] py-4 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99]">
+                {isSignup ? 'Create Account' : 'Sign In'}
+              </button>
+            </div>
           </form>
 
           <p className="font-sans text-sm text-center text-charcoal/45 dark-flip-muted mt-6">
             {isSignup
-              ? <><>Already have an account? </><Link href="/login" className="text-crimson hover:text-crimson-600 font-semibold">Sign in</Link></>
-              : <><>No account? </><Link href="/login?tab=signup" className="text-crimson hover:text-crimson-600 font-semibold">Create one free</Link></>}
+              ? <><span>Already have an account? </span><Link href="/login" className="text-crimson hover:text-crimson/70 font-semibold">Sign in</Link></>
+              : <><span>No account? </span><Link href="/login?tab=signup" className="text-crimson hover:text-crimson/70 font-semibold">Create one free</Link></>}
           </p>
+
+          {/* ── Demo accounts panel ────────────────────────────────────── */}
+          <div className="mt-10 bg-sand dark-flip-surf border border-line dark-flip-border rounded-2xl overflow-hidden">
+            <div className="px-5 py-3.5 border-b border-line dark-flip-border">
+              <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted">
+                Demo Accounts
+              </p>
+              <p className="font-sans text-[12px] text-charcoal/55 dark-flip-muted mt-0.5">
+                Try any role. Password for all: <span className="font-mono font-bold text-charcoal dark-flip-text">{DEMO_PASSWORD}</span>
+              </p>
+            </div>
+            <div className="divide-y divide-line dark-flip-border">
+              {DEMO_ACCOUNTS.map(({ email, role }) => (
+                <div key={email} className="flex items-center justify-between px-5 py-3">
+                  <p className="font-mono text-[10px] text-charcoal/65 dark-flip-muted">{email}</p>
+                  <span className="font-mono text-[8px] uppercase tracking-[0.1em] text-charcoal/35 dark-flip-muted">
+                    {role}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <p className="font-display text-[9px] text-charcoal/25 dark-flip-muted text-center mt-8">
             By continuing you agree to our{' '}

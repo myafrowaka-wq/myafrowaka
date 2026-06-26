@@ -9,6 +9,8 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 import { ScrollRevealInit } from "@/components/ScrollRevealInit";
 import { NewsletterPopup } from "@/components/NewsletterPopup";
 import { CustomCursor } from "@/components/CustomCursor";
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages } from 'next-intl/server'
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -36,7 +38,7 @@ export const metadata: Metadata = {
     template: "%s – MyAfroWaka",
   },
   description:
-    "557 verified travel guides across 47 African countries. From the Pyramids of Giza to the gorilla forests of Uganda. Written by Africans, for the world.",
+    "Verified travel guides to Africa's greatest destinations. From the Pyramids of Giza to the gorilla forests of Uganda. Written by Africans, for the world.",
   metadataBase: new URL("https://myafrowaka.com"),
   keywords: ["Africa travel", "African destinations", "travel guides Africa", "safari", "Egypt", "Kenya", "Morocco"],
   openGraph: {
@@ -46,7 +48,7 @@ export const metadata: Metadata = {
     url: "https://myafrowaka.com",
     title: "MyAfroWaka – Discover Africa Beyond the Stereotype",
     description:
-      "Verified travel guides to 557 African attractions across 47 countries. No fabrications. Written by Africans.",
+      "Verified travel guides to Africa's greatest attractions. No fabrications. Written by Africans.",
     images: [
       {
         url: "https://images.unsplash.com/photo-GNqLWDUKwDk?auto=format&fit=crop&w=1200&h=630&q=80",
@@ -61,7 +63,7 @@ export const metadata: Metadata = {
     site: "@myafrowaka_",
     creator: "@myafrowaka_",
     title: "MyAfroWaka – Discover Africa Beyond the Stereotype",
-    description: "557 verified travel guides across 47 African countries.",
+    description: "Verified travel guides to Africa's greatest destinations. Written by Africans.",
     images: ["https://images.unsplash.com/photo-GNqLWDUKwDk?auto=format&fit=crop&w=1200&h=630&q=80"],
   },
   robots: {
@@ -84,9 +86,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const messages = await getMessages()
+
   return (
     <html
       lang="en"
@@ -94,17 +98,19 @@ export default function RootLayout({
       className={`${poppins.variable} ${outfit.variable} ${spaceMono.variable}`}
     >
       <body className="min-h-screen flex flex-col">
-        <SessionProviderWrapper>
-          <ThemeProvider>
-            <CustomCursor />
-            <ScrollRevealInit />
-            <Nav />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <ScrollToTop />
-            <NewsletterPopup />
-          </ThemeProvider>
-        </SessionProviderWrapper>
+        <NextIntlClientProvider messages={messages}>
+          <SessionProviderWrapper>
+            <ThemeProvider>
+              <CustomCursor />
+              <ScrollRevealInit />
+              <Nav />
+              <main className="flex-1">{children}</main>
+              <Footer />
+              <ScrollToTop />
+              <NewsletterPopup />
+            </ThemeProvider>
+          </SessionProviderWrapper>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

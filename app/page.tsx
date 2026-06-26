@@ -7,6 +7,7 @@ import { HeroBackground } from '@/components/HeroBackground'
 import { PlanTripCard } from '@/components/PlanTripCard'
 import { DestinationsGrid } from '@/components/DestinationsGrid'
 import { PopularPills } from '@/components/PopularPills'
+import { ExperiencesCarousel } from '@/components/ExperiencesCarousel'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -319,25 +320,7 @@ export default async function HomePage() {
             </h2>
           </div>
 
-          {/* 2 col mobile, 6 col desktop — all cards uniform */}
-          <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4">
-            {EXPERIENCES.map((e) => (
-              <Link key={e.slug} href={`/search?q=${encodeURIComponent(e.slug)}`}
-                className="card-zoom group relative rounded-2xl overflow-hidden aspect-[3/4] lg:aspect-[2/3] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500">
-                <Image src={e.image} alt={e.label} fill
-                  sizes="(max-width:1024px) 50vw, 17vw"
-                  className="object-cover img-editorial img-inner"/>
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/92 via-ink/25 to-transparent"/>
-                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-                  <h3 className="font-display font-bold text-sm lg:text-[13px] text-cream group-hover:text-gold-300 transition-colors leading-tight"
-                    style={{ letterSpacing: '-0.01em' }}>
-                    {e.label}
-                  </h3>
-                  <p className="font-sans text-[10px] text-cream/55 mt-1 leading-tight hidden lg:block">{e.desc}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <ExperiencesCarousel />
         </div>
       </section>
 

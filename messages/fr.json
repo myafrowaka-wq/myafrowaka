@@ -1,0 +1,71 @@
+{
+  "nav": {
+    "destinations": "Destinations",
+    "guides":       "Guides",
+    "blog":         "Journal",
+    "about":        "À Propos",
+    "contact":      "Contact",
+    "signIn":       "Connexion",
+    "planATrip":    "Planifier"
+  },
+  "common": {
+    "browseAll":    "Tout Parcourir",
+    "readMore":     "Lire la suite",
+    "learnMore":    "En savoir plus",
+    "save":         "Sauvegarder",
+    "saved":        "Sauvegardé",
+    "explore":      "Explorer",
+    "viewAll":      "Voir tout",
+    "by":           "Par",
+    "in":           "en",
+    "published":    "Publié",
+    "featured":     "À la une",
+    "verified":     "Vérifié",
+    "backToTop":    "Retour en haut",
+    "close":        "Fermer",
+    "loading":      "Chargement…"
+  },
+  "home": {
+    "heroTagline":      "L'Afrique Expliquée par des Africains",
+    "heroSubheadline":  "Découvrez les vraies histoires derrière les lieux les plus remarquables d'Afrique — écrits par ceux qui les vivent.",
+    "exploreButton":    "Explorer les Sites",
+    "featuredSection":  "Lieux en Vedette",
+    "latestArticles":   "Derniers Articles du Journal"
+  },
+  "search": {
+    "placeholder":  "Rechercher sites, villes, pays…",
+    "filters":      "Filtres",
+    "noResults":    "Aucun résultat trouvé",
+    "resultsFor":   "Résultats pour"
+  },
+  "auth": {
+    "signIn":             "Se connecter",
+    "signUp":             "Créer un compte",
+    "signOut":            "Se déconnecter",
+    "continueWithGoogle": "Continuer avec Google",
+    "emailLabel":         "Adresse e-mail",
+    "passwordLabel":      "Mot de passe",
+    "nameLabel":          "Nom complet",
+    "welcomeBack":        "Bienvenue",
+    "createAccount":      "Créer votre compte"
+  },
+  "dashboard": {
+    "title":            "Tableau de Bord",
+    "overview":         "Aperçu",
+    "savedAttractions": "Sites Sauvegardés",
+    "corrections":      "Corrections",
+    "submit":           "Soumettre",
+    "articles":         "Articles",
+    "users":            "Utilisateurs",
+    "noSaved":          "Votre liste est vide",
+    "noSavedDesc":      "Parcourez les sites les plus remarquables d'Afrique et cliquez sur le cœur pour les sauvegarder.",
+    "browseToSave":     "Explorer les Sites"
+  },
+  "footer": {
+    "tagline":  "L'Afrique expliquée par des Africains.",
+    "rights":   "Tous droits réservés.",
+    "contact":  "Contact",
+    "privacy":  "Politique de Confidentialité",
+    "terms":    "Conditions d'Utilisation"
+  }
+}

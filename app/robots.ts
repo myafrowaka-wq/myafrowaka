@@ -1,22 +1,24 @@
 import type { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://myafrowaka.com'
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
         disallow: [
-          '/studio/',
-          '/admin/',
-          '/dashboard/',
-          '/api/',
-          '/search',
+          '/user-dashboard',
+          '/dashboard',
           '/login',
-          '/style-guide',
+          '/register',
+          '/admin',
+          '/studio',
+          '/search',
+          '/api/',
         ],
       },
     ],
-    sitemap: 'https://myafrowaka.com/sitemap.xml',
+    sitemap: `${base}/sitemap.xml`,
   }
 }

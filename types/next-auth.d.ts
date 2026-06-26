@@ -1,10 +1,18 @@
 import type { DefaultSession } from 'next-auth'
 
+export type UserRole =
+  | 'subscriber'
+  | 'moderator'
+  | 'contributor'
+  | 'author-editor'
+  | 'admin'
+  | 'visitor'
+
 declare module 'next-auth' {
   interface Session {
     user: {
       id: string
-      role: 'visitor' | 'contributor' | 'admin'
+      role: UserRole
     } & DefaultSession['user']
   }
 }

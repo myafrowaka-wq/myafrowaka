@@ -8,6 +8,7 @@ import { ATTRACTION_BY_SLUG_QUERY, ALL_PUBLISHED_SLUGS_QUERY } from '@/sanity/li
 import { Badge } from '@/components/Badge'
 import { FaqAccordion } from '@/components/FaqAccordion'
 import { SaveButton } from '@/components/SaveButton'
+import { CollapsibleSection } from '@/components/CollapsibleSection'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -52,11 +53,54 @@ interface Attraction {
   featuredIn?: { title: string; slug: string }[]
 }
 
+type PortableBlock = {
+  _type: string
+  _key?: string
+  style?: string
+  children?: Array<{ _key?: string; _type?: string; text: string; marks?: string[] }>
+  [key: string]: unknown
+}
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function formatVerifiedDate(raw: string): string {
   const d = new Date(raw + 'T00:00:00')
   return d.toLocaleDateString('en-GB', { year: 'numeric', month: 'long' })
+}
+
+function filterSeparators(blocks: unknown[]): unknown[] {
+  return (blocks as PortableBlock[]).filter(block => {
+    if (block._type !== 'block') return true
+    const text = (block.children ?? []).map(c => c.text).join('').trim()
+    return text !== 'MyAfroWaka Separator' && !text.startsWith('MyAfroWaka Separator')
+  })
+}
+
+function groupByH2(blocks: unknown[]): { title: string; content: unknown[]; defaultOpen: boolean }[] {
+  const groups: { title: string; content: unknown[]; defaultOpen: boolean }[] = []
+  let current: { title: string; content: unknown[] } | null = null
+  const preamble: unknown[] = []
+
+  for (const block of blocks as PortableBlock[]) {
+    if (block._type === 'block' && block.style === 'h2') {
+      if (current) groups.push({ ...current, defaultOpen: false })
+      const title = (block.children ?? []).map(c => c.text).join('')
+      current = { title, content: [] }
+    } else if (current) {
+      current.content.push(block)
+    } else {
+      preamble.push(block)
+    }
+  }
+  if (current) groups.push({ ...current, defaultOpen: false })
+
+  if (preamble.length > 0) {
+    groups.unshift({ title: 'Quick Overview', content: preamble, defaultOpen: true })
+  } else if (groups.length > 0) {
+    groups[0].defaultOpen = true
+  }
+
+  return groups
 }
 
 // ── Static params ─────────────────────────────────────────────────────────────
@@ -134,6 +178,19 @@ function buildJsonLd(a: Attraction) {
   ]
 }
 
+// ── Prose classes (shared, with dark mode) ─────────────────────────────────────
+
+const PROSE = `prose prose-lg max-w-none
+  prose-headings:font-display prose-headings:tracking-tight prose-headings:leading-tight
+  prose-headings:text-charcoal dark:prose-headings:text-cream
+  prose-h3:text-xl prose-h3:text-crimson dark:prose-h3:text-crimson
+  prose-p:text-charcoal/75 dark:prose-p:text-cream/70 prose-p:leading-relaxed prose-p:font-sans
+  prose-a:text-crimson prose-a:no-underline hover:prose-a:underline
+  prose-strong:text-charcoal dark:prose-strong:text-cream prose-strong:font-semibold
+  prose-ul:text-charcoal/75 dark:prose-ul:text-cream/70 prose-li:leading-relaxed
+  prose-blockquote:border-l-4 prose-blockquote:border-gold-400
+  prose-blockquote:italic prose-blockquote:text-charcoal/60 dark:prose-blockquote:text-cream/55`
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function AttractionPage(
@@ -156,6 +213,8 @@ export default async function AttractionPage(
   }))
 
   const hasContent = Array.isArray(a.articleBody) && a.articleBody.length > 0
+  const filteredBody = hasContent ? filterSeparators(a.articleBody!) : []
+  const sections = hasContent ? groupByH2(filteredBody) : []
 
   return (
     <>
@@ -178,7 +237,6 @@ export default async function AttractionPage(
         <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/65 to-ink/97"/>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">
-
 
           {/* Badges */}
           {(a.unescoStatus || (a.type && a.type.length > 0)) && (
@@ -224,47 +282,57 @@ export default async function AttractionPage(
             <div className="lg:col-span-2 min-w-0">
 
               {hasContent ? (
-                <div className="prose prose-lg max-w-none
-                  prose-headings:font-display prose-headings:text-charcoal prose-headings:tracking-tight prose-headings:leading-tight
-                  prose-h2:text-3xl prose-h2:mt-12 prose-h2:pb-3 prose-h2:border-b prose-h2:border-line
-                  prose-h3:text-xl prose-h3:text-crimson
-                  prose-p:text-charcoal/75 prose-p:leading-relaxed prose-p:font-sans
-                  prose-a:text-crimson prose-a:no-underline hover:prose-a:underline
-                  prose-strong:text-charcoal prose-strong:font-semibold
-                  prose-ul:text-charcoal/75 prose-li:leading-relaxed
-                  prose-blockquote:border-l-4 prose-blockquote:border-gold-400
-                  prose-blockquote:italic prose-blockquote:text-charcoal/60 prose-blockquote:not-italic">
-                  <PortableText value={a.articleBody as Parameters<typeof PortableText>[0]['value']} />
+                /* ── Article body: collapsible sections grouped by h2 ── */
+                <div className="divide-y divide-line dark-flip-border border-t border-line dark-flip-border">
+                  {sections.map((section, i) => (
+                    <CollapsibleSection
+                      key={i}
+                      title={section.title}
+                      defaultOpen={section.defaultOpen}
+                    >
+                      <div className={PROSE}>
+                        <PortableText
+                          value={section.content as Parameters<typeof PortableText>[0]['value']}
+                        />
+                      </div>
+                    </CollapsibleSection>
+                  ))}
                 </div>
               ) : (
-                <div className="space-y-10">
+                /* ── Fallback: structured data sections ────────────────── */
+                <div className="divide-y divide-line dark-flip-border border-t border-line dark-flip-border">
 
+                  {/* Quick Overview — always open */}
+                  <CollapsibleSection title="Quick Overview" defaultOpen={true}>
+                    {a.editorialSummary ? (
+                      <p className="font-sans text-[15px] text-charcoal/70 dark-flip-muted leading-relaxed">
+                        {a.editorialSummary}
+                      </p>
+                    ) : (
+                      <p className="font-sans text-[14px] text-charcoal/40 dark-flip-muted italic">
+                        A full editorial overview is being prepared for this attraction.
+                      </p>
+                    )}
+                  </CollapsibleSection>
+
+                  {/* How to Get There */}
                   {a.gettingThere && (
-                    <section>
-                      <div className="w-8 h-px bg-gold-400 mb-5 opacity-60"/>
-                      <h2 className="font-display font-bold text-charcoal dark-flip-text mb-4"
-                        style={{ fontSize: 'clamp(18px, 2.2vw, 26px)', letterSpacing: '-0.015em' }}>
-                        How to Get There
-                      </h2>
-                      <p className="font-sans text-[15px] text-charcoal/70 dark-flip-muted leading-relaxed whitespace-pre-line">
+                    <CollapsibleSection title="How to Get There">
+                      <p className="font-sans text-[15px] text-charcoal/70 dark-flip-muted leading-relaxed whitespace-pre-line mb-4">
                         {a.gettingThere}
                       </p>
                       {a.addressDirections && (
-                        <div className="mt-5 bg-sand dark-flip-surf rounded-2xl p-5 border border-line dark-flip-border">
+                        <div className="bg-sand dark-flip-surf rounded-2xl p-5 border border-line dark-flip-border">
                           <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted mb-2">Address</p>
                           <p className="font-sans text-[14px] text-charcoal/75 dark-flip-muted">{a.addressDirections}</p>
                         </div>
                       )}
-                    </section>
+                    </CollapsibleSection>
                   )}
 
+                  {/* Entry Fees */}
                   {(a.entryFeeDisplayText || a.entryFeeInternational != null) && (
-                    <section>
-                      <div className="w-8 h-px bg-gold-400 mb-5 opacity-60"/>
-                      <h2 className="font-display font-bold text-charcoal dark-flip-text mb-4"
-                        style={{ fontSize: 'clamp(18px, 2.2vw, 26px)', letterSpacing: '-0.015em' }}>
-                        Entry Fees
-                      </h2>
+                    <CollapsibleSection title="Entry Fees">
                       {a.entryFeeDisplayText ? (
                         <p className="font-sans text-[15px] text-charcoal/70 dark-flip-muted leading-relaxed whitespace-pre-line">
                           {a.entryFeeDisplayText}
@@ -289,29 +357,21 @@ export default async function AttractionPage(
                           )}
                         </div>
                       )}
-                    </section>
+                    </CollapsibleSection>
                   )}
 
+                  {/* Best Time to Visit */}
                   {a.bestTimeToVisit && (
-                    <section>
-                      <div className="w-8 h-px bg-gold-400 mb-5 opacity-60"/>
-                      <h2 className="font-display font-bold text-charcoal dark-flip-text mb-4"
-                        style={{ fontSize: 'clamp(18px, 2.2vw, 26px)', letterSpacing: '-0.015em' }}>
-                        Best Time to Visit
-                      </h2>
+                    <CollapsibleSection title="Best Time to Visit">
                       <p className="font-sans text-[15px] text-charcoal/70 dark-flip-muted leading-relaxed whitespace-pre-line">
                         {a.bestTimeToVisit}
                       </p>
-                    </section>
+                    </CollapsibleSection>
                   )}
 
+                  {/* Nearby Cities */}
                   {a.nearbyCities && a.nearbyCities.length > 0 && (
-                    <section>
-                      <div className="w-8 h-px bg-gold-400 mb-5 opacity-60"/>
-                      <h2 className="font-display font-bold text-charcoal dark-flip-text mb-4"
-                        style={{ fontSize: 'clamp(18px, 2.2vw, 26px)', letterSpacing: '-0.015em' }}>
-                        Nearby Cities
-                      </h2>
+                    <CollapsibleSection title="Nearby Cities">
                       <div className="flex flex-wrap gap-2">
                         {a.nearbyCities.map(city => (
                           <Link
@@ -323,26 +383,15 @@ export default async function AttractionPage(
                           </Link>
                         ))}
                       </div>
-                    </section>
+                    </CollapsibleSection>
                   )}
-                </div>
-              )}
 
-              {/* FAQ accordion */}
-              {faqItems.length > 0 && (
-                <section className="mt-12">
-                  <div className="w-8 h-px bg-gold-400 mb-5 opacity-60"/>
-                  <h2 className="font-display font-bold text-charcoal dark-flip-text mb-6"
-                    style={{ fontSize: 'clamp(18px, 2.2vw, 26px)', letterSpacing: '-0.015em' }}>
-                    Frequently Asked Questions
-                  </h2>
-                  <FaqAccordion items={faqItems} />
-                </section>
+                </div>
               )}
 
               {/* Experience tags */}
               {a.experienceTags && a.experienceTags.length > 0 && (
-                <div className="mt-12 pt-6 border-t border-line dark-flip-border">
+                <div className="mt-10 pt-6 border-t border-line dark-flip-border">
                   <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-4">Tagged</p>
                   <div className="flex flex-wrap gap-2">
                     {a.experienceTags.map(tag => (
@@ -358,8 +407,8 @@ export default async function AttractionPage(
               )}
 
               {a.lastVerifiedDate && (
-                <p className="mt-10 font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/25 dark-flip-muted">
-                  Information last verified: {formatVerifiedDate(a.lastVerifiedDate)}
+                <p className="mt-8 font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/25 dark-flip-muted">
+                  Last updated: {formatVerifiedDate(a.lastVerifiedDate)}
                 </p>
               )}
             </div>
@@ -431,7 +480,9 @@ export default async function AttractionPage(
                   <div className="space-y-4">
                     {a.nearestAirportIATA && (
                       <div className="flex items-start gap-3">
-                        <span className="text-base mt-0.5 shrink-0">✈</span>
+                        <svg className="w-4 h-4 text-charcoal/40 dark-flip-muted mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        </svg>
                         <div>
                           <p className="font-display font-semibold text-[13px] text-charcoal dark-flip-text">
                             {a.nearestAirportIATA}
@@ -446,7 +497,10 @@ export default async function AttractionPage(
                     )}
                     {a.addressDirections && (
                       <div className="flex items-start gap-3">
-                        <span className="text-base mt-0.5 shrink-0">📍</span>
+                        <svg className="w-4 h-4 text-charcoal/40 dark-flip-muted mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
                         <p className="font-sans text-[12px] text-charcoal/60 dark-flip-muted leading-relaxed">
                           {a.addressDirections}
                         </p>
@@ -544,6 +598,24 @@ export default async function AttractionPage(
           </div>
         </div>
       </div>
+
+      {/* ── FAQ — separate full-width container ──────────────────────── */}
+      {faqItems.length > 0 && (
+        <div className="bg-sand dark-flip-surf border-t border-line dark-flip-border">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 md:py-20">
+            <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-charcoal/35 dark-flip-muted mb-3">
+              Common Questions
+            </p>
+            <h2
+              className="font-display font-bold text-charcoal dark-flip-text mb-8"
+              style={{ fontSize: 'clamp(20px, 2.5vw, 32px)', letterSpacing: '-0.018em' }}
+            >
+              Frequently Asked Questions
+            </h2>
+            <FaqAccordion items={faqItems} />
+          </div>
+        </div>
+      )}
     </>
   )
 }

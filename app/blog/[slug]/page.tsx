@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { PortableText } from '@portabletext/react'
 import { client } from '@/sanity/lib/client'
 import { POST_BY_SLUG_QUERY, ALL_POST_SLUGS_QUERY, ALL_POSTS_QUERY } from '@/sanity/lib/queries'
+import { FALLBACK_POSTS, type FallbackPost } from '@/lib/fallbackPosts'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -26,8 +27,11 @@ interface Post {
 // ── Static params ─────────────────────────────────────────────────────────────
 
 export async function generateStaticParams() {
-  const slugs = await client.fetch<{ slug: string }[]>(ALL_POST_SLUGS_QUERY)
-  return slugs.map(s => ({ slug: s.slug }))
+  const sanityslugs = await client.fetch<{ slug: string }[]>(ALL_POST_SLUGS_QUERY).catch(() => [])
+  const fallbackSlugs = FALLBACK_POSTS.map(p => ({ slug: p.slug }))
+  const all = [...sanityslugs, ...fallbackSlugs]
+  const seen = new Set<string>()
+  return all.filter(s => { if (seen.has(s.slug)) return false; seen.add(s.slug); return true })
 }
 
 // ── Metadata ──────────────────────────────────────────────────────────────────
@@ -36,11 +40,12 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params
-  const post = await client.fetch<Post | null>(POST_BY_SLUG_QUERY, { slug })
+  const sanityPost = await client.fetch<Post | null>(POST_BY_SLUG_QUERY, { slug }).catch(() => null)
+  const post = sanityPost ?? FALLBACK_POSTS.find(p => p.slug === slug)
   if (!post) return {}
 
-  const title       = post.metaTitle       ?? `${post.title} – MyAfroWaka`
-  const description = post.metaDescription ?? post.excerpt ?? `Read ${post.title} on MyAfroWaka.`
+  const title       = ('metaTitle' in post && post.metaTitle) ? post.metaTitle : `${post.title} – MyAfroWaka`
+  const description = ('metaDescription' in post && post.metaDescription) ? post.metaDescription : (post.excerpt ?? `Read ${post.title} on MyAfroWaka.`)
 
   return {
     title,
@@ -150,14 +155,31 @@ export default async function BlogPostPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params
-  const [post, allPosts] = await Promise.all([
-    client.fetch<Post | null>(POST_BY_SLUG_QUERY, { slug }),
-    client.fetch<Post[]>(ALL_POSTS_QUERY),
+  const [sanityPost, allSanityPosts] = await Promise.all([
+    client.fetch<Post | null>(POST_BY_SLUG_QUERY, { slug }).catch(() => null),
+    client.fetch<Post[]>(ALL_POSTS_QUERY).catch(() => [] as Post[]),
   ])
-  if (!post) notFound()
+
+  const fallback     = FALLBACK_POSTS.find(p => p.slug === slug)
+  const isFallback   = !sanityPost && !!fallback
+  if (!sanityPost && !fallback) notFound()
+
+  const post = sanityPost ?? {
+    title: fallback!.title, slug: fallback!.slug, publishedAt: fallback!.publishedAt,
+    excerpt: fallback!.excerpt, category: fallback!.category, tags: fallback!.tags,
+    coverImage: undefined, body: undefined, metaTitle: fallback!.metaTitle,
+    metaDescription: fallback!.metaDescription, author: fallback!.author,
+    featuredCountry: undefined,
+  }
 
   const accent = post.category ? (CATEGORY_COLOR[post.category] ?? '#B55D39') : '#B55D39'
-  const related = allPosts.filter(p => p.slug !== slug && p.category === post.category).slice(0, 3)
+
+  // Related: from Sanity first, then fallbacks
+  const allForRelated: { slug: string; title: string; category?: string }[] = [
+    ...allSanityPosts,
+    ...FALLBACK_POSTS.filter(fp => !allSanityPosts.find(sp => sp.slug === fp.slug)),
+  ]
+  const related = allForRelated.filter(p => p.slug !== slug && p.category === post.category).slice(0, 3)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -230,11 +252,22 @@ export default async function BlogPostPage(
                 </p>
               )}
 
-              {post.body && post.body.length > 0 ? (
+              {/* Sanity PortableText body */}
+              {!isFallback && post.body && (post.body as unknown[]).length > 0 && (
                 <div>
                   <PortableText value={post.body as Parameters<typeof PortableText>[0]['value']} components={ptComponents} />
                 </div>
-              ) : (
+              )}
+
+              {/* Fallback plain-text paragraphs */}
+              {isFallback && fallback?.content.map((para, i) => (
+                <p key={i} className="font-sans text-[15px] text-charcoal/78 dark-flip-muted leading-[1.8] mb-5">
+                  {para}
+                </p>
+              ))}
+
+              {/* No body placeholder (Sanity post without body) */}
+              {!isFallback && (!post.body || (post.body as unknown[]).length === 0) && (
                 <p className="font-sans text-sm text-charcoal/35 dark-flip-muted italic">
                   Article body coming soon.
                 </p>

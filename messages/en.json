@@ -1,0 +1,71 @@
+{
+  "nav": {
+    "destinations": "Destinations",
+    "guides":       "Guides",
+    "blog":         "Blog",
+    "about":        "About",
+    "contact":      "Contact",
+    "signIn":       "Sign In",
+    "planATrip":    "Plan a Trip"
+  },
+  "common": {
+    "browseAll":    "Browse All",
+    "readMore":     "Read more",
+    "learnMore":    "Learn more",
+    "save":         "Save",
+    "saved":        "Saved",
+    "explore":      "Explore",
+    "viewAll":      "View all",
+    "by":           "By",
+    "in":           "in",
+    "published":    "Published",
+    "featured":     "Featured",
+    "verified":     "Verified",
+    "backToTop":    "Back to top",
+    "close":        "Close",
+    "loading":      "Loading…"
+  },
+  "home": {
+    "heroTagline":      "Africa Explained by Africans",
+    "heroSubheadline":  "Discover the real stories behind Africa's most remarkable places — written by those who live them.",
+    "exploreButton":    "Explore Attractions",
+    "featuredSection":  "Featured Places",
+    "latestArticles":   "Latest from The Journal"
+  },
+  "search": {
+    "placeholder":  "Search attractions, cities, countries…",
+    "filters":      "Filters",
+    "noResults":    "No results found",
+    "resultsFor":   "Results for"
+  },
+  "auth": {
+    "signIn":             "Sign in",
+    "signUp":             "Create account",
+    "signOut":            "Sign out",
+    "continueWithGoogle": "Continue with Google",
+    "emailLabel":         "Email Address",
+    "passwordLabel":      "Password",
+    "nameLabel":          "Full Name",
+    "welcomeBack":        "Welcome back",
+    "createAccount":      "Create your account"
+  },
+  "dashboard": {
+    "title":            "Dashboard",
+    "overview":         "Overview",
+    "savedAttractions": "Saved Attractions",
+    "corrections":      "Corrections",
+    "submit":           "Submit",
+    "articles":         "Articles",
+    "users":            "Users",
+    "noSaved":          "Your list is empty",
+    "noSavedDesc":      "Browse Africa's most remarkable places and tap the heart to save them here.",
+    "browseToSave":     "Explore Attractions"
+  },
+  "footer": {
+    "tagline":  "Africa explained by Africans.",
+    "rights":   "All rights reserved.",
+    "contact":  "Contact",
+    "privacy":  "Privacy Policy",
+    "terms":    "Terms of Service"
+  }
+}

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import { useSession } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 
 // ─── data ─────────────────────────────────────────────────────────────────────
 
@@ -88,7 +89,7 @@ function NavUserButton({ close }: { close: () => void }) {
   if (status === 'authenticated' && session?.user) {
     const u = session.user
     return (
-      <Link href="/dashboard" onClick={close}
+      <Link href="/user-dashboard" onClick={close}
         className="hidden lg:flex items-center gap-2 hover:bg-white/10 rounded-full pl-0.5 pr-3 py-0.5 transition-all ml-1 group"
         title={`Signed in as ${u.name}`}>
         {u.image ? (
@@ -120,12 +121,22 @@ function NavUserButton({ close }: { close: () => void }) {
 // ─── component ────────────────────────────────────────────────────────────────
 
 export default function Nav() {
+  const t = useTranslations('nav')
   const [panel, setPanel]         = useState<PanelKey>(null)
   const [langOpen, setLangOpen]   = useState(false)
   const [mobile, setMobile]       = useState(false)
   const [menuOpen, setMenuOpen]   = useState(false)
   const [mobileAcc, setMobileAcc] = useState<string | null>(null)
   const [lang, setLang]           = useState('EN')
+
+  // Read locale from cookie on mount
+  useEffect(() => {
+    const match = document.cookie.match(/NEXT_LOCALE=([^;]+)/)
+    if (match) {
+      const code = match[1].toUpperCase()
+      if (['EN', 'FR', 'PT'].includes(code)) setLang(code)
+    }
+  }, [])
 
   const openTimer  = useRef<ReturnType<typeof setTimeout> | null>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -232,9 +243,9 @@ export default function Nav() {
           <div className="relative" onMouseEnter={() => hoverOpen('media')} onMouseLeave={hoverClose}>
             <button className={ni}>Guides {chevron(panel === 'media')}</button>
           </div>
-          <Link href="/blog"    onClick={close} className={ni}>Blog</Link>
-          <Link href="/about"   onClick={close} className={ni}>About</Link>
-          <Link href="/contact" onClick={close} className={ni}>Contact</Link>
+          <Link href="/blog"    onClick={close} className={ni}>{t('blog')}</Link>
+          <Link href="/about"   onClick={close} className={ni}>{t('about')}</Link>
+          <Link href="/contact" onClick={close} className={ni}>{t('contact')}</Link>
         </nav>
 
         {/* Right cluster */}
@@ -258,14 +269,26 @@ export default function Nav() {
             </button>
             {langOpen && (
               <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-[#1E1B14] border border-line dark:border-white/10 rounded-2xl py-2 shadow-[0_8px_40px_rgba(0,0,0,0.18)]">
-                {LANGUAGES.map(l => (
-                  <button key={l.code} onClick={() => { setLang(l.code); setLangOpen(false) }}
-                    className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-sans hover:bg-cream dark:hover:bg-white/5 transition-colors ${lang === l.code ? 'text-ochre-600 font-semibold' : 'text-charcoal/70 dark:text-cream/65'}`}>
-                    <span>{l.flag}</span><span>{l.label}</span>
-                    {lang === l.code && <svg className="w-3.5 h-3.5 ml-auto text-ochre-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>}
-                  </button>
-                ))}
-                {lang !== 'EN' && <p className="mx-4 mt-2 pt-2 border-t border-line dark:border-white/10 font-mono text-[9px] uppercase tracking-[0.12em] text-charcoal/30 dark:text-cream/25">Translation coming soon</p>}
+                {LANGUAGES.map(l => {
+                  const supported = ['EN', 'FR', 'PT'].includes(l.code)
+                  return (
+                    <button key={l.code}
+                      onClick={() => {
+                        if (supported) {
+                          document.cookie = `NEXT_LOCALE=${l.code.toLowerCase()}; path=/; max-age=31536000; SameSite=Lax`
+                          setLang(l.code)
+                          setLangOpen(false)
+                          window.location.reload()
+                        }
+                      }}
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-sans transition-colors ${supported ? 'hover:bg-cream dark:hover:bg-white/5 cursor-pointer' : 'opacity-40 cursor-not-allowed'} ${lang === l.code ? 'text-ochre-600 font-semibold' : 'text-charcoal/70 dark:text-cream/65'}`}>
+                      <span>{l.flag}</span>
+                      <span>{l.label}</span>
+                      {!supported && <span className="ml-auto font-mono text-[8px] uppercase tracking-[0.1em] text-charcoal/30 dark:text-cream/25">Soon</span>}
+                      {lang === l.code && supported && <svg className="w-3.5 h-3.5 ml-auto text-ochre-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>}
+                    </button>
+                  )
+                })}
               </div>
             )}
           </div>
@@ -279,7 +302,7 @@ export default function Nav() {
             className="inline-flex items-center bg-crimson hover:bg-crimson-600 text-cream font-display font-bold uppercase tracking-[0.10em] rounded-full transition-all hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap
               text-[11px] px-4 py-2 ml-1
               lg:text-[12px] lg:px-5 lg:py-2.5 lg:ml-2">
-            Plan a Trip
+            {t('planATrip')}
           </Link>
         </div>
       </div>
@@ -594,7 +617,15 @@ export default function Nav() {
               </Link>
               <div className="flex items-center gap-2">
                 <ThemeToggle/>
-                <select value={lang} onChange={e => setLang(e.target.value)}
+                <select value={lang}
+                  onChange={e => {
+                    const code = e.target.value
+                    setLang(code)
+                    if (['EN', 'FR', 'PT'].includes(code)) {
+                      document.cookie = `NEXT_LOCALE=${code.toLowerCase()}; path=/; max-age=31536000; SameSite=Lax`
+                      window.location.reload()
+                    }
+                  }}
                   className="bg-white/10 text-cream text-[11px] font-mono border border-white/15 rounded-full px-3 py-1.5 focus:outline-none">
                   {LANGUAGES.map(l => (
                     <option key={l.code} value={l.code} className="text-charcoal bg-white">{l.flag} {l.code}</option>
