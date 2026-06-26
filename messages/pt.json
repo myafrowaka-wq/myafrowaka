@@ -2,11 +2,11 @@
   "nav": {
     "destinations": "Destinos",
     "guides":       "Guias",
-    "blog":         "Jornal",
-    "about":        "Sobre",
+    "blog":         "Blog",
+    "about":        "About",
     "contact":      "Contacto",
     "signIn":       "Entrar",
-    "planATrip":    "Planear"
+    "planATrip":    "Plan a Trip"
   },
   "common": {
     "browseAll":    "Ver Tudo",
@@ -27,7 +27,7 @@
   },
   "home": {
     "heroTagline":      "África Explicada por Africanos",
-    "heroSubheadline":  "Descubra as histórias reais por detrás dos lugares mais notáveis de África — escritas por quem as vive.",
+    "heroSubheadline":  "Descubra as histórias reais por detrás dos lugares mais notáveis de África, escritas por quem as vive.",
     "exploreButton":    "Explorar Atrações",
     "featuredSection":  "Lugares em Destaque",
     "latestArticles":   "Últimos Artigos do Jornal"

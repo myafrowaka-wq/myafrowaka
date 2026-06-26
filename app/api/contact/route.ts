@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       from:    `MyAfroWaka <${fromEmail}>`,
       to:      [toEmail],
       replyTo: email,
-      subject: `[Contact] ${escapeHtml(subject)} — from ${escapeHtml(name)}`,
+      subject: `[Contact] ${escapeHtml(subject)} from ${escapeHtml(name)}`,
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
           <h2 style="margin:0 0 20px;color:#1A1813">New contact form submission</h2>

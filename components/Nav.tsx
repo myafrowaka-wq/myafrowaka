@@ -598,7 +598,7 @@ export default function Nav() {
             </div>
 
             {[
-              { label: 'Guides',   href: '/search' },
+              { label: 'Guides',   href: '/guides' },
               { label: 'Blog',     href: '/blog'   },
               { label: 'About',    href: '/about'  },
               { label: 'Contact',  href: '/contact'},

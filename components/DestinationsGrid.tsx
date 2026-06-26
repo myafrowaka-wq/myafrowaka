@@ -115,7 +115,7 @@ export function DestinationsGrid() {
           <div className="flex gap-1.5">
             {Array.from({ length: maxIdx + 1 }, (_, i) => (
               <button key={i} onClick={() => setIdx(i)}
-                className={`h-1.5 rounded-full transition-all ${i === idx ? 'bg-crimson w-4' : 'bg-charcoal/20 dark:bg-cream/20 w-1.5'}`}/>
+                className={`h-1.5 rounded-full transition-all ${i === idx ? 'bg-crimson w-4' : 'bg-charcoal/20 dark-flip-surf w-1.5'}`}/>
             ))}
           </div>
 

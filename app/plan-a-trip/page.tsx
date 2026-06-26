@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Plan a Trip to Africa – MyAfroWaka',
-  description: 'Tell us where you want to go and what you love — we will point you to the right destinations, experiences, and guides across the continent.',
+  description: 'Tell us where you want to go and what you love. We will point you to the right destinations, experiences, and guides across the continent.',
 }
 
 export default function PlanATripPage() {
