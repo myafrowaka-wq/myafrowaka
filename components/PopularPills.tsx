@@ -25,7 +25,7 @@ export function PopularPills({ attractions }: { attractions: Pill[] }) {
         <Link
           key={p.slug}
           href={`/attractions/${p.slug}`}
-          className="inline-flex items-center gap-1 bg-white/8 hover:bg-white/15 border border-white/10 hover:border-white/22 text-cream/60 hover:text-cream/85 font-mono text-[8px] uppercase tracking-[0.10em] px-3 py-1.5 rounded-full transition-all"
+          className="inline-flex items-center gap-1 bg-white/8 hover:bg-white/15 border border-white/10 hover:border-white/22 text-cream/60 hover:text-cream/85 font-inter text-[8px] uppercase tracking-[0.10em] px-3 py-1.5 rounded-full transition-all"
         >
           <svg className="w-2 h-2 text-gold-400/70 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>

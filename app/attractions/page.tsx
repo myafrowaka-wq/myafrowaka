@@ -6,6 +6,7 @@ import { client } from '@/sanity/lib/client'
 import { ALL_ATTRACTIONS_QUERY } from '@/sanity/lib/queries'
 import { AttractionSearch } from '@/components/AttractionSearch'
 import { AttractionsFilter } from '@/components/AttractionsFilter'
+import { TypewriterHero } from '@/components/TypewriterHero'
 
 export const metadata: Metadata = {
   title: 'Africa Travel Guides - MyAfroWaka',
@@ -90,22 +91,29 @@ export default async function AttractionsPage({
   return (
     <>
       {/* Hero */}
-      <div className="relative overflow-hidden min-h-[480px] flex items-end">
+      <div className="relative overflow-hidden min-h-[520px] flex items-center">
         <Image
           src="https://picsum.photos/seed/attractions-landing-hero/1920/900"
           alt="Explore Africa" fill priority
           className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/65 to-ink/97"/>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-14 pt-28">
-          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-gold-400/75 mb-4">Destination Guides</p>
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/80 to-ink/50"/>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-24">
+          <p className="font-inter text-[9px] uppercase tracking-[0.22em] text-gold-400/75 mb-5">Destination Guides</p>
           <h1
-            className="font-display font-extrabold text-cream mb-5"
-            style={{ fontSize: 'clamp(30px, 6vw, 68px)', lineHeight: '0.93', letterSpacing: '-0.03em' }}
+            className="font-display font-extrabold text-cream mb-6 tracking-hero"
+            style={{ fontSize: 'clamp(38px, 4.2vw, 64px)', lineHeight: '0.94' }}
           >
-            Explore Africa.<br className="sm:hidden"/> One Place at a Time.
+            <TypewriterHero
+              speed={32}
+              lines={[
+                { text: 'Explore ', noBreakAfter: true },
+                { text: 'Africa,', className: 'text-crimson' },
+                { text: ' One Adventure at a Time.' },
+              ]}
+            />
           </h1>
-          <p className="font-sans text-cream/60 leading-relaxed mb-8 max-w-xl"
+          <p className="font-sans text-cream/65 leading-relaxed mb-8 max-w-xl"
             style={{ fontSize: 'clamp(14px, 1.4vw, 17px)' }}>
             Verified guides written by people who live, work, and travel across the continent.
           </p>
@@ -123,19 +131,19 @@ export default async function AttractionsPage({
           {(q || type) && (
             <div className="mb-6 flex items-center gap-3 flex-wrap">
               {q && (
-                <span className="inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/50 dark-flip-muted bg-sand dark-flip-surf border border-line dark-flip-border px-3 py-1.5 rounded-full">
+                <span className="inline-flex items-center gap-2 font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/50 dark-flip-muted bg-sand dark-flip-surf border border-line dark-flip-border px-3 py-1.5 rounded-full">
                   &ldquo;{q}&rdquo;
                   <Link href={buildUrl({ q: null })} className="text-crimson hover:text-crimson/70 transition-colors leading-none">&#x2715;</Link>
                 </span>
               )}
               {type && (
-                <span className="inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/50 dark-flip-muted bg-sand dark-flip-surf border border-line dark-flip-border px-3 py-1.5 rounded-full">
+                <span className="inline-flex items-center gap-2 font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/50 dark-flip-muted bg-sand dark-flip-surf border border-line dark-flip-border px-3 py-1.5 rounded-full">
                   {type}
                   <Link href={buildUrl({ type: null })} className="text-crimson hover:text-crimson/70 transition-colors leading-none">&#x2715;</Link>
                 </span>
               )}
               <Link href="/attractions"
-                className="font-mono text-[9px] uppercase tracking-[0.14em] text-crimson/60 hover:text-crimson transition-colors">
+                className="font-inter text-[9px] uppercase tracking-[0.14em] text-crimson/60 hover:text-crimson transition-colors">
                 Clear all
               </Link>
             </div>
@@ -148,9 +156,9 @@ export default async function AttractionsPage({
 
           {pageItems.length === 0 ? (
             <div className="text-center py-24">
-              <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-3">No results</p>
+              <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-3">No results</p>
               <p className="font-sans text-sm text-charcoal/45 dark-flip-muted">Try a different search term or filter.</p>
-              <Link href="/attractions" className="mt-6 inline-flex font-mono text-[10px] uppercase tracking-[0.14em] text-crimson">Browse All Guides</Link>
+              <Link href="/attractions" className="mt-6 inline-flex font-inter text-[10px] uppercase tracking-[0.14em] text-crimson">Browse All Guides</Link>
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5">
@@ -168,7 +176,7 @@ export default async function AttractionsPage({
                         className="object-cover img-editorial img-inner"
                       />
                       {typeLabel && (
-                        <span className="absolute top-3 left-3 bg-ink/75 backdrop-blur font-mono text-[8px] uppercase tracking-[0.13em] text-cream/80 px-2 py-0.5 rounded-full">
+                        <span className="absolute top-3 left-3 bg-ink/75 backdrop-blur font-inter text-[8px] uppercase tracking-[0.13em] text-cream/80 px-2 py-0.5 rounded-full">
                           {typeLabel}
                         </span>
                       )}
@@ -177,11 +185,11 @@ export default async function AttractionsPage({
                       {a.country && (
                         <div className="flex items-center gap-1.5 mb-2">
                           {a.country.flagEmoji && <span className="text-xs">{a.country.flagEmoji}</span>}
-                          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-crimson">{a.country.name}</span>
+                          <span className="font-inter text-[9px] uppercase tracking-[0.14em] text-crimson">{a.country.name}</span>
                           {a.city && (
                             <>
                               <span className="text-charcoal/20 dark-flip-muted text-[8px]">&middot;</span>
-                              <span className="font-mono text-[9px] text-charcoal/35 dark-flip-muted">{a.city.name}</span>
+                              <span className="font-inter text-[9px] text-charcoal/35 dark-flip-muted">{a.city.name}</span>
                             </>
                           )}
                         </div>
@@ -196,7 +204,7 @@ export default async function AttractionsPage({
                         </p>
                       )}
                       <div className="mt-4 pt-3 border-t border-line dark-flip-border">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
+                        <span className="font-inter text-[10px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
                           Read the guide &#8594;
                         </span>
                       </div>
@@ -220,7 +228,7 @@ export default async function AttractionsPage({
               )}
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
                 <Link key={p} href={buildUrl({ page: p })}
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-mono text-[11px] transition-all
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-inter text-[11px] transition-all
                     ${p === safePage ? 'bg-crimson text-cream border border-crimson' : 'border border-line dark-flip-border text-charcoal/55 dark-flip-muted hover:border-crimson hover:text-crimson'}`}>
                   {p}
                 </Link>

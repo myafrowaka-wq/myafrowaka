@@ -96,7 +96,7 @@ export default function Footer() {
 
             <div className="mt-6 pt-5 border-t border-white/6">
               <a href="mailto:info@myafrowaka.com"
-                className="font-mono text-[10px] text-cream/35 hover:text-gold-400 transition-colors">
+                className="font-inter text-[10px] text-cream/35 hover:text-gold-400 transition-colors">
                 info@myafrowaka.com
               </a>
             </div>
@@ -104,7 +104,7 @@ export default function Footer() {
 
           {/* Destinations */}
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">Destinations</p>
+            <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">Destinations</p>
             <ul className="space-y-2.5">
               {DESTINATIONS.map(l => (
                 <li key={l.href}>
@@ -116,7 +116,7 @@ export default function Footer() {
 
           {/* Experiences */}
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">Experiences</p>
+            <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">Experiences</p>
             <ul className="space-y-2.5">
               {EXPERIENCES.map(l => (
                 <li key={l.href}>
@@ -128,7 +128,7 @@ export default function Footer() {
 
           {/* Guides */}
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">Top Guides</p>
+            <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">Top Guides</p>
             <ul className="space-y-2.5">
               {GUIDES.map(l => (
                 <li key={l.href}>
@@ -140,7 +140,7 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">Company</p>
+            <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">Company</p>
             <ul className="space-y-2.5">
               {COMPANY.map(l => (
                 <li key={l.href}>
@@ -156,12 +156,12 @@ export default function Footer() {
       <div className="border-t border-white/6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="font-mono text-[10px] text-cream/20 uppercase tracking-[0.1em]">
+            <p className="font-inter text-[10px] text-cream/20 uppercase tracking-[0.1em]">
               &copy; {new Date().getFullYear()} MyAfroWaka. All rights reserved.
             </p>
             <div className="flex items-center gap-4">
-              <Link href="/privacy" className="font-mono text-[10px] text-cream/20 hover:text-cream/45 transition-colors uppercase tracking-[0.1em]">Privacy</Link>
-              <Link href="/terms"   className="font-mono text-[10px] text-cream/20 hover:text-cream/45 transition-colors uppercase tracking-[0.1em]">Terms</Link>
+              <Link href="/privacy" className="font-inter text-[10px] text-cream/20 hover:text-cream/45 transition-colors uppercase tracking-[0.1em]">Privacy</Link>
+              <Link href="/terms"   className="font-inter text-[10px] text-cream/20 hover:text-cream/45 transition-colors uppercase tracking-[0.1em]">Terms</Link>
             </div>
           </div>
         </div>

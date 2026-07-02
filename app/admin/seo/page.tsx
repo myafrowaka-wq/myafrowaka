@@ -126,7 +126,7 @@ export default function AdminSeoPage() {
 
       {/* Header */}
       <div>
-        <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-gold-400/60 mb-1">Admin</p>
+        <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-gold-400/60 mb-1">Admin</p>
         <h1 className="font-display font-extrabold text-cream"
           style={{ fontSize: 'clamp(20px, 3vw, 34px)', letterSpacing: '-0.02em' }}>
           SEO Audit
@@ -148,7 +148,7 @@ export default function AdminSeoPage() {
           ].map(s => (
             <div key={s.label} className="bg-white/5 border border-white/8 rounded-2xl p-4 text-center">
               <p className={`font-display font-extrabold text-2xl ${s.color}`}>{s.value}</p>
-              <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-cream/30 mt-1">{s.label}</p>
+              <p className="font-inter text-[8px] uppercase tracking-[0.14em] text-cream/30 mt-1">{s.label}</p>
             </div>
           ))}
         </div>
@@ -156,18 +156,18 @@ export default function AdminSeoPage() {
 
       {/* Legend */}
       <div className="flex flex-wrap items-center gap-4">
-        <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-cream/30">Checks:</p>
+        <p className="font-inter text-[8px] uppercase tracking-[0.14em] text-cream/30">Checks:</p>
         {[
           { label: 'Meta Title (≤65)',     color: 'text-cream/50' },
           { label: 'Meta Description (≤160)', color: 'text-cream/50' },
           { label: 'Focus Keyword',        color: 'text-cream/50' },
           { label: 'Article Body',         color: 'text-cream/50' },
           { label: 'Verified Date',        color: 'text-cream/50' },
-        ].map(l => <span key={l.label} className="font-mono text-[8px] text-cream/40">{l.label}</span>)}
+        ].map(l => <span key={l.label} className="font-inter text-[8px] text-cream/40">{l.label}</span>)}
         <div className="flex items-center gap-2 ml-auto">
-          <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-moss-400"/><span className="font-mono text-[8px] text-cream/35">OK</span></span>
-          <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-gold-400"/><span className="font-mono text-[8px] text-cream/35">Too long</span></span>
-          <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-crimson"/><span className="font-mono text-[8px] text-cream/35">Missing</span></span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-moss-400"/><span className="font-inter text-[8px] text-cream/35">OK</span></span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-gold-400"/><span className="font-inter text-[8px] text-cream/35">Too long</span></span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-crimson"/><span className="font-inter text-[8px] text-cream/35">Missing</span></span>
         </div>
       </div>
 
@@ -177,7 +177,7 @@ export default function AdminSeoPage() {
         <div className="flex flex-wrap gap-1.5">
           {STATUS_TABS.map(s => (
             <button key={s} onClick={() => setTab(s)}
-              className={`font-mono text-[8px] uppercase tracking-[0.1em] px-3 py-1.5 rounded-full border transition-all ${
+              className={`font-inter text-[8px] uppercase tracking-[0.1em] px-3 py-1.5 rounded-full border transition-all ${
                 tab === s
                   ? 'bg-gold-400 text-ink border-gold-400'
                   : 'text-cream/40 border-white/12 hover:text-cream/70 hover:border-white/25'
@@ -197,14 +197,14 @@ export default function AdminSeoPage() {
             className="bg-white/6 border border-white/12 rounded-xl px-3 py-2 font-sans text-[12px] text-cream placeholder-cream/25 focus:outline-none focus:border-gold-400/40 w-52"
           />
           <select value={scoreFilter} onChange={e => setScoreFilter(e.target.value as typeof scoreFilter)}
-            className="bg-white/6 border border-white/12 rounded-xl px-3 py-2 font-mono text-[8px] uppercase tracking-[0.1em] text-cream/50 focus:outline-none">
+            className="bg-white/6 border border-white/12 rounded-xl px-3 py-2 font-inter text-[8px] uppercase tracking-[0.1em] text-cream/50 focus:outline-none">
             <option value="all">All scores</option>
             <option value="ready">SEO Ready (5/5)</option>
             <option value="partial">Partial (3-4)</option>
             <option value="needs">Needs work (0-2)</option>
           </select>
           <select value={sortBy} onChange={e => setSortBy(e.target.value as typeof sortBy)}
-            className="bg-white/6 border border-white/12 rounded-xl px-3 py-2 font-mono text-[8px] uppercase tracking-[0.1em] text-cream/50 focus:outline-none">
+            className="bg-white/6 border border-white/12 rounded-xl px-3 py-2 font-inter text-[8px] uppercase tracking-[0.1em] text-cream/50 focus:outline-none">
             <option value="score">Sort: Score (worst first)</option>
             <option value="name">Sort: Name A-Z</option>
             <option value="status">Sort: Status</option>
@@ -230,15 +230,15 @@ export default function AdminSeoPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-white/8">
-                  <th className="text-left px-5 py-3.5 font-mono text-[7px] uppercase tracking-[0.16em] text-cream/25">Attraction</th>
-                  <th className="text-left px-4 py-3.5 font-mono text-[7px] uppercase tracking-[0.16em] text-cream/25 hidden md:table-cell">Status</th>
-                  <th className="text-center px-4 py-3.5 font-mono text-[7px] uppercase tracking-[0.16em] text-cream/25">Score</th>
-                  <th className="text-center px-3 py-3.5 font-mono text-[7px] uppercase tracking-[0.16em] text-cream/25 hidden sm:table-cell">Title</th>
-                  <th className="text-center px-3 py-3.5 font-mono text-[7px] uppercase tracking-[0.16em] text-cream/25 hidden sm:table-cell">Desc</th>
-                  <th className="text-center px-3 py-3.5 font-mono text-[7px] uppercase tracking-[0.16em] text-cream/25 hidden lg:table-cell">KW</th>
-                  <th className="text-center px-3 py-3.5 font-mono text-[7px] uppercase tracking-[0.16em] text-cream/25 hidden lg:table-cell">Body</th>
-                  <th className="text-center px-3 py-3.5 font-mono text-[7px] uppercase tracking-[0.16em] text-cream/25 hidden lg:table-cell">Date</th>
-                  <th className="text-right px-5 py-3.5 font-mono text-[7px] uppercase tracking-[0.16em] text-cream/25">Edit</th>
+                  <th className="text-left px-5 py-3.5 font-inter text-[7px] uppercase tracking-[0.16em] text-cream/25">Attraction</th>
+                  <th className="text-left px-4 py-3.5 font-inter text-[7px] uppercase tracking-[0.16em] text-cream/25 hidden md:table-cell">Status</th>
+                  <th className="text-center px-4 py-3.5 font-inter text-[7px] uppercase tracking-[0.16em] text-cream/25">Score</th>
+                  <th className="text-center px-3 py-3.5 font-inter text-[7px] uppercase tracking-[0.16em] text-cream/25 hidden sm:table-cell">Title</th>
+                  <th className="text-center px-3 py-3.5 font-inter text-[7px] uppercase tracking-[0.16em] text-cream/25 hidden sm:table-cell">Desc</th>
+                  <th className="text-center px-3 py-3.5 font-inter text-[7px] uppercase tracking-[0.16em] text-cream/25 hidden lg:table-cell">KW</th>
+                  <th className="text-center px-3 py-3.5 font-inter text-[7px] uppercase tracking-[0.16em] text-cream/25 hidden lg:table-cell">Body</th>
+                  <th className="text-center px-3 py-3.5 font-inter text-[7px] uppercase tracking-[0.16em] text-cream/25 hidden lg:table-cell">Date</th>
+                  <th className="text-right px-5 py-3.5 font-inter text-[7px] uppercase tracking-[0.16em] text-cream/25">Edit</th>
                 </tr>
               </thead>
               <tbody>
@@ -250,16 +250,16 @@ export default function AdminSeoPage() {
                       <td className="px-5 py-3.5">
                         <p className="font-sans text-[12px] text-cream/75 leading-snug">{a.name}</p>
                         {a.country && (
-                          <p className="font-mono text-[8px] text-cream/25 mt-0.5 uppercase tracking-[0.1em]">{a.country.name}</p>
+                          <p className="font-inter text-[8px] text-cream/25 mt-0.5 uppercase tracking-[0.1em]">{a.country.name}</p>
                         )}
                       </td>
                       <td className="px-4 py-3.5 hidden md:table-cell">
-                        <span className={`font-mono text-[7px] uppercase tracking-[0.1em] px-2 py-0.5 rounded-full border ${STATUS_STYLE[a.contentStatus] ?? 'text-cream/30 border-white/10'}`}>
+                        <span className={`font-inter text-[7px] uppercase tracking-[0.1em] px-2 py-0.5 rounded-full border ${STATUS_STYLE[a.contentStatus] ?? 'text-cream/30 border-white/10'}`}>
                           {a.contentStatus}
                         </span>
                       </td>
                       <td className="px-4 py-3.5 text-center">
-                        <span className={`font-mono font-bold text-[13px] ${scoreColor}`}>{h.score}/5</span>
+                        <span className={`font-inter font-bold text-[13px] ${scoreColor}`}>{h.score}/5</span>
                       </td>
                       <td className="px-3 py-3.5 text-center hidden sm:table-cell">
                         <Dot check={h.title} label="Meta Title"/>
@@ -279,7 +279,7 @@ export default function AdminSeoPage() {
                       <td className="px-5 py-3.5 text-right">
                         <a href={`/studio/structure/attraction;${a._id}`} target="_blank"
                           rel="noopener noreferrer"
-                          className="font-mono text-[8px] uppercase tracking-[0.1em] text-gold-400/60 hover:text-gold-400 border border-gold-400/20 hover:border-gold-400/40 px-2.5 py-1 rounded-lg transition-all inline-block">
+                          className="font-inter text-[8px] uppercase tracking-[0.1em] text-gold-400/60 hover:text-gold-400 border border-gold-400/20 hover:border-gold-400/40 px-2.5 py-1 rounded-lg transition-all inline-block">
                           Edit
                         </a>
                       </td>
@@ -290,7 +290,7 @@ export default function AdminSeoPage() {
             </table>
             {filtered.length === 250 && (
               <div className="px-5 py-3 border-t border-white/6 text-center">
-                <p className="font-mono text-[8px] uppercase tracking-[0.1em] text-cream/20">Showing first 250 results. Use filters to narrow down.</p>
+                <p className="font-inter text-[8px] uppercase tracking-[0.1em] text-cream/20">Showing first 250 results. Use filters to narrow down.</p>
               </div>
             )}
           </div>

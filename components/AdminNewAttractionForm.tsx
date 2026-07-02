@@ -78,7 +78,7 @@ export function AdminNewAttractionForm() {
           </button>
         </div>
         {attrSlug && (
-          <p className="font-mono text-[10px] text-charcoal/30 dark-flip-muted mt-4">
+          <p className="font-inter text-[10px] text-charcoal/30 dark-flip-muted mt-4">
             Slug: /attractions/{attrSlug}
           </p>
         )}

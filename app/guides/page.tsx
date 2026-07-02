@@ -45,7 +45,7 @@ export default async function GuidesPage() {
       {/* ── Header ───────────────────────────────────────────────────── */}
       <div className="bg-ink border-b border-white/8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-12">
-          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-gold-400 mb-3">Best-of Africa</p>
+          <p className="font-inter text-[9px] uppercase tracking-[0.22em] text-gold-400 mb-3">Best-of Africa</p>
           <h1
             className="font-display font-extrabold text-cream"
             style={{ fontSize: 'clamp(30px, 5.5vw, 64px)', lineHeight: '0.92', letterSpacing: '-0.03em' }}
@@ -85,12 +85,12 @@ function GuideCard({ guide, index }: { guide: Guide; index: number }) {
     <Link href={`/guides/${guide.slug}`}
       className="group relative block bg-cream dark-flip-card border border-line dark-flip-border hover:border-gold-300 rounded-2xl p-6 hover:shadow-[var(--shadow-soft)] transition-all overflow-hidden">
       <span
-        className="absolute top-4 right-5 font-mono font-bold text-[38px] leading-none text-charcoal/5 dark-flip-muted select-none"
+        className="absolute top-4 right-5 font-inter font-bold text-[38px] leading-none text-charcoal/5 dark-flip-muted select-none"
         aria-hidden>
         {num}
       </span>
       {guide.focusKeyword && (
-        <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-gold-600 mb-3">{guide.focusKeyword}</p>
+        <p className="font-inter text-[8px] uppercase tracking-[0.18em] text-gold-600 mb-3">{guide.focusKeyword}</p>
       )}
       <h2 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors mb-3 pr-8"
         style={{ fontSize: 'clamp(15px, 1.6vw, 19px)', letterSpacing: '-0.013em', lineHeight: '1.2' }}>
@@ -102,10 +102,10 @@ function GuideCard({ guide, index }: { guide: Guide; index: number }) {
         </p>
       )}
       <div className="flex items-center justify-between">
-        <span className="font-mono text-[8px] uppercase tracking-[0.12em] text-charcoal/28 dark-flip-muted">
+        <span className="font-inter text-[8px] uppercase tracking-[0.12em] text-charcoal/28 dark-flip-muted">
           {guide.itemCount} {guide.itemCount === 1 ? 'attraction' : 'attractions'}
         </span>
-        <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
+        <p className="font-inter text-[9px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
           Read &#8594;
         </p>
       </div>
@@ -130,7 +130,7 @@ function EmptyState() {
         Create an Editorial Pillar document in Sanity Studio and set the status to Published to see it here.
       </p>
       <Link href="/search"
-        className="font-mono text-[9px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
+        className="font-inter text-[9px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
         Browse all attractions &#8594;
       </Link>
     </div>

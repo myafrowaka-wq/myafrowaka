@@ -1,6 +1,6 @@
-'use client'
+﻿'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -31,20 +31,11 @@ const ALL_COUNTRIES: Country[] = [
   { name: 'Mauritius',    slug: 'mauritius',    region: 'Indian Ocean Islands', flag: '\u{1F1F2}\u{1F1FA}', color: '#2E5B6E', image: 'https://picsum.photos/seed/mauritius-dest-rnd/600/800'   },
 ]
 
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
-}
-
 function CountryCard({ d }: { d: Country }) {
   return (
     <Link
       href={`/destinations/${d.slug}`}
-      className="card-zoom group relative rounded-2xl overflow-hidden shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500"
+      className="card-zoom group relative rounded-2xl overflow-hidden shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500 h-full"
       style={{ aspectRatio: '3/4' }}
     >
       <div className="absolute inset-0" style={{ backgroundColor: d.color }}/>
@@ -54,7 +45,7 @@ function CountryCard({ d }: { d: Country }) {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-transparent"/>
       <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-        <p className="font-mono text-[7px] lg:text-[8px] uppercase tracking-[0.12em] text-cream/55 mb-1">
+        <p className="font-inter text-[7px] lg:text-[8px] uppercase tracking-[0.12em] text-cream/55 mb-1">
           {d.flag} {d.region}
         </p>
         <h3
@@ -68,66 +59,133 @@ function CountryCard({ d }: { d: Country }) {
   )
 }
 
-export function DestinationsGrid() {
-  const [countries, setCountries] = useState<Country[]>(ALL_COUNTRIES.slice(0, 6))
-  const [ready, setReady]         = useState(false)
-  const [idx, setIdx]             = useState(0)
+const VISIBLE_MOBILE = 2
+const GAP_MOBILE = 12 // px
+const INTERVAL_MS = 4500
+// Use first 8 countries as a fixed set for mobile carousel
+const DISPLAY = ALL_COUNTRIES.slice(0, 8)
+const N = DISPLAY.length
+// Triple for seamless infinite loop
+const ITEMS = [...DISPLAY, ...DISPLAY, ...DISPLAY]
 
+export function DestinationsGrid() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [containerW, setContainerW] = useState(0)
+  const [rawIdx, setRawIdx] = useState(N) // start at 2nd copy
+  const [animated, setAnimated] = useState(false)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  // Measure container width
   useEffect(() => {
-    setCountries(shuffle(ALL_COUNTRIES).slice(0, 6))
-    setReady(true)
+    const el = containerRef.current
+    if (!el) return
+    const measure = () => setContainerW(el.offsetWidth)
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
   }, [])
 
-  const visibleOnMobile = 2
-  const maxIdx          = countries.length - visibleOnMobile
+  const cardW = containerW > 0 ? (containerW - GAP_MOBILE) / VISIBLE_MOBILE : 0
+  const step  = cardW + GAP_MOBILE
 
-  function prev() { setIdx(i => Math.max(0, i - 1)) }
-  function next() { setIdx(i => Math.min(maxIdx, i + 1)) }
+  const startTimer = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setAnimated(true)
+      setRawIdx(i => i + 1)
+    }, INTERVAL_MS)
+  }, [])
 
-  // Auto-advance every 3 seconds on mobile
   useEffect(() => {
-    if (!ready) return
-    const timer = setInterval(() => {
-      setIdx(i => (i >= maxIdx ? 0 : i + 1))
-    }, 3000)
-    return () => clearInterval(timer)
-  }, [ready, maxIdx])
+    if (containerW > 0) {
+      setAnimated(false)
+      setRawIdx(N)
+      const t = setTimeout(() => {
+        setAnimated(true)
+        startTimer()
+      }, 100)
+      return () => {
+        clearTimeout(t)
+        if (timerRef.current) clearInterval(timerRef.current)
+      }
+    }
+  }, [containerW, startTimer])
+
+  // Seamless loop: after CSS transition, silently reset index
+  useEffect(() => {
+    if (rawIdx >= N * 2) {
+      const t = setTimeout(() => {
+        setAnimated(false)
+        setRawIdx(i => i - N)
+        requestAnimationFrame(() => requestAnimationFrame(() => setAnimated(true)))
+      }, 520)
+      return () => clearTimeout(t)
+    }
+    if (containerW > 0 && rawIdx < N) {
+      const t = setTimeout(() => {
+        setAnimated(false)
+        setRawIdx(i => i + N)
+        requestAnimationFrame(() => requestAnimationFrame(() => setAnimated(true)))
+      }, 520)
+      return () => clearTimeout(t)
+    }
+  }, [rawIdx, containerW])
+
+  function handleNav(dir: number) {
+    if (timerRef.current) clearInterval(timerRef.current)
+    setAnimated(true)
+    setRawIdx(i => i + dir)
+    startTimer()
+  }
+
+  function handleDot(i: number) {
+    if (timerRef.current) clearInterval(timerRef.current)
+    setAnimated(true)
+    setRawIdx(N + i)
+    startTimer()
+  }
+
+  const dotIdx = ((rawIdx - N) % N + N) % N
+
+  const navBtn = 'w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/40 dark-flip-muted hover:border-crimson hover:text-crimson transition-all active:scale-95'
 
   return (
-    <div className={`transition-opacity duration-300 ${ready ? 'opacity-100' : 'opacity-0'}`}>
-
-      {/* Mobile: auto-advancing carousel showing 2 at a time */}
-      <div className="lg:hidden">
-        <div className="overflow-hidden">
+    <>
+      {/* ── Mobile: JS infinite carousel ──────────────────────────────── */}
+      <div className="lg:hidden" ref={containerRef}>
+        <div className="overflow-hidden rounded-xl">
           <div
-            className="flex gap-3 transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(calc(-${idx} * (50% + 6px)))` }}
+            className="flex"
+            style={{
+              gap: `${GAP_MOBILE}px`,
+              transform: containerW > 0 ? `translateX(${-rawIdx * step}px)` : 'translateX(0)',
+              transition: animated && containerW > 0 ? 'transform 500ms cubic-bezier(0.4,0,0.2,1)' : 'none',
+            }}
           >
-            {countries.map(d => (
-              <div key={d.name} className="shrink-0" style={{ width: 'calc(50% - 6px)' }}>
+            {ITEMS.map((d, i) => (
+              <div key={i} className="shrink-0" style={{ width: `${cardW}px` }}>
                 <CountryCard d={d} />
               </div>
             ))}
           </div>
         </div>
 
+        {/* Controls */}
         <div className="flex items-center justify-between mt-5">
-          <button onClick={prev} disabled={idx === 0} aria-label="Previous destinations"
-            className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/40 dark-flip-muted disabled:opacity-30 hover:border-crimson hover:text-crimson transition-all">
+          <button onClick={() => handleNav(-1)} aria-label="Previous" className={navBtn}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
             </svg>
           </button>
 
           <div className="flex gap-1.5">
-            {Array.from({ length: maxIdx + 1 }, (_, i) => (
-              <button key={i} onClick={() => setIdx(i)}
-                className={`h-1.5 rounded-full transition-all ${i === idx ? 'bg-crimson w-4' : 'bg-charcoal/20 dark-flip-surf w-1.5'}`}/>
+            {DISPLAY.map((_, i) => (
+              <button key={i} onClick={() => handleDot(i)} aria-label={`Go to ${DISPLAY[i].name}`}
+                className={`h-1.5 rounded-full transition-all ${i === dotIdx ? 'bg-crimson w-5' : 'bg-charcoal/18 dark-flip-surf w-1.5'}`}/>
             ))}
           </div>
 
-          <button onClick={next} disabled={idx === maxIdx} aria-label="Next destinations"
-            className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/40 dark-flip-muted disabled:opacity-30 hover:border-crimson hover:text-crimson transition-all">
+          <button onClick={() => handleNav(1)} aria-label="Next" className={navBtn}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
             </svg>
@@ -135,10 +193,16 @@ export function DestinationsGrid() {
         </div>
       </div>
 
-      {/* Desktop: 6-col grid */}
-      <div className="hidden lg:grid lg:grid-cols-6 gap-4">
-        {countries.map(d => <CountryCard key={d.name} d={d}/>)}
+      {/* ── Desktop: CSS marquee (slow auto-scroll) ─────────────────────── */}
+      <div className="hidden lg:block marquee-wrap-dest">
+        <div className="marquee-track-dest" style={{ gap: '16px' }}>
+          {[...ALL_COUNTRIES, ...ALL_COUNTRIES].map((d, i) => (
+            <div key={i} className="shrink-0" style={{ width: '200px' }}>
+              <CountryCard d={d} />
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }

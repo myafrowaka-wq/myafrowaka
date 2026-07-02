@@ -33,7 +33,7 @@ export default async function AdminAttractionsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-gold-400/60 mb-1">Admin</p>
+        <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-gold-400/60 mb-1">Admin</p>
         <h1 className="font-display font-extrabold text-cream"
           style={{ fontSize: 'clamp(20px, 3vw, 34px)', letterSpacing: '-0.02em' }}>
           Attraction Pipeline

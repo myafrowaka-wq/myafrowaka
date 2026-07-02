@@ -48,7 +48,7 @@ export default function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-gold-400/60 mb-1">Admin</p>
+        <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-gold-400/60 mb-1">Admin</p>
         <h1 className="font-display font-extrabold text-cream"
           style={{ fontSize: 'clamp(20px, 3vw, 34px)', letterSpacing: '-0.02em' }}>
           User Management
@@ -66,7 +66,7 @@ export default function AdminUsersPage() {
           { role: 'admin',       desc: 'Can publish content, manage users, and access all admin tools.' },
         ] as { role: Role; desc: string }[]).map(r => (
           <div key={r.role} className="bg-white/5 border border-white/8 rounded-xl p-4">
-            <span className={`inline-block font-mono text-[8px] uppercase tracking-[0.12em] px-2 py-0.5 rounded-full border mb-2 ${ROLE_STYLE[r.role]}`}>
+            <span className={`inline-block font-inter text-[8px] uppercase tracking-[0.12em] px-2 py-0.5 rounded-full border mb-2 ${ROLE_STYLE[r.role]}`}>
               {r.role}
             </span>
             <p className="font-sans text-[11px] text-cream/40 leading-relaxed">{r.desc}</p>
@@ -92,10 +92,10 @@ export default function AdminUsersPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-white/8">
-                  <th className="text-left px-5 py-4 font-mono text-[8px] uppercase tracking-[0.14em] text-cream/25">User</th>
-                  <th className="text-left px-4 py-4 font-mono text-[8px] uppercase tracking-[0.14em] text-cream/25 hidden md:table-cell">Joined</th>
-                  <th className="text-left px-4 py-4 font-mono text-[8px] uppercase tracking-[0.14em] text-cream/25">Role</th>
-                  <th className="text-right px-5 py-4 font-mono text-[8px] uppercase tracking-[0.14em] text-cream/25">Change</th>
+                  <th className="text-left px-5 py-4 font-inter text-[8px] uppercase tracking-[0.14em] text-cream/25">User</th>
+                  <th className="text-left px-4 py-4 font-inter text-[8px] uppercase tracking-[0.14em] text-cream/25 hidden md:table-cell">Joined</th>
+                  <th className="text-left px-4 py-4 font-inter text-[8px] uppercase tracking-[0.14em] text-cream/25">Role</th>
+                  <th className="text-right px-5 py-4 font-inter text-[8px] uppercase tracking-[0.14em] text-cream/25">Change</th>
                 </tr>
               </thead>
               <tbody>
@@ -103,13 +103,13 @@ export default function AdminUsersPage() {
                   <tr key={u._id} className="border-b border-white/6 last:border-0 hover:bg-white/3 transition-colors">
                     <td className="px-5 py-4">
                       <p className="font-sans text-[13px] text-cream/70">{u.userName}</p>
-                      <p className="font-mono text-[9px] text-cream/25 mt-0.5">{u.userEmail}</p>
+                      <p className="font-inter text-[9px] text-cream/25 mt-0.5">{u.userEmail}</p>
                     </td>
                     <td className="px-4 py-4 hidden md:table-cell">
-                      <p className="font-mono text-[10px] text-cream/30">{formatDate(u.createdAt)}</p>
+                      <p className="font-inter text-[10px] text-cream/30">{formatDate(u.createdAt)}</p>
                     </td>
                     <td className="px-4 py-4">
-                      <span className={`inline-block font-mono text-[8px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-full border ${ROLE_STYLE[u.role]}`}>
+                      <span className={`inline-block font-inter text-[8px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-full border ${ROLE_STYLE[u.role]}`}>
                         {u.role}
                       </span>
                     </td>
@@ -124,19 +124,19 @@ export default function AdminUsersPage() {
                           <>
                             {u.role !== 'contributor' && (
                               <button onClick={() => changeRole(u._id, 'contributor')}
-                                className="font-mono text-[8px] uppercase tracking-[0.1em] text-moss-400/70 hover:text-moss-400 border border-moss-400/20 hover:border-moss-400/40 px-2.5 py-1 rounded-lg transition-all">
+                                className="font-inter text-[8px] uppercase tracking-[0.1em] text-moss-400/70 hover:text-moss-400 border border-moss-400/20 hover:border-moss-400/40 px-2.5 py-1 rounded-lg transition-all">
                                 Contributor
                               </button>
                             )}
                             {u.role !== 'admin' && (
                               <button onClick={() => changeRole(u._id, 'admin')}
-                                className="font-mono text-[8px] uppercase tracking-[0.1em] text-gold-400/70 hover:text-gold-400 border border-gold-400/20 hover:border-gold-400/40 px-2.5 py-1 rounded-lg transition-all">
+                                className="font-inter text-[8px] uppercase tracking-[0.1em] text-gold-400/70 hover:text-gold-400 border border-gold-400/20 hover:border-gold-400/40 px-2.5 py-1 rounded-lg transition-all">
                                 Admin
                               </button>
                             )}
                             {u.role !== 'visitor' && (
                               <button onClick={() => changeRole(u._id, 'visitor')}
-                                className="font-mono text-[8px] uppercase tracking-[0.1em] text-cream/25 hover:text-cream/50 border border-white/10 hover:border-white/20 px-2.5 py-1 rounded-lg transition-all">
+                                className="font-inter text-[8px] uppercase tracking-[0.1em] text-cream/25 hover:text-cream/50 border border-white/10 hover:border-white/20 px-2.5 py-1 rounded-lg transition-all">
                                 Visitor
                               </button>
                             )}

@@ -52,7 +52,7 @@ export default async function AdminPage() {
 
       {/* Header */}
       <div>
-        <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-gold-400/60 mb-1">MyAfroWaka</p>
+        <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-gold-400/60 mb-1">MyAfroWaka</p>
         <h1 className="font-display font-extrabold text-cream"
           style={{ fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.02em' }}>
           Admin Overview
@@ -70,7 +70,7 @@ export default async function AdminPage() {
           { label: 'Needs Update',      value: needsUpdate, color: STATUS_COLOR['Needs Update'] },
         ].map(s => (
           <div key={s.label} className="bg-white/5 border border-white/8 rounded-2xl p-5">
-            <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-cream/35 mb-2">{s.label}</p>
+            <p className="font-inter text-[8px] uppercase tracking-[0.14em] text-cream/35 mb-2">{s.label}</p>
             <p className={`font-display font-bold text-3xl ${s.color}`} style={{ letterSpacing: '-0.02em' }}>
               {s.value}
             </p>
@@ -82,7 +82,7 @@ export default async function AdminPage() {
       <div className="grid sm:grid-cols-2 gap-3">
         <Link href="/admin/attractions"
           className="bg-white/5 hover:bg-white/10 border border-white/8 rounded-2xl p-5 group transition-all">
-          <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-gold-400/60 mb-2">Pipeline</p>
+          <p className="font-inter text-[8px] uppercase tracking-[0.14em] text-gold-400/60 mb-2">Pipeline</p>
           <p className="font-display font-bold text-cream text-base group-hover:text-gold-300 transition-colors" style={{ letterSpacing: '-0.01em' }}>
             Manage Attractions
           </p>
@@ -92,7 +92,7 @@ export default async function AdminPage() {
         {session.user?.role === 'admin' && (
           <Link href="/admin/users"
             className="bg-white/5 hover:bg-white/10 border border-white/8 rounded-2xl p-5 group transition-all">
-            <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-gold-400/60 mb-2">Team</p>
+            <p className="font-inter text-[8px] uppercase tracking-[0.14em] text-gold-400/60 mb-2">Team</p>
             <p className="font-display font-bold text-cream text-base group-hover:text-gold-300 transition-colors" style={{ letterSpacing: '-0.01em' }}>
               Manage Users
             </p>
@@ -103,18 +103,18 @@ export default async function AdminPage() {
 
       {/* Status breakdown */}
       <div className="bg-white/5 border border-white/8 rounded-2xl p-6">
-        <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-cream/35 mb-5">Status Breakdown</p>
+        <p className="font-inter text-[9px] uppercase tracking-[0.16em] text-cream/35 mb-5">Status Breakdown</p>
         <div className="space-y-3">
           {stats.sort((a, b) => b.count - a.count).map(s => (
             <div key={s.status} className="flex items-center gap-3">
-              <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-cream/40 w-28 shrink-0">{s.status}</span>
+              <span className="font-inter text-[9px] uppercase tracking-[0.1em] text-cream/40 w-28 shrink-0">{s.status}</span>
               <div className="flex-1 h-1.5 bg-white/8 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gold-400/60 rounded-full"
                   style={{ width: `${total > 0 ? (s.count / total) * 100 : 0}%` }}
                 />
               </div>
-              <span className="font-mono text-[10px] text-cream/50 w-8 text-right shrink-0">{s.count}</span>
+              <span className="font-inter text-[10px] text-cream/50 w-8 text-right shrink-0">{s.count}</span>
             </div>
           ))}
         </div>
@@ -124,9 +124,9 @@ export default async function AdminPage() {
       {recentUsers.length > 0 && (
         <div className="bg-white/5 border border-white/8 rounded-2xl p-6">
           <div className="flex items-center justify-between mb-5">
-            <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-cream/35">Recent Sign-ins</p>
+            <p className="font-inter text-[9px] uppercase tracking-[0.16em] text-cream/35">Recent Sign-ins</p>
             {session.user?.role === 'admin' && (
-              <Link href="/admin/users" className="font-mono text-[9px] uppercase tracking-[0.12em] text-gold-400/60 hover:text-gold-400 transition-colors">
+              <Link href="/admin/users" className="font-inter text-[9px] uppercase tracking-[0.12em] text-gold-400/60 hover:text-gold-400 transition-colors">
                 View all
               </Link>
             )}
@@ -136,9 +136,9 @@ export default async function AdminPage() {
               <div key={i} className="flex items-center justify-between">
                 <div>
                   <p className="font-sans text-[13px] text-cream/70">{u.userName}</p>
-                  <p className="font-mono text-[9px] text-cream/30">{u.userEmail}</p>
+                  <p className="font-inter text-[9px] text-cream/30">{u.userEmail}</p>
                 </div>
-                <span className={`font-mono text-[9px] uppercase tracking-[0.1em] px-2.5 py-1 rounded-full border ${
+                <span className={`font-inter text-[9px] uppercase tracking-[0.1em] px-2.5 py-1 rounded-full border ${
                   u.role === 'admin'       ? 'text-gold-400 border-gold-400/25 bg-gold-400/8' :
                   u.role === 'contributor' ? 'text-moss-400 border-moss-400/25 bg-moss-400/8' :
                   'text-cream/25 border-white/10'

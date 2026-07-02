@@ -21,7 +21,7 @@ export default function StyleGuide() {
   return (
     <main className="min-h-screen bg-cream px-6 py-16 max-w-5xl mx-auto">
       <div className="mb-16">
-        <p className="font-mono text-xs uppercase tracking-widest text-charcoal-300 mb-2">MyAfroWaka</p>
+        <p className="font-inter text-xs uppercase tracking-widest text-charcoal-300 mb-2">MyAfroWaka</p>
         <h1 className="font-display font-black text-5xl text-charcoal mb-3">Style Guide</h1>
         <p className="font-sans text-charcoal-300 text-lg">Brand colours, typography, and components — the building blocks of the platform.</p>
       </div>
@@ -34,7 +34,7 @@ export default function StyleGuide() {
             <div key={c.token}>
               <div className="h-24 rounded-[14px] shadow-soft mb-3" style={{ backgroundColor: c.hex }} />
               <p className="font-sans font-semibold text-sm text-charcoal">{c.name}</p>
-              <p className="font-mono text-xs text-charcoal-300">{c.hex}</p>
+              <p className="font-inter text-xs text-charcoal-300">{c.hex}</p>
               <p className="font-sans text-xs text-charcoal-300 mt-1">{c.role}</p>
             </div>
           ))}
@@ -49,7 +49,7 @@ export default function StyleGuide() {
                 style={{ backgroundColor: s.hex }}
               />
               <p className="font-sans font-semibold text-sm text-charcoal">{s.name}</p>
-              <p className="font-mono text-xs text-charcoal-300">{s.hex}</p>
+              <p className="font-inter text-xs text-charcoal-300">{s.hex}</p>
             </div>
           ))}
         </div>
@@ -60,21 +60,21 @@ export default function StyleGuide() {
         <h2 className="font-display font-semibold text-2xl text-charcoal mb-6">Typography</h2>
         <div className="space-y-8">
           <div className="bg-sand rounded-[22px] p-8">
-            <p className="font-mono text-xs uppercase tracking-widest text-charcoal-300 mb-4">Display — Fraunces</p>
+            <p className="font-inter text-xs uppercase tracking-widest text-charcoal-300 mb-4">Display — Fraunces</p>
             <p className="font-display font-black text-5xl text-charcoal leading-tight mb-2">Africa Explained<br/>by Africans.</p>
             <p className="font-display font-semibold text-2xl text-ochre italic">Explore the continent.</p>
           </div>
           <div className="bg-sand rounded-[22px] p-8">
-            <p className="font-mono text-xs uppercase tracking-widest text-charcoal-300 mb-4">Body & UI — Outfit</p>
+            <p className="font-inter text-xs uppercase tracking-widest text-charcoal-300 mb-4">Body & UI — Outfit</p>
             <p className="font-sans font-light text-xl text-charcoal mb-2">Light 300 — Introductory paragraph text at its most elegant.</p>
             <p className="font-sans text-base text-charcoal mb-2">Regular 400 — Body copy, descriptions, and general interface text across the platform.</p>
             <p className="font-sans font-semibold text-base text-charcoal mb-2">Semibold 600 — Labels, navigation items, card titles, and UI controls.</p>
             <p className="font-sans font-bold text-base text-charcoal">Bold 700 — Strong emphasis, callouts, and primary interface actions.</p>
           </div>
           <div className="bg-sand rounded-[22px] p-8">
-            <p className="font-mono text-xs uppercase tracking-widest text-charcoal-300 mb-4">Mono — Space Mono</p>
-            <p className="font-mono text-sm text-charcoal-300 uppercase tracking-widest mb-2">EXPLORE. CONNECT. AFRICA.</p>
-            <p className="font-mono text-sm text-charcoal">Last Verified: Jan 2026 · 6.2°S, 35.7°E · UNESCO #003</p>
+            <p className="font-inter text-xs uppercase tracking-widest text-charcoal-300 mb-4">Mono — Space Mono</p>
+            <p className="font-inter text-sm text-charcoal-300 uppercase tracking-widest mb-2">EXPLORE. CONNECT. AFRICA.</p>
+            <p className="font-inter text-sm text-charcoal">Last Verified: Jan 2026 · 6.2°S, 35.7°E · UNESCO #003</p>
           </div>
         </div>
       </section>
@@ -85,7 +85,7 @@ export default function StyleGuide() {
         <div className="bg-sand rounded-[22px] p-8 inline-block">
           <span className="font-display font-light text-4xl text-charcoal">my</span>
           <span className="font-display font-black text-4xl text-charcoal">afrowaka</span>
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-charcoal-300 mt-1">Explore. Connect. Africa.</p>
+          <p className="font-inter text-xs uppercase tracking-[0.3em] text-charcoal-300 mt-1">Explore. Connect. Africa.</p>
         </div>
       </section>
 
@@ -155,7 +155,7 @@ export default function StyleGuide() {
             ['Coordinates', '33.9628° S, 18.4098° E'],
           ].map(([label, value], i) => (
             <div key={i} className={`flex justify-between items-center px-6 py-4 ${i % 2 === 0 ? 'bg-sand' : 'bg-cream'}`}>
-              <span className="font-mono text-xs uppercase tracking-wider text-charcoal-300">{label}</span>
+              <span className="font-inter text-xs uppercase tracking-wider text-charcoal-300">{label}</span>
               <span className="font-sans text-sm font-medium text-charcoal text-right">{value}</span>
             </div>
           ))}

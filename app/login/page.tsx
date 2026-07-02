@@ -45,21 +45,18 @@ export default async function LoginPage({
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/80 via-ink/60 to-ink/92"/>
 
-        <div className="relative z-10 flex flex-col h-full p-12">
-          <Link href="/" className="shrink-0">
-            <Image src="/logo-white.png" alt="MyAfroWaka" width={200} height={52} className="h-9 w-auto"/>
-          </Link>
-          <div className="flex-1"/>
+        <div className="relative z-10 flex flex-col h-full p-12 pt-20">
           <blockquote>
             <p className="font-display font-bold text-cream leading-snug mb-5"
               style={{ fontSize: 'clamp(22px, 2.5vw, 32px)', letterSpacing: '-0.018em' }}>
               Africa is not a destination.
               <span className="block text-gold-300 italic mt-1">It is a conversation you never want to end.</span>
             </p>
-            <footer className="font-mono text-[10px] uppercase tracking-[0.16em] text-gold-400/70">
+            <footer className="font-inter text-[10px] uppercase tracking-[0.16em] text-gold-400/70">
               MyAfroWaka
             </footer>
           </blockquote>
+          <div className="flex-1"/>
         </div>
       </div>
 
@@ -107,7 +104,7 @@ export default async function LoginPage({
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-line dark-flip-border"/></div>
             <div className="relative flex justify-center">
-              <span className="bg-cream dark-flip-bg px-3 font-mono text-[10px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted">
+              <span className="bg-cream dark-flip-bg px-3 font-inter text-[10px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted">
                 or with email
               </span>
             </div>
@@ -168,18 +165,18 @@ export default async function LoginPage({
           {/* ── Demo accounts panel ────────────────────────────────────── */}
           <div className="mt-10 bg-sand dark-flip-surf border border-line dark-flip-border rounded-2xl overflow-hidden">
             <div className="px-5 py-3.5 border-b border-line dark-flip-border">
-              <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted">
+              <p className="font-inter text-[8px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted">
                 Demo Accounts
               </p>
               <p className="font-sans text-[12px] text-charcoal/55 dark-flip-muted mt-0.5">
-                Try any role. Password for all: <span className="font-mono font-bold text-charcoal dark-flip-text">{DEMO_PASSWORD}</span>
+                Try any role. Password for all: <span className="font-inter font-bold text-charcoal dark-flip-text">{DEMO_PASSWORD}</span>
               </p>
             </div>
             <div className="divide-y divide-line dark-flip-border">
               {DEMO_ACCOUNTS.map(({ email, role }) => (
                 <div key={email} className="flex items-center justify-between px-5 py-3">
-                  <p className="font-mono text-[10px] text-charcoal/65 dark-flip-muted">{email}</p>
-                  <span className="font-mono text-[8px] uppercase tracking-[0.1em] text-charcoal/35 dark-flip-muted">
+                  <p className="font-inter text-[10px] text-charcoal/65 dark-flip-muted">{email}</p>
+                  <span className="font-inter text-[8px] uppercase tracking-[0.1em] text-charcoal/35 dark-flip-muted">
                     {role}
                   </span>
                 </div>

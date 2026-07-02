@@ -282,9 +282,8 @@ export default function Nav() {
                         }
                       }}
                       className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-sans transition-colors ${supported ? 'hover:bg-cream dark:hover:bg-white/5 cursor-pointer' : 'opacity-40 cursor-not-allowed'} ${lang === l.code ? 'text-ochre-600 font-semibold' : 'text-charcoal/70 dark:text-cream/65'}`}>
-                      <span>{l.flag}</span>
                       <span>{l.label}</span>
-                      {!supported && <span className="ml-auto font-mono text-[8px] uppercase tracking-[0.1em] text-charcoal/30 dark:text-cream/25">Soon</span>}
+                      {!supported && <span className="ml-auto font-inter text-[8px] uppercase tracking-[0.1em] text-charcoal/30 dark:text-cream/25">Soon</span>}
                       {lang === l.code && supported && <svg className="w-3.5 h-3.5 ml-auto text-ochre-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>}
                     </button>
                   )
@@ -348,7 +347,7 @@ export default function Nav() {
                   ))}
                 </div>
                 <Link href="/search" onClick={close}
-                  className="mt-7 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
+                  className="mt-7 inline-flex items-center gap-1.5 font-inter text-[10px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
                   View all countries
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </Link>
@@ -393,14 +392,14 @@ export default function Nav() {
                         <Image src={a.img} alt={a.title} fill className="object-cover"/>
                       </div>
                       <div>
-                        <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-ochre-400 mb-1">{a.tag}</p>
+                        <p className="font-inter text-[9px] uppercase tracking-[0.1em] text-ochre-400 mb-1">{a.tag}</p>
                         <p className="font-display font-semibold text-[13px] text-cream/80 group-hover:text-cream transition-colors leading-snug">{a.title}</p>
                       </div>
                     </Link>
                   ))}
                 </div>
                 <Link href="/search" onClick={close}
-                  className="mt-5 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
+                  className="mt-5 inline-flex items-center gap-1.5 font-inter text-[10px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
                   Browse all guides
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </Link>
@@ -436,7 +435,7 @@ export default function Nav() {
                         </li>
                       ))}
                       <li>
-                        <Link href={r.href} onClick={close} className="font-mono text-[11px] text-ochre-500 hover:text-ochre-600 transition-colors mt-0.5 inline-block">
+                        <Link href={r.href} onClick={close} className="font-inter text-[11px] text-ochre-500 hover:text-ochre-600 transition-colors mt-0.5 inline-block">
                           More &rarr;
                         </Link>
                       </li>
@@ -450,7 +449,7 @@ export default function Nav() {
                   <Image src="https://picsum.photos/seed/egypt-mega-feat/400/280" alt="Egypt" fill className="object-cover group-hover:scale-105 transition-transform duration-500"/>
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent"/>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-gold-400 mb-1">North Africa</p>
+                    <p className="font-inter text-[9px] uppercase tracking-[0.12em] text-gold-400 mb-1">North Africa</p>
                     <p className="font-display font-bold text-lg text-cream leading-tight">Egypt</p>
                     <p className="font-sans text-[11px] text-cream/55 mt-0.5">North Africa</p>
                   </div>
@@ -521,7 +520,7 @@ export default function Nav() {
                   ))}
                 </ul>
                 <Link href="/search" onClick={close}
-                  className="mt-5 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
+                  className="mt-5 inline-flex items-center gap-1.5 font-inter text-[10px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
                   All destinations
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </Link>
@@ -542,7 +541,7 @@ export default function Nav() {
                         <Image src={a.img} alt={a.title} fill className="object-cover"/>
                       </div>
                       <div>
-                        <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-crimson mb-1">{a.tag}</p>
+                        <p className="font-inter text-[9px] uppercase tracking-[0.1em] text-crimson mb-1">{a.tag}</p>
                         <p className="font-display font-semibold text-[13px] text-charcoal/80 dark:text-cream/75 group-hover:text-crimson transition-colors leading-snug">{a.title}</p>
                       </div>
                     </Link>
@@ -551,7 +550,7 @@ export default function Nav() {
                 <div className="mt-5 pt-4 border-t border-line dark:border-white/8 flex items-center justify-between">
                   <p className="font-sans text-[12px] text-charcoal/40 dark:text-cream/35">Destination guides, written from inside Africa.</p>
                   <Link href="/search" onClick={close}
-                    className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-ochre-500 hover:text-ochre-600 transition-colors">
+                    className="inline-flex items-center gap-1.5 font-inter text-[10px] uppercase tracking-[0.12em] text-ochre-500 hover:text-ochre-600 transition-colors">
                     Browse all
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                   </Link>
@@ -626,20 +625,15 @@ export default function Nav() {
                       window.location.reload()
                     }
                   }}
-                  className="bg-white/10 text-cream text-[11px] font-mono border border-white/15 rounded-full px-3 py-1.5 focus:outline-none">
+                  className="bg-white/10 text-cream text-[11px] font-inter border border-white/15 rounded-full px-3 py-1.5 focus:outline-none">
                   {LANGUAGES.map(l => (
-                    <option key={l.code} value={l.code} className="text-charcoal bg-white">{l.flag} {l.code}</option>
+                    <option key={l.code} value={l.code} className="text-charcoal bg-white">{l.label}</option>
                   ))}
                 </select>
               </div>
             </div>
 
-            <div className="py-4">
-              <Link href="/plan-a-trip" onClick={close}
-                className="block text-center bg-crimson hover:bg-crimson-600 text-cream text-[12px] font-display font-bold uppercase tracking-[0.10em] py-4 rounded-xl transition-colors">
-                Plan a Trip
-              </Link>
-            </div>
+
           </div>
         </div>
       )}

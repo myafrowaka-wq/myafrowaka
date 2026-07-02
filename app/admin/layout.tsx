@@ -36,7 +36,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             {/* Brand bar */}
             <div className="flex items-center gap-2.5 px-2 mb-6">
               <Image src="/logo-white.png" alt="MyAfroWaka" width={200} height={52} className="h-6 w-auto opacity-70"/>
-              <span className="font-mono text-[8px] uppercase tracking-[0.16em] text-cream/30 border border-cream/15 px-2 py-0.5 rounded-full">
+              <span className="font-inter text-[8px] uppercase tracking-[0.16em] text-cream/30 border border-cream/15 px-2 py-0.5 rounded-full">
                 Admin
               </span>
             </div>
@@ -85,7 +85,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               )}
               <div className="min-w-0">
                 <p className="font-sans text-[11px] text-cream/60 truncate">{user.name}</p>
-                <p className="font-mono text-[8px] uppercase tracking-[0.12em] text-gold-400/70">{role}</p>
+                <p className="font-inter text-[8px] uppercase tracking-[0.12em] text-gold-400/70">{role}</p>
               </div>
             </div>
           </aside>

@@ -33,7 +33,7 @@ const STATUS_STYLE: Record<string, string> = {
 
 function StatusBadge({ status }: { status: string }) {
   return (
-    <span className={`inline-flex items-center font-mono text-[9px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-full ${STATUS_STYLE[status] ?? 'bg-charcoal/8 text-charcoal/40'}`}>
+    <span className={`inline-flex items-center font-inter text-[9px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-full ${STATUS_STYLE[status] ?? 'bg-charcoal/8 text-charcoal/40'}`}>
       {status}
     </span>
   )
@@ -85,7 +85,7 @@ export function PipelineBoard({ attractions, role }: Props) {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.12em] px-3.5 py-2 rounded-full border transition-all ${
+            className={`flex items-center gap-1.5 font-inter text-[9px] uppercase tracking-[0.12em] px-3.5 py-2 rounded-full border transition-all ${
               activeTab === tab
                 ? 'bg-ink text-cream border-ink'
                 : 'bg-cream dark-flip-card border-line dark-flip-border text-charcoal/50 hover:border-charcoal/30'
@@ -116,7 +116,7 @@ export function PipelineBoard({ attractions, role }: Props) {
       </div>
 
       {/* Results count */}
-      <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/30 dark-flip-muted">
+      <p className="font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/30 dark-flip-muted">
         {filtered.length} attraction{filtered.length !== 1 ? 's' : ''}
       </p>
 
@@ -131,11 +131,11 @@ export function PipelineBoard({ attractions, role }: Props) {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-line dark-flip-border bg-sand dark-flip-surf">
-                  <th className="text-left px-5 py-3.5 font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted">Attraction</th>
-                  <th className="text-left px-4 py-3.5 font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted hidden md:table-cell">Country</th>
-                  <th className="text-left px-4 py-3.5 font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted">Status</th>
-                  <th className="text-left px-4 py-3.5 font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted hidden lg:table-cell">Verified</th>
-                  <th className="text-right px-5 py-3.5 font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted">Actions</th>
+                  <th className="text-left px-5 py-3.5 font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted">Attraction</th>
+                  <th className="text-left px-4 py-3.5 font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted hidden md:table-cell">Country</th>
+                  <th className="text-left px-4 py-3.5 font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted">Status</th>
+                  <th className="text-left px-4 py-3.5 font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted hidden lg:table-cell">Verified</th>
+                  <th className="text-right px-5 py-3.5 font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/40 dark-flip-muted">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -149,7 +149,7 @@ export function PipelineBoard({ attractions, role }: Props) {
                           {a.name}
                         </p>
                         {a.type?.[0] && (
-                          <p className="font-mono text-[9px] text-charcoal/30 dark-flip-muted mt-0.5 truncate max-w-[200px]">{a.type[0]}</p>
+                          <p className="font-inter text-[9px] text-charcoal/30 dark-flip-muted mt-0.5 truncate max-w-[200px]">{a.type[0]}</p>
                         )}
                       </div>
                     </td>
@@ -163,7 +163,7 @@ export function PipelineBoard({ attractions, role }: Props) {
                     </td>
 
                     <td className="px-4 py-3.5 hidden lg:table-cell">
-                      <p className="font-mono text-[10px] text-charcoal/35 dark-flip-muted">
+                      <p className="font-inter text-[10px] text-charcoal/35 dark-flip-muted">
                         {a.lastVerifiedDate ?? '—'}
                       </p>
                     </td>
@@ -180,7 +180,7 @@ export function PipelineBoard({ attractions, role }: Props) {
                             {/* Contributor action: Draft or Incomplete → submit for review */}
                             {(a.contentStatus === 'Draft' || a.contentStatus === 'Incomplete') && (
                               <button onClick={() => changeStatus(a._id, 'Verified')}
-                                className="font-mono text-[9px] uppercase tracking-[0.1em] text-moss-700 hover:text-moss-600 border border-moss-200 hover:border-moss-400 px-2.5 py-1 rounded-lg transition-all whitespace-nowrap">
+                                className="font-inter text-[9px] uppercase tracking-[0.1em] text-moss-700 hover:text-moss-600 border border-moss-200 hover:border-moss-400 px-2.5 py-1 rounded-lg transition-all whitespace-nowrap">
                                 Submit
                               </button>
                             )}
@@ -189,11 +189,11 @@ export function PipelineBoard({ attractions, role }: Props) {
                             {role === 'admin' && a.contentStatus === 'Verified' && (
                               <>
                                 <button onClick={() => changeStatus(a._id, 'Published')}
-                                  className="font-mono text-[9px] uppercase tracking-[0.1em] text-gold-700 hover:text-gold-600 border border-gold-200 hover:border-gold-400 px-2.5 py-1 rounded-lg transition-all">
+                                  className="font-inter text-[9px] uppercase tracking-[0.1em] text-gold-700 hover:text-gold-600 border border-gold-200 hover:border-gold-400 px-2.5 py-1 rounded-lg transition-all">
                                   Publish
                                 </button>
                                 <button onClick={() => changeStatus(a._id, 'Draft')}
-                                  className="font-mono text-[9px] uppercase tracking-[0.1em] text-charcoal/40 hover:text-charcoal/70 border border-line hover:border-charcoal/30 px-2.5 py-1 rounded-lg transition-all">
+                                  className="font-inter text-[9px] uppercase tracking-[0.1em] text-charcoal/40 hover:text-charcoal/70 border border-line hover:border-charcoal/30 px-2.5 py-1 rounded-lg transition-all">
                                   Return
                                 </button>
                               </>
@@ -201,14 +201,14 @@ export function PipelineBoard({ attractions, role }: Props) {
 
                             {role === 'admin' && a.contentStatus === 'Published' && (
                               <button onClick={() => changeStatus(a._id, 'Needs Update')}
-                                className="font-mono text-[9px] uppercase tracking-[0.1em] text-crimson/70 hover:text-crimson border border-crimson/20 hover:border-crimson/40 px-2.5 py-1 rounded-lg transition-all whitespace-nowrap">
+                                className="font-inter text-[9px] uppercase tracking-[0.1em] text-crimson/70 hover:text-crimson border border-crimson/20 hover:border-crimson/40 px-2.5 py-1 rounded-lg transition-all whitespace-nowrap">
                                 Flag
                               </button>
                             )}
 
                             {role === 'admin' && a.contentStatus === 'Needs Update' && (
                               <button onClick={() => changeStatus(a._id, 'Published')}
-                                className="font-mono text-[9px] uppercase tracking-[0.1em] text-gold-700 hover:text-gold-600 border border-gold-200 hover:border-gold-400 px-2.5 py-1 rounded-lg transition-all">
+                                className="font-inter text-[9px] uppercase tracking-[0.1em] text-gold-700 hover:text-gold-600 border border-gold-200 hover:border-gold-400 px-2.5 py-1 rounded-lg transition-all">
                                 Re-publish
                               </button>
                             )}
@@ -235,7 +235,7 @@ export function PipelineBoard({ attractions, role }: Props) {
       </div>
 
       {filtered.length > 200 && (
-        <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-charcoal/30 dark-flip-muted text-center">
+        <p className="font-inter text-[9px] uppercase tracking-[0.12em] text-charcoal/30 dark-flip-muted text-center">
           Showing 200 of {filtered.length} results. Refine the filter or search to narrow results.
         </p>
       )}

@@ -141,12 +141,41 @@ const ptComponents = {
           />
         </div>
         {value.caption && (
-          <figcaption className="text-center font-mono text-[9px] text-charcoal/35 dark-flip-muted uppercase tracking-[0.1em] mt-2">
+          <figcaption className="text-center font-inter text-[9px] text-charcoal/35 dark-flip-muted uppercase tracking-[0.1em] mt-2">
             {value.caption}
           </figcaption>
         )}
       </figure>
     ),
+  },
+}
+
+// ── Author profiles ───────────────────────────────────────────────────────────
+
+const AUTHOR_PROFILES: Record<string, { bio: string; avatarSeed: string }> = {
+  'Amara Osei': {
+    avatarSeed: 'amara-osei-portrait',
+    bio: 'Amara writes about West African culture, coastal destinations, and the stories that make travel worth the journey.',
+  },
+  'Chioma Adeyemi': {
+    avatarSeed: 'chioma-adeyemi-portrait',
+    bio: 'Chioma covers East African wildlife and conservation, and has reported from parks across Kenya, Tanzania, and Uganda.',
+  },
+  'Kwame Boateng': {
+    avatarSeed: 'kwame-boateng-portrait',
+    bio: 'Kwame specialises in adventure travel and trekking routes across the continent.',
+  },
+  'Fatou Diallo': {
+    avatarSeed: 'fatou-diallo-portrait',
+    bio: 'Fatou explores the intersections of food, tradition, and place across Francophone Africa.',
+  },
+  'Nadia Mensah': {
+    avatarSeed: 'nadia-mensah-portrait',
+    bio: 'Nadia focuses on independent travel in North Africa and has visited every country on the continent.',
+  },
+  'MyAfroWaka Editorial Team': {
+    avatarSeed: 'myafrowaka-editorial-portrait',
+    bio: 'The MyAfroWaka editorial team researches, fact-checks, and publishes guides to the most remarkable places across Africa.',
   },
 }
 
@@ -232,9 +261,10 @@ export default async function BlogPostPage(
           className="object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/20 via-ink/55 to-ink/97"/>
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">
+          <div className="lg:max-w-[66%]">
           {post.category && (
-            <span className="inline-block font-mono text-[8px] uppercase tracking-[0.18em] px-3 py-1 rounded-full text-cream mb-4"
+            <span className="inline-block font-inter text-[8px] uppercase tracking-[0.18em] px-3 py-1 rounded-full text-cream mb-4"
               style={{ backgroundColor: accent + 'cc' }}>
               {post.category}
             </span>
@@ -249,20 +279,21 @@ export default async function BlogPostPage(
 
           <div className="flex items-center gap-4 flex-wrap mt-4">
             {post.author && (
-              <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-cream/50">
+              <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/50">
                 {post.author.name}
               </span>
             )}
             {post.publishedAt && (
-              <span className="font-mono text-[9px] text-cream/35">{formatDate(post.publishedAt)}</span>
+              <span className="font-inter text-[9px] text-cream/35">{formatDate(post.publishedAt)}</span>
             )}
           </div>
           <div className="mt-3 flex items-center gap-2">
             <svg className="w-3 h-3 text-cream/35" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            <span className="font-mono text-[9px] text-cream/35">{readingTime} min read</span>
+            <span className="font-inter text-[9px] text-cream/35">{readingTime} min read</span>
           </div>
+          </div>{/* end lg:max-w-[66%] */}
         </div>
       </div>
 
@@ -306,7 +337,7 @@ export default async function BlogPostPage(
                 <div className="mt-10 pt-6 border-t border-line dark-flip-border flex flex-wrap gap-2">
                   {post.tags.map(tag => (
                     <span key={tag}
-                      className="font-mono text-[9px] uppercase tracking-[0.12em] text-charcoal/40 dark-flip-muted border border-line dark-flip-border px-3 py-1 rounded-full">
+                      className="font-inter text-[9px] uppercase tracking-[0.12em] text-charcoal/40 dark-flip-muted border border-line dark-flip-border px-3 py-1 rounded-full">
                       {tag}
                     </span>
                   ))}
@@ -349,22 +380,40 @@ export default async function BlogPostPage(
             <div className="lg:sticky lg:top-24 space-y-5">
 
               {/* Author */}
-              {post.author && (
-                <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                  <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-3">Written by</p>
-                  <p className="font-display font-bold text-[15px] text-charcoal dark-flip-text"
-                    style={{ letterSpacing: '-0.01em' }}>
-                    {post.author.name}
-                  </p>
-                </div>
-              )}
+              {post.author && (() => {
+                const profile = AUTHOR_PROFILES[post.author.name]
+                return (
+                  <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
+                    <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">Written by</p>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-gold-300/40">
+                        <Image
+                          src={`https://picsum.photos/seed/${profile?.avatarSeed ?? post.author.name.toLowerCase().replace(/\s+/g, '-')}-avatar/88/88`}
+                          alt={post.author.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <p className="font-display font-bold text-[15px] text-charcoal dark-flip-text leading-tight"
+                        style={{ letterSpacing: '-0.01em' }}>
+                        {post.author.name}
+                      </p>
+                    </div>
+                    {profile?.bio && (
+                      <p className="font-sans text-[12px] text-charcoal/50 dark-flip-muted leading-relaxed">
+                        {profile.bio}
+                      </p>
+                    )}
+                  </div>
+                )
+              })()}
 
               {/* Country link */}
               {post.featuredCountry && (
                 <Link href={`/destinations/${post.featuredCountry.slug}`}
                   className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
                   <div>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-1">Destination</p>
+                    <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-1">Destination</p>
                     <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                       {post.featuredCountry.name}
                     </p>
@@ -379,7 +428,7 @@ export default async function BlogPostPage(
               <Link href="/search"
                 className="flex items-center justify-between bg-ink rounded-3xl p-6 group transition-all">
                 <div>
-                  <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-gold-400/60 mb-1">Explore</p>
+                  <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-gold-400/60 mb-1">Explore</p>
                   <p className="font-display font-bold text-base text-cream group-hover:text-gold-400 transition-colors">
                     Browse Attractions
                   </p>
@@ -391,7 +440,7 @@ export default async function BlogPostPage(
 
               {/* Back to blog */}
               <Link href="/blog"
-                className="flex items-center gap-2 justify-center font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/30 dark-flip-muted hover:text-charcoal/55 transition-colors py-2">
+                className="flex items-center gap-2 justify-center font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/30 dark-flip-muted hover:text-charcoal/55 transition-colors py-2">
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
                 </svg>
@@ -405,7 +454,7 @@ export default async function BlogPostPage(
       {alsoRead.length > 0 && (
         <div className="bg-sand dark-flip-surf border-t border-line dark-flip-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-            <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-6">Also Read</p>
+            <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-6">Also Read</p>
             <div className="grid sm:grid-cols-3 gap-4">
               {alsoRead.map(r => (
                 <Link key={r.slug} href={`/blog/${r.slug}`}
@@ -419,7 +468,7 @@ export default async function BlogPostPage(
                   </div>
                   <div className="p-5">
                     {r.category && (
-                      <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-crimson mb-2">{r.category}</p>
+                      <p className="font-inter text-[8px] uppercase tracking-[0.14em] text-crimson mb-2">{r.category}</p>
                     )}
                     <h3 className="font-display font-bold text-[13px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug line-clamp-2"
                       style={{ letterSpacing: '-0.01em' }}>

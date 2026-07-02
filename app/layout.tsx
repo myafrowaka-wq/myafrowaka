@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, Outfit, Space_Mono } from "next/font/google";
+import { Poppins, Outfit, Space_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -27,8 +27,14 @@ const outfit = Outfit({
 
 const spaceMono = Space_Mono({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-inter",
   weight: ["400", "700"],
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -95,7 +101,7 @@ export default async function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${poppins.variable} ${outfit.variable} ${spaceMono.variable}`}
+      className={`${poppins.variable} ${outfit.variable} ${spaceMono.variable} ${inter.variable}`}
     >
       <body className="min-h-screen flex flex-col">
         <NextIntlClientProvider messages={messages}>

@@ -422,8 +422,20 @@ body::after {
 .marquee-track-exp {
   display: flex;
   width: max-content;
-  animation: marquee 20s linear infinite;
+  animation: marquee 32s linear infinite;
   gap: 12px;
 }
 .marquee-track-exp:hover { animation-play-state: paused; }
 .marquee-wrap-exp { overflow: hidden; }
+/* Inter font utility */
+.font-inter { font-family: var(--font-inter, 'Inter', sans-serif); }
+
+/* Destinations carousel marquee (desktop) */
+.marquee-track-dest {
+  display: flex;
+  width: max-content;
+  animation: marquee 50s linear infinite;
+  gap: 16px;
+}
+.marquee-track-dest:hover { animation-play-state: paused; }
+.marquee-wrap-dest { overflow: hidden; }
