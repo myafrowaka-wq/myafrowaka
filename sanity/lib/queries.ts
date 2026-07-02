@@ -39,6 +39,9 @@ export const ATTRACTION_BY_SLUG_QUERY = `
     "nearbyCities": nearbyCities[]->{ name, "slug": slug.current },
     "featuredIn": *[_type == "editorialPillar" && contentStatus == "Published" && references(^._id)]{
       title, "slug": slug.current
+    },
+    "countryAttractions": *[_type == "attraction" && country._ref == ^.country._ref && contentStatus == "Published" && slug.current != $slug][0..3]{
+      name, "slug": slug.current, type, editorialSummary
     }
   }
 `
@@ -152,6 +155,17 @@ export const GUIDE_BY_SLUG_QUERY = `
 
 export const ALL_GUIDE_SLUGS_QUERY = `
   *[_type == "editorialPillar" && contentStatus == "Published"]{ "slug": slug.current }
+`
+
+export const ALL_ATTRACTIONS_QUERY = `
+  *[_type == "attraction" && contentStatus == "Published"] | order(name asc) {
+    name,
+    "slug": slug.current,
+    type,
+    editorialSummary,
+    "country": country->{ name, "slug": slug.current, flagEmoji },
+    "city": city->{ name }
+  }
 `
 
 export const DESTINATION_BY_SLUG_QUERY = `

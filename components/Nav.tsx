@@ -240,8 +240,8 @@ export default function Nav() {
           <div className="relative" onMouseEnter={() => hoverOpen('destinations')} onMouseLeave={hoverClose}>
             <button className={ni}>Destinations {chevron(panel === 'destinations')}</button>
           </div>
-          <div className="relative" onMouseEnter={() => hoverOpen('media')} onMouseLeave={hoverClose}>
-            <button className={ni}>Guides {chevron(panel === 'media')}</button>
+          <div className="relative">
+            <Link href="/attractions" className={ni} onClick={close}>Guides</Link>
           </div>
           <Link href="/blog"    onClick={close} className={ni}>{t('blog')}</Link>
           <Link href="/about"   onClick={close} className={ni}>{t('about')}</Link>
@@ -598,7 +598,7 @@ export default function Nav() {
             </div>
 
             {[
-              { label: 'Guides',   href: '/guides' },
+              { label: 'Guides',   href: '/attractions' },
               { label: 'Blog',     href: '/blog'   },
               { label: 'About',    href: '/about'  },
               { label: 'Contact',  href: '/contact'},

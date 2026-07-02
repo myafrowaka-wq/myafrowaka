@@ -51,6 +51,7 @@ interface Attraction {
   city?: { name: string; slug: string }
   nearbyCities?: { name: string; slug: string }[]
   featuredIn?: { title: string; slug: string }[]
+  countryAttractions?: { name: string; slug: string; type?: string[]; editorialSummary?: string }[]
 }
 
 type PortableBlock = {
@@ -280,6 +281,59 @@ export default async function AttractionPage(
 
             {/* ── Main content (2/3) ──────────────────────────────────── */}
             <div className="lg:col-span-2 min-w-0">
+
+              {/* Mobile-only At a Glance */}
+              <div className="lg:hidden bg-ink rounded-3xl p-6 text-cream mb-8">
+                <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-gold-400 mb-5">At a Glance</p>
+                <div className="space-y-0">
+                  {a.country && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Country</span>
+                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.country.name}</span>
+                    </div>
+                  )}
+                  {a.continentRegion && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Region</span>
+                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.continentRegion}</span>
+                    </div>
+                  )}
+                  {(a.entryFeeDisplayText || a.entryFeeInternational != null) && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Entry</span>
+                      <span className="font-sans text-[13px] text-cream/80 text-right">
+                        {a.entryFeeDisplayText
+                          ? a.entryFeeDisplayText.split('\n')[0]
+                          : a.entryFeeInternational === 0 ? 'Free' : `From $${a.entryFeeInternational} USD`}
+                      </span>
+                    </div>
+                  )}
+                  {a.bestTimeToVisit && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Best Time</span>
+                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.bestTimeToVisit}</span>
+                    </div>
+                  )}
+                  {a.timeNeeded != null && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Time Needed</span>
+                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.timeNeeded} hr{a.timeNeeded !== 1 ? 's' : ''} min</span>
+                    </div>
+                  )}
+                  {a.difficultyAccessLevel && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Access</span>
+                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.difficultyAccessLevel}</span>
+                    </div>
+                  )}
+                  {a.unescoStatus && (
+                    <div className="flex items-start justify-between gap-3 pt-3">
+                      <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">UNESCO</span>
+                      <span className="font-sans text-[12px] text-gold-300 text-right leading-snug">{a.unescoStatus}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
 
               {hasContent ? (
                 /* ── Article body: collapsible sections grouped by h2 ── */
@@ -613,6 +667,64 @@ export default async function AttractionPage(
               Frequently Asked Questions
             </h2>
             <FaqAccordion items={faqItems} />
+          </div>
+        </div>
+      )}
+
+      {/* Explore More in Country */}
+      {a.country && a.countryAttractions && a.countryAttractions.length > 0 && (
+        <div className="bg-cream dark-flip-bg border-t border-line dark-flip-border">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-20">
+            <div className="flex items-end justify-between mb-8 gap-4">
+              <div>
+                <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-crimson mb-2">Keep Exploring</p>
+                <h2 className="font-display font-bold text-charcoal dark-flip-text"
+                  style={{ fontSize: 'clamp(20px, 2.5vw, 32px)', letterSpacing: '-0.018em' }}>
+                  More to See in {a.country.name}
+                </h2>
+              </div>
+              <Link href={`/destinations/${a.country.slug}`}
+                className="inline-link link-arrow hidden sm:inline-flex font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors shrink-0">
+                All {a.country.name} guides
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+              </Link>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {a.countryAttractions.map(rel => {
+                const seed      = rel.slug.split('').reduce((n: number, c: string) => n + c.charCodeAt(0), 0)
+                const typeLabel = (rel.type?.[0] ?? '').replace('UNESCO World Heritage Site | ', '')
+                return (
+                  <Link key={rel.slug} href={`/attractions/${rel.slug}`}
+                    className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
+                    <div className="relative h-40 overflow-hidden bg-sand">
+                      <Image
+                        src={`https://picsum.photos/seed/${seed}/800/500`}
+                        alt={rel.name} fill
+                        sizes="(max-width:640px)100vw,(max-width:1024px)50vw,25vw"
+                        className="object-cover img-editorial img-inner"
+                      />
+                      {typeLabel && (
+                        <span className="absolute top-2 left-2 bg-ink/75 backdrop-blur font-mono text-[7px] uppercase tracking-[0.13em] text-cream/80 px-2 py-0.5 rounded-full">
+                          {typeLabel}
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug text-[14px]"
+                        style={{ letterSpacing: '-0.012em' }}>{rel.name}</h3>
+                      {rel.editorialSummary && (
+                        <p className="font-sans text-[11px] text-charcoal/50 dark-flip-muted leading-relaxed line-clamp-2 mt-1.5">
+                          {rel.editorialSummary}
+                        </p>
+                      )}
+                      <p className="mt-3 font-mono text-[9px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
+                        Read guide &#8594;
+                      </p>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
           </div>
         </div>
       )}

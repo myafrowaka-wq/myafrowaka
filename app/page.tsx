@@ -8,6 +8,7 @@ import { PlanTripCard } from '@/components/PlanTripCard'
 import { DestinationsGrid } from '@/components/DestinationsGrid'
 import { PopularPills } from '@/components/PopularPills'
 import { ExperiencesCarousel } from '@/components/ExperiencesCarousel'
+import { FALLBACK_POSTS } from '@/lib/fallbackPosts'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -176,7 +177,7 @@ export default async function HomePage() {
           <DestinationsGrid />
 
           <div className="mt-10 flex justify-center">
-            <Link href="/search"
+            <Link href="/attractions"
               className="inline-flex items-center gap-2.5 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(180,30,30,0.28)] hover:shadow-[0_8px_36px_rgba(180,30,30,0.38)]">
               All Destinations
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
@@ -257,7 +258,7 @@ export default async function HomePage() {
                   </p>
                   <div className="flex items-center justify-end pt-4 border-t border-line dark-flip-border">
                     <span className="link-arrow inline-link font-mono text-[10px] text-crimson">
-                      Read
+                      Read the guide
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </span>
                   </div>
@@ -300,7 +301,7 @@ export default async function HomePage() {
 
           {/* View all — prominent solid button */}
           <div className="mt-12 flex justify-center">
-            <Link href="/search"
+            <Link href="/attractions"
               className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(26,24,19,0.22)] hover:shadow-[0_8px_36px_rgba(26,24,19,0.32)]">
               View All Attractions
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
@@ -394,6 +395,78 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* ══ FROM THE JOURNAL ════════════════════════════════════════════════════ */}
+      <section className="py-24 lg:py-32 bg-cream dark-flip-bg" data-reveal>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-crimson mb-2">The Journal</p>
+              <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
+                style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
+                Stories from Across Africa
+              </h2>
+            </div>
+            <Link href="/blog"
+              className="inline-link link-arrow hidden sm:inline-flex font-mono text-[9px] uppercase tracking-[0.16em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors">
+              All articles
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </Link>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+            {FALLBACK_POSTS.slice(0, 3).map(post => {
+              const seed = post.slug.split('').reduce((n: number, c: string) => n + c.charCodeAt(0), 0)
+              return (
+                <Link key={post.slug} href={`/blog/${post.slug}`}
+                  className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
+                  <div className="relative h-52 overflow-hidden bg-sand">
+                    <Image
+                      src={`https://picsum.photos/seed/${seed}/800/500`}
+                      alt={post.title} fill
+                      sizes="(max-width:640px)100vw,(max-width:1024px)50vw,33vw"
+                      className="object-cover img-editorial img-inner"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <span className="bg-ink/75 backdrop-blur font-mono text-[8px] uppercase tracking-[0.14em] text-cream/80 px-2.5 py-1 rounded-full">
+                        {post.category}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-crimson">{post.tags[0]}</span>
+                      <span className="text-charcoal/20 dark-flip-muted">·</span>
+                      <span className="font-mono text-[9px] text-charcoal/30 dark-flip-muted">
+                        {new Date(post.publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </span>
+                    </div>
+                    <h3 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-2"
+                      style={{ fontSize: 'clamp(14px, 1.5vw, 17px)', letterSpacing: '-0.015em' }}>
+                      {post.title}
+                    </h3>
+                    <p className="font-sans text-[13px] text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-2">
+                      {post.excerpt}
+                    </p>
+                    <div className="mt-4 pt-4 border-t border-line dark-flip-border flex items-center justify-between">
+                      <span className="font-sans text-[11px] text-charcoal/35 dark-flip-muted">{post.author.name}</span>
+                      <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
+                        Read &#8594;
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+          <div className="mt-10 flex justify-center">
+            <Link href="/blog"
+              className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic">
+              View All Articles
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* ══ INSTAGRAM GALLERY ══════════════════════════════════════════════════ */}
       <section className="py-24 lg:py-28 bg-cream dark-flip-bg" data-reveal>
