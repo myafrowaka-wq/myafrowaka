@@ -9,6 +9,7 @@ import { Badge } from '@/components/Badge'
 import { FaqAccordion } from '@/components/FaqAccordion'
 import { SaveButton } from '@/components/SaveButton'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
+import { ParallaxHero } from '@/components/ParallaxHero'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -192,6 +193,65 @@ const PROSE = `prose prose-lg max-w-none
   prose-blockquote:border-l-4 prose-blockquote:border-gold-400
   prose-blockquote:italic prose-blockquote:text-charcoal/60 dark:prose-blockquote:text-cream/55`
 
+// ── Auto-overview generator (used when no Sanity body exists) ────────────────
+
+function generateOverview(a: Attraction): { p1: string; p2: string } {
+  const typeLabel = a.type?.[0]?.replace('UNESCO World Heritage Site | ', '') || 'attraction'
+  const locationParts = [a.city?.name, a.country?.name].filter(Boolean)
+  const location = locationParts.join(', ') || a.continentRegion || 'Africa'
+
+  // Paragraph 1: what it is + why it matters
+  let p1 = ''
+  if (a.editorialSummary) {
+    const summary = a.editorialSummary.replace(/\.$/, '')
+    p1 = `${a.name} is a ${typeLabel.toLowerCase()} in ${location}. ${summary}.`
+    if (a.unescoStatus) {
+      p1 += ` Designated as a ${a.unescoStatus}, it is recognised among the world's most significant cultural and natural treasures.`
+    } else if (a.primaryBrandPillar) {
+      p1 += ` As a landmark of ${a.primaryBrandPillar.toLowerCase()}, it draws travellers with a passion for ${typeLabel.toLowerCase()} experiences.`
+    }
+  } else {
+    p1 = `${a.name} is a ${typeLabel.toLowerCase()} located in ${location}.`
+    if (a.unescoStatus) {
+      p1 += ` It holds ${a.unescoStatus} status, placing it among the world's outstanding sites.`
+    }
+    if (a.heritageEra && a.heritageEra.length > 0) {
+      p1 += ` Rooted in ${a.heritageEra.join(' and ')} heritage, it represents one of the defining landmarks of ${a.continentRegion || location}.`
+    }
+  }
+
+  // Paragraph 2: practical visitor guidance
+  const pts: string[] = []
+  if (a.bestTimeToVisit) pts.push(`The best time to visit is ${a.bestTimeToVisit}`)
+  if (a.timeNeeded != null && a.timeNeeded > 0) {
+    pts.push(`allow approximately ${a.timeNeeded} hour${a.timeNeeded !== 1 ? 's' : ''} to explore the site`)
+  }
+  if (a.difficultyAccessLevel) pts.push(`access is rated ${a.difficultyAccessLevel.toLowerCase()}`)
+  if (a.entryFeeDisplayText) {
+    pts.push(a.entryFeeDisplayText.split('\n')[0])
+  } else if (a.entryFeeInternational === 0) {
+    pts.push('entry is free of charge')
+  } else if (a.entryFeeInternational != null) {
+    pts.push(`international visitor entry starts from $${a.entryFeeInternational} USD`)
+  }
+  if (a.suitableFor && a.suitableFor.length > 0) {
+    pts.push(`recommended for ${a.suitableFor.slice(0, 2).join(' and ')}`)
+  }
+
+  let p2 = ''
+  if (pts.length >= 2) {
+    const [first, ...rest] = pts
+    const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+    p2 = `${cap(first)}. ${cap(rest.join(', '))}.`
+  } else if (pts.length === 1) {
+    p2 = pts[0].charAt(0).toUpperCase() + pts[0].slice(1) + '.'
+  } else {
+    p2 = `A comprehensive travel guide to ${a.name} is being compiled by the MyAfroWaka editorial team. For current visitor information, write to info@myafrowaka.com.`
+  }
+
+  return { p1, p2 }
+}
+
 // ── Fallback country attractions (used when Sanity returns empty) ─────────────
 
 const FALLBACK_COUNTRY_ATTRACTIONS = [
@@ -251,12 +311,14 @@ export default async function AttractionPage(
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[480px] flex items-end">
+        <ParallaxHero>
         <Image
           src={`https://picsum.photos/seed/${slug}-hero-v1/1920/800`}
           alt={a.name}
           fill priority
-          className="object-cover object-center"
+          className="object-cover object-center scale-110"
         />
+        </ParallaxHero>
         <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/65 to-ink/97"/>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">
@@ -320,6 +382,38 @@ export default async function AttractionPage(
                       <span className="font-sans text-[13px] text-cream/80 text-right">{a.continentRegion}</span>
                     </div>
                   )}
+                  {a.type && a.type.length > 0 && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Type</span>
+                      <span className="font-sans text-[12px] text-cream/80 text-right leading-snug">{a.type[0].replace('UNESCO World Heritage Site | ', '')}</span>
+                    </div>
+                  )}
+                  {a.city && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Nearest City</span>
+                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.city.name}</span>
+                    </div>
+                  )}
+                  {a.nearestAirportIATA && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Airport</span>
+                      <span className="font-sans text-[13px] text-cream/80 text-right">
+                        {a.nearestAirportIATA}{a.nearestAirportDistanceKm ? ` (${a.nearestAirportDistanceKm} km)` : ''}
+                      </span>
+                    </div>
+                  )}
+                  {a.heritageEra && a.heritageEra.length > 0 && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Era</span>
+                      <span className="font-sans text-[12px] text-cream/80 text-right leading-snug">{a.heritageEra.join(', ')}</span>
+                    </div>
+                  )}
+                  {a.suitableFor && a.suitableFor.length > 0 && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Suitable For</span>
+                      <span className="font-sans text-[12px] text-cream/80 text-right leading-snug">{a.suitableFor.slice(0, 3).join(', ')}</span>
+                    </div>
+                  )}
                   {(a.entryFeeDisplayText || a.entryFeeInternational != null) && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
                       <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Entry</span>
@@ -378,17 +472,17 @@ export default async function AttractionPage(
                 /* ── Fallback: structured data sections ────────────────── */
                 <div className="divide-y divide-line dark-flip-border border-t border-line dark-flip-border">
 
-                  {/* Quick Overview — always open */}
+                  {/* Quick Overview — always open, two-paragraph generated overview */}
                   <CollapsibleSection title="Quick Overview" defaultOpen={true}>
-                    {a.editorialSummary ? (
-                      <p className="font-sans text-[15px] text-charcoal/70 dark-flip-muted leading-relaxed">
-                        {a.editorialSummary}
-                      </p>
-                    ) : (
-                      <p className="font-sans text-[14px] text-charcoal/40 dark-flip-muted italic">
-                        A full editorial overview is being prepared for this attraction.
-                      </p>
-                    )}
+                    {(() => {
+                      const { p1, p2 } = generateOverview(a)
+                      return (
+                        <div className="space-y-4">
+                          <p className="font-sans text-[15px] text-charcoal/75 dark-flip-muted leading-[1.8]">{p1}</p>
+                          <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{p2}</p>
+                        </div>
+                      )
+                    })()}
                   </CollapsibleSection>
 
                   {/* How to Get There */}
@@ -506,6 +600,38 @@ export default async function AttractionPage(
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
                       <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Region</span>
                       <span className="font-sans text-[13px] text-cream/80 text-right">{a.continentRegion}</span>
+                    </div>
+                  )}
+                  {a.type && a.type.length > 0 && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Type</span>
+                      <span className="font-sans text-[12px] text-cream/80 text-right leading-snug">{a.type[0].replace('UNESCO World Heritage Site | ', '')}</span>
+                    </div>
+                  )}
+                  {a.city && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Nearest City</span>
+                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.city.name}</span>
+                    </div>
+                  )}
+                  {a.nearestAirportIATA && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Airport</span>
+                      <span className="font-sans text-[13px] text-cream/80 text-right">
+                        {a.nearestAirportIATA}{a.nearestAirportDistanceKm ? ` (${a.nearestAirportDistanceKm} km)` : ''}
+                      </span>
+                    </div>
+                  )}
+                  {a.heritageEra && a.heritageEra.length > 0 && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Era</span>
+                      <span className="font-sans text-[12px] text-cream/80 text-right leading-snug">{a.heritageEra.join(', ')}</span>
+                    </div>
+                  )}
+                  {a.suitableFor && a.suitableFor.length > 0 && (
+                    <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
+                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Suitable For</span>
+                      <span className="font-sans text-[12px] text-cream/80 text-right leading-snug">{a.suitableFor.slice(0, 3).join(', ')}</span>
                     </div>
                   )}
                   {(a.entryFeeDisplayText || a.entryFeeInternational != null) && (

@@ -6,6 +6,8 @@ import { client } from '@/sanity/lib/client'
 import { DESTINATION_BY_SLUG_QUERY, ALL_COUNTRY_SLUGS_QUERY } from '@/sanity/lib/queries'
 import { DestinationSearch } from '@/components/DestinationSearch'
 import { TypewriterHero } from '@/components/TypewriterHero'
+import { ParallaxHero } from '@/components/ParallaxHero'
+import { PopularPills } from '@/components/PopularPills'
 
 interface AttractionSummary {
   name: string; slug: string; type?: string[]; editorialSummary?: string
@@ -76,6 +78,7 @@ export default async function DestinationPage({
   const safePage   = Math.min(currentPage, totalPages)
   const start      = (safePage - 1) * ITEMS_PER_PAGE
   const pageItems  = filtered.slice(start, start + ITEMS_PER_PAGE)
+  const popularPills = dest.attractions.slice(0, 12).map(a => ({ label: a.name, slug: a.slug }))
 
   const jsonLd = [
     {
@@ -102,44 +105,62 @@ export default async function DestinationPage({
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       ))}
 
-      {/* Hero */}
-      <div className="relative overflow-hidden min-h-[520px] flex items-end">
+      {/* Hero — matches homepage hero style */}
+      <div className="relative min-h-[94vh] flex items-center overflow-hidden">
+        <ParallaxHero>
         <Image
-          src={`https://picsum.photos/seed/${slug}-country-hero/1920/800`}
+          src={`https://picsum.photos/seed/${slug}-country-hero/1920/1080`}
           alt={dest.name} fill priority
-          className="object-cover object-center"
+          className="object-cover object-center scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/65 to-ink/97"/>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-14 pt-28">
-          <div className="flex items-end gap-4 flex-wrap mb-4">
-            {dest.flagEmoji && <span className="text-5xl leading-none shrink-0">{dest.flagEmoji}</span>}
-            <div>
-              {dest.continentRegion && (
-                <p className="font-inter text-[9px] uppercase tracking-[0.22em] mb-2" style={{ color: '#D4A853' }}>
-                  {dest.continentRegion}
-                </p>
-              )}
-              <h1
-                className="font-display font-extrabold text-cream"
-                style={{ fontSize: 'clamp(28px, 5.5vw, 68px)', lineHeight: '0.92', letterSpacing: '-0.03em' }}
-              >
-                <TypewriterHero
-                  speed={28}
-                  lines={[
-                    { text: `Explore ${dest.name},`, noBreakAfter: false },
-                    { text: ' one adventure at a time.', className: 'text-gold-300' },
-                  ]}
-                />
-              </h1>
-            </div>
-          </div>
+        </ParallaxHero>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#070F09]/96 via-[#0A1A0C]/88 to-[#0E2010]/55"/>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#070F09]/60 via-transparent to-[#070F09]/15"/>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-20 lg:py-28">
+          {dest.continentRegion && (
+            <p className="font-inter text-[9px] uppercase tracking-[0.22em] mb-4" style={{ color: '#D4A853' }}>
+              {dest.flagEmoji && <span className="mr-2">{dest.flagEmoji}</span>}
+              {dest.continentRegion}
+            </p>
+          )}
+
+          <h1
+            className="font-display font-extrabold text-cream mb-6 tracking-hero"
+            style={{ fontSize: 'clamp(46px, 4.2vw, 64px)', lineHeight: '0.94', letterSpacing: '-0.025em' }}
+          >
+            <TypewriterHero
+              speed={28}
+              lines={[
+                { text: `Explore `, noBreakAfter: true },
+                { text: `${dest.name},`, className: 'text-crimson' },
+                { text: ' One Adventure at a Time.' },
+              ]}
+            />
+          </h1>
+
           {dest.overview && (
-            <p className="font-sans text-cream/60 leading-relaxed max-w-2xl mb-8"
-              style={{ fontSize: 'clamp(14px, 1.4vw, 17px)' }}>
+            <p className="font-display font-medium text-cream/75 mb-8 max-w-lg leading-relaxed"
+              style={{ fontSize: 'clamp(13px, 1.5vw, 16px)' }}>
               {dest.overview}
             </p>
           )}
-          <DestinationSearch slug={slug} initialQ={q} />
+
+          <div className="max-w-lg mb-6">
+            <DestinationSearch slug={slug} initialQ={q} />
+          </div>
+
+          {popularPills.length > 0 && (
+            <div>
+              <p className="font-inter text-[9px] uppercase tracking-[0.15em] text-cream/30 mb-3">Popular in {dest.name}:</p>
+              <PopularPills attractions={popularPills} />
+            </div>
+          )}
+        </div>
+
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
+          <span className="font-inter text-[8px] uppercase tracking-[0.2em] text-cream">Scroll</span>
+          <div className="w-px h-8 bg-gradient-to-b from-cream to-transparent"/>
         </div>
       </div>
 

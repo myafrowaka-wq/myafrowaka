@@ -75,14 +75,18 @@ export function DestinationsGrid() {
   const [animated, setAnimated] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  // Measure container width
+  // Measure container width with ResizeObserver for reliable SSR-safe detection
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
-    const measure = () => setContainerW(el.offsetWidth)
-    measure()
-    window.addEventListener('resize', measure)
-    return () => window.removeEventListener('resize', measure)
+    const ro = new ResizeObserver(entries => {
+      const w = entries[0]?.contentRect.width ?? 0
+      if (w > 0) setContainerW(w)
+    })
+    ro.observe(el)
+    // Fallback immediate check
+    if (el.offsetWidth > 0) setContainerW(el.offsetWidth)
+    return () => ro.disconnect()
   }, [])
 
   const cardW = containerW > 0 ? (containerW - GAP_MOBILE) / VISIBLE_MOBILE : 0
