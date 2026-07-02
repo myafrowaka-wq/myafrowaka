@@ -5,12 +5,13 @@ import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { ALL_ATTRACTIONS_QUERY } from '@/sanity/lib/queries'
 import { AttractionSearch } from '@/components/AttractionSearch'
+import { AttractionsFilter } from '@/components/AttractionsFilter'
 
 export const metadata: Metadata = {
-  title: 'Africa Travel Guides – MyAfroWaka',
+  title: 'Africa Travel Guides - MyAfroWaka',
   description: 'Discover verified travel guides to extraordinary destinations across Africa. Explore by country, type, or experience.',
   openGraph: {
-    title: 'Africa Travel Guides – MyAfroWaka',
+    title: 'Africa Travel Guides - MyAfroWaka',
     description: 'Discover verified travel guides to extraordinary destinations across Africa.',
     images: ['https://picsum.photos/seed/attractions-hero/1200/630'],
   },
@@ -45,9 +46,9 @@ const ITEMS_PER_PAGE = 12
 export default async function AttractionsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; q?: string }>
+  searchParams: Promise<{ page?: string; q?: string; type?: string }>
 }) {
-  const { page: pageParam, q } = await searchParams
+  const { page: pageParam, q, type } = await searchParams
   const currentPage = Math.max(1, parseInt(pageParam ?? '1', 10))
 
   let attractions: AttractionSummary[] = []
@@ -59,18 +60,32 @@ export default async function AttractionsPage({
     attractions = FALLBACK_ATTRACTIONS
   }
 
-  const filtered = q
-    ? attractions.filter(a =>
-        a.name.toLowerCase().includes(q.toLowerCase()) ||
-        a.country?.name.toLowerCase().includes(q.toLowerCase()) ||
-        a.city?.name.toLowerCase().includes(q.toLowerCase())
-      )
-    : attractions
+  const filtered = attractions.filter(a => {
+    if (q && !(
+      a.name.toLowerCase().includes(q.toLowerCase()) ||
+      a.country?.name.toLowerCase().includes(q.toLowerCase()) ||
+      a.city?.name.toLowerCase().includes(q.toLowerCase())
+    )) return false
+    if (type && !a.type?.some(t => t.toLowerCase().includes(type.toLowerCase()))) return false
+    return true
+  })
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
   const safePage   = Math.min(currentPage, totalPages)
   const start      = (safePage - 1) * ITEMS_PER_PAGE
-  const page       = filtered.slice(start, start + ITEMS_PER_PAGE)
+  const pageItems  = filtered.slice(start, start + ITEMS_PER_PAGE)
+
+  function buildUrl(overrides: { page?: number; type?: string | null; q?: string | null }) {
+    const params = new URLSearchParams()
+    const newQ    = overrides.q    !== undefined ? overrides.q    : (q ?? null)
+    const newType = overrides.type !== undefined ? overrides.type : (type ?? null)
+    const newPage = overrides.page !== undefined ? overrides.page : safePage
+    if (newQ)              params.set('q', newQ)
+    if (newType)           params.set('type', newType)
+    if (newPage && newPage > 1) params.set('page', String(newPage))
+    const qs = params.toString()
+    return qs ? `/attractions?${qs}` : '/attractions'
+  }
 
   return (
     <>
@@ -104,27 +119,42 @@ export default async function AttractionsPage({
       <div className="bg-cream dark-flip-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-18">
 
-          {q && (
-            <div className="mb-8 flex items-center gap-3">
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-charcoal/45 dark-flip-muted">
-                Results for &ldquo;{q}&rdquo;
-              </p>
+          {/* Active filters */}
+          {(q || type) && (
+            <div className="mb-6 flex items-center gap-3 flex-wrap">
+              {q && (
+                <span className="inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/50 dark-flip-muted bg-sand dark-flip-surf border border-line dark-flip-border px-3 py-1.5 rounded-full">
+                  &ldquo;{q}&rdquo;
+                  <Link href={buildUrl({ q: null })} className="text-crimson hover:text-crimson/70 transition-colors leading-none">&#x2715;</Link>
+                </span>
+              )}
+              {type && (
+                <span className="inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-charcoal/50 dark-flip-muted bg-sand dark-flip-surf border border-line dark-flip-border px-3 py-1.5 rounded-full">
+                  {type}
+                  <Link href={buildUrl({ type: null })} className="text-crimson hover:text-crimson/70 transition-colors leading-none">&#x2715;</Link>
+                </span>
+              )}
               <Link href="/attractions"
-                className="font-mono text-[10px] uppercase tracking-[0.14em] text-crimson/70 hover:text-crimson transition-colors">
-                Clear
+                className="font-mono text-[9px] uppercase tracking-[0.14em] text-crimson/60 hover:text-crimson transition-colors">
+                Clear all
               </Link>
             </div>
           )}
 
-          {page.length === 0 ? (
+          {/* Type filter pills */}
+          <Suspense>
+            <AttractionsFilter activeType={type} />
+          </Suspense>
+
+          {pageItems.length === 0 ? (
             <div className="text-center py-24">
               <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-3">No results</p>
-              <p className="font-sans text-sm text-charcoal/45 dark-flip-muted">Try a different search term or browse all guides.</p>
+              <p className="font-sans text-sm text-charcoal/45 dark-flip-muted">Try a different search term or filter.</p>
               <Link href="/attractions" className="mt-6 inline-flex font-mono text-[10px] uppercase tracking-[0.14em] text-crimson">Browse All Guides</Link>
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5">
-              {page.map(a => {
+              {pageItems.map(a => {
                 const seed      = a.slug.split('').reduce((n: number, c: string) => n + c.charCodeAt(0), 0)
                 const typeLabel = (a.type?.[0] ?? '').replace('UNESCO World Heritage Site | ', '')
                 return (
@@ -150,7 +180,7 @@ export default async function AttractionsPage({
                           <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-crimson">{a.country.name}</span>
                           {a.city && (
                             <>
-                              <span className="text-charcoal/20 dark-flip-muted text-[8px]">·</span>
+                              <span className="text-charcoal/20 dark-flip-muted text-[8px]">&middot;</span>
                               <span className="font-mono text-[9px] text-charcoal/35 dark-flip-muted">{a.city.name}</span>
                             </>
                           )}
@@ -181,7 +211,7 @@ export default async function AttractionsPage({
           {totalPages > 1 && (
             <div className="mt-14 flex items-center justify-center gap-2">
               {safePage > 1 && (
-                <Link href={`/attractions?${q ? `q=${encodeURIComponent(q)}&` : ''}page=${safePage - 1}`}
+                <Link href={buildUrl({ page: safePage - 1 })}
                   className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/45 dark-flip-muted hover:border-crimson hover:text-crimson transition-all">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
@@ -189,14 +219,14 @@ export default async function AttractionsPage({
                 </Link>
               )}
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-                <Link key={p} href={`/attractions?${q ? `q=${encodeURIComponent(q)}&` : ''}page=${p}`}
+                <Link key={p} href={buildUrl({ page: p })}
                   className={`w-10 h-10 rounded-xl flex items-center justify-center font-mono text-[11px] transition-all
                     ${p === safePage ? 'bg-crimson text-cream border border-crimson' : 'border border-line dark-flip-border text-charcoal/55 dark-flip-muted hover:border-crimson hover:text-crimson'}`}>
                   {p}
                 </Link>
               ))}
               {safePage < totalPages && (
-                <Link href={`/attractions?${q ? `q=${encodeURIComponent(q)}&` : ''}page=${safePage + 1}`}
+                <Link href={buildUrl({ page: safePage + 1 })}
                   className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/45 dark-flip-muted hover:border-crimson hover:text-crimson transition-all">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>

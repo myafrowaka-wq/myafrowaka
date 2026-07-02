@@ -40,7 +40,7 @@ export async function generateMetadata(
   const { slug } = await params
   const dest = await client.fetch<Destination | null>(DESTINATION_BY_SLUG_QUERY, { slug })
   if (!dest) return {}
-  const title = `${dest.name} Travel Guide – MyAfroWaka`
+  const title = `${dest.flagEmoji ? dest.flagEmoji + ' ' : ''}${dest.name} Travel Guide – MyAfroWaka`
   const description = dest.overview || `Discover attractions in ${dest.name}. Verified travel guides from MyAfroWaka.`
   return {
     title, description,

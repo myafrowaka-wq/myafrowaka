@@ -6,6 +6,7 @@ import { PortableText } from '@portabletext/react'
 import { client } from '@/sanity/lib/client'
 import { POST_BY_SLUG_QUERY, ALL_POST_SLUGS_QUERY, ALL_POSTS_QUERY } from '@/sanity/lib/queries'
 import { FALLBACK_POSTS, type FallbackPost } from '@/lib/fallbackPosts'
+import { ScrollProgress } from '@/components/ScrollProgress'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -174,6 +175,26 @@ export default async function BlogPostPage(
 
   const accent = post.category ? (CATEGORY_COLOR[post.category] ?? '#B55D39') : '#B55D39'
 
+  // Reading time
+  let wordCount = 0
+  if (isFallback && fallback?.content) {
+    wordCount = fallback.content.join(' ').split(/\s+/).filter(Boolean).length
+  } else if (post.body) {
+    wordCount = JSON.stringify(post.body).split(/\s+/).length
+  }
+  const readingTime = Math.max(1, Math.round(wordCount / 200))
+
+  // Also Read: posts sharing at least one tag
+  const allWithTags: { slug: string; title: string; tags?: string[]; excerpt?: string; category?: string }[] = [
+    ...allSanityPosts.map(p => ({ slug: p.slug, title: p.title, tags: p.tags, excerpt: p.excerpt, category: p.category })),
+    ...FALLBACK_POSTS
+      .filter(fp => !allSanityPosts.find(sp => sp.slug === fp.slug))
+      .map(fp => ({ slug: fp.slug, title: fp.title, tags: fp.tags, excerpt: fp.excerpt, category: fp.category })),
+  ]
+  const alsoRead = (post.tags && post.tags.length > 0)
+    ? allWithTags.filter(p => p.slug !== slug && p.tags?.some(t => post.tags!.includes(t))).slice(0, 3)
+    : []
+
   // Related: from Sanity first, then fallbacks
   const allForRelated: { slug: string; title: string; category?: string }[] = [
     ...allSanityPosts,
@@ -199,6 +220,7 @@ export default async function BlogPostPage(
 
   return (
     <>
+      <ScrollProgress />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
@@ -234,6 +256,12 @@ export default async function BlogPostPage(
             {post.publishedAt && (
               <span className="font-mono text-[9px] text-cream/35">{formatDate(post.publishedAt)}</span>
             )}
+          </div>
+          <div className="mt-3 flex items-center gap-2">
+            <svg className="w-3 h-3 text-cream/35" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span className="font-mono text-[9px] text-cream/35">{readingTime} min read</span>
           </div>
         </div>
       </div>
@@ -373,6 +401,40 @@ export default async function BlogPostPage(
           </div>
         </div>
       </div>
+      {/* Also Read */}
+      {alsoRead.length > 0 && (
+        <div className="bg-sand dark-flip-surf border-t border-line dark-flip-border">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+            <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-6">Also Read</p>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {alsoRead.map(r => (
+                <Link key={r.slug} href={`/blog/${r.slug}`}
+                  className="group block bg-white dark-flip-card rounded-2xl overflow-hidden border border-line dark-flip-border hover:border-gold-300 hover:shadow-[var(--shadow-soft)] transition-all">
+                  <div className="relative aspect-[16/9] overflow-hidden">
+                    <Image
+                      src={`https://picsum.photos/seed/${r.slug}-cover/400/225`}
+                      alt={r.title} fill
+                      className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="p-5">
+                    {r.category && (
+                      <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-crimson mb-2">{r.category}</p>
+                    )}
+                    <h3 className="font-display font-bold text-[13px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug line-clamp-2"
+                      style={{ letterSpacing: '-0.01em' }}>
+                      {r.title}
+                    </h3>
+                    {r.excerpt && (
+                      <p className="font-sans text-[11px] text-charcoal/45 dark-flip-muted leading-relaxed mt-2 line-clamp-2">{r.excerpt}</p>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }
