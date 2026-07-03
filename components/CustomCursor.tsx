@@ -42,8 +42,11 @@ export function CustomCursor() {
     const shrink = () => ring.classList.remove('cursor-expanded')
     const targets = 'a,button,[role="button"],[tabindex]'
 
+    const registered = new WeakSet<HTMLElement>()
     const addListeners = () => {
       document.querySelectorAll<HTMLElement>(targets).forEach(el => {
+        if (registered.has(el)) return
+        registered.add(el)
         el.addEventListener('mouseenter', expand)
         el.addEventListener('mouseleave', shrink)
       })

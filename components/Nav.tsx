@@ -337,7 +337,7 @@ export default function Nav() {
                       </Link>
                       <div className="flex flex-wrap gap-x-3 gap-y-0.5 pl-5">
                         {r.countries.slice(0, 3).map(c => (
-                          <Link key={c} href={`/search?q=${encodeURIComponent(c)}`} onClick={close}
+                          <Link key={c} href={`/destinations/${c.toLowerCase().replace(/\s+/g, '-')}`} onClick={close}
                             className="font-sans text-[12px] text-cream/45 hover:text-cream/80 transition-colors">
                             {c}
                           </Link>
@@ -358,16 +358,16 @@ export default function Nav() {
                 <p className="font-display font-bold text-lg text-cream mb-6">Browse by Type</p>
                 <div className="space-y-2">
                   {[
-                    { label: 'Safari and Wildlife',    q: 'safari'   },
-                    { label: 'Historical Sites',       q: 'history'  },
-                    { label: 'Beach and Islands',      q: 'beach'    },
-                    { label: 'Mountain and Hiking',    q: 'hiking'   },
-                    { label: 'Cultural Experiences',   q: 'culture'  },
-                    { label: 'Food and Markets',       q: 'food'     },
-                    { label: 'City Breaks',            q: 'city'     },
-                    { label: 'UNESCO Heritage Sites',  q: 'UNESCO'   },
+                    { label: 'Safari and Wildlife',    exp: 'Safari'          },
+                    { label: 'Historical Sites',       exp: 'Historical Sites'},
+                    { label: 'Beach and Islands',      exp: 'Beach'           },
+                    { label: 'Mountain and Hiking',    exp: 'Hiking'          },
+                    { label: 'Cultural Experiences',   exp: 'Culture'         },
+                    { label: 'Food and Markets',       exp: 'Food'            },
+                    { label: 'City Breaks',            exp: 'City'            },
+                    { label: 'UNESCO Heritage Sites',  exp: 'UNESCO'          },
                   ].map(t => (
-                    <Link key={t.q} href={`/search?q=${t.q}`} onClick={close}
+                    <Link key={t.exp} href={`/search?exp=${encodeURIComponent(t.exp)}`} onClick={close}
                       className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-cream/75 hover:text-cream hover:bg-white/5 transition-colors font-sans text-[14px]">
                       <span className="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0 opacity-60"/>
                       {t.label}
@@ -428,7 +428,7 @@ export default function Nav() {
                     <ul className="space-y-2">
                       {r.countries.map(c => (
                         <li key={c}>
-                          <Link href={`/search?q=${encodeURIComponent(c)}`} onClick={close}
+                          <Link href={`/destinations/${c.toLowerCase().replace(/\s+/g, '-')}`} onClick={close}
                             className="font-sans text-[14px] text-charcoal/70 dark:text-cream/65 hover:text-ochre-600 dark:hover:text-ochre-400 transition-colors">
                             {c}
                           </Link>
@@ -445,7 +445,7 @@ export default function Nav() {
               </div>
               <div className="col-span-3 border-l border-line dark:border-white/8 pl-8 flex flex-col">
                 <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-4">Featured</p>
-                <Link href="/search?q=Egypt" onClick={close} className="group relative rounded-2xl overflow-hidden flex-1 min-h-[200px] block">
+                <Link href="/destinations/egypt" onClick={close} className="group relative rounded-2xl overflow-hidden flex-1 min-h-[200px] block">
                   <Image src="https://picsum.photos/seed/egypt-mega-feat/400/280" alt="Egypt" fill className="object-cover group-hover:scale-105 transition-transform duration-500"/>
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent"/>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -479,17 +479,17 @@ export default function Nav() {
                 <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Type</p>
                 <ul className="space-y-2">
                   {[
-                    { label: 'Safari and Wildlife',   q: 'safari'   },
-                    { label: 'Historical Sites',      q: 'history'  },
-                    { label: 'Beach and Islands',     q: 'beach'    },
-                    { label: 'Mountain and Hiking',   q: 'hiking'   },
-                    { label: 'Cultural Experiences',  q: 'culture'  },
-                    { label: 'Food and Markets',      q: 'food'     },
-                    { label: 'City Breaks',           q: 'city'     },
-                    { label: 'UNESCO Heritage Sites', q: 'UNESCO'   },
+                    { label: 'Safari and Wildlife',   exp: 'Safari'           },
+                    { label: 'Historical Sites',      exp: 'Historical Sites' },
+                    { label: 'Beach and Islands',     exp: 'Beach'            },
+                    { label: 'Mountain and Hiking',   exp: 'Hiking'           },
+                    { label: 'Cultural Experiences',  exp: 'Culture'          },
+                    { label: 'Food and Markets',      exp: 'Food'             },
+                    { label: 'City Breaks',           exp: 'City'             },
+                    { label: 'UNESCO Heritage Sites', exp: 'UNESCO'           },
                   ].map(t => (
-                    <li key={t.q}>
-                      <Link href={`/search?q=${t.q}`} onClick={close}
+                    <li key={t.exp}>
+                      <Link href={`/search?exp=${encodeURIComponent(t.exp)}`} onClick={close}
                         className="flex items-center gap-2 font-sans text-[14px] text-charcoal/70 dark:text-cream/65 hover:text-crimson dark:hover:text-crimson-300 transition-colors py-0.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0 opacity-60"/>
                         {t.label}

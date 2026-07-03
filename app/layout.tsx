@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, Outfit, Space_Mono, Inter } from "next/font/google";
+import { Poppins, Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -22,13 +22,6 @@ const poppins = Poppins({
 const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-sans",
-  display: "swap",
-});
-
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -57,7 +50,7 @@ export const metadata: Metadata = {
       "Verified travel guides to Africa's greatest attractions. No fabrications. Written by Africans.",
     images: [
       {
-        url: "https://images.unsplash.com/photo-GNqLWDUKwDk?auto=format&fit=crop&w=1200&h=630&q=80",
+        url: "https://picsum.photos/seed/myafrowaka-og/1200/630",
         width: 1200,
         height: 630,
         alt: "African wildlife silhouette against golden sunset sky",
@@ -70,7 +63,7 @@ export const metadata: Metadata = {
     creator: "@myafrowaka_",
     title: "MyAfroWaka – Discover Africa Beyond the Stereotype",
     description: "Verified travel guides to Africa's greatest destinations. Written by Africans.",
-    images: ["https://images.unsplash.com/photo-GNqLWDUKwDk?auto=format&fit=crop&w=1200&h=630&q=80"],
+    images: ["https://picsum.photos/seed/myafrowaka-og/1200/630"],
   },
   robots: {
     index: true,
@@ -101,16 +94,20 @@ export default async function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${poppins.variable} ${outfit.variable} ${spaceMono.variable} ${inter.variable}`}
+      className={`${poppins.variable} ${outfit.variable} ${inter.variable}`}
     >
       <body className="min-h-screen flex flex-col">
+        <a href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-crimson focus:text-cream focus:font-display focus:font-bold focus:text-sm focus:px-4 focus:py-2 focus:rounded-xl focus:outline-none focus:shadow-lg">
+          Skip to content
+        </a>
         <NextIntlClientProvider messages={messages}>
           <SessionProviderWrapper>
             <ThemeProvider>
               <CustomCursor />
               <ScrollRevealInit />
               <Nav />
-              <main className="flex-1">{children}</main>
+              <main id="main-content" className="flex-1">{children}</main>
               <Footer />
               <ScrollToTop />
               <NewsletterPopup />

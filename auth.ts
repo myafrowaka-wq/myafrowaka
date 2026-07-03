@@ -12,7 +12,7 @@ const sanityUrl = `https://${SANITY_PROJECT}.api.sanity.io/v2024-01-01/data`
 
 // ── Demo accounts ─────────────────────────────────────────────────────────────
 
-const DEMO_PASSWORD = 'Demo1234!'
+const DEMO_PASSWORD = process.env.DEMO_PASSWORD ?? 'Demo1234!'
 
 const DEMO_ACCOUNTS: Record<string, { name: string; role: UserRole }> = {
   'subscriber@demo.myafrowaka.com':  { name: 'Demo Subscriber',  role: 'subscriber'   },
@@ -26,8 +26,9 @@ const DEMO_ACCOUNTS: Record<string, { name: string; role: UserRole }> = {
 
 async function fetchRole(userId: string): Promise<string | null> {
   try {
-    const query  = encodeURIComponent(`*[_type=="userRole" && userId=="${userId}"][0]{role}`)
-    const res    = await fetch(`${sanityUrl}/query/${SANITY_DATASET}?query=${query}`, {
+    const query  = encodeURIComponent('*[_type=="userRole" && userId==$userId][0]{role}')
+    const params = encodeURIComponent(JSON.stringify({ userId }))
+    const res    = await fetch(`${sanityUrl}/query/${SANITY_DATASET}?query=${query}&$userId=${params}`, {
       headers: { Authorization: `Bearer ${SANITY_TOKEN}` },
       cache: 'no-store',
     })

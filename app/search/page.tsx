@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, Suspense } from 'react'
+import { useEffect, useState, useCallback, useRef, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -85,12 +85,17 @@ function AccordionSection({
 function SearchInner() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [all, setAll]         = useState<Attraction[]>([])
-  const [loading, setLoading] = useState(true)
+  const [all, setAll]           = useState<Attraction[]>([])
+  const [loading, setLoading]   = useState(true)
+  const [inputVal, setInputVal] = useState('')
+  const debounceRef             = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const query  = searchParams.get('q')      || ''
   const region = searchParams.get('region') || ''
   const exp    = searchParams.get('exp')    || ''
+
+  // Keep input field in sync with URL param (e.g. when arriving from plan-a-trip)
+  useEffect(() => { setInputVal(query) }, [query])
 
   useEffect(() => {
     client.fetch<Attraction[]>(`
@@ -147,8 +152,13 @@ function SearchInner() {
             </svg>
             <input
               type="search"
-              value={query}
-              onChange={e => setParam('q', e.target.value)}
+              value={inputVal}
+              onChange={e => {
+                const v = e.target.value
+                setInputVal(v)
+                if (debounceRef.current) clearTimeout(debounceRef.current)
+                debounceRef.current = setTimeout(() => setParam('q', v), 300)
+              }}
               placeholder="Search by country, attraction, type..."
               className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl pl-10 pr-4 py-3.5 text-sm font-sans text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors"
             />

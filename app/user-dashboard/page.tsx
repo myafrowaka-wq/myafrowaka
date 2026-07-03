@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { auth } from '@/auth'
 import { client } from '@/sanity/lib/client'
 import type { UserRole } from '@/types/next-auth'
+import { DashGreeting } from '@/components/DashGreeting'
 
 export const metadata: Metadata = {
   title: 'My Dashboard – MyAfroWaka',
@@ -38,20 +39,6 @@ const ROLE_ORDER: UserRole[] = ['visitor', 'subscriber', 'moderator', 'contribut
 
 function atLeast(userRole: UserRole, minRole: UserRole): boolean {
   return ROLE_ORDER.indexOf(userRole) >= ROLE_ORDER.indexOf(minRole)
-}
-
-function getGreeting(): string {
-  const h = new Date().getHours()
-  if (h < 5)  return 'Good night'
-  if (h < 12) return 'Good morning'
-  if (h < 17) return 'Good afternoon'
-  return 'Good evening'
-}
-
-function getDashDate(): string {
-  return new Date().toLocaleDateString('en-GB', {
-    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
-  })
 }
 
 function accentGradient(slug: string): string {
@@ -209,13 +196,7 @@ export default async function UserDashboardPage() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="font-inter text-[8px] uppercase tracking-[0.24em] text-gold-400/55 mb-1.5">
-                  {getDashDate()}
-                </p>
-                <h1 className="font-display font-extrabold text-cream"
-                  style={{ fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.025em', lineHeight: '1.1' }}>
-                  {getGreeting()}, {firstName}
-                </h1>
+                <DashGreeting firstName={firstName} />
                 <p className="font-sans text-cream/45 mt-1.5 leading-relaxed text-[13px] max-w-lg">
                   {ROLE_DESCRIPTIONS[role]}
                 </p>
@@ -395,7 +376,7 @@ export default async function UserDashboardPage() {
                   No pending corrections
                 </p>
                 <p className="font-sans text-[13px] text-charcoal/40 dark-flip-muted max-w-sm mx-auto leading-relaxed">
-                  When visitors submit factual corrections, they will appear here for your review. Full workflow coming in the next update.
+                  When visitors submit factual corrections, they will appear here for your review.
                 </p>
               </div>
             </div>

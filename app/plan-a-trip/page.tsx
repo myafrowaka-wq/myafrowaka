@@ -1,13 +1,45 @@
+'use client'
+
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Plan a Trip to Africa – MyAfroWaka',
-  description: 'Tell us where you want to go and what you love. We will point you to the right destinations, experiences, and guides across the continent.',
-}
+// Note: metadata can't be exported from a client component.
+// SEO is handled by the parent layout's default metadata.
+
+const INTERESTS = ['Safari', 'Culture', 'Beach', 'History', 'Hiking', 'Food']
 
 export default function PlanATripPage() {
+  const router = useRouter()
+  const [destination, setDestination] = useState('')
+  const [from, setFrom]               = useState('')
+  const [to, setTo]                   = useState('')
+  const [travelers, setTravelers]     = useState('')
+  const [budget, setBudget]           = useState('')
+  const [interests, setInterests]     = useState<string[]>([])
+
+  function toggleInterest(v: string) {
+    setInterests(prev => prev.includes(v) ? prev.filter(i => i !== v) : [...prev, v])
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+
+    // Build search URL with the collected data
+    const params = new URLSearchParams()
+    if (destination.trim()) params.set('q', destination.trim())
+    if (interests.length > 0) params.set('exp', interests[0])
+
+    // Save the full plan to sessionStorage so a future "save plan" feature can use it
+    try {
+      sessionStorage.setItem('trip_plan', JSON.stringify({ destination, from, to, travelers, budget, interests }))
+    } catch { /* non-fatal */ }
+
+    router.push(`/search${params.toString() ? '?' + params.toString() : ''}`)
+  }
+
   return (
     <div className="min-h-screen bg-cream dark-flip-bg">
 
@@ -29,26 +61,25 @@ export default function PlanATripPage() {
             Plan Your Africa Trip
           </h1>
           <p className="font-sans text-cream/60 leading-relaxed" style={{ fontSize: 'clamp(14px, 1.4vw, 17px)' }}>
-            Tell us what you are looking for. We will help you find the right destinations, experiences, and guides.
+            Tell us what you are looking for. We will find the right destinations, experiences, and guides.
           </p>
         </div>
       </div>
 
       {/* Form */}
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16">
-        <form
-          action="/login?tab=signup"
-          method="GET"
-          className="space-y-6"
-        >
+        <form onSubmit={handleSubmit} className="space-y-6">
+
           {/* Destination */}
           <div>
-            <label className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">
+            <label htmlFor="destination" className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">
               Where in Africa do you want to go?
             </label>
             <input
+              id="destination"
               type="text"
-              name="destination"
+              value={destination}
+              onChange={e => setDestination(e.target.value)}
               placeholder="e.g. Kenya, West Africa, Morocco..."
               className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder-charcoal/30 dark:placeholder-cream/25 font-sans text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-gold-400 transition-colors"
             />
@@ -57,18 +88,22 @@ export default function PlanATripPage() {
           {/* Travel dates */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">From</label>
+              <label htmlFor="from" className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">From</label>
               <input
+                id="from"
                 type="date"
-                name="from"
+                value={from}
+                onChange={e => setFrom(e.target.value)}
                 className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text font-sans text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-gold-400 transition-colors"
               />
             </div>
             <div>
-              <label className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">To</label>
+              <label htmlFor="to" className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">To</label>
               <input
+                id="to"
                 type="date"
-                name="to"
+                value={to}
+                onChange={e => setTo(e.target.value)}
                 className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text font-sans text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-gold-400 transition-colors"
               />
             </div>
@@ -76,11 +111,13 @@ export default function PlanATripPage() {
 
           {/* Travelers */}
           <div>
-            <label className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">
+            <label htmlFor="travelers" className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">
               How many travelers?
             </label>
             <select
-              name="travelers"
+              id="travelers"
+              value={travelers}
+              onChange={e => setTravelers(e.target.value)}
               className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text font-sans text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-gold-400 transition-colors"
             >
               <option value="">Select</option>
@@ -94,11 +131,13 @@ export default function PlanATripPage() {
 
           {/* Budget */}
           <div>
-            <label className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">
+            <label htmlFor="budget" className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">
               Budget range (per person)
             </label>
             <select
-              name="budget"
+              id="budget"
+              value={budget}
+              onChange={e => setBudget(e.target.value)}
               className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text font-sans text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-gold-400 transition-colors"
             >
               <option value="">Select</option>
@@ -111,16 +150,16 @@ export default function PlanATripPage() {
 
           {/* Interests */}
           <div>
-            <label className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-3">
+            <p className="font-display font-semibold text-[13px] text-charcoal dark-flip-text mb-3">
               What interests you most?
-            </label>
+            </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {['Safari', 'Culture', 'Beach', 'History', 'Hiking', 'Food'].map(interest => (
+              {INTERESTS.map(interest => (
                 <label key={interest} className="flex items-center gap-2.5 cursor-pointer group">
                   <input
                     type="checkbox"
-                    name="interests"
-                    value={interest.toLowerCase()}
+                    checked={interests.includes(interest)}
+                    onChange={() => toggleInterest(interest)}
                     className="w-4 h-4 rounded border-line accent-crimson cursor-pointer"
                   />
                   <span className="font-sans text-sm text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
@@ -137,10 +176,14 @@ export default function PlanATripPage() {
               type="submit"
               className="w-full bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[13px] uppercase tracking-[0.12em] py-4 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99]"
             >
-              Start Planning
+              Find Attractions
             </button>
-            <p className="font-display text-[9px] text-charcoal/25 dark-flip-muted text-center mt-4">
-              Creating a free account lets you save your trip and get personalised recommendations.
+            <p className="font-sans text-[12px] text-charcoal/45 dark-flip-muted text-center mt-3 leading-relaxed">
+              You will be taken to the attraction search with your preferences applied.
+              <Link href="/login" className="text-crimson hover:text-crimson/70 transition-colors ml-1">
+                Sign in
+              </Link>
+              {' '}to save a full itinerary.
             </p>
           </div>
         </form>

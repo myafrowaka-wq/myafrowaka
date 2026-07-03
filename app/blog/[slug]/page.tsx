@@ -3,10 +3,16 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { PortableText } from '@portabletext/react'
+import imageUrlBuilder from '@sanity/image-url'
 import { client } from '@/sanity/lib/client'
 import { POST_BY_SLUG_QUERY, ALL_POST_SLUGS_QUERY, ALL_POSTS_QUERY } from '@/sanity/lib/queries'
 import { FALLBACK_POSTS, type FallbackPost } from '@/lib/fallbackPosts'
 import { ScrollProgress } from '@/components/ScrollProgress'
+
+const builder = imageUrlBuilder(client)
+function urlFor(source: Parameters<typeof builder.image>[0]) {
+  return builder.image(source)
+}
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -130,23 +136,28 @@ const ptComponents = {
     number: ({ children }: { children?: React.ReactNode }) => <li>{children}</li>,
   },
   types: {
-    image: ({ value }: { value: { alt?: string; caption?: string } }) => (
-      <figure className="my-8">
-        <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
-          <Image
-            src={`https://picsum.photos/seed/${value.alt?.replace(/\s+/g, '-') ?? 'blog-img'}/800/450`}
-            alt={value.alt ?? ''}
-            fill
-            className="object-cover"
-          />
-        </div>
-        {value.caption && (
-          <figcaption className="text-center font-inter text-[9px] text-charcoal/35 dark-flip-muted uppercase tracking-[0.1em] mt-2">
-            {value.caption}
-          </figcaption>
-        )}
-      </figure>
-    ),
+    image: ({ value }: { value: { asset?: object; alt?: string; caption?: string } }) => {
+      const src = value.asset
+        ? urlFor(value).width(1200).height(675).fit('crop').auto('format').url()
+        : `https://picsum.photos/seed/${value.alt?.replace(/\s+/g, '-') ?? 'blog-img'}/800/450`
+      return (
+        <figure className="my-8">
+          <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
+            <Image
+              src={src}
+              alt={value.alt ?? ''}
+              fill
+              className="object-cover"
+            />
+          </div>
+          {value.caption && (
+            <figcaption className="text-center font-inter text-[9px] text-charcoal/35 dark-flip-muted uppercase tracking-[0.1em] mt-2">
+              {value.caption}
+            </figcaption>
+          )}
+        </figure>
+      )
+    },
   },
 }
 
@@ -204,12 +215,16 @@ export default async function BlogPostPage(
 
   const accent = post.category ? (CATEGORY_COLOR[post.category] ?? '#B55D39') : '#B55D39'
 
-  // Reading time
+  // Reading time — extract only plain text from PortableText blocks to avoid inflating
+  // count with JSON keys, _type, _key, etc.
   let wordCount = 0
   if (isFallback && fallback?.content) {
     wordCount = fallback.content.join(' ').split(/\s+/).filter(Boolean).length
   } else if (post.body) {
-    wordCount = JSON.stringify(post.body).split(/\s+/).length
+    const text = (post.body as Array<{ children?: Array<{ text?: string }> }>)
+      .flatMap(block => (block.children ?? []).map(span => span.text ?? ''))
+      .join(' ')
+    wordCount = text.split(/\s+/).filter(Boolean).length
   }
   const readingTime = Math.max(1, Math.round(wordCount / 200))
 
@@ -382,6 +397,7 @@ export default async function BlogPostPage(
               {/* Author */}
               {post.author && (() => {
                 const profile = AUTHOR_PROFILES[post.author.name]
+                const bio = profile?.bio ?? 'A contributor to the MyAfroWaka editorial team, writing about travel and culture across the African continent.'
                 return (
                   <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
                     <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">Written by</p>
@@ -399,11 +415,9 @@ export default async function BlogPostPage(
                         {post.author.name}
                       </p>
                     </div>
-                    {profile?.bio && (
-                      <p className="font-sans text-[12px] text-charcoal/50 dark-flip-muted leading-relaxed">
-                        {profile.bio}
-                      </p>
-                    )}
+                    <p className="font-sans text-[12px] text-charcoal/50 dark-flip-muted leading-relaxed">
+                      {bio}
+                    </p>
                   </div>
                 )
               })()}
