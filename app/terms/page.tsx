@@ -4,6 +4,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Terms of Use – MyAfroWaka',
   description: 'Terms and conditions for using the MyAfroWaka website.',
+  alternates: { canonical: 'https://myafrowaka.com/terms' },
 }
 
 export default function TermsPage() {

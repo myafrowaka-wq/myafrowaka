@@ -4,6 +4,7 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Privacy Policy – MyAfroWaka',
   description: 'How MyAfroWaka collects, uses, and protects your personal information.',
+  alternates: { canonical: 'https://myafrowaka.com/privacy' },
 }
 
 export default function PrivacyPage() {

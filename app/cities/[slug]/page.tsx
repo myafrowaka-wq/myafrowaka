@@ -31,11 +31,19 @@ export async function generateMetadata(
   const { slug } = await params
   const city = await client.fetch<City | null>(CITY_BY_SLUG_QUERY, { slug })
   if (!city) return {}
+  const canonicalUrl = `https://myafrowaka.com/cities/${slug}`
+  const description = city.overview ||
+    `Explore the best attractions in ${city.name}${city.country ? `, ${city.country.name}` : ''}. Verified travel guides from MyAfroWaka.`
   return {
     title: `${city.name} Attractions – MyAfroWaka`,
-    description:
-      city.overview ||
-      `Explore the best attractions in ${city.name}${city.country ? `, ${city.country.name}` : ''}. Verified travel guides from MyAfroWaka.`,
+    description,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      title: `${city.name} Attractions – MyAfroWaka`,
+      description,
+      type: 'website',
+      url: canonicalUrl,
+    },
   }
 }
 
