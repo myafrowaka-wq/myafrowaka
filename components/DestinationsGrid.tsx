@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
@@ -35,7 +35,7 @@ function CountryCard({ d }: { d: Country }) {
   return (
     <Link
       href={`/destinations/${d.slug}`}
-      className="card-zoom group relative rounded-2xl overflow-hidden shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500 h-full"
+      className="card-zoom group relative rounded-2xl overflow-hidden shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500 block w-full"
       style={{ aspectRatio: '3/4' }}
     >
       <div className="absolute inset-0" style={{ backgroundColor: d.color }}/>
@@ -59,116 +59,108 @@ function CountryCard({ d }: { d: Country }) {
   )
 }
 
-const VISIBLE_MOBILE = 2
-const GAP_MOBILE = 12 // px
+// ── Mobile carousel constants ──────────────────────────────────────────────────
+// Show 2 countries per "page". 8 countries = 4 pages.
+// Triple for seamless infinite loop: 12 total page slots.
+// Key insight: track is 1200% wide; each slot = (100/12)% of track = 100% of container.
+// translateX uses % of the TRACK width — so -rawPage/12*100% moves exactly one slot.
+// No JavaScript width measurement needed at all.
+
+const MOBILE_POOL  = ALL_COUNTRIES.slice(0, 8)              // 8 countries
+const PPV          = 2                                        // countries per view
+const PAGES        = MOBILE_POOL.length / PPV                // 4 pages
+const COPIES       = 3                                        // triple for seamless loop
+const TOTAL_SLOTS  = PAGES * COPIES                          // 12 slots
+const SLOT_PCT     = 100 / TOTAL_SLOTS                       // 8.333% per slot
+const TRACK_PCT    = TOTAL_SLOTS * 100                       // 1200% track width
+
+// Build 12 slots (4 pages × 3 copies)
+const ALL_SLOTS = Array.from({ length: COPIES }, () =>
+  Array.from({ length: PAGES }, (_, p) => MOBILE_POOL.slice(p * PPV, p * PPV + PPV))
+).flat()
+
 const INTERVAL_MS = 4500
-// Use first 8 countries as a fixed set for mobile carousel
-const DISPLAY = ALL_COUNTRIES.slice(0, 8)
-const N = DISPLAY.length
-// Triple for seamless infinite loop
-const ITEMS = [...DISPLAY, ...DISPLAY, ...DISPLAY]
+
+const NAV_BTN = 'w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/40 dark-flip-muted hover:border-crimson hover:text-crimson transition-all active:scale-95'
 
 export function DestinationsGrid() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [containerW, setContainerW] = useState(0)
-  const [rawIdx, setRawIdx] = useState(N) // start at 2nd copy
-  const [animated, setAnimated] = useState(false)
+  // Start at first slot of the MIDDLE copy so we can go both directions
+  const [rawSlot, setRawSlot]   = useState(PAGES)
+  const [animated, setAnimated] = useState(true)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
-
-  // Measure container width with ResizeObserver for reliable SSR-safe detection
-  useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
-    const ro = new ResizeObserver(entries => {
-      const w = entries[0]?.contentRect.width ?? 0
-      if (w > 0) setContainerW(w)
-    })
-    ro.observe(el)
-    // Fallback immediate check
-    if (el.offsetWidth > 0) setContainerW(el.offsetWidth)
-    return () => ro.disconnect()
-  }, [])
-
-  const cardW = containerW > 0 ? (containerW - GAP_MOBILE) / VISIBLE_MOBILE : 0
-  const step  = cardW + GAP_MOBILE
 
   const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current)
     timerRef.current = setInterval(() => {
       setAnimated(true)
-      setRawIdx(i => i + 1)
+      setRawSlot(s => s + 1)
     }, INTERVAL_MS)
   }, [])
 
   useEffect(() => {
-    if (containerW > 0) {
-      setAnimated(false)
-      setRawIdx(N)
-      const t = setTimeout(() => {
-        setAnimated(true)
-        startTimer()
-      }, 100)
-      return () => {
-        clearTimeout(t)
-        if (timerRef.current) clearInterval(timerRef.current)
-      }
-    }
-  }, [containerW, startTimer])
+    startTimer()
+    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+  }, [startTimer])
 
-  // Seamless loop: after CSS transition, silently reset index
+  // Seamless loop: after CSS transition finishes, silently teleport within middle copy
   useEffect(() => {
-    if (rawIdx >= N * 2) {
+    if (rawSlot >= PAGES * 2) {
       const t = setTimeout(() => {
         setAnimated(false)
-        setRawIdx(i => i - N)
+        setRawSlot(s => s - PAGES)
         requestAnimationFrame(() => requestAnimationFrame(() => setAnimated(true)))
       }, 520)
       return () => clearTimeout(t)
     }
-    if (containerW > 0 && rawIdx < N) {
+    if (rawSlot < PAGES) {
       const t = setTimeout(() => {
         setAnimated(false)
-        setRawIdx(i => i + N)
+        setRawSlot(s => s + PAGES)
         requestAnimationFrame(() => requestAnimationFrame(() => setAnimated(true)))
       }, 520)
       return () => clearTimeout(t)
     }
-  }, [rawIdx, containerW])
+  }, [rawSlot])
 
   function handleNav(dir: number) {
     if (timerRef.current) clearInterval(timerRef.current)
     setAnimated(true)
-    setRawIdx(i => i + dir)
+    setRawSlot(s => s + dir)
     startTimer()
   }
 
-  function handleDot(i: number) {
+  function handleDot(pageIdx: number) {
     if (timerRef.current) clearInterval(timerRef.current)
     setAnimated(true)
-    setRawIdx(N + i)
+    setRawSlot(PAGES + pageIdx)
     startTimer()
   }
 
-  const dotIdx = ((rawIdx - N) % N + N) % N
-
-  const navBtn = 'w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/40 dark-flip-muted hover:border-crimson hover:text-crimson transition-all active:scale-95'
+  // Which dot lights up (0-3)
+  const dotIdx = ((rawSlot - PAGES) % PAGES + PAGES) % PAGES
 
   return (
     <>
-      {/* ── Mobile: JS infinite carousel ──────────────────────────────── */}
-      <div className="lg:hidden" ref={containerRef}>
+      {/* ── Mobile: CSS percentage-based infinite carousel ─────────────── */}
+      {/* No JS width measurement — track is TRACK_PCT% wide, each slot = 100% of outer */}
+      <div className="lg:hidden">
         <div className="overflow-hidden rounded-xl">
           <div
             className="flex"
             style={{
-              gap: `${GAP_MOBILE}px`,
-              transform: containerW > 0 ? `translateX(${-rawIdx * step}px)` : 'translateX(0)',
-              transition: animated && containerW > 0 ? 'transform 500ms cubic-bezier(0.4,0,0.2,1)' : 'none',
+              width: `${TRACK_PCT}%`,
+              transform: `translateX(-${rawSlot * SLOT_PCT}%)`,
+              transition: animated ? 'transform 500ms cubic-bezier(0.4,0,0.2,1)' : 'none',
+              willChange: 'transform',
             }}
           >
-            {ITEMS.map((d, i) => (
-              <div key={i} className="shrink-0" style={{ width: `${cardW}px` }}>
-                <CountryCard d={d} />
+            {ALL_SLOTS.map((pair, i) => (
+              <div key={i} style={{ width: `${SLOT_PCT}%`, flexShrink: 0 }}>
+                <div className="grid grid-cols-2 gap-3 px-0.5">
+                  {pair.map(d => (
+                    <CountryCard key={d.slug} d={d} />
+                  ))}
+                </div>
               </div>
             ))}
           </div>
@@ -176,20 +168,26 @@ export function DestinationsGrid() {
 
         {/* Controls */}
         <div className="flex items-center justify-between mt-5">
-          <button onClick={() => handleNav(-1)} aria-label="Previous" className={navBtn}>
+          <button onClick={() => handleNav(-1)} aria-label="Previous" className={NAV_BTN}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
             </svg>
           </button>
 
           <div className="flex gap-1.5">
-            {DISPLAY.map((_, i) => (
-              <button key={i} onClick={() => handleDot(i)} aria-label={`Go to ${DISPLAY[i].name}`}
-                className={`h-1.5 rounded-full transition-all ${i === dotIdx ? 'bg-crimson w-5' : 'bg-charcoal/18 dark-flip-surf w-1.5'}`}/>
+            {Array.from({ length: PAGES }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => handleDot(i)}
+                aria-label={`Page ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all ${
+                  i === dotIdx ? 'bg-crimson w-5' : 'bg-charcoal/18 dark-flip-surf w-1.5'
+                }`}
+              />
             ))}
           </div>
 
-          <button onClick={() => handleNav(1)} aria-label="Next" className={navBtn}>
+          <button onClick={() => handleNav(1)} aria-label="Next" className={NAV_BTN}>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
             </svg>
@@ -197,11 +195,25 @@ export function DestinationsGrid() {
         </div>
       </div>
 
-      {/* ── Desktop: CSS marquee (slow auto-scroll) ─────────────────────── */}
-      <div className="hidden lg:block marquee-wrap-dest">
-        <div className="marquee-track-dest" style={{ gap: '16px' }}>
+      {/* ── Desktop: CSS marquee — self-contained keyframe ─────────────── */}
+      <style>{`
+        @keyframes marquee-dest-anim {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        .marquee-dest-track {
+          display: flex;
+          width: max-content;
+          gap: 16px;
+          animation: marquee-dest-anim 50s linear infinite;
+        }
+        .marquee-dest-track:hover { animation-play-state: paused; }
+        .marquee-dest-wrap { overflow: hidden; }
+      `}</style>
+      <div className="hidden lg:block marquee-dest-wrap">
+        <div className="marquee-dest-track">
           {[...ALL_COUNTRIES, ...ALL_COUNTRIES].map((d, i) => (
-            <div key={i} className="shrink-0" style={{ width: '200px' }}>
+            <div key={i} style={{ width: '200px', flexShrink: 0 }}>
               <CountryCard d={d} />
             </div>
           ))}
