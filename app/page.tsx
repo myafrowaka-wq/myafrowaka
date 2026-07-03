@@ -11,6 +11,7 @@ import { PopularPills } from '@/components/PopularPills'
 import { ExperiencesCarousel } from '@/components/ExperiencesCarousel'
 import { FALLBACK_POSTS } from '@/lib/fallbackPosts'
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
   title: 'MyAfroWaka – Discover Africa Beyond the Stereotype',
@@ -102,10 +103,14 @@ const FALLBACK_GUIDES: GuideItem[] = [
 const GALLERY_SEEDS = ['gallery-af-1', 'gallery-af-2', 'gallery-af-3', 'gallery-af-4', 'gallery-af-5', 'gallery-af-6']
 
 export default async function HomePage() {
-  const [featured, guides, popularRaw] = await Promise.all([
-    client.fetch(FEATURED_QUERY).catch(() => []),
-    client.fetch(GUIDES_QUERY).catch(() => []),
-    client.fetch<{ name: string; slug: string }[]>(POPULAR_QUERY).catch(() => []),
+  const [t, tc, [featured, guides, popularRaw]] = await Promise.all([
+    getTranslations('home'),
+    getTranslations('common'),
+    Promise.all([
+      client.fetch(FEATURED_QUERY).catch(() => []),
+      client.fetch(GUIDES_QUERY).catch(() => []),
+      client.fetch<{ name: string; slug: string }[]>(POPULAR_QUERY).catch(() => []),
+    ]),
   ])
 
   const popularAttractions = popularRaw.map((a: { name: string; slug: string }) => ({ label: a.name, slug: a.slug }))
@@ -153,8 +158,7 @@ export default async function HomePage() {
               {/* Sub-headline */}
               <p className="font-display font-medium text-cream/75 mb-10 max-w-lg leading-relaxed"
                 style={{ fontSize: 'clamp(13px, 1.5vw, 16px)' }}>
-                Discover hidden gems. Plan your dream trips.
-                Get insider travel tips from explorers who live and breathe Africa.
+                {t('heroSubheadline')}
               </p>
 
               {/* Search */}
@@ -175,7 +179,7 @@ export default async function HomePage() {
               </form>
 
               <div>
-                <p className="font-inter text-[9px] uppercase tracking-[0.15em] text-cream/30 mb-3">Popular searches:</p>
+                <p className="font-inter text-[9px] uppercase tracking-[0.15em] text-cream/30 mb-3">{t('popularSearches')}</p>
                 <PopularPills attractions={popularAttractions} />
               </div>
             </div>
@@ -199,7 +203,7 @@ export default async function HomePage() {
 
           <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial mb-12"
             style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
-            Where Will You Go Next?
+            {t('whereNext')}
           </h2>
 
           {/* Client component handles random selection on each load */}
@@ -208,7 +212,7 @@ export default async function HomePage() {
           <div className="mt-10 flex justify-center">
             <Link href="/attractions"
               className="inline-flex items-center gap-2.5 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(180,30,30,0.28)] hover:shadow-[0_8px_36px_rgba(180,30,30,0.38)]">
-              All Destinations
+              {t('allDestinations')}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
           </div>
@@ -225,11 +229,11 @@ export default async function HomePage() {
           <div className="flex items-end justify-between mb-12">
             <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
               style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
-              Featured Attractions
+              {t('featuredAttractions')}
             </h2>
             <Link href="/search"
               className="inline-link link-arrow hidden sm:inline-flex font-inter text-[9px] uppercase tracking-[0.16em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors">
-              All attractions
+              {tc('browseAll')}
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
           </div>
@@ -255,7 +259,7 @@ export default async function HomePage() {
                   {displayGuides[0].editorialSummary}
                 </p>
                 <span className="link-arrow inline-link font-inter text-[10px] uppercase tracking-[0.14em] text-gold-400 group-hover:text-gold-300">
-                  Read guide
+                  {t('readGuide')}
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </span>
               </div>
@@ -320,7 +324,7 @@ export default async function HomePage() {
                 </p>
                 <div className="flex items-center justify-end pt-4 border-t border-line dark-flip-border">
                   <span className="link-arrow inline-link font-inter text-[10px] text-crimson">
-                    Read the guide
+                    {t('readTheGuide')}
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                   </span>
                 </div>
@@ -332,7 +336,7 @@ export default async function HomePage() {
           <div className="mt-12 flex justify-center">
             <Link href="/attractions"
               className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(26,24,19,0.22)] hover:shadow-[0_8px_36px_rgba(26,24,19,0.32)]">
-              View All Attractions
+              {t('allAttractions')}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
           </div>
@@ -346,7 +350,7 @@ export default async function HomePage() {
           <div className="flex items-end justify-between mb-12">
             <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
               style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
-              Explore by Experience
+              {t('exploreByExperience')}
             </h2>
           </div>
 
@@ -362,11 +366,11 @@ export default async function HomePage() {
             <div className="flex items-end justify-between mb-12">
               <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
                 style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
-                Latest Travel Attractions
+                {t('latestAttractions')}
               </h2>
               <Link href="/search"
                 className="inline-link link-arrow hidden sm:inline-flex font-inter text-[9px] uppercase tracking-[0.16em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors">
-                Browse all
+                {tc('browseAll')}
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
               </Link>
             </div>

@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 
 const DESTINATIONS = [
   { label: 'East Africa',          href: '/search?region=East+Africa'          },
@@ -58,7 +59,8 @@ const SOCIAL = [
   },
 ]
 
-export default function Footer() {
+export default async function Footer() {
+  const t = await getTranslations('footer')
   return (
     <footer className="bg-[#131009]" role="contentinfo">
 
@@ -104,7 +106,7 @@ export default function Footer() {
 
           {/* Destinations */}
           <div>
-            <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">Destinations</p>
+            <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">{t('sectionDestinations')}</p>
             <ul className="space-y-2.5">
               {DESTINATIONS.map(l => (
                 <li key={l.href}>
@@ -116,7 +118,7 @@ export default function Footer() {
 
           {/* Experiences */}
           <div>
-            <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">Experiences</p>
+            <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">{t('sectionExperiences')}</p>
             <ul className="space-y-2.5">
               {EXPERIENCES.map(l => (
                 <li key={l.href}>
@@ -128,7 +130,7 @@ export default function Footer() {
 
           {/* Guides */}
           <div>
-            <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">Top Guides</p>
+            <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">{t('sectionGuides')}</p>
             <ul className="space-y-2.5">
               {GUIDES.map(l => (
                 <li key={l.href}>
@@ -140,7 +142,7 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">Company</p>
+            <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-cream/25 mb-4">{t('sectionCompany')}</p>
             <ul className="space-y-2.5">
               {COMPANY.map(l => (
                 <li key={l.href}>
@@ -157,11 +159,11 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="font-inter text-[10px] text-cream/20 uppercase tracking-[0.1em]">
-              &copy; {new Date().getFullYear()} MyAfroWaka. All rights reserved.
+              &copy; {new Date().getFullYear()} MyAfroWaka. {t('rights')}
             </p>
             <div className="flex items-center gap-4">
-              <Link href="/privacy" className="font-inter text-[10px] text-cream/20 hover:text-cream/45 transition-colors uppercase tracking-[0.1em]">Privacy</Link>
-              <Link href="/terms"   className="font-inter text-[10px] text-cream/20 hover:text-cream/45 transition-colors uppercase tracking-[0.1em]">Terms</Link>
+              <Link href="/privacy" className="font-inter text-[10px] text-cream/20 hover:text-cream/45 transition-colors uppercase tracking-[0.1em]">{t('privacy')}</Link>
+              <Link href="/terms"   className="font-inter text-[10px] text-cream/20 hover:text-cream/45 transition-colors uppercase tracking-[0.1em]">{t('terms')}</Link>
             </div>
           </div>
         </div>

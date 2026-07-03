@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { signIn } from '@/auth'
+import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
   title: 'Sign In – MyAfroWaka',
@@ -31,6 +32,7 @@ export default async function LoginPage({
   const { tab, error } = await searchParams
   const isSignup   = tab === 'signup'
   const hasError   = error === 'CredentialsSignin'
+  const t = await getTranslations('auth')
 
   return (
     <div className="min-h-screen bg-cream dark-flip-bg flex">
@@ -65,19 +67,17 @@ export default async function LoginPage({
         <div className="w-full max-w-md">
 
           <h1 className="font-display font-bold text-3xl text-charcoal dark-flip-text mb-2" style={{ letterSpacing: '-0.018em' }}>
-            {isSignup ? 'Create your account' : 'Welcome back'}
+            {isSignup ? t('createAccount') : t('welcomeBack')}
           </h1>
           <p className="font-sans text-sm text-charcoal/55 dark-flip-muted mb-8">
-            {isSignup
-              ? 'Join explorers who travel Africa with intention.'
-              : 'Sign in to access your saved trips and dashboard.'}
+            {isSignup ? t('joinExplorers') : t('signInAccess')}
           </p>
 
           {/* Error message */}
           {hasError && (
             <div className="mb-5 bg-crimson/8 border border-crimson/25 rounded-xl px-4 py-3">
               <p className="font-sans text-[13px] text-crimson">
-                Incorrect email or password. Check the demo accounts below.
+                {t('incorrectCreds')}
               </p>
             </div>
           )}
@@ -96,7 +96,7 @@ export default async function LoginPage({
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                 </svg>
-                Continue with Google
+                {t('continueWithGoogle')}
               </button>
             </form>
           </div>
@@ -105,7 +105,7 @@ export default async function LoginPage({
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-line dark-flip-border"/></div>
             <div className="relative flex justify-center">
               <span className="bg-cream dark-flip-bg px-3 font-inter text-[10px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted">
-                or with email
+                {t('orWithEmail')}
               </span>
             </div>
           </div>
@@ -128,7 +128,7 @@ export default async function LoginPage({
               {isSignup && (
                 <div>
                   <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">
-                    Full Name
+                    {t('nameLabel')}
                   </label>
                   <input type="text" name="name" placeholder="Your name"
                     className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
@@ -136,14 +136,14 @@ export default async function LoginPage({
               )}
               <div>
                 <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">
-                  Email Address
+                  {t('emailLabel')}
                 </label>
                 <input type="email" name="email" placeholder="your@email.com"
                   className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
               </div>
               <div>
                 <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">
-                  Password
+                  {t('passwordLabel')}
                 </label>
                 <input type="password" name="password" placeholder={isSignup ? 'Create a strong password' : 'Enter your password'}
                   className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>

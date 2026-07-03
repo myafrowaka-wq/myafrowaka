@@ -26,17 +26,32 @@
     "loading":      "Loading…"
   },
   "home": {
-    "heroTagline":      "Africa Explained by Africans",
-    "heroSubheadline":  "Discover the real stories behind Africa's most remarkable places, written by those who live them.",
-    "exploreButton":    "Explore Attractions",
-    "featuredSection":  "Featured Places",
-    "latestArticles":   "Latest from The Journal"
+    "heroTagline":         "Africa Explained by Africans",
+    "heroSubheadline":     "Discover hidden gems. Plan your dream trips. Get insider travel tips from explorers who live and breathe Africa.",
+    "exploreButton":       "Explore Attractions",
+    "whereNext":           "Where Will You Go Next?",
+    "allDestinations":     "All Destinations",
+    "featuredAttractions": "Featured Attractions",
+    "allAttractions":      "View All Attractions",
+    "exploreByExperience": "Explore by Experience",
+    "latestAttractions":   "Latest Travel Attractions",
+    "readGuide":           "Read guide",
+    "readTheGuide":        "Read the guide",
+    "popularSearches":     "Popular searches:",
+    "featuredSection":     "Featured Places",
+    "latestArticles":      "Latest from The Journal"
   },
   "search": {
-    "placeholder":  "Search attractions, cities, countries…",
-    "filters":      "Filters",
-    "noResults":    "No results found",
-    "resultsFor":   "Results for"
+    "placeholder":     "Search attractions, cities, countries…",
+    "filters":         "Filters",
+    "noResults":       "No results found",
+    "resultsFor":      "Results for",
+    "tryDifferent":    "Try a different search term or clear the filters",
+    "clearAllFilters": "Clear all filters",
+    "filterResults":   "Filter Results",
+    "clearAll":        "Clear all",
+    "byRegion":        "By Region",
+    "byExperience":    "By Experience"
   },
   "auth": {
     "signIn":             "Sign in",
@@ -47,25 +62,34 @@
     "passwordLabel":      "Password",
     "nameLabel":          "Full Name",
     "welcomeBack":        "Welcome back",
-    "createAccount":      "Create your account"
+    "createAccount":      "Create your account",
+    "orWithEmail":        "or with email",
+    "joinExplorers":      "Join explorers who travel Africa with intention.",
+    "signInAccess":       "Sign in to access your saved trips and dashboard.",
+    "incorrectCreds":     "Incorrect email or password. Check the demo accounts below."
   },
   "dashboard": {
-    "title":            "Dashboard",
-    "overview":         "Overview",
-    "savedAttractions": "Saved Attractions",
-    "corrections":      "Corrections",
-    "submit":           "Submit",
-    "articles":         "Articles",
-    "users":            "Users",
-    "noSaved":          "Your list is empty",
-    "noSavedDesc":      "Browse Africa's most remarkable places and tap the heart to save them here.",
-    "browseToSave":     "Explore Attractions"
+    "title":             "Dashboard",
+    "overview":          "Overview",
+    "savedAttractions":  "Saved Attractions",
+    "corrections":       "Corrections",
+    "correctionsInbox":  "Corrections Inbox",
+    "submit":            "Submit",
+    "articles":          "Articles",
+    "users":             "Users",
+    "noSaved":           "Your list is empty",
+    "noSavedDesc":       "Browse Africa's most remarkable places and tap the heart to save them here.",
+    "browseToSave":      "Explore Attractions"
   },
   "footer": {
-    "tagline":  "Africa explained by Africans.",
-    "rights":   "All rights reserved.",
-    "contact":  "Contact",
-    "privacy":  "Privacy Policy",
-    "terms":    "Terms of Service"
+    "tagline":             "Africa explained by Africans.",
+    "rights":              "All rights reserved.",
+    "contact":             "Contact",
+    "privacy":             "Privacy Policy",
+    "terms":               "Terms of Service",
+    "sectionDestinations": "Destinations",
+    "sectionExperiences":  "Experiences",
+    "sectionGuides":       "Top Guides",
+    "sectionCompany":      "Company"
   }
 }

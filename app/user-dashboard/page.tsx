@@ -5,6 +5,7 @@ import { auth } from '@/auth'
 import { client } from '@/sanity/lib/client'
 import type { UserRole } from '@/types/next-auth'
 import { DashGreeting } from '@/components/DashGreeting'
+import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
   title: 'My Dashboard – MyAfroWaka',
@@ -132,6 +133,7 @@ export default async function UserDashboardPage() {
   const role = (user.role ?? 'subscriber') as UserRole
   const rm = ROLE_BADGE[role] ?? ROLE_BADGE.subscriber
   const firstName = (user.name ?? user.email ?? 'Explorer').split(' ')[0]
+  const t = await getTranslations('dashboard')
 
   // ── Data fetching ──────────────────────────────────────────────────────────
 
@@ -240,7 +242,7 @@ export default async function UserDashboardPage() {
         {/* ── 2. Stats cards ───────────────────────────────────────────── */}
         <div className={`grid gap-4 ${atLeast(role, 'admin') ? 'grid-cols-2 lg:grid-cols-4' : atLeast(role, 'author-editor') ? 'grid-cols-2' : 'grid-cols-1 sm:grid-cols-2'}`}>
           <StatCard
-            label="Saved Attractions"
+            label={t('savedAttractions')}
             value={saved.length}
             bg="bg-crimson/10 text-crimson"
             icon={icons.heart}
@@ -274,7 +276,7 @@ export default async function UserDashboardPage() {
         {/* ── 3. Saved attractions ─────────────────────────────────────── */}
         <section id="saved" className="scroll-mt-8">
           <SectionHead
-            title="Saved Attractions"
+            title={t('savedAttractions')}
             icon={icons.heart}
             aside={saved.length > 0 ? (
               <Link href="/search"
@@ -290,15 +292,15 @@ export default async function UserDashboardPage() {
                 {icons.heart}
               </div>
               <p className="font-display font-semibold text-[14px] text-charcoal dark-flip-text mb-1.5">
-                Your list is empty
+                {t('noSaved')}
               </p>
               <p className="font-sans text-[13px] text-charcoal/45 dark-flip-muted mb-5 max-w-xs mx-auto leading-relaxed">
-                Browse Africa's most remarkable places and tap the heart to save them here.
+                {t('noSavedDesc')}
               </p>
               <Link href="/search"
                 className="inline-flex items-center gap-2 bg-ink hover:bg-charcoal text-cream font-inter text-[9px] uppercase tracking-[0.14em] px-5 py-2.5 rounded-full transition-colors">
                 {icons.map}
-                <span>Explore Attractions</span>
+                <span>{t('browseToSave')}</span>
               </Link>
             </div>
           ) : (
@@ -356,7 +358,7 @@ export default async function UserDashboardPage() {
         {/* ── 4. Corrections inbox (Moderator+) ────────────────────────── */}
         {atLeast(role, 'moderator') && (
           <section id="corrections" className="scroll-mt-8">
-            <SectionHead title="Corrections Inbox" icon={icons.check}
+            <SectionHead title={t('correctionsInbox')} icon={icons.check}
               aside={
                 <span className="font-inter text-[8px] uppercase tracking-[0.14em] text-charcoal/30 dark-flip-muted bg-charcoal/6 dark-flip-surf px-3 py-1.5 rounded-full">
                   0 pending

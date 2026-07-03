@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import Image from 'next/image'
 import { createClient } from 'next-sanity'
@@ -85,6 +86,7 @@ function AccordionSection({
 function SearchInner() {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const ts = useTranslations('search')
   const [all, setAll]           = useState<Attraction[]>([])
   const [loading, setLoading]   = useState(true)
   const [inputVal, setInputVal] = useState('')
@@ -159,7 +161,7 @@ function SearchInner() {
                 if (debounceRef.current) clearTimeout(debounceRef.current)
                 debounceRef.current = setTimeout(() => setParam('q', v), 300)
               }}
-              placeholder="Search by country, attraction, type..."
+              placeholder={ts('placeholder')}
               className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl pl-10 pr-4 py-3.5 text-sm font-sans text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors"
             />
           </div>
@@ -167,7 +169,7 @@ function SearchInner() {
           {/* Active filter chips */}
           {hasFilters && (
             <div className="flex flex-wrap gap-2 mt-4 items-center">
-              <span className="font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted">Filters:</span>
+              <span className="font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted">{ts('filters')}:</span>
               {region && (
                 <button onClick={() => setParam('region', '')}
                   className="flex items-center gap-1.5 bg-crimson/10 text-crimson font-inter text-[10px] uppercase tracking-[0.1em] px-3 py-1.5 rounded-full border border-crimson/20 hover:bg-crimson/20 transition-colors">
@@ -184,7 +186,7 @@ function SearchInner() {
               )}
               <button onClick={clearAll}
                 className="font-inter text-[10px] uppercase tracking-[0.12em] text-charcoal/40 hover:text-crimson transition-colors underline underline-offset-2">
-                Clear all
+                {ts('clearAll')}
               </button>
             </div>
           )}
@@ -200,12 +202,12 @@ function SearchInner() {
             <div className="bg-white dark-flip-card border border-line dark-flip-border rounded-2xl overflow-hidden">
 
               <div className="px-5 py-4 border-b border-line dark-flip-border">
-                <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-charcoal/40 dark-flip-muted">Filter Results</p>
+                <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-charcoal/40 dark-flip-muted">{ts('filterResults')}</p>
               </div>
 
               <div className="px-5">
 
-                <AccordionSection title="By Region" defaultOpen={true}>
+                <AccordionSection title={ts('byRegion')} defaultOpen={true}>
                   <div className="space-y-1">
                     {REGIONS.map(r => (
                       <button key={r} onClick={() => setParam('region', region === r ? '' : r)}
@@ -223,7 +225,7 @@ function SearchInner() {
                   </div>
                 </AccordionSection>
 
-                <AccordionSection title="By Experience">
+                <AccordionSection title={ts('byExperience')}>
                   <div className="space-y-1">
                     {EXPERIENCES.map(e => (
                       <button key={e} onClick={() => setParam('exp', exp === e ? '' : e)}
@@ -265,11 +267,11 @@ function SearchInner() {
               </div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-20">
-                <p className="font-display font-bold text-3xl text-charcoal/20 dark-flip-muted mb-3">No results found</p>
-                <p className="font-sans text-sm text-charcoal/35 dark-flip-muted mb-6">Try a different search term or clear the filters</p>
+                <p className="font-display font-bold text-3xl text-charcoal/20 dark-flip-muted mb-3">{ts('noResults')}</p>
+                <p className="font-sans text-sm text-charcoal/35 dark-flip-muted mb-6">{ts('tryDifferent')}</p>
                 <button onClick={clearAll}
                   className="inline-flex items-center gap-2 border border-line dark-flip-border text-charcoal/50 dark-flip-muted hover:text-crimson hover:border-crimson font-inter text-[10px] uppercase tracking-[0.12em] px-6 py-3 rounded-full transition-colors">
-                  Clear all filters
+                  {ts('clearAllFilters')}
                 </button>
               </div>
             ) : (

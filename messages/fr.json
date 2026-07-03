@@ -3,10 +3,10 @@
     "destinations": "Destinations",
     "guides":       "Guides",
     "blog":         "Blog",
-    "about":        "About",
+    "about":        "À Propos",
     "contact":      "Contact",
     "signIn":       "Connexion",
-    "planATrip":    "Plan a Trip"
+    "planATrip":    "Planifier un Voyage"
   },
   "common": {
     "browseAll":    "Tout Parcourir",
@@ -26,17 +26,32 @@
     "loading":      "Chargement…"
   },
   "home": {
-    "heroTagline":      "L'Afrique Expliquée par des Africains",
-    "heroSubheadline":  "Découvrez les vraies histoires derrière les lieux les plus remarquables d'Afrique, écrits par ceux qui les vivent.",
-    "exploreButton":    "Explorer les Sites",
-    "featuredSection":  "Lieux en Vedette",
-    "latestArticles":   "Derniers Articles du Journal"
+    "heroTagline":         "L'Afrique Expliquée par des Africains",
+    "heroSubheadline":     "Découvrez des trésors cachés. Planifiez vos voyages de rêve. Des conseils d'initiés d'explorateurs qui vivent et respirent l'Afrique.",
+    "exploreButton":       "Explorer les Sites",
+    "whereNext":           "Où Irez-Vous Ensuite?",
+    "allDestinations":     "Toutes les Destinations",
+    "featuredAttractions": "Attractions en Vedette",
+    "allAttractions":      "Voir Toutes les Attractions",
+    "exploreByExperience": "Explorer par Expérience",
+    "latestAttractions":   "Dernières Attractions",
+    "readGuide":           "Lire le guide",
+    "readTheGuide":        "Lire le guide",
+    "popularSearches":     "Recherches populaires:",
+    "featuredSection":     "Lieux en Vedette",
+    "latestArticles":      "Derniers Articles du Journal"
   },
   "search": {
-    "placeholder":  "Rechercher sites, villes, pays…",
-    "filters":      "Filtres",
-    "noResults":    "Aucun résultat trouvé",
-    "resultsFor":   "Résultats pour"
+    "placeholder":     "Rechercher sites, villes, pays…",
+    "filters":         "Filtres",
+    "noResults":       "Aucun résultat trouvé",
+    "resultsFor":      "Résultats pour",
+    "tryDifferent":    "Essayez un autre terme ou effacez les filtres",
+    "clearAllFilters": "Effacer tous les filtres",
+    "filterResults":   "Filtrer les Résultats",
+    "clearAll":        "Tout effacer",
+    "byRegion":        "Par Région",
+    "byExperience":    "Par Expérience"
   },
   "auth": {
     "signIn":             "Se connecter",
@@ -47,25 +62,34 @@
     "passwordLabel":      "Mot de passe",
     "nameLabel":          "Nom complet",
     "welcomeBack":        "Bienvenue",
-    "createAccount":      "Créer votre compte"
+    "createAccount":      "Créer votre compte",
+    "orWithEmail":        "ou avec e-mail",
+    "joinExplorers":      "Rejoignez des explorateurs qui voyagent en Afrique avec intention.",
+    "signInAccess":       "Connectez-vous pour accéder à vos voyages et tableau de bord.",
+    "incorrectCreds":     "E-mail ou mot de passe incorrect. Consultez les comptes de démonstration ci-dessous."
   },
   "dashboard": {
-    "title":            "Tableau de Bord",
-    "overview":         "Aperçu",
-    "savedAttractions": "Sites Sauvegardés",
-    "corrections":      "Corrections",
-    "submit":           "Soumettre",
-    "articles":         "Articles",
-    "users":            "Utilisateurs",
-    "noSaved":          "Votre liste est vide",
-    "noSavedDesc":      "Parcourez les sites les plus remarquables d'Afrique et cliquez sur le cœur pour les sauvegarder.",
-    "browseToSave":     "Explorer les Sites"
+    "title":             "Tableau de Bord",
+    "overview":          "Aperçu",
+    "savedAttractions":  "Sites Sauvegardés",
+    "corrections":       "Corrections",
+    "correctionsInbox":  "Boîte de Corrections",
+    "submit":            "Soumettre",
+    "articles":          "Articles",
+    "users":             "Utilisateurs",
+    "noSaved":           "Votre liste est vide",
+    "noSavedDesc":       "Parcourez les sites les plus remarquables d'Afrique et cliquez sur le cœur pour les sauvegarder.",
+    "browseToSave":      "Explorer les Sites"
   },
   "footer": {
-    "tagline":  "L'Afrique expliquée par des Africains.",
-    "rights":   "Tous droits réservés.",
-    "contact":  "Contact",
-    "privacy":  "Politique de Confidentialité",
-    "terms":    "Conditions d'Utilisation"
+    "tagline":             "L'Afrique expliquée par des Africains.",
+    "rights":              "Tous droits réservés.",
+    "contact":             "Contact",
+    "privacy":             "Politique de Confidentialité",
+    "terms":               "Conditions d'Utilisation",
+    "sectionDestinations": "Destinations",
+    "sectionExperiences":  "Expériences",
+    "sectionGuides":       "Meilleurs Guides",
+    "sectionCompany":      "Entreprise"
   }
 }
