@@ -7,6 +7,14 @@ export const metadata: Metadata = {
   title: 'About MyAfroWaka – Africa Explained by Africans',
   description:
     'MyAfroWaka is a travel and destination discovery platform built from Abuja, Nigeria. We produce verified travel guides across Africa, written by people who actually live here.',
+  alternates: { canonical: 'https://myafrowaka.com/about' },
+  openGraph: {
+    title: 'About MyAfroWaka – Africa Explained by Africans',
+    description: 'A travel and destination discovery platform built from Abuja, Nigeria. Verified guides written by people who live here.',
+    type: 'website',
+    url: 'https://myafrowaka.com/about',
+    images: ['https://picsum.photos/seed/myafrowaka-about-og/1200/630'],
+  },
 }
 
 const PILLARS = [

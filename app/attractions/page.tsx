@@ -10,11 +10,13 @@ import { TypewriterHero } from '@/components/TypewriterHero'
 import { ParallaxHero } from '@/components/ParallaxHero'
 
 export const metadata: Metadata = {
-  title: 'Africa Travel Guides - MyAfroWaka',
-  description: 'Discover verified travel guides to extraordinary destinations across Africa. Explore by country, type, or experience.',
+  title: 'Africa Travel Guides – MyAfroWaka',
+  description: 'Verified travel guides to extraordinary destinations across Africa. Explore by country, type, or experience.',
+  alternates: { canonical: 'https://myafrowaka.com/attractions' },
   openGraph: {
-    title: 'Africa Travel Guides - MyAfroWaka',
-    description: 'Discover verified travel guides to extraordinary destinations across Africa.',
+    title: 'Africa Travel Guides – MyAfroWaka',
+    description: 'Verified travel guides to extraordinary destinations across Africa.',
+    url: 'https://myafrowaka.com/attractions',
     images: ['https://picsum.photos/seed/attractions-hero/1200/630'],
   },
 }

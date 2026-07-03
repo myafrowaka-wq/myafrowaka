@@ -45,10 +45,13 @@ export async function generateMetadata(
   if (!dest) return {}
   const title = `${dest.flagEmoji ? dest.flagEmoji + ' ' : ''}${dest.name} Travel Guide – MyAfroWaka`
   const description = dest.overview || `Discover attractions in ${dest.name}. Verified travel guides from MyAfroWaka.`
+  const canonicalUrl = `https://myafrowaka.com/destinations/${slug}`
   return {
     title, description,
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title, description, type: 'website',
+      url: canonicalUrl,
       images: [`https://picsum.photos/seed/${slug}-country-hero/1200/630`],
     },
   }

@@ -18,10 +18,13 @@ interface Guide {
 export const metadata: Metadata = {
   title: 'Travel Guides – MyAfroWaka',
   description: 'Curated best-of guides to attractions across Africa. Ranked lists built from verified field research.',
+  alternates: { canonical: 'https://myafrowaka.com/guides' },
   openGraph: {
     title: 'Travel Guides – MyAfroWaka',
     description: 'Curated best-of guides to attractions across Africa.',
     type: 'website',
+    url: 'https://myafrowaka.com/guides',
+    images: ['https://picsum.photos/seed/myafrowaka-guides-og/1200/630'],
   },
 }
 

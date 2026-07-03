@@ -13,10 +13,13 @@ const POSTS_PER_PAGE = 6
 export const metadata: Metadata = {
   title: 'The Journal – MyAfroWaka',
   description: 'Perspectives, dispatches, and stories from across the continent. Written by people who have been there.',
+  alternates: { canonical: 'https://myafrowaka.com/blog' },
   openGraph: {
     title: 'The MyAfroWaka Journal',
     description: 'Stories and perspectives from across the African continent.',
     type: 'website',
+    url: 'https://myafrowaka.com/blog',
+    images: ['https://picsum.photos/seed/myafrowaka-blog-og/1200/630'],
   },
 }
 

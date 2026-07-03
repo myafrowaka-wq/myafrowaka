@@ -20,6 +20,7 @@ interface Post {
   title: string
   slug: string
   publishedAt?: string
+  _updatedAt?: string
   excerpt?: string
   category?: string
   tags?: string[]
@@ -54,13 +55,16 @@ export async function generateMetadata(
   const title       = ('metaTitle' in post && post.metaTitle) ? post.metaTitle : `${post.title} – MyAfroWaka`
   const description = ('metaDescription' in post && post.metaDescription) ? post.metaDescription : (post.excerpt ?? `Read ${post.title} on MyAfroWaka.`)
 
+  const canonicalUrl = `https://myafrowaka.com/blog/${slug}`
   return {
     title,
     description,
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title,
       description,
       type: 'article',
+      url: canonicalUrl,
       publishedTime: post.publishedAt,
       images: [`https://picsum.photos/seed/${slug}-cover/1200/630`],
     },
@@ -252,14 +256,27 @@ export default async function BlogPostPage(
     headline: post.title,
     description: post.excerpt ?? '',
     datePublished: post.publishedAt,
+    dateModified: post._updatedAt ?? post.publishedAt,
     url: `https://myafrowaka.com/blog/${slug}`,
-    image: `https://picsum.photos/seed/${slug}-cover/1200/630`,
-    ...(post.author ? { author: { '@type': 'Person', name: post.author.name } } : {}),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://myafrowaka.com/blog/${slug}` },
+    image: { '@type': 'ImageObject', url: `https://picsum.photos/seed/${slug}-cover/1200/630`, width: 1200, height: 630 },
+    ...(post.author ? {
+      author: {
+        '@type': 'Person',
+        name: post.author.name,
+        url: 'https://myafrowaka.com/about',
+      }
+    } : {
+      author: { '@type': 'Organization', name: 'MyAfroWaka Editorial Team', url: 'https://myafrowaka.com/about' }
+    }),
     publisher: {
       '@type': 'Organization',
       name: 'MyAfroWaka',
-      logo: { '@type': 'ImageObject', url: 'https://myafrowaka.com/images/myafrowaka-logo-transparent.png' },
+      url: 'https://myafrowaka.com',
+      logo: { '@type': 'ImageObject', url: 'https://myafrowaka.com/icon.png' },
     },
+    inLanguage: 'en',
+    isPartOf: { '@type': 'Blog', '@id': 'https://myafrowaka.com/blog', name: 'MyAfroWaka Journal' },
   }
 
   return (

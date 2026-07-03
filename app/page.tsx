@@ -16,7 +16,31 @@ export const metadata: Metadata = {
   title: 'MyAfroWaka – Discover Africa Beyond the Stereotype',
   description:
     'Verified travel guides across Africa written by people who live here. Explore destinations, experiences, and insider knowledge from every corner of the continent.',
+  alternates: { canonical: 'https://myafrowaka.com' },
 }
+
+const HOME_JSON_LD = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'MyAfroWaka',
+    url: 'https://myafrowaka.com',
+    logo: 'https://myafrowaka.com/icon.png',
+    sameAs: ['https://twitter.com/myafrowaka_'],
+    contactPoint: { '@type': 'ContactPoint', email: 'info@myafrowaka.com', contactType: 'customer support' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'MyAfroWaka',
+    url: 'https://myafrowaka.com',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: { '@type': 'EntryPoint', urlTemplate: 'https://myafrowaka.com/search?q={search_term_string}' },
+      'query-input': 'required name=search_term_string',
+    },
+  },
+]
 
 const FEATURED_QUERY = `
   *[_type == "attraction" && contentStatus == "Published"] | order(_updatedAt desc)[0..7]{
@@ -97,6 +121,10 @@ export default async function HomePage() {
 
   return (
     <>
+      {HOME_JSON_LD.map((schema, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      ))}
+
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
       <section className="relative min-h-[94vh] flex items-center overflow-hidden">
         <HeroBackground src="https://picsum.photos/seed/africa-historical-landmark-hero/1920/1080" alt="African landmark at golden hour"/>

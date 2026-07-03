@@ -120,21 +120,25 @@ export async function generateMetadata(
   const { slug } = await params
   const a = await client.fetch<Attraction | null>(ATTRACTION_BY_SLUG_QUERY, { slug })
   if (!a) return {}
-  const title = a.metaTitle || `${a.name} – MyAfroWaka`
-  const description = a.metaDescription || a.editorialSummary || ''
+  const title = a.metaTitle || `${a.name} Travel Guide – ${a.country?.name ?? 'Africa'} | MyAfroWaka`
+  const description = a.metaDescription || a.editorialSummary || `Discover ${a.name} in ${a.country?.name ?? 'Africa'}. Verified travel guide with visitor information, entry fees, best time to visit, and how to get there.`
+  const canonicalUrl = `https://myafrowaka.com/attractions/${slug}`
   return {
     title,
     description,
+    alternates: { canonical: canonicalUrl },
     openGraph: {
-      title: a.metaTitle || a.name,
+      title: a.metaTitle || `${a.name} – ${a.country?.name ?? 'Africa'} Travel Guide`,
       description,
       type: 'article',
+      url: canonicalUrl,
       images: [`https://picsum.photos/seed/${slug}-hero-v1/1200/630`],
     },
     twitter: {
       card: 'summary_large_image',
-      title: a.metaTitle || a.name,
+      title: a.metaTitle || `${a.name} – ${a.country?.name ?? 'Africa'} Travel Guide`,
       description,
+      images: [`https://picsum.photos/seed/${slug}-hero-v1/1200/630`],
     },
   }
 }
@@ -142,6 +146,7 @@ export async function generateMetadata(
 // ── JSON-LD ───────────────────────────────────────────────────────────────────
 
 function buildJsonLd(a: Attraction) {
+  const url = `https://myafrowaka.com/attractions/${a.slug.current}`
   const breadcrumbs = [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://myafrowaka.com' },
     ...(a.country ? [{ '@type': 'ListItem', position: 2, name: a.country.name, item: `https://myafrowaka.com/destinations/${a.country.slug}` }] : []),
@@ -150,27 +155,42 @@ function buildJsonLd(a: Attraction) {
       '@type': 'ListItem',
       position: (a.country ? 1 : 0) + (a.city ? 1 : 0) + 2,
       name: a.name,
-      item: `https://myafrowaka.com/attractions/${a.slug.current}`,
+      item: url,
     },
   ]
 
-  return [
+  const schemas: object[] = [
     {
       '@context': 'https://schema.org',
       '@type': 'TouristAttraction',
       name: a.name,
       description: a.editorialSummary || '',
-      url: `https://myafrowaka.com/attractions/${a.slug.current}`,
+      url,
       ...(a.latitude && a.longitude ? {
         geo: { '@type': 'GeoCoordinates', latitude: a.latitude, longitude: a.longitude },
       } : {}),
       ...(a.addressDirections ? {
         address: { '@type': 'PostalAddress', streetAddress: a.addressDirections },
       } : {}),
-      ...(a.country ? { containedInPlace: { '@type': 'Country', name: a.country.name } } : {}),
-      ...(a.unescoStatus ? {
+      ...(a.country ? {
+        containedInPlace: {
+          '@type': 'Country',
+          name: a.country.name,
+          url: `https://myafrowaka.com/destinations/${a.country.slug}`,
+        },
+      } : {}),
+      ...(a.unescoStatus && a.unescoStatus !== 'Not UNESCO Listed' ? {
         additionalProperty: { '@type': 'PropertyValue', name: 'UNESCO Status', value: a.unescoStatus },
       } : {}),
+      ...(a.type && a.type.length > 0 ? {
+        touristType: a.type.map(t => t.replace('UNESCO World Heritage Site | ', '')),
+      } : {}),
+      isAccessibleForFree: a.entryFeeInternational === 0,
+      publisher: {
+        '@type': 'Organization',
+        name: 'MyAfroWaka',
+        url: 'https://myafrowaka.com',
+      },
     },
     {
       '@context': 'https://schema.org',
@@ -178,6 +198,8 @@ function buildJsonLd(a: Attraction) {
       itemListElement: breadcrumbs,
     },
   ]
+
+  return schemas
 }
 
 // ── Prose classes (shared, with dark mode) ─────────────────────────────────────
@@ -193,63 +215,135 @@ const PROSE = `prose prose-lg max-w-none
   prose-blockquote:border-l-4 prose-blockquote:border-gold-400
   prose-blockquote:italic prose-blockquote:text-charcoal/60 dark:prose-blockquote:text-cream/55`
 
-// ── Auto-overview generator (used when no Sanity body exists) ────────────────
+// ── Smart FAQ answer generator ────────────────────────────────────────────────
 
-function generateOverview(a: Attraction): { p1: string; p2: string } {
-  const typeLabel = a.type?.[0]?.replace('UNESCO World Heritage Site | ', '') || 'attraction'
-  const locationParts = [a.city?.name, a.country?.name].filter(Boolean)
-  const location = locationParts.join(', ') || a.continentRegion || 'Africa'
+function generateFaqAnswer(question: string, a: Attraction): string {
+  const q = question.toLowerCase()
+  const name = a.name
+  const typeLabel = (a.type?.[0]?.replace('UNESCO World Heritage Site | ', '') || 'attraction').toLowerCase()
+  const location = [a.city?.name, a.country?.name].filter(Boolean).join(', ') || a.continentRegion || 'Africa'
 
-  // Paragraph 1: what it is + why it matters
-  let p1 = ''
+  if ((q.includes('best time') || q.includes('when to visit') || q.includes('when should')) && a.bestTimeToVisit) {
+    return `The best time to visit ${name} is ${a.bestTimeToVisit}. Planning your trip around this window ensures the most favourable conditions and a more rewarding experience.`
+  }
+  if ((q.includes('how long') || q.includes('how much time') || q.includes('duration') || q.includes('hours')) && a.timeNeeded != null) {
+    const hrs = a.timeNeeded === 1 ? 'one hour' : `${a.timeNeeded} hours`
+    return `Plan to spend approximately ${hrs} at ${name}. Visitors with a deeper interest in ${typeLabel} history and context may wish to allow more time to fully absorb what the site offers.`
+  }
+  if (q.includes('entry fee') || q.includes('ticket') || (q.includes('how much') && q.includes('cost')) || q.includes('admission') || q.includes('price')) {
+    if (a.entryFeeDisplayText) return a.entryFeeDisplayText.split('\n')[0]
+    if (a.entryFeeInternational === 0) return `Entry to ${name} is free of charge for all visitors.`
+    if (a.entryFeeInternational != null) {
+      let ans = `Entry for international visitors to ${name} starts from $${a.entryFeeInternational} USD.`
+      if (a.entryFeeLocal != null) ans += ` Local and resident visitors pay a reduced rate.`
+      return ans
+    }
+    return `Entry fee information for ${name} is best confirmed directly with the site or local tourist authority before your visit, as prices can change seasonally.`
+  }
+  if ((q.includes('how to get') || q.includes('getting there') || q.includes('transport') || q.includes('directions') || q.includes('reach')) && a.gettingThere) {
+    return a.gettingThere.split('\n')[0]
+  }
+  if ((q.includes('airport') || q.includes('fly') || q.includes('nearest airport') || q.includes('closest airport')) && a.nearestAirportIATA) {
+    return `The nearest major airport to ${name} is ${a.nearestAirportIATA}${a.nearestAirportDistanceKm ? `, approximately ${a.nearestAirportDistanceKm} km from the site` : ''}. Onward travel is typically by road, and local transfer options vary by season.`
+  }
+  if ((q.includes('suitable') || q.includes('family') || q.includes('children') || q.includes('kids') || q.includes('who can') || q.includes('who is')) && a.suitableFor) {
+    return `${name} is recommended for ${a.suitableFor.join(', ').toLowerCase()}. Access is rated ${a.difficultyAccessLevel?.toLowerCase() || 'moderate'}, so visitors should plan accordingly.`
+  }
+  if ((q.includes('unesco') || q.includes('world heritage') || q.includes('heritage status')) && a.unescoStatus) {
+    return `${name} holds ${a.unescoStatus} status, recognised by UNESCO for its outstanding universal value. It is among Africa's most significant protected ${typeLabel} sites.`
+  }
+  if ((q.includes('overview') || q.includes('what is') || q.includes('about') || q.includes('describe')) && a.editorialSummary) {
+    return a.editorialSummary
+  }
+  // Generic fallback using what we know
+  return `${name} is a ${typeLabel} in ${location}. ${a.editorialSummary || `It is one of ${a.country?.name || a.continentRegion || "Africa"}'s most notable visitor sites.`} For the most current visitor information, contact info@myafrowaka.com.`
+}
+
+// ── Rich overview generator (used when no Sanity article body exists) ─────────
+
+function generateOverview(a: Attraction): { p1: string; p2: string; p3?: string } {
+  const typeLabel = (a.type?.[0]?.replace('UNESCO World Heritage Site | ', '') || 'attraction').toLowerCase()
+  const location = [a.city?.name, a.country?.name].filter(Boolean).join(', ') || a.continentRegion || 'Africa'
+  const region = a.continentRegion || a.country?.name || 'Africa'
+
+  // ── Paragraph 1: Identity + significance + context ───────────────────────
+  const s1: string[] = []
+
   if (a.editorialSummary) {
-    const summary = a.editorialSummary.replace(/\.$/, '')
-    p1 = `${a.name} is a ${typeLabel.toLowerCase()} in ${location}. ${summary}.`
-    if (a.unescoStatus) {
-      p1 += ` Designated as a ${a.unescoStatus}, it is recognised among the world's most significant cultural and natural treasures.`
-    } else if (a.primaryBrandPillar) {
-      p1 += ` As a landmark of ${a.primaryBrandPillar.toLowerCase()}, it draws travellers with a passion for ${typeLabel.toLowerCase()} experiences.`
-    }
+    s1.push(a.editorialSummary.replace(/\.$/, '') + '.')
   } else {
-    p1 = `${a.name} is a ${typeLabel.toLowerCase()} located in ${location}.`
-    if (a.unescoStatus) {
-      p1 += ` It holds ${a.unescoStatus} status, placing it among the world's outstanding sites.`
-    }
-    if (a.heritageEra && a.heritageEra.length > 0) {
-      p1 += ` Rooted in ${a.heritageEra.join(' and ')} heritage, it represents one of the defining landmarks of ${a.continentRegion || location}.`
-    }
+    s1.push(`${a.name} is a ${typeLabel} located in ${location}.`)
   }
 
-  // Paragraph 2: practical visitor guidance
-  const pts: string[] = []
-  if (a.bestTimeToVisit) pts.push(`The best time to visit is ${a.bestTimeToVisit}`)
+  if (a.unescoStatus && a.unescoStatus !== 'Not UNESCO Listed') {
+    s1.push(`Designated as a ${a.unescoStatus}, it is recognised by UNESCO among the world's outstanding cultural and natural sites.`)
+  }
+
+  if (a.heritageEra && a.heritageEra.length > 0) {
+    const eras = a.heritageEra.join(' and ')
+    s1.push(`The site traces its roots to ${eras} civilisation, making it one of the most historically significant landmarks in ${region}.`)
+  } else if (a.primaryBrandPillar && !a.unescoStatus) {
+    s1.push(`Positioned at the intersection of ${a.primaryBrandPillar.toLowerCase()} and authentic discovery, it draws visitors seeking genuine ${typeLabel} experiences in ${a.country?.name || region}.`)
+  }
+
+  if (a.experienceTags && a.experienceTags.length > 0 && s1.length < 3) {
+    const tags = a.experienceTags.slice(0, 3).join(', ')
+    s1.push(`Key experiences here include ${tags.toLowerCase()}.`)
+  }
+
+  const p1 = s1.join(' ')
+
+  // ── Paragraph 2: Visitor practicalities ──────────────────────────────────
+  const s2: string[] = []
+
+  if (a.bestTimeToVisit) {
+    s2.push(`The best time to visit ${a.name} is ${a.bestTimeToVisit}.`)
+  }
+
   if (a.timeNeeded != null && a.timeNeeded > 0) {
-    pts.push(`allow approximately ${a.timeNeeded} hour${a.timeNeeded !== 1 ? 's' : ''} to explore the site`)
+    const hrs = a.timeNeeded === 1 ? 'one hour' : `${a.timeNeeded} hours`
+    s2.push(`Budget approximately ${hrs} to experience the site properly.`)
   }
-  if (a.difficultyAccessLevel) pts.push(`access is rated ${a.difficultyAccessLevel.toLowerCase()}`)
-  if (a.entryFeeDisplayText) {
-    pts.push(a.entryFeeDisplayText.split('\n')[0])
-  } else if (a.entryFeeInternational === 0) {
-    pts.push('entry is free of charge')
-  } else if (a.entryFeeInternational != null) {
-    pts.push(`international visitor entry starts from $${a.entryFeeInternational} USD`)
+
+  if (a.difficultyAccessLevel) {
+    const accessMap: Record<string, string> = {
+      'Easy': 'Access is straightforward and suitable for all fitness levels, including families with young children.',
+      'Moderate': 'Access requires a moderate level of fitness, manageable for most visitors in reasonable health.',
+      'Challenging': 'Access is physically challenging. Good fitness and appropriate footwear are essential.',
+      'Very Challenging': 'Access is demanding. Strong physical fitness, proper equipment, and guided assistance are strongly recommended.',
+    }
+    s2.push(accessMap[a.difficultyAccessLevel] || `Access is rated ${a.difficultyAccessLevel}.`)
   }
+
+  if (a.nearestAirportIATA) {
+    const dist = a.nearestAirportDistanceKm ? `, approximately ${a.nearestAirportDistanceKm} km from the site` : ''
+    s2.push(`The nearest major airport is ${a.nearestAirportIATA}${dist}.`)
+  }
+
   if (a.suitableFor && a.suitableFor.length > 0) {
-    pts.push(`recommended for ${a.suitableFor.slice(0, 2).join(' and ')}`)
+    s2.push(`This site is particularly well suited to ${a.suitableFor.slice(0, 3).join(', ').toLowerCase()}.`)
   }
 
-  let p2 = ''
-  if (pts.length >= 2) {
-    const [first, ...rest] = pts
-    const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
-    p2 = `${cap(first)}. ${cap(rest.join(', '))}.`
-  } else if (pts.length === 1) {
-    p2 = pts[0].charAt(0).toUpperCase() + pts[0].slice(1) + '.'
-  } else {
-    p2 = `A comprehensive travel guide to ${a.name} is being compiled by the MyAfroWaka editorial team. For current visitor information, write to info@myafrowaka.com.`
+  const p2 = s2.length > 0
+    ? s2.join(' ')
+    : `Comprehensive visitor information for ${a.name} — including transport options, booking guidance, and on-site logistics — is maintained by the MyAfroWaka editorial team. Contact info@myafrowaka.com for time-sensitive queries.`
+
+  // ── Paragraph 3: Entry fees (only rendered if data is available) ──────────
+  let p3: string | undefined
+  if (a.entryFeeDisplayText) {
+    p3 = a.entryFeeDisplayText.split('\n').slice(0, 2).join(' ')
+  } else if (a.entryFeeInternational === 0) {
+    p3 = `Entry to ${a.name} is free of charge for all visitors.`
+  } else if (a.entryFeeInternational != null) {
+    let t = `International visitor entry starts from $${a.entryFeeInternational} USD`
+    if (a.entryFeeLocal != null && a.entryFeeLocal < a.entryFeeInternational) {
+      t += `. Local and resident visitors pay a reduced rate of $${a.entryFeeLocal} USD`
+    }
+    t += '. Prices are verified at time of publication and are subject to change.'
+    p3 = t
   }
 
-  return { p1, p2 }
+  return { p1, p2, p3 }
 }
 
 // ── Fallback country attractions (used when Sanity returns empty) ─────────────
@@ -285,10 +379,10 @@ export default async function AttractionPage(
     ? a.secondaryKeywords.split('|').map(s => s.trim()).filter(Boolean)
     : []
 
-  const faqItems = secondaryKws.slice(0, 6).map(kw => ({
-    question: kw.charAt(0).toUpperCase() + kw.slice(1) + '?',
-    answer: 'A detailed answer about this topic is being prepared for publication. For urgent queries, contact us at info@myafrowaka.com.',
-  }))
+  const faqItems = secondaryKws.slice(0, 6).map(kw => {
+    const question = kw.charAt(0).toUpperCase() + kw.slice(1) + '?'
+    return { question, answer: generateFaqAnswer(question, a) }
+  })
 
   const hasContent = Array.isArray(a.articleBody) && a.articleBody.length > 0
 
@@ -475,11 +569,12 @@ export default async function AttractionPage(
                   {/* Quick Overview — always open, two-paragraph generated overview */}
                   <CollapsibleSection title="Quick Overview" defaultOpen={true}>
                     {(() => {
-                      const { p1, p2 } = generateOverview(a)
+                      const { p1, p2, p3 } = generateOverview(a)
                       return (
                         <div className="space-y-4">
                           <p className="font-sans text-[15px] text-charcoal/75 dark-flip-muted leading-[1.8]">{p1}</p>
                           <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{p2}</p>
+                          {p3 && <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{p3}</p>}
                         </div>
                       )
                     })()}
