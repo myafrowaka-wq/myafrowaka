@@ -47,9 +47,23 @@ const QUICK_LINKS = [
   { label: 'Who We Write For', href: '#audience'      },
 ]
 
+const ABOUT_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'MyAfroWaka',
+  url: 'https://myafrowaka.com',
+  logo: 'https://myafrowaka.com/icon.png',
+  foundingLocation: { '@type': 'Place', name: 'Abuja, Nigeria' },
+  description: 'Verified travel guides across Africa, written by people who live here.',
+  sameAs: ['https://twitter.com/myafrowaka_'],
+  contactPoint: { '@type': 'ContactPoint', email: 'info@myafrowaka.com', contactType: 'customer support' },
+  areaServed: { '@type': 'Place', name: 'Africa' },
+}
+
 export default function AboutPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ABOUT_JSON_LD) }} />
       {/* Hero — Ken Burns slow-zoom with vertically centred text */}
       <div className="relative overflow-hidden min-h-[520px] flex items-center">
         <Image

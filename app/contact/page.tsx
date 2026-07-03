@@ -8,6 +8,13 @@ export const metadata: Metadata = {
   title: 'Contact MyAfroWaka – Get in Touch',
   description:
     'Reach the MyAfroWaka team for attraction corrections, partnerships, press requests, or travel questions. We read every message.',
+  alternates: { canonical: 'https://myafrowaka.com/contact' },
+  openGraph: {
+    title: 'Contact MyAfroWaka – Get in Touch',
+    description: 'Reach the MyAfroWaka team for corrections, partnerships, or travel questions.',
+    type: 'website',
+    url: 'https://myafrowaka.com/contact',
+  },
 }
 
 export default function ContactPage() {

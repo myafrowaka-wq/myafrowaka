@@ -63,13 +63,16 @@ export async function generateMetadata(
   const title       = guide.metaTitle       ?? `${guide.title} – MyAfroWaka`
   const description = guide.metaDescription ?? `A curated guide to ${guide.title}. Verified travel information from MyAfroWaka.`
 
+  const canonicalUrl = `https://myafrowaka.com/guides/${slug}`
   return {
     title,
     description,
+    alternates: { canonical: canonicalUrl },
     openGraph: {
       title,
       description,
       type: 'article',
+      url: canonicalUrl,
       images: [`https://picsum.photos/seed/${slug}-guide-hero/1200/630`],
     },
     twitter: {
