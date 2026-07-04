@@ -12,6 +12,30 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
+// ── Attraction image helpers ──────────────────────────────────────────────────
+
+const ATTRACTION_IMAGES: Record<string, string> = {
+  'pyramids-of-giza':                  'rxYpXRpmpY0',
+  'serengeti-national-park':           'oymHjI4qPJI',
+  'victoria-falls':                    'nsm-gUKDMeQ',
+  'bwindi-impenetrable-national-park': 'PIU27R-xL04',
+  'djemaa-el-fna-marrakech':           'CFKksjYRSQ8',
+  'sossusvlei-namib-desert':           '2vSQw0Qxi5c',
+  'volcanoes-national-park-rwanda':    '12llx3ZOGIs',
+  'cape-point-south-africa':           'byUDvQhsh4U',
+  'lalibela-rock-hewn-churches':       'qEGQxK8NFN4',
+  'maasai-mara-national-reserve':      '7T6BXB4ahZw',
+  'stone-town-zanzibar':               'XSgMLCn3cMs',
+  'ngorongoro-conservation-area':      'ZulYpcsh2-w',
+}
+
+function attractionImageUrl(slug: string, width = 600) {
+  const id = ATTRACTION_IMAGES[slug]
+  return id
+    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
+    : `https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=${width}&q=80`
+}
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 interface SavedEntry {
@@ -309,7 +333,6 @@ export default async function UserDashboardPage() {
                 const a = entry.attraction
                 if (!a) return null
                 const typeLabel = a.type?.[0]?.replace('UNESCO World Heritage Site | ', '') ?? ''
-                const seed = a.slug.split('').reduce((n, c) => n + c.charCodeAt(0), 0)
                 return (
                   <Link
                     key={entry.attractionSlug}
@@ -320,7 +343,7 @@ export default async function UserDashboardPage() {
                     <div className="relative h-40 overflow-hidden bg-sand dark-flip-surf">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={`https://picsum.photos/seed/${seed}/600/300`}
+                        src={attractionImageUrl(a.slug, 600)}
                         alt={a.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />

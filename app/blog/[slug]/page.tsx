@@ -14,6 +14,29 @@ function urlFor(source: Parameters<typeof builder.image>[0]) {
   return builder.image(source)
 }
 
+// ── Blog image helpers ────────────────────────────────────────────────────────
+
+const BLOG_COVERS: Record<string, string> = {
+  'lagos-rush-hour-city-life':              '67ruAEYmp4c',
+  'kumasi-central-market-west-africa':      'w-jFW9XkDBg',
+  'slow-travel-rwanda':                     '1ihYfuwRZds',
+  'namib-desert-first-light':              '2vSQw0Qxi5c',
+  'west-africa-food-culture':               'lNIy1gZUWwc',
+  'zanzibar-stone-town-doors':              'XSgMLCn3cMs',
+  'marrakech-djemaa-el-fna-guide':          'CFKksjYRSQ8',
+  'victoria-falls-zimbabwe-guide':          'nsm-gUKDMeQ',
+  'maasai-mara-wildebeest-migration-kenya': '7T6BXB4ahZw',
+  'cape-town-winter-travel-guide':          'byUDvQhsh4U',
+  'addis-ababa-walking-guide':              'qEGQxK8NFN4',
+}
+
+function blogCoverUrl(slug: string, width = 1200) {
+  const id = BLOG_COVERS[slug]
+  return id
+    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
+    : `https://images.unsplash.com/photo-1ihYfuwRZds?auto=format&fit=crop&w=${width}&q=80`
+}
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 interface Post {
@@ -66,13 +89,13 @@ export async function generateMetadata(
       type: 'article',
       url: canonicalUrl,
       publishedTime: post.publishedAt,
-      images: [`https://picsum.photos/seed/${slug}-cover/1200/630`],
+      images: [blogCoverUrl(slug, 1200)],
     },
     twitter: {
       card:        'summary_large_image',
       title,
       description,
-      images:      [`https://picsum.photos/seed/${slug}-cover/1200/630`],
+      images:      [blogCoverUrl(slug, 1200)],
     },
   }
 }
@@ -143,7 +166,7 @@ const ptComponents = {
     image: ({ value }: { value: { asset?: object; alt?: string; caption?: string } }) => {
       const src = value.asset
         ? urlFor(value).width(1200).height(675).fit('crop').auto('format').url()
-        : `https://picsum.photos/seed/${value.alt?.replace(/\s+/g, '-') ?? 'blog-img'}/800/450`
+        : `https://images.unsplash.com/photo-7T6BXB4ahZw?auto=format&fit=crop&w=800&q=80`
       return (
         <figure className="my-8">
           <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
@@ -167,29 +190,29 @@ const ptComponents = {
 
 // ── Author profiles ───────────────────────────────────────────────────────────
 
-const AUTHOR_PROFILES: Record<string, { bio: string; avatarSeed: string }> = {
+const AUTHOR_PROFILES: Record<string, { bio: string; avatarId: string }> = {
   'Amara Osei': {
-    avatarSeed: 'amara-osei-portrait',
+    avatarId: 'J3mFMkED-vU',
     bio: 'Amara writes about West African culture, coastal destinations, and the stories that make travel worth the journey.',
   },
   'Chioma Adeyemi': {
-    avatarSeed: 'chioma-adeyemi-portrait',
+    avatarId: 'HC_yNe8VtYg',
     bio: 'Chioma covers East African wildlife and conservation, and has reported from parks across Kenya, Tanzania, and Uganda.',
   },
   'Kwame Boateng': {
-    avatarSeed: 'kwame-boateng-portrait',
+    avatarId: 'M7ZepOvUcjU',
     bio: 'Kwame specialises in adventure travel and trekking routes across the continent.',
   },
   'Fatou Diallo': {
-    avatarSeed: 'fatou-diallo-portrait',
+    avatarId: '1OR7uXqJHpQ',
     bio: 'Fatou explores the intersections of food, tradition, and place across Francophone Africa.',
   },
   'Nadia Mensah': {
-    avatarSeed: 'nadia-mensah-portrait',
+    avatarId: 'HC_yNe8VtYg',
     bio: 'Nadia focuses on independent travel in North Africa and has visited every country on the continent.',
   },
   'MyAfroWaka Editorial Team': {
-    avatarSeed: 'myafrowaka-editorial-portrait',
+    avatarId: 'M7ZepOvUcjU',
     bio: 'The MyAfroWaka editorial team researches, fact-checks, and publishes guides to the most remarkable places across Africa.',
   },
 }
@@ -259,7 +282,7 @@ export default async function BlogPostPage(
     dateModified: post._updatedAt ?? post.publishedAt,
     url: `https://myafrowaka.com/blog/${slug}`,
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://myafrowaka.com/blog/${slug}` },
-    image: { '@type': 'ImageObject', url: `https://picsum.photos/seed/${slug}-cover/1200/630`, width: 1200, height: 630 },
+    image: { '@type': 'ImageObject', url: blogCoverUrl(slug, 1200), width: 1200, height: 630 },
     ...(post.author ? {
       author: {
         '@type': 'Person',
@@ -287,7 +310,7 @@ export default async function BlogPostPage(
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[420px] flex items-end">
         <Image
-          src={`https://picsum.photos/seed/${slug}-cover/1920/720`}
+          src={blogCoverUrl(slug, 1920)}
           alt={post.title}
           fill priority
           className="object-cover object-center"
@@ -389,7 +412,7 @@ export default async function BlogPostPage(
                         className="group block bg-sand dark-flip-surf border border-line dark-flip-border hover:border-gold-300 rounded-xl overflow-hidden hover:shadow-[var(--shadow-soft)] transition-all">
                         <div className="relative aspect-[16/9] overflow-hidden">
                           <Image
-                            src={`https://picsum.photos/seed/${r.slug}-cover/400/225`}
+                            src={blogCoverUrl(r.slug, 400)}
                             alt={r.title}
                             fill
                             className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
@@ -421,7 +444,7 @@ export default async function BlogPostPage(
                     <div className="flex items-center gap-3 mb-3">
                       <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-gold-300/40">
                         <Image
-                          src={`https://picsum.photos/seed/${profile?.avatarSeed ?? post.author.name.toLowerCase().replace(/\s+/g, '-')}-avatar/88/88`}
+                          src={`https://images.unsplash.com/photo-${profile?.avatarId ?? 'M7ZepOvUcjU'}?auto=format&fit=crop&w=88&q=80&crop=faces`}
                           alt={post.author.name}
                           fill
                           className="object-cover"
@@ -492,7 +515,7 @@ export default async function BlogPostPage(
                   className="group block bg-white dark-flip-card rounded-2xl overflow-hidden border border-line dark-flip-border hover:border-gold-300 hover:shadow-[var(--shadow-soft)] transition-all">
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <Image
-                      src={`https://picsum.photos/seed/${r.slug}-cover/400/225`}
+                      src={blogCoverUrl(r.slug, 400)}
                       alt={r.title} fill
                       className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
                     />

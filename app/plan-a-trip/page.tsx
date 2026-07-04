@@ -46,7 +46,7 @@ export default function PlanATripPage() {
       {/* Hero */}
       <div className="relative overflow-hidden min-h-[380px] flex items-end">
         <Image
-          src="https://picsum.photos/seed/plan-a-trip-hero/1920/720"
+          src="https://images.unsplash.com/photo-2mz1kYGlBZc?auto=format&fit=crop&w=1920&q=85"
           alt="Plan your Africa trip"
           fill priority
           className="object-cover object-center"

@@ -105,6 +105,30 @@ function groupByH2(blocks: unknown[]): { title: string; content: unknown[]; defa
   return groups
 }
 
+// ── Attraction image helpers ──────────────────────────────────────────────────
+
+const ATTRACTION_IMAGES: Record<string, string> = {
+  'pyramids-of-giza':                  'rxYpXRpmpY0',
+  'serengeti-national-park':           'oymHjI4qPJI',
+  'victoria-falls':                    'nsm-gUKDMeQ',
+  'bwindi-impenetrable-national-park': 'PIU27R-xL04',
+  'djemaa-el-fna-marrakech':           'CFKksjYRSQ8',
+  'sossusvlei-namib-desert':           '2vSQw0Qxi5c',
+  'volcanoes-national-park-rwanda':    '12llx3ZOGIs',
+  'cape-point-south-africa':           'byUDvQhsh4U',
+  'lalibela-rock-hewn-churches':       'qEGQxK8NFN4',
+  'maasai-mara-national-reserve':      '7T6BXB4ahZw',
+  'stone-town-zanzibar':               'XSgMLCn3cMs',
+  'ngorongoro-conservation-area':      'ZulYpcsh2-w',
+}
+
+function attractionImageUrl(slug: string, width = 1920) {
+  const id = ATTRACTION_IMAGES[slug]
+  return id
+    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
+    : `https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=${width}&q=80`
+}
+
 // ── Static params ─────────────────────────────────────────────────────────────
 
 export async function generateStaticParams() {
@@ -132,13 +156,13 @@ export async function generateMetadata(
       description,
       type: 'article',
       url: canonicalUrl,
-      images: [`https://picsum.photos/seed/${slug}-hero-v1/1200/630`],
+      images: [attractionImageUrl(slug, 1200)],
     },
     twitter: {
       card: 'summary_large_image',
       title: a.metaTitle || `${a.name} – ${a.country?.name ?? 'Africa'} Travel Guide`,
       description,
-      images: [`https://picsum.photos/seed/${slug}-hero-v1/1200/630`],
+      images: [attractionImageUrl(slug, 1200)],
     },
   }
 }
@@ -407,7 +431,7 @@ export default async function AttractionPage(
       <div className="relative overflow-hidden min-h-[480px] flex items-end">
         <ParallaxHero>
         <Image
-          src={`https://picsum.photos/seed/${slug}-hero-v1/1920/800`}
+          src={attractionImageUrl(slug, 1920)}
           alt={a.name}
           fill priority
           className="object-cover object-center scale-110"
@@ -934,14 +958,13 @@ export default async function AttractionPage(
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {displayRelated.map(rel => {
-                const seed      = rel.slug.split('').reduce((n: number, c: string) => n + c.charCodeAt(0), 0)
                 const typeLabel = (rel.type?.[0] ?? '').replace('UNESCO World Heritage Site | ', '')
                 return (
                   <Link key={rel.slug} href={`/attractions/${rel.slug}`}
                     className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
                     <div className="relative h-40 overflow-hidden bg-sand">
                       <Image
-                        src={`https://picsum.photos/seed/${seed}/800/500`}
+                        src={attractionImageUrl(rel.slug, 800)}
                         alt={rel.name} fill
                         sizes="(max-width:640px)100vw,(max-width:1024px)50vw,25vw"
                         className="object-cover img-editorial img-inner"

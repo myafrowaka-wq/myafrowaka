@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: 'Africa Travel Guides – MyAfroWaka',
     description: 'Verified travel guides to extraordinary destinations across Africa.',
     url: 'https://myafrowaka.com/attractions',
-    images: ['https://picsum.photos/seed/attractions-hero/1200/630'],
+    images: ['https://images.unsplash.com/photo-sbSjIOUm5gw?auto=format&fit=crop&w=1200&q=80'],
   },
 }
 
@@ -28,6 +28,28 @@ interface AttractionSummary {
   editorialSummary?: string
   country?: { name: string; slug: string; flagEmoji?: string }
   city?: { name: string }
+}
+
+const ATTRACTION_IMAGES: Record<string, string> = {
+  'pyramids-of-giza':                  'rxYpXRpmpY0',
+  'serengeti-national-park':           'oymHjI4qPJI',
+  'victoria-falls':                    'nsm-gUKDMeQ',
+  'bwindi-impenetrable-national-park': 'PIU27R-xL04',
+  'djemaa-el-fna-marrakech':           'CFKksjYRSQ8',
+  'sossusvlei-namib-desert':           '2vSQw0Qxi5c',
+  'volcanoes-national-park-rwanda':    '12llx3ZOGIs',
+  'cape-point-south-africa':           'byUDvQhsh4U',
+  'lalibela-rock-hewn-churches':       'qEGQxK8NFN4',
+  'maasai-mara-national-reserve':      '7T6BXB4ahZw',
+  'stone-town-zanzibar':               'XSgMLCn3cMs',
+  'ngorongoro-conservation-area':      'ZulYpcsh2-w',
+}
+
+function attractionImageUrl(slug: string, width = 800) {
+  const id = ATTRACTION_IMAGES[slug]
+  return id
+    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
+    : `https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=${width}&q=80`
 }
 
 const FALLBACK_ATTRACTIONS: AttractionSummary[] = [
@@ -96,7 +118,7 @@ export default async function AttractionsPage({
       {/* Hero */}
       <div className="relative overflow-hidden min-h-[520px] flex items-center">
         <Image
-          src="https://picsum.photos/seed/attractions-landing-hero/1920/900"
+          src="https://images.unsplash.com/photo-sbSjIOUm5gw?auto=format&fit=crop&w=1920&q=85"
           alt="Explore Africa" fill priority
           className="object-cover object-center"
         />
@@ -166,14 +188,13 @@ export default async function AttractionsPage({
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5">
               {pageItems.map(a => {
-                const seed      = a.slug.split('').reduce((n: number, c: string) => n + c.charCodeAt(0), 0)
                 const typeLabel = (a.type?.[0] ?? '').replace('UNESCO World Heritage Site | ', '')
                 return (
                   <Link key={a.slug} href={`/attractions/${a.slug}`}
                     className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
                     <div className="relative h-48 overflow-hidden bg-sand">
                       <Image
-                        src={`https://picsum.photos/seed/${seed}/800/500`}
+                        src={attractionImageUrl(a.slug, 800)}
                         alt={a.name} fill
                         sizes="(max-width:640px)100vw,(max-width:1024px)50vw,(max-width:1280px)33vw,25vw"
                         className="object-cover img-editorial img-inner"

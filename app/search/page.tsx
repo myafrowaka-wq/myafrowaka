@@ -14,6 +14,28 @@ const client = createClient({
   useCdn: true,
 })
 
+const ATTRACTION_IMAGES: Record<string, string> = {
+  'pyramids-of-giza':                  'rxYpXRpmpY0',
+  'serengeti-national-park':           'oymHjI4qPJI',
+  'victoria-falls':                    'nsm-gUKDMeQ',
+  'bwindi-impenetrable-national-park': 'PIU27R-xL04',
+  'djemaa-el-fna-marrakech':           'CFKksjYRSQ8',
+  'sossusvlei-namib-desert':           '2vSQw0Qxi5c',
+  'volcanoes-national-park-rwanda':    '12llx3ZOGIs',
+  'cape-point-south-africa':           'byUDvQhsh4U',
+  'lalibela-rock-hewn-churches':       'qEGQxK8NFN4',
+  'maasai-mara-national-reserve':      '7T6BXB4ahZw',
+  'stone-town-zanzibar':               'XSgMLCn3cMs',
+  'ngorongoro-conservation-area':      'ZulYpcsh2-w',
+}
+
+function attractionImageUrl(slug: string, width = 600) {
+  const id = ATTRACTION_IMAGES[slug]
+  return id
+    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
+    : `https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=${width}&q=80`
+}
+
 interface Attraction {
   name: string
   slug: string
@@ -284,7 +306,7 @@ function SearchInner() {
                       className="group block bg-white dark-flip-card border border-line dark-flip-border hover:border-gold-300 rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-[var(--shadow-soft)] hover:-translate-y-0.5">
                       <div className="relative h-44 overflow-hidden bg-sand">
                         <Image
-                          src={`https://picsum.photos/seed/${a.slug.split('').reduce((n: number, c: string) => n + c.charCodeAt(0), 0)}/600/400`}
+                          src={attractionImageUrl(a.slug, 600)}
                           alt={a.name}
                           fill
                           sizes="(max-width:640px) 100vw, (max-width:1280px) 50vw, 33vw"

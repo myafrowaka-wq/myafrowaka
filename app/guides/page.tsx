@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     description: 'Curated best-of guides to attractions across Africa.',
     type: 'website',
     url: 'https://myafrowaka.com/guides',
-    images: ['https://picsum.photos/seed/myafrowaka-guides-og/1200/630'],
+    images: ['https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=1200&q=80'],
   },
 }
 

@@ -21,6 +21,58 @@ interface Destination {
   relatedCountries?: { name: string; slug: string; flagEmoji?: string }[]
 }
 
+const COUNTRY_IMAGES: Record<string, string> = {
+  'egypt':         'lWH4VkvUcss',
+  'kenya':         'sbSjIOUm5gw',
+  'south-africa':  'tRPvXfu5Xf0',
+  'tanzania':      'ZulYpcsh2-w',
+  'morocco':       '0ZL_juKJzyQ',
+  'ghana':         'FgtREiQ2rws',
+  'nigeria':       'eS-5YV1r-Pc',
+  'rwanda':        '12llx3ZOGIs',
+  'ethiopia':      'qEGQxK8NFN4',
+  'uganda':        'sMjVNtvYkD0',
+  'senegal':       'zLXKV5UV8F4',
+  'zimbabwe':      'QHH3WH1ZBsk',
+  'namibia':       'pWshkmAH4qA',
+  'botswana':      'IyeStQnPq4I',
+  'madagascar':    'yPSbirjJWzs',
+  'tunisia':       'sOYnDSB7clQ',
+  'ivory-coast':   'pBYfTtWVzuk',
+  'mozambique':    'aexdWGJu7Gs',
+  'zambia':        'afGA-TbGNbA',
+  'mauritius':     'hMXZwS4_LcY',
+}
+
+const ATTRACTION_IMAGES: Record<string, string> = {
+  'pyramids-of-giza':                  'rxYpXRpmpY0',
+  'serengeti-national-park':           'oymHjI4qPJI',
+  'victoria-falls':                    'nsm-gUKDMeQ',
+  'bwindi-impenetrable-national-park': 'PIU27R-xL04',
+  'djemaa-el-fna-marrakech':           'CFKksjYRSQ8',
+  'sossusvlei-namib-desert':           '2vSQw0Qxi5c',
+  'volcanoes-national-park-rwanda':    '12llx3ZOGIs',
+  'cape-point-south-africa':           'byUDvQhsh4U',
+  'lalibela-rock-hewn-churches':       'qEGQxK8NFN4',
+  'maasai-mara-national-reserve':      '7T6BXB4ahZw',
+  'stone-town-zanzibar':               'XSgMLCn3cMs',
+  'ngorongoro-conservation-area':      'ZulYpcsh2-w',
+}
+
+function countryImageUrl(slug: string, width = 1920) {
+  const id = COUNTRY_IMAGES[slug]
+  return id
+    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=85`
+    : `https://images.unsplash.com/photo-sbSjIOUm5gw?auto=format&fit=crop&w=${width}&q=85`
+}
+
+function attractionImageUrl(slug: string, width = 800) {
+  const id = ATTRACTION_IMAGES[slug]
+  return id
+    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
+    : `https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=${width}&q=80`
+}
+
 const REGION_COLOR: Record<string, string> = {
   'East Africa':          '#3F6A3D',
   'West Africa':          '#B55D39',
@@ -52,7 +104,7 @@ export async function generateMetadata(
     openGraph: {
       title, description, type: 'website',
       url: canonicalUrl,
-      images: [`https://picsum.photos/seed/${slug}-country-hero/1200/630`],
+      images: [countryImageUrl(slug, 1200)],
     },
   }
 }
@@ -112,7 +164,7 @@ export default async function DestinationPage({
       <div className="relative min-h-[94vh] flex items-center overflow-hidden">
         <ParallaxHero>
         <Image
-          src={`https://picsum.photos/seed/${slug}-country-hero/1920/1080`}
+          src={countryImageUrl(slug, 1920)}
           alt={dest.name} fill priority
           className="object-cover object-center scale-110"
         />
@@ -205,14 +257,13 @@ export default async function DestinationPage({
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5">
               {pageItems.map(a => {
-                const seed      = a.slug.split('').reduce((n: number, c: string) => n + c.charCodeAt(0), 0)
                 const typeLabel = (a.type?.[0] ?? '').replace('UNESCO World Heritage Site | ', '')
                 return (
                   <Link key={a.slug} href={`/attractions/${a.slug}`}
                     className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
                     <div className="relative h-48 overflow-hidden bg-sand">
                       <Image
-                        src={`https://picsum.photos/seed/${seed}/800/500`}
+                        src={attractionImageUrl(a.slug, 800)}
                         alt={a.name} fill
                         sizes="(max-width:640px)100vw,(max-width:1024px)50vw,(max-width:1280px)33vw,25vw"
                         className="object-cover img-editorial img-inner"

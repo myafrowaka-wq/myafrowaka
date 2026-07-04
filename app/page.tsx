@@ -102,6 +102,28 @@ const FALLBACK_GUIDES: GuideItem[] = [
 
 const GALLERY_IDS = ['sbSjIOUm5gw', '0ZL_juKJzyQ', 'aexdWGJu7Gs', 'ZulYpcsh2-w', 'FgtREiQ2rws', 'yPSbirjJWzs']
 
+const ATTRACTION_IMAGES: Record<string, string> = {
+  'pyramids-of-giza':                  'rxYpXRpmpY0',
+  'serengeti-national-park':           'oymHjI4qPJI',
+  'victoria-falls':                    'nsm-gUKDMeQ',
+  'bwindi-impenetrable-national-park': 'PIU27R-xL04',
+  'djemaa-el-fna-marrakech':           'CFKksjYRSQ8',
+  'sossusvlei-namib-desert':           '2vSQw0Qxi5c',
+  'volcanoes-national-park-rwanda':    '12llx3ZOGIs',
+  'cape-point-south-africa':           'byUDvQhsh4U',
+  'lalibela-rock-hewn-churches':       'qEGQxK8NFN4',
+  'maasai-mara-national-reserve':      '7T6BXB4ahZw',
+  'stone-town-zanzibar':               'XSgMLCn3cMs',
+  'ngorongoro-conservation-area':      'ZulYpcsh2-w',
+}
+
+function attractionImageUrl(slug: string, width = 800) {
+  const id = ATTRACTION_IMAGES[slug]
+  return id
+    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
+    : `https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=${width}&q=80`
+}
+
 const BLOG_COVERS: Record<string, string> = {
   'lagos-rush-hour-city-life':              '67ruAEYmp4c',
   'kumasi-central-market-west-africa':      'w-jFW9XkDBg',
@@ -394,7 +416,7 @@ export default async function HomePage() {
                 <Link key={a.slug} href={`/attractions/${a.slug}`}
                   className="card-zoom group relative rounded-2xl overflow-hidden aspect-[4/5] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500">
                   <Image
-                    src={`https://picsum.photos/seed/${a.slug}/700/900`}
+                    src={attractionImageUrl(a.slug, 700)}
                     alt={a.name} fill
                     sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,25vw"
                     className="object-cover img-editorial img-inner"

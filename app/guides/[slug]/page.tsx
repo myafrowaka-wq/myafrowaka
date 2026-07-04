@@ -73,13 +73,13 @@ export async function generateMetadata(
       description,
       type: 'article',
       url: canonicalUrl,
-      images: [`https://picsum.photos/seed/${slug}-guide-hero/1200/630`],
+      images: [`https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=1200&q=80`],
     },
     twitter: {
       card:   'summary_large_image',
       title,
       description,
-      images: [`https://picsum.photos/seed/${slug}-guide-hero/1200/630`],
+      images: [`https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=1200&q=80`],
     },
   }
 }
@@ -130,7 +130,7 @@ export default async function GuidePage(
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[380px] flex items-end">
         <Image
-          src={`https://picsum.photos/seed/${slug}-guide-hero/1920/720`}
+          src="https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=1920&q=85"
           alt={guide.title}
           fill priority
           className="object-cover object-center"
