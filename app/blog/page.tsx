@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     description: 'Stories and perspectives from across the African continent.',
     type: 'website',
     url: 'https://myafrowaka.com/blog',
-    images: ['https://picsum.photos/seed/myafrowaka-blog-og/1200/630'],
+    images: ['https://images.unsplash.com/photo-7T6BXB4ahZw?auto=format&fit=crop&w=1200&q=80'],
   },
 }
 
@@ -55,7 +55,7 @@ export default async function BlogPage(
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[420px] md:min-h-[500px] flex items-end">
         <Image
-          src="https://picsum.photos/seed/blog-hero-africa-stories-v2/1920/800"
+          src="https://images.unsplash.com/photo-7T6BXB4ahZw?auto=format&fit=crop&w=1920&q=85"
           alt="The MyAfroWaka Journal"
           fill priority
           className="object-cover object-center"

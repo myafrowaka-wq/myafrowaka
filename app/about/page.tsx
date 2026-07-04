@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     description: 'A travel and destination discovery platform built from Abuja, Nigeria. Verified guides written by people who live here.',
     type: 'website',
     url: 'https://myafrowaka.com/about',
-    images: ['https://picsum.photos/seed/myafrowaka-about-og/1200/630'],
+    images: ['https://images.unsplash.com/photo-PgGEwoWcFAM?auto=format&fit=crop&w=1200&q=80'],
   },
 }
 
@@ -67,7 +67,7 @@ export default function AboutPage() {
       {/* Hero — Ken Burns slow-zoom with vertically centred text */}
       <div className="relative overflow-hidden min-h-[520px] flex items-center">
         <Image
-          src="https://picsum.photos/seed/africa-heritage-landscape-v2/1920/900"
+          src="https://images.unsplash.com/photo-PgGEwoWcFAM?auto=format&fit=crop&w=1920&q=85"
           alt="African landscape"
           fill
           priority

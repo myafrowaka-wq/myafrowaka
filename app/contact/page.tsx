@@ -23,7 +23,7 @@ export default function ContactPage() {
       {/* ── Hero ────────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[420px] flex items-center">
         <Image
-          src="https://picsum.photos/seed/contact-africa-village-hero/1920/700"
+          src="https://images.unsplash.com/photo-15SgFVgU8sI?auto=format&fit=crop&w=1920&q=85"
           alt="African cultural destination"
           fill priority
           className="object-cover object-center"

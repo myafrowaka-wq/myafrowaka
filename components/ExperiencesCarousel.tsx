@@ -4,12 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const EXPERIENCES = [
-  { label: 'Safari',  slug: 'safari',  desc: 'The Big Five and beyond',               image: 'https://picsum.photos/seed/exp-safari-rnd/600/800'   },
-  { label: 'Culture', slug: 'culture', desc: 'Living traditions across the continent', image: 'https://picsum.photos/seed/exp-culture-rnd/600/800'  },
-  { label: 'Beach',   slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',       image: 'https://picsum.photos/seed/exp-beach-rnd/600/800'    },
-  { label: 'History', slug: 'history', desc: 'Ancient kingdoms and World Heritage',    image: 'https://picsum.photos/seed/exp-history-rnd/600/800'  },
-  { label: 'Hiking',  slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',   image: 'https://picsum.photos/seed/exp-hiking-rnd/600/800'   },
-  { label: 'Food',    slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: 'https://picsum.photos/seed/exp-food-rnd/600/800'     },
+  { label: 'Safari',  slug: 'safari',  desc: 'The Big Five and beyond',               image: 'https://images.unsplash.com/photo-hcBVdd2leJs?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Culture', slug: 'culture', desc: 'Living traditions across the continent', image: 'https://images.unsplash.com/photo-4KdywRnTbzE?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Beach',   slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',       image: 'https://images.unsplash.com/photo-2mz1kYGlBZc?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'History', slug: 'history', desc: 'Ancient kingdoms and World Heritage',    image: 'https://images.unsplash.com/photo-00hJ4dTXkw0?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Hiking',  slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',   image: 'https://images.unsplash.com/photo-Uq388U5PdeI?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Food',    slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: 'https://images.unsplash.com/photo-woC24wGXsQ8?auto=format&fit=crop&w=600&q=80'  },
 ]
 
 export function ExperiencesCarousel() {

@@ -79,11 +79,14 @@ export function PlanTripCard() {
         {/* Traveller social proof — larger avatars, bolder count */}
         <div className="mt-5 pt-4 border-t border-line flex items-center gap-3">
           <div className="flex -space-x-2.5">
-            {[1, 2, 3, 4].map(n => (
-              <div key={n} className="w-9 h-9 rounded-full border-2 border-white overflow-hidden bg-sand shadow-sm">
-                <Image
-                  src={`https://picsum.photos/seed/traveller-avatar-${n}/72/72`}
-                  alt="" width={36} height={36} className="object-cover"/>
+            {[
+              'https://images.unsplash.com/photo-M7ZepOvUcjU?auto=format&fit=crop&w=72&q=80&crop=faces',
+              'https://images.unsplash.com/photo-J3mFMkED-vU?auto=format&fit=crop&w=72&q=80&crop=faces',
+              'https://images.unsplash.com/photo-1OR7uXqJHpQ?auto=format&fit=crop&w=72&q=80&crop=faces',
+              'https://images.unsplash.com/photo-HC_yNe8VtYg?auto=format&fit=crop&w=72&q=80&crop=faces',
+            ].map((src, i) => (
+              <div key={i} className="w-9 h-9 rounded-full border-2 border-white overflow-hidden bg-sand shadow-sm">
+                <Image src={src} alt="" width={36} height={36} className="object-cover"/>
               </div>
             ))}
           </div>

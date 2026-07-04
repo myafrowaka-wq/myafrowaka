@@ -65,12 +65,12 @@ type GuideItem = {
 type AttrItem = { slug: string; name: string; editorialSummary?: string; continentRegion?: string; country?: { name: string } }
 
 const EXPERIENCES = [
-  { label: 'Safari',    slug: 'safari',  desc: 'The Big Five and beyond',               image: 'https://picsum.photos/seed/exp-safari-rnd/600/800'    },
-  { label: 'Culture',   slug: 'culture', desc: 'Living traditions across the continent', image: 'https://picsum.photos/seed/exp-culture-rnd/600/800'   },
-  { label: 'Beach',     slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',       image: 'https://picsum.photos/seed/exp-beach-rnd/600/800'     },
-  { label: 'History',   slug: 'history', desc: 'Ancient kingdoms and World Heritage',    image: 'https://picsum.photos/seed/exp-history-rnd/600/800'   },
-  { label: 'Hiking',    slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',   image: 'https://picsum.photos/seed/exp-hiking-rnd/600/800'    },
-  { label: 'Food',      slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: 'https://picsum.photos/seed/exp-food-rnd/600/800'      },
+  { label: 'Safari',    slug: 'safari',  desc: 'The Big Five and beyond',               image: 'https://images.unsplash.com/photo-hcBVdd2leJs?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Culture',   slug: 'culture', desc: 'Living traditions across the continent', image: 'https://images.unsplash.com/photo-4KdywRnTbzE?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Beach',     slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',       image: 'https://images.unsplash.com/photo-2mz1kYGlBZc?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'History',   slug: 'history', desc: 'Ancient kingdoms and World Heritage',    image: 'https://images.unsplash.com/photo-00hJ4dTXkw0?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Hiking',    slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',   image: 'https://images.unsplash.com/photo-Uq388U5PdeI?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Food',      slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: 'https://images.unsplash.com/photo-woC24wGXsQ8?auto=format&fit=crop&w=600&q=80'  },
 ]
 
 const FALLBACK_GUIDES: GuideItem[] = [
@@ -78,29 +78,43 @@ const FALLBACK_GUIDES: GuideItem[] = [
     name: 'Pyramids of Giza: The Complete Travel Guide',
     slug: 'pyramids-of-giza', continentRegion: 'North Africa', country: 'Egypt',
     editorialSummary: 'The last surviving Wonder of the Ancient World, standing on the Giza Plateau outside Cairo. Everything you need to know before you visit.',
-    image: 'https://picsum.photos/seed/giza-guide-v2/900/1100',
+    image: 'https://images.unsplash.com/photo-rxYpXRpmpY0?auto=format&fit=crop&w=900&q=80',
   },
   {
     name: 'Bwindi Impenetrable Forest: Mountain Gorilla Encounter',
     slug: 'bwindi-impenetrable-national-park', continentRegion: 'East Africa', country: 'Uganda',
     editorialSummary: 'Home to half the world mountain gorilla population, Bwindi covers 321 square kilometres of southwestern Uganda.',
-    image: 'https://picsum.photos/seed/bwindi-guide-v2/900/1100',
+    image: 'https://images.unsplash.com/photo-PIU27R-xL04?auto=format&fit=crop&w=900&q=80',
   },
   {
     name: 'Table Mountain: Everything You Need to Know',
     slug: 'table-mountain', continentRegion: 'Southern Africa', country: 'South Africa',
     editorialSummary: 'Cape Town iconic flat-topped summit rises 1,085 metres above sea level and harbours more plant species than the entire United Kingdom.',
-    image: 'https://picsum.photos/seed/table-mtn-v2/900/1100',
+    image: 'https://images.unsplash.com/photo-6gn7jdejEoQ?auto=format&fit=crop&w=900&q=80',
   },
   {
     name: 'Serengeti National Park: The Migration Guide',
     slug: 'serengeti-national-park', continentRegion: 'East Africa', country: 'Tanzania',
     editorialSummary: 'The Great Migration moves 1.5 million wildebeest and 250,000 zebras in a continuous annual circuit across Tanzania and Kenya.',
-    image: 'https://picsum.photos/seed/serengeti-v2/900/1100',
+    image: 'https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=900&q=80',
   },
 ]
 
-const GALLERY_SEEDS = ['gallery-af-1', 'gallery-af-2', 'gallery-af-3', 'gallery-af-4', 'gallery-af-5', 'gallery-af-6']
+const GALLERY_IDS = ['sbSjIOUm5gw', '0ZL_juKJzyQ', 'aexdWGJu7Gs', 'ZulYpcsh2-w', 'FgtREiQ2rws', 'yPSbirjJWzs']
+
+const BLOG_COVERS: Record<string, string> = {
+  'lagos-rush-hour-city-life':              '67ruAEYmp4c',
+  'kumasi-central-market-west-africa':      'w-jFW9XkDBg',
+  'slow-travel-rwanda':                     '1ihYfuwRZds',
+  'namib-desert-first-light':               '2vSQw0Qxi5c',
+  'west-africa-food-culture':               'lNIy1gZUWwc',
+  'zanzibar-stone-town-doors':              'XSgMLCn3cMs',
+  'marrakech-djemaa-el-fna-guide':          'CFKksjYRSQ8',
+  'victoria-falls-zimbabwe-guide':          'nsm-gUKDMeQ',
+  'maasai-mara-wildebeest-migration-kenya': '7T6BXB4ahZw',
+  'cape-town-winter-travel-guide':          'byUDvQhsh4U',
+  'addis-ababa-walking-guide':              'qEGQxK8NFN4',
+}
 
 export default async function HomePage() {
   const [t, tc, [featured, guides, popularRaw]] = await Promise.all([
@@ -132,7 +146,7 @@ export default async function HomePage() {
 
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
       <section className="relative min-h-[94vh] flex items-center overflow-hidden">
-        <HeroBackground src="https://picsum.photos/seed/africa-historical-landmark-hero/1920/1080" alt="African landmark at golden hour"/>
+        <HeroBackground src="https://images.unsplash.com/photo-1qrriRTdoqg?auto=format&fit=crop&w=1920&q=85" alt="Pyramids of Giza at golden hour"/>
         <div className="absolute inset-0 bg-gradient-to-r from-[#070F09]/96 via-[#0A1A0C]/88 to-[#0E2010]/55"/>
         <div className="absolute inset-0 bg-gradient-to-t from-[#070F09]/60 via-transparent to-[#070F09]/15"/>
 
@@ -444,13 +458,15 @@ export default async function HomePage() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
             {FALLBACK_POSTS.slice(0, 3).map(post => {
-              const seed = post.slug.split('').reduce((n: number, c: string) => n + c.charCodeAt(0), 0)
+              const coverSrc = BLOG_COVERS[post.slug]
+                ? `https://images.unsplash.com/photo-${BLOG_COVERS[post.slug]}?auto=format&fit=crop&w=800&q=80`
+                : 'https://images.unsplash.com/photo-1ihYfuwRZds?auto=format&fit=crop&w=800&q=80'
               return (
                 <Link key={post.slug} href={`/blog/${post.slug}`}
                   className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
                   <div className="relative h-52 overflow-hidden bg-sand">
                     <Image
-                      src={`https://picsum.photos/seed/${seed}/800/500`}
+                      src={coverSrc}
                       alt={post.title} fill
                       sizes="(max-width:640px)100vw,(max-width:1024px)50vw,33vw"
                       className="object-cover img-editorial img-inner"
@@ -515,10 +531,10 @@ export default async function HomePage() {
             </a>
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-            {GALLERY_SEEDS.map(seed => (
-              <a key={seed} href="https://instagram.com/myafrowaka_" target="_blank" rel="noopener noreferrer"
+            {GALLERY_IDS.map(id => (
+              <a key={id} href="https://instagram.com/myafrowaka_" target="_blank" rel="noopener noreferrer"
                 className="card-zoom group relative aspect-square rounded-xl overflow-hidden bg-sand dark-flip-surf">
-                <Image src={`https://picsum.photos/seed/${seed}/600/600`} alt="MyAfroWaka on Instagram" fill sizes="(max-width:640px) 33vw,17vw"
+                <Image src={`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=600&q=80`} alt="MyAfroWaka on Instagram" fill sizes="(max-width:640px) 33vw,17vw"
                   className="object-cover img-editorial img-inner"/>
                 <div className="absolute inset-0 bg-ink/0 group-hover:bg-ink/30 transition-colors duration-300 flex items-center justify-center">
                   <svg className="w-5 h-5 text-cream opacity-0 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24">
@@ -533,7 +549,7 @@ export default async function HomePage() {
 
       {/* ══ CTA BANNER ═════════════════════════════════════════════════════════ */}
       <section className="relative py-28 lg:py-36 overflow-hidden" data-reveal>
-        <Image src="https://picsum.photos/seed/cta-v2/1920/700" alt="" fill className="object-cover img-editorial"/>
+        <Image src="https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=1920&q=85" alt="" fill className="object-cover img-editorial"/>
         <div className="absolute inset-0 bg-ink/88"/>
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="font-display font-extrabold text-cream mb-6 tracking-hero"

@@ -40,7 +40,7 @@ export default async function LoginPage({
       {/* ── Left panel (desktop only) ─────────────────────────────────── */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden flex-col">
         <Image
-          src="https://picsum.photos/seed/login-african-cultural-site-v2/900/1200"
+          src="https://images.unsplash.com/photo-dLnErzTXNAY?auto=format&fit=crop&w=900&q=85"
           alt="African cultural landmark"
           fill priority
           className="object-cover object-center"

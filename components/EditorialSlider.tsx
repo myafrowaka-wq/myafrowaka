@@ -11,7 +11,7 @@ const SLIDES = [
     headline: 'What Lagos Rush Hour Teaches You About African City Life.',
     body:     'Five million journeys a day. The danfo, the okada, the man selling credit through your car window. Lagos traffic is not dysfunction. It is an improvised system that works.',
     slug:     'lagos-rush-hour-city-life',
-    img:      'https://picsum.photos/seed/lagos-editorial-spotlight/1200/900',
+    img:      'https://images.unsplash.com/photo-67ruAEYmp4c?auto=format&fit=crop&w=1200&q=80',
   },
   {
     tag:      'Ghana',
@@ -19,7 +19,7 @@ const SLIDES = [
     headline: 'Kumasi Central Market: The Heartbeat of West African Trade.',
     body:     'Kejetia market in Kumasi is one of the largest open-air markets in West Africa. Kente cloth, spices, secondhand goods, live poultry. Every aisle tells a different story.',
     slug:     'kumasi-central-market-west-africa',
-    img:      'https://picsum.photos/seed/kumasi-editorial-spotlight/1200/900',
+    img:      'https://images.unsplash.com/photo-w-jFW9XkDBg?auto=format&fit=crop&w=1200&q=80',
   },
   {
     tag:      'Rwanda',
@@ -27,7 +27,7 @@ const SLIDES = [
     headline: 'Slow Travel in Rwanda: The Country That Made You Stop Rushing.',
     body:     'Rwanda rewards patience. The rolling hills, the mist over Lake Kivu, the silence of Nyungwe Forest. If you move too fast, you will miss everything that makes this country extraordinary.',
     slug:     'slow-travel-rwanda',
-    img:      'https://picsum.photos/seed/rwanda-editorial-spotlight/1200/900',
+    img:      'https://images.unsplash.com/photo-1ihYfuwRZds?auto=format&fit=crop&w=1200&q=80',
   },
   {
     tag:      'Tanzania',
@@ -35,7 +35,7 @@ const SLIDES = [
     headline: 'Zanzibar Stone Town: What the Carved Doors Are Actually Saying.',
     body:     "Every carved wooden door in Stone Town tells its owner's story. Indian brass studs, Omani chain carving, Swahili latticework. The architecture of the old town is a record of four centuries of trade.",
     slug:     'zanzibar-stone-town-doors',
-    img:      'https://picsum.photos/seed/zanzibar-editorial-spotlight/1200/900',
+    img:      'https://images.unsplash.com/photo-XSgMLCn3cMs?auto=format&fit=crop&w=1200&q=80',
   },
 ]
 

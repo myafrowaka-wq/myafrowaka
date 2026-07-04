@@ -35,6 +35,27 @@ const CATEGORY_COLOR: Record<string, string> = {
   'Experiences':        '#3B403E',
 }
 
+const BLOG_COVERS: Record<string, string> = {
+  'lagos-rush-hour-city-life':              '67ruAEYmp4c',
+  'kumasi-central-market-west-africa':      'w-jFW9XkDBg',
+  'slow-travel-rwanda':                     '1ihYfuwRZds',
+  'namib-desert-first-light':               '2vSQw0Qxi5c',
+  'west-africa-food-culture':               'lNIy1gZUWwc',
+  'zanzibar-stone-town-doors':              'XSgMLCn3cMs',
+  'marrakech-djemaa-el-fna-guide':          'CFKksjYRSQ8',
+  'victoria-falls-zimbabwe-guide':          'nsm-gUKDMeQ',
+  'maasai-mara-wildebeest-migration-kenya': '7T6BXB4ahZw',
+  'cape-town-winter-travel-guide':          'byUDvQhsh4U',
+  'addis-ababa-walking-guide':              'qEGQxK8NFN4',
+}
+
+function blogCoverUrl(slug: string, width = 900) {
+  const id = BLOG_COVERS[slug]
+  return id
+    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
+    : `https://images.unsplash.com/photo-1ihYfuwRZds?auto=format&fit=crop&w=${width}&q=80`
+}
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function formatDate(iso?: string) {
@@ -123,7 +144,7 @@ function FeaturedPost({ post }: { post: BlogPost }) {
         {/* Image */}
         <div className="relative aspect-[3/2] lg:aspect-auto lg:min-h-[340px] overflow-hidden">
           <Image
-            src={`https://picsum.photos/seed/${post.slug}-cover/900/600`}
+            src={blogCoverUrl(post.slug, 900)}
             alt={post.title}
             fill
             className="object-cover group-hover:scale-[1.03] transition-transform duration-700"
@@ -193,7 +214,7 @@ function PostCard({ post }: { post: BlogPost }) {
       {/* Cover image */}
       <div className="relative aspect-[16/9] overflow-hidden">
         <Image
-          src={`https://picsum.photos/seed/${post.slug}-cover/600/340`}
+          src={blogCoverUrl(post.slug, 600)}
           alt={post.title}
           fill
           className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
