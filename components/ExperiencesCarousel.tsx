@@ -1,15 +1,15 @@
-'use client'
+﻿'use client'
 
 import Image from 'next/image'
 import Link from 'next/link'
 
 const EXPERIENCES = [
-  { label: 'Safari',  slug: 'safari',  desc: 'The Big Five and beyond',               image: 'https://images.unsplash.com/photo-hcBVdd2leJs?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'Culture', slug: 'culture', desc: 'Living traditions across the continent', image: 'https://images.unsplash.com/photo-4KdywRnTbzE?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'Beach',   slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',       image: 'https://images.unsplash.com/photo-2mz1kYGlBZc?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'History', slug: 'history', desc: 'Ancient kingdoms and World Heritage',    image: 'https://images.unsplash.com/photo-00hJ4dTXkw0?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'Hiking',  slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',   image: 'https://images.unsplash.com/photo-Uq388U5PdeI?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'Food',    slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: 'https://images.unsplash.com/photo-woC24wGXsQ8?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Safari',  slug: 'safari',  desc: 'The Big Five and beyond',               image: 'https://images.unsplash.com/photo-1741850820849-1b63a5911606?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Culture', slug: 'culture', desc: 'Living traditions across the continent', image: 'https://images.unsplash.com/photo-1597212618440-806262de4f6b?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Beach',   slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',       image: 'https://images.unsplash.com/photo-1577455486223-089171b4572f?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'History', slug: 'history', desc: 'Ancient kingdoms and World Heritage',    image: 'https://images.unsplash.com/photo-1640005438758-861043e64aa5?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Hiking',  slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',   image: 'https://images.unsplash.com/photo-1563985336376-568060942b80?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Food',    slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: 'https://images.unsplash.com/photo-1664992960082-0ea299a9c53e?auto=format&fit=crop&w=600&q=80'  },
 ]
 
 export function ExperiencesCarousel() {

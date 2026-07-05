@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -80,10 +80,10 @@ export function PlanTripCard() {
         <div className="mt-5 pt-4 border-t border-line flex items-center gap-3">
           <div className="flex -space-x-2.5">
             {[
-              'https://images.unsplash.com/photo-M7ZepOvUcjU?auto=format&fit=crop&w=72&q=80&crop=faces',
-              'https://images.unsplash.com/photo-J3mFMkED-vU?auto=format&fit=crop&w=72&q=80&crop=faces',
-              'https://images.unsplash.com/photo-1OR7uXqJHpQ?auto=format&fit=crop&w=72&q=80&crop=faces',
-              'https://images.unsplash.com/photo-HC_yNe8VtYg?auto=format&fit=crop&w=72&q=80&crop=faces',
+              'https://images.unsplash.com/photo-1518882570151-157128e78fa1?auto=format&fit=crop&w=72&q=80&crop=faces',
+              'https://images.unsplash.com/photo-1759300063434-482e4d65f9bf?auto=format&fit=crop&w=72&q=80&crop=faces',
+              'https://images.unsplash.com/photo-1713845784497-fe3d7ed176d8?auto=format&fit=crop&w=72&q=80&crop=faces',
+              'https://images.unsplash.com/photo-1593351799227-75df2026356b?auto=format&fit=crop&w=72&q=80&crop=faces',
             ].map((src, i) => (
               <div key={i} className="w-9 h-9 rounded-full border-2 border-white overflow-hidden bg-sand shadow-sm">
                 <Image src={src} alt="" width={36} height={36} className="object-cover"/>
@@ -91,8 +91,8 @@ export function PlanTripCard() {
             ))}
           </div>
           <p className="font-sans text-[13px] text-charcoal/55 leading-snug">
-            <strong className="font-bold text-charcoal/80 text-[14px]">Travellers</strong>
-            <span className="block text-[11px]">exploring Africa with intention</span>
+            <strong className="font-bold text-charcoal/80 text-[14px]">4.6k+</strong>
+            <span className="block text-[11px]">travellers exploring Africa with intention</span>
           </p>
         </div>
       </div>

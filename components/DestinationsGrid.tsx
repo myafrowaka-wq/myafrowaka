@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
@@ -9,26 +9,26 @@ type Country = {
 }
 
 const ALL_COUNTRIES: Country[] = [
-  { name: 'Egypt',        slug: 'egypt',        region: 'North Africa',         flag: '\u{1F1EA}\u{1F1EC}', color: '#A22E29', image: 'https://images.unsplash.com/photo-lWH4VkvUcss?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Kenya',        slug: 'kenya',        region: 'East Africa',          flag: '\u{1F1F0}\u{1F1EA}', color: '#3F6A3D', image: 'https://images.unsplash.com/photo-sbSjIOUm5gw?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'South Africa', slug: 'south-africa', region: 'Southern Africa',      flag: '\u{1F1FF}\u{1F1E6}', color: '#29251A', image: 'https://images.unsplash.com/photo-tRPvXfu5Xf0?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Tanzania',     slug: 'tanzania',     region: 'East Africa',          flag: '\u{1F1F9}\u{1F1FF}', color: '#B28E38', image: 'https://images.unsplash.com/photo-ZulYpcsh2-w?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Morocco',      slug: 'morocco',      region: 'North Africa',         flag: '\u{1F1F2}\u{1F1E6}', color: '#8C4A28', image: 'https://images.unsplash.com/photo-0ZL_juKJzyQ?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Ghana',        slug: 'ghana',        region: 'West Africa',          flag: '\u{1F1EC}\u{1F1ED}', color: '#B55D39', image: 'https://images.unsplash.com/photo-FgtREiQ2rws?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Nigeria',      slug: 'nigeria',      region: 'West Africa',          flag: '\u{1F1F3}\u{1F1EC}', color: '#3B7A5E', image: 'https://images.unsplash.com/photo-eS-5YV1r-Pc?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Rwanda',       slug: 'rwanda',       region: 'East Africa',          flag: '\u{1F1F7}\u{1F1FC}', color: '#2D6B50', image: 'https://images.unsplash.com/photo-12llx3ZOGIs?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Ethiopia',     slug: 'ethiopia',     region: 'East Africa',          flag: '\u{1F1EA}\u{1F1F9}', color: '#2D5A29', image: 'https://images.unsplash.com/photo-qEGQxK8NFN4?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Uganda',       slug: 'uganda',       region: 'East Africa',          flag: '\u{1F1FA}\u{1F1EC}', color: '#3F6A3D', image: 'https://images.unsplash.com/photo-sMjVNtvYkD0?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Senegal',      slug: 'senegal',      region: 'West Africa',          flag: '\u{1F1F8}\u{1F1F3}', color: '#B55D39', image: 'https://images.unsplash.com/photo-zLXKV5UV8F4?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Zimbabwe',     slug: 'zimbabwe',     region: 'Southern Africa',      flag: '\u{1F1FF}\u{1F1FC}', color: '#29251A', image: 'https://images.unsplash.com/photo-QHH3WH1ZBsk?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Namibia',      slug: 'namibia',      region: 'Southern Africa',      flag: '\u{1F1F3}\u{1F1E6}', color: '#8C6A28', image: 'https://images.unsplash.com/photo-pWshkmAH4qA?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Botswana',     slug: 'botswana',     region: 'Southern Africa',      flag: '\u{1F1E7}\u{1F1FC}', color: '#4A3218', image: 'https://images.unsplash.com/photo-IyeStQnPq4I?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Madagascar',   slug: 'madagascar',   region: 'Indian Ocean Islands', flag: '\u{1F1F2}\u{1F1EC}', color: '#3B403E', image: 'https://images.unsplash.com/photo-yPSbirjJWzs?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Tunisia',      slug: 'tunisia',      region: 'North Africa',         flag: '\u{1F1F9}\u{1F1F3}', color: '#A22E29', image: 'https://images.unsplash.com/photo-sOYnDSB7clQ?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Ivory Coast',  slug: 'ivory-coast',  region: 'West Africa',          flag: '\u{1F1E8}\u{1F1EE}', color: '#B55D39', image: 'https://images.unsplash.com/photo-pBYfTtWVzuk?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Mozambique',   slug: 'mozambique',   region: 'East Africa',          flag: '\u{1F1F2}\u{1F1FF}', color: '#3B6E58', image: 'https://images.unsplash.com/photo-aexdWGJu7Gs?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Zambia',       slug: 'zambia',       region: 'Southern Africa',      flag: '\u{1F1FF}\u{1F1F2}', color: '#5A3A1A', image: 'https://images.unsplash.com/photo-afGA-TbGNbA?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Mauritius',    slug: 'mauritius',    region: 'Indian Ocean Islands', flag: '\u{1F1F2}\u{1F1FA}', color: '#2E5B6E', image: 'https://images.unsplash.com/photo-hMXZwS4_LcY?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Egypt',        slug: 'egypt',        region: 'North Africa',         flag: '\u{1F1EA}\u{1F1EC}', color: '#A22E29', image: 'https://images.unsplash.com/photo-1640005438758-861043e64aa5?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Kenya',        slug: 'kenya',        region: 'East Africa',          flag: '\u{1F1F0}\u{1F1EA}', color: '#3F6A3D', image: 'https://images.unsplash.com/photo-1531872036218-4e8a6828e339?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'South Africa', slug: 'south-africa', region: 'Southern Africa',      flag: '\u{1F1FF}\u{1F1E6}', color: '#29251A', image: 'https://images.unsplash.com/photo-1744604030401-b24c5975a574?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Tanzania',     slug: 'tanzania',     region: 'East Africa',          flag: '\u{1F1F9}\u{1F1FF}', color: '#B28E38', image: 'https://images.unsplash.com/photo-1635865897833-38bc0f8aee44?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Morocco',      slug: 'morocco',      region: 'North Africa',         flag: '\u{1F1F2}\u{1F1E6}', color: '#8C4A28', image: 'https://images.unsplash.com/photo-1760681554227-d7aad73cd57f?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Ghana',        slug: 'ghana',        region: 'West Africa',          flag: '\u{1F1EC}\u{1F1ED}', color: '#B55D39', image: 'https://images.unsplash.com/photo-1727023663928-1772e2c7e679?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Nigeria',      slug: 'nigeria',      region: 'West Africa',          flag: '\u{1F1F3}\u{1F1EC}', color: '#3B7A5E', image: 'https://images.unsplash.com/photo-1618828665011-0abd973f7bb8?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Rwanda',       slug: 'rwanda',       region: 'East Africa',          flag: '\u{1F1F7}\u{1F1FC}', color: '#2D6B50', image: 'https://images.unsplash.com/photo-1682773083896-95176d8aecf8?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Ethiopia',     slug: 'ethiopia',     region: 'East Africa',          flag: '\u{1F1EA}\u{1F1F9}', color: '#2D5A29', image: 'https://images.unsplash.com/photo-1782283849015-df78517d4765?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Uganda',       slug: 'uganda',       region: 'East Africa',          flag: '\u{1F1FA}\u{1F1EC}', color: '#3F6A3D', image: 'https://images.unsplash.com/photo-1614528767034-70de9fe166e0?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Senegal',      slug: 'senegal',      region: 'West Africa',          flag: '\u{1F1F8}\u{1F1F3}', color: '#B55D39', image: 'https://images.unsplash.com/photo-1644772088209-c71d5c59f719?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Zimbabwe',     slug: 'zimbabwe',     region: 'Southern Africa',      flag: '\u{1F1FF}\u{1F1FC}', color: '#29251A', image: 'https://images.unsplash.com/photo-1618811308896-d279d72fdf4d?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Namibia',      slug: 'namibia',      region: 'Southern Africa',      flag: '\u{1F1F3}\u{1F1E6}', color: '#8C6A28', image: 'https://images.unsplash.com/photo-1563985336376-568060942b80?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Botswana',     slug: 'botswana',     region: 'Southern Africa',      flag: '\u{1F1E7}\u{1F1FC}', color: '#4A3218', image: 'https://images.unsplash.com/photo-1531208853003-c1ec1b8a81d7?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Madagascar',   slug: 'madagascar',   region: 'Indian Ocean Islands', flag: '\u{1F1F2}\u{1F1EC}', color: '#3B403E', image: 'https://images.unsplash.com/photo-1558694440-03ade9215d7b?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Tunisia',      slug: 'tunisia',      region: 'North Africa',         flag: '\u{1F1F9}\u{1F1F3}', color: '#A22E29', image: 'https://images.unsplash.com/photo-1737276812695-a930ae18aec2?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Ivory Coast',  slug: 'ivory-coast',  region: 'West Africa',          flag: '\u{1F1E8}\u{1F1EE}', color: '#B55D39', image: 'https://images.unsplash.com/photo-1690975719788-c0cf5b5692de?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Mozambique',   slug: 'mozambique',   region: 'East Africa',          flag: '\u{1F1F2}\u{1F1FF}', color: '#3B6E58', image: 'https://images.unsplash.com/photo-1544298903-35eee5a95b4d?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Zambia',       slug: 'zambia',       region: 'Southern Africa',      flag: '\u{1F1FF}\u{1F1F2}', color: '#5A3A1A', image: 'https://images.unsplash.com/photo-1678714001094-ba90abd57fec?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Mauritius',    slug: 'mauritius',    region: 'Indian Ocean Islands', flag: '\u{1F1F2}\u{1F1FA}', color: '#2E5B6E', image: 'https://images.unsplash.com/photo-1513415277900-a62401e19be4?auto=format&fit=crop&w=600&q=80'  },
 ]
 
 function CountryCard({ d }: { d: Country }) {

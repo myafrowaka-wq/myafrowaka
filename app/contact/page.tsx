@@ -1,4 +1,4 @@
-import Image from 'next/image'
+﻿import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { TypewriterHero } from '@/components/TypewriterHero'
@@ -23,7 +23,7 @@ export default function ContactPage() {
       {/* ── Hero ────────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[420px] flex items-center">
         <Image
-          src="https://images.unsplash.com/photo-15SgFVgU8sI?auto=format&fit=crop&w=1920&q=85"
+          src="https://images.unsplash.com/photo-1727023663928-1772e2c7e679?auto=format&fit=crop&w=1920&q=85"
           alt="African cultural destination"
           fill priority
           className="object-cover object-center"

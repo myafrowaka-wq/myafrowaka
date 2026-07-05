@@ -1,4 +1,4 @@
-import Image from 'next/image'
+﻿import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -18,24 +18,24 @@ function urlFor(source: Parameters<typeof builder.image>[0]) {
 // ── Blog image helpers ────────────────────────────────────────────────────────
 
 const BLOG_COVERS: Record<string, string> = {
-  'lagos-rush-hour-city-life':              '67ruAEYmp4c',
-  'kumasi-central-market-west-africa':      'w-jFW9XkDBg',
-  'slow-travel-rwanda':                     '1ihYfuwRZds',
-  'namib-desert-first-light':              '2vSQw0Qxi5c',
-  'west-africa-food-culture':               'lNIy1gZUWwc',
-  'zanzibar-stone-town-doors':              'XSgMLCn3cMs',
-  'marrakech-djemaa-el-fna-guide':          'CFKksjYRSQ8',
-  'victoria-falls-zimbabwe-guide':          'nsm-gUKDMeQ',
-  'maasai-mara-wildebeest-migration-kenya': '7T6BXB4ahZw',
-  'cape-town-winter-travel-guide':          'byUDvQhsh4U',
-  'addis-ababa-walking-guide':              'qEGQxK8NFN4',
+  'lagos-rush-hour-city-life':              '1618828665011-0abd973f7bb8',
+  'kumasi-central-market-west-africa':      '1776153380872-108ba14dc63d',
+  'slow-travel-rwanda':                     '1682773083896-95176d8aecf8',
+  'namib-desert-first-light':              '1666837147745-1c9dea9908a4',
+  'west-africa-food-culture':               '1665333048952-a3ee97714c6b',
+  'zanzibar-stone-town-doors':              '1697730083060-f024eecacd48',
+  'marrakech-djemaa-el-fna-guide':          '1597212618440-806262de4f6b',
+  'victoria-falls-zimbabwe-guide':          '1674573606969-0b0403e6fce1',
+  'maasai-mara-wildebeest-migration-kenya': '1664304214202-93f2988a25a4',
+  'cape-town-winter-travel-guide':          '1746876269545-c23ecff55722',
+  'addis-ababa-walking-guide':              '1782283849015-df78517d4765',
 }
 
 function blogCoverUrl(slug: string, width = 1200) {
   const id = BLOG_COVERS[slug]
   return id
     ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
-    : `https://images.unsplash.com/photo-1ihYfuwRZds?auto=format&fit=crop&w=${width}&q=80`
+    : `https://images.unsplash.com/photo-1682773083896-95176d8aecf8?auto=format&fit=crop&w=${width}&q=80`
 }
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -167,7 +167,7 @@ const ptComponents = {
     image: ({ value }: { value: { asset?: object; alt?: string; caption?: string } }) => {
       const src = value.asset
         ? urlFor(value).width(1200).height(675).fit('crop').auto('format').url()
-        : `https://images.unsplash.com/photo-7T6BXB4ahZw?auto=format&fit=crop&w=800&q=80`
+        : `https://images.unsplash.com/photo-1664304214202-93f2988a25a4?auto=format&fit=crop&w=800&q=80`
       return (
         <figure className="my-8">
           <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
@@ -442,7 +442,7 @@ export default async function BlogPostPage(
               {post.author && (() => {
                 const authorData = getAuthorByName(post.author.name)
                 const bio = authorData?.bio ?? 'A contributor to the MyAfroWaka editorial team, writing about travel and culture across the African continent.'
-                const avatarId = authorData?.avatarId ?? 'M7ZepOvUcjU'
+                const avatarId = authorData?.avatarId ?? '1518882570151-157128e78fa1'
                 const authorSlug = authorData?.slug ?? nameToSlug(post.author.name)
                 return (
                   <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">

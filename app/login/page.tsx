@@ -1,4 +1,4 @@
-import Image from 'next/image'
+﻿import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { signIn } from '@/auth'
@@ -40,7 +40,7 @@ export default async function LoginPage({
       {/* ── Left panel (desktop only) ─────────────────────────────────── */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden flex-col">
         <Image
-          src="https://images.unsplash.com/photo-dLnErzTXNAY?auto=format&fit=crop&w=900&q=85"
+          src="https://images.unsplash.com/photo-1635865897833-38bc0f8aee44?auto=format&fit=crop&w=900&q=85"
           alt="African cultural landmark"
           fill priority
           className="object-cover object-center"

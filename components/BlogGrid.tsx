@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import Image from 'next/image'
@@ -36,24 +36,24 @@ const CATEGORY_COLOR: Record<string, string> = {
 }
 
 const BLOG_COVERS: Record<string, string> = {
-  'lagos-rush-hour-city-life':              '67ruAEYmp4c',
-  'kumasi-central-market-west-africa':      'w-jFW9XkDBg',
-  'slow-travel-rwanda':                     '1ihYfuwRZds',
-  'namib-desert-first-light':               '2vSQw0Qxi5c',
-  'west-africa-food-culture':               'lNIy1gZUWwc',
-  'zanzibar-stone-town-doors':              'XSgMLCn3cMs',
-  'marrakech-djemaa-el-fna-guide':          'CFKksjYRSQ8',
-  'victoria-falls-zimbabwe-guide':          'nsm-gUKDMeQ',
-  'maasai-mara-wildebeest-migration-kenya': '7T6BXB4ahZw',
-  'cape-town-winter-travel-guide':          'byUDvQhsh4U',
-  'addis-ababa-walking-guide':              'qEGQxK8NFN4',
+  'lagos-rush-hour-city-life':              '1618828665011-0abd973f7bb8',
+  'kumasi-central-market-west-africa':      '1776153380872-108ba14dc63d',
+  'slow-travel-rwanda':                     '1682773083896-95176d8aecf8',
+  'namib-desert-first-light':               '1666837147745-1c9dea9908a4',
+  'west-africa-food-culture':               '1665333048952-a3ee97714c6b',
+  'zanzibar-stone-town-doors':              '1697730083060-f024eecacd48',
+  'marrakech-djemaa-el-fna-guide':          '1597212618440-806262de4f6b',
+  'victoria-falls-zimbabwe-guide':          '1674573606969-0b0403e6fce1',
+  'maasai-mara-wildebeest-migration-kenya': '1664304214202-93f2988a25a4',
+  'cape-town-winter-travel-guide':          '1746876269545-c23ecff55722',
+  'addis-ababa-walking-guide':              '1782283849015-df78517d4765',
 }
 
 function blogCoverUrl(slug: string, width = 900) {
   const id = BLOG_COVERS[slug]
   return id
     ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
-    : `https://images.unsplash.com/photo-1ihYfuwRZds?auto=format&fit=crop&w=${width}&q=80`
+    : `https://images.unsplash.com/photo-1682773083896-95176d8aecf8?auto=format&fit=crop&w=${width}&q=80`
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

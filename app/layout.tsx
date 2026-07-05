@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Poppins, Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
       "Verified travel guides to Africa's greatest attractions. No fabrications. Written by Africans.",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1qrriRTdoqg?auto=format&fit=crop&w=1200&q=80",
+        url: "https://images.unsplash.com/photo-1746310783422-16df7622e7c9?auto=format&fit=crop&w=1200&q=80",
         width: 1200,
         height: 630,
         alt: "African wildlife silhouette against golden sunset sky",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     creator: "@myafrowaka_",
     title: "MyAfroWaka – Discover Africa Beyond the Stereotype",
     description: "Verified travel guides to Africa's greatest destinations. Written by Africans.",
-    images: ["https://images.unsplash.com/photo-1qrriRTdoqg?auto=format&fit=crop&w=1200&q=80"],
+    images: ["https://images.unsplash.com/photo-1746310783422-16df7622e7c9?auto=format&fit=crop&w=1200&q=80"],
   },
   robots: {
     index: true,

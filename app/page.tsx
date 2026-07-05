@@ -1,4 +1,4 @@
-import Image from 'next/image'
+﻿import Image from 'next/image'
 import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
 import { EditorialSlider } from '@/components/EditorialSlider'
@@ -65,12 +65,12 @@ type GuideItem = {
 type AttrItem = { slug: string; name: string; editorialSummary?: string; continentRegion?: string; country?: { name: string } }
 
 const EXPERIENCES = [
-  { label: 'Safari',    slug: 'safari',  desc: 'The Big Five and beyond',               image: 'https://images.unsplash.com/photo-hcBVdd2leJs?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'Culture',   slug: 'culture', desc: 'Living traditions across the continent', image: 'https://images.unsplash.com/photo-4KdywRnTbzE?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'Beach',     slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',       image: 'https://images.unsplash.com/photo-2mz1kYGlBZc?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'History',   slug: 'history', desc: 'Ancient kingdoms and World Heritage',    image: 'https://images.unsplash.com/photo-00hJ4dTXkw0?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'Hiking',    slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',   image: 'https://images.unsplash.com/photo-Uq388U5PdeI?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'Food',      slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: 'https://images.unsplash.com/photo-woC24wGXsQ8?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Safari',    slug: 'safari',  desc: 'The Big Five and beyond',               image: 'https://images.unsplash.com/photo-1741850820849-1b63a5911606?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Culture',   slug: 'culture', desc: 'Living traditions across the continent', image: 'https://images.unsplash.com/photo-1597212618440-806262de4f6b?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Beach',     slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',       image: 'https://images.unsplash.com/photo-1577455486223-089171b4572f?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'History',   slug: 'history', desc: 'Ancient kingdoms and World Heritage',    image: 'https://images.unsplash.com/photo-1640005438758-861043e64aa5?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Hiking',    slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',   image: 'https://images.unsplash.com/photo-1563985336376-568060942b80?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Food',      slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: 'https://images.unsplash.com/photo-1664992960082-0ea299a9c53e?auto=format&fit=crop&w=600&q=80'  },
 ]
 
 const FALLBACK_GUIDES: GuideItem[] = [
@@ -78,64 +78,64 @@ const FALLBACK_GUIDES: GuideItem[] = [
     name: 'Pyramids of Giza: The Complete Travel Guide',
     slug: 'pyramids-of-giza', continentRegion: 'North Africa', country: 'Egypt',
     editorialSummary: 'The last surviving Wonder of the Ancient World, standing on the Giza Plateau outside Cairo. Everything you need to know before you visit.',
-    image: 'https://images.unsplash.com/photo-rxYpXRpmpY0?auto=format&fit=crop&w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1736443830251-dda3cb6df76c?auto=format&fit=crop&w=900&q=80',
   },
   {
     name: 'Bwindi Impenetrable Forest: Mountain Gorilla Encounter',
     slug: 'bwindi-impenetrable-national-park', continentRegion: 'East Africa', country: 'Uganda',
     editorialSummary: 'Home to half the world mountain gorilla population, Bwindi covers 321 square kilometres of southwestern Uganda.',
-    image: 'https://images.unsplash.com/photo-PIU27R-xL04?auto=format&fit=crop&w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1673624522244-8de0d50b8492?auto=format&fit=crop&w=900&q=80',
   },
   {
     name: 'Table Mountain: Everything You Need to Know',
     slug: 'table-mountain', continentRegion: 'Southern Africa', country: 'South Africa',
     editorialSummary: 'Cape Town iconic flat-topped summit rises 1,085 metres above sea level and harbours more plant species than the entire United Kingdom.',
-    image: 'https://images.unsplash.com/photo-6gn7jdejEoQ?auto=format&fit=crop&w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1746876269545-c23ecff55722?auto=format&fit=crop&w=900&q=80',
   },
   {
     name: 'Serengeti National Park: The Migration Guide',
     slug: 'serengeti-national-park', continentRegion: 'East Africa', country: 'Tanzania',
     editorialSummary: 'The Great Migration moves 1.5 million wildebeest and 250,000 zebras in a continuous annual circuit across Tanzania and Kenya.',
-    image: 'https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=900&q=80',
+    image: 'https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=900&q=80',
   },
 ]
 
-const GALLERY_IDS = ['sbSjIOUm5gw', '0ZL_juKJzyQ', 'aexdWGJu7Gs', 'ZulYpcsh2-w', 'FgtREiQ2rws', 'yPSbirjJWzs']
+const GALLERY_IDS = ['1531872036218-4e8a6828e339', '1760681554227-d7aad73cd57f', '1544298903-35eee5a95b4d', '1635865897833-38bc0f8aee44', '1727023663928-1772e2c7e679', '1558694440-03ade9215d7b']
 
 const ATTRACTION_IMAGES: Record<string, string> = {
-  'pyramids-of-giza':                  'rxYpXRpmpY0',
-  'serengeti-national-park':           'oymHjI4qPJI',
-  'victoria-falls':                    'nsm-gUKDMeQ',
-  'bwindi-impenetrable-national-park': 'PIU27R-xL04',
-  'djemaa-el-fna-marrakech':           'CFKksjYRSQ8',
-  'sossusvlei-namib-desert':           '2vSQw0Qxi5c',
-  'volcanoes-national-park-rwanda':    '12llx3ZOGIs',
-  'cape-point-south-africa':           'byUDvQhsh4U',
-  'lalibela-rock-hewn-churches':       'qEGQxK8NFN4',
-  'maasai-mara-national-reserve':      '7T6BXB4ahZw',
-  'stone-town-zanzibar':               'XSgMLCn3cMs',
-  'ngorongoro-conservation-area':      'ZulYpcsh2-w',
+  'pyramids-of-giza':                  '1736443830251-dda3cb6df76c',
+  'serengeti-national-park':           '1542729841-c5af4aed2152',
+  'victoria-falls':                    '1674573606969-0b0403e6fce1',
+  'bwindi-impenetrable-national-park': '1673624522244-8de0d50b8492',
+  'djemaa-el-fna-marrakech':           '1597212618440-806262de4f6b',
+  'sossusvlei-namib-desert':           '1666837147745-1c9dea9908a4',
+  'volcanoes-national-park-rwanda':    '1682773083896-95176d8aecf8',
+  'cape-point-south-africa':           '1746876269545-c23ecff55722',
+  'lalibela-rock-hewn-churches':       '1782283849015-df78517d4765',
+  'maasai-mara-national-reserve':      '1664304214202-93f2988a25a4',
+  'stone-town-zanzibar':               '1697730083060-f024eecacd48',
+  'ngorongoro-conservation-area':      '1635865897833-38bc0f8aee44',
 }
 
 function attractionImageUrl(slug: string, width = 800) {
   const id = ATTRACTION_IMAGES[slug]
   return id
     ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
-    : `https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=${width}&q=80`
+    : `https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=${width}&q=80`
 }
 
 const BLOG_COVERS: Record<string, string> = {
-  'lagos-rush-hour-city-life':              '67ruAEYmp4c',
-  'kumasi-central-market-west-africa':      'w-jFW9XkDBg',
-  'slow-travel-rwanda':                     '1ihYfuwRZds',
-  'namib-desert-first-light':               '2vSQw0Qxi5c',
-  'west-africa-food-culture':               'lNIy1gZUWwc',
-  'zanzibar-stone-town-doors':              'XSgMLCn3cMs',
-  'marrakech-djemaa-el-fna-guide':          'CFKksjYRSQ8',
-  'victoria-falls-zimbabwe-guide':          'nsm-gUKDMeQ',
-  'maasai-mara-wildebeest-migration-kenya': '7T6BXB4ahZw',
-  'cape-town-winter-travel-guide':          'byUDvQhsh4U',
-  'addis-ababa-walking-guide':              'qEGQxK8NFN4',
+  'lagos-rush-hour-city-life':              '1618828665011-0abd973f7bb8',
+  'kumasi-central-market-west-africa':      '1776153380872-108ba14dc63d',
+  'slow-travel-rwanda':                     '1682773083896-95176d8aecf8',
+  'namib-desert-first-light':               '1666837147745-1c9dea9908a4',
+  'west-africa-food-culture':               '1665333048952-a3ee97714c6b',
+  'zanzibar-stone-town-doors':              '1697730083060-f024eecacd48',
+  'marrakech-djemaa-el-fna-guide':          '1597212618440-806262de4f6b',
+  'victoria-falls-zimbabwe-guide':          '1674573606969-0b0403e6fce1',
+  'maasai-mara-wildebeest-migration-kenya': '1664304214202-93f2988a25a4',
+  'cape-town-winter-travel-guide':          '1746876269545-c23ecff55722',
+  'addis-ababa-walking-guide':              '1782283849015-df78517d4765',
 }
 
 export default async function HomePage() {
@@ -168,7 +168,7 @@ export default async function HomePage() {
 
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
       <section className="relative min-h-[94vh] flex items-center overflow-hidden">
-        <HeroBackground src="https://images.unsplash.com/photo-1qrriRTdoqg?auto=format&fit=crop&w=1920&q=85" alt="Pyramids of Giza at golden hour"/>
+        <HeroBackground src="https://images.unsplash.com/photo-1746310783422-16df7622e7c9?auto=format&fit=crop&w=1920&q=85" alt="Pyramids of Giza at golden hour"/>
         <div className="absolute inset-0 bg-gradient-to-r from-[#070F09]/96 via-[#0A1A0C]/88 to-[#0E2010]/55"/>
         <div className="absolute inset-0 bg-gradient-to-t from-[#070F09]/60 via-transparent to-[#070F09]/15"/>
 
@@ -482,7 +482,7 @@ export default async function HomePage() {
             {FALLBACK_POSTS.slice(0, 3).map(post => {
               const coverSrc = BLOG_COVERS[post.slug]
                 ? `https://images.unsplash.com/photo-${BLOG_COVERS[post.slug]}?auto=format&fit=crop&w=800&q=80`
-                : 'https://images.unsplash.com/photo-1ihYfuwRZds?auto=format&fit=crop&w=800&q=80'
+                : 'https://images.unsplash.com/photo-1682773083896-95176d8aecf8?auto=format&fit=crop&w=800&q=80'
               return (
                 <Link key={post.slug} href={`/blog/${post.slug}`}
                   className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
@@ -571,7 +571,7 @@ export default async function HomePage() {
 
       {/* ══ CTA BANNER ═════════════════════════════════════════════════════════ */}
       <section className="relative py-28 lg:py-36 overflow-hidden" data-reveal>
-        <Image src="https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=1920&q=85" alt="" fill className="object-cover img-editorial"/>
+        <Image src="https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=1920&q=85" alt="" fill className="object-cover img-editorial"/>
         <div className="absolute inset-0 bg-ink/88"/>
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="font-display font-extrabold text-cream mb-6 tracking-hero"

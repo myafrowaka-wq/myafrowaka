@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { ALL_GUIDES_QUERY } from '@/sanity/lib/queries'
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     description: 'Curated best-of guides to attractions across Africa.',
     type: 'website',
     url: 'https://myafrowaka.com/guides',
-    images: ['https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=1200&q=80'],
+    images: ['https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=1200&q=80'],
   },
 }
 

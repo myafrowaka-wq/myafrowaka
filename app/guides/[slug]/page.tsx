@@ -1,4 +1,4 @@
-import Image from 'next/image'
+﻿import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -73,13 +73,13 @@ export async function generateMetadata(
       description,
       type: 'article',
       url: canonicalUrl,
-      images: [`https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=1200&q=80`],
+      images: [`https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=1200&q=80`],
     },
     twitter: {
       card:   'summary_large_image',
       title,
       description,
-      images: [`https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=1200&q=80`],
+      images: [`https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=1200&q=80`],
     },
   }
 }
@@ -130,7 +130,7 @@ export default async function GuidePage(
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[380px] flex items-end">
         <Image
-          src="https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=1920&q=85"
+          src="https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=1920&q=85"
           alt={guide.title}
           fill priority
           className="object-cover object-center"

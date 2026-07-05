@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
@@ -13,32 +13,32 @@ const REGIONS = [
   {
     region: 'East Africa', color: '#3F6A3D', href: '/search?region=East+Africa',
     countries: ['Kenya', 'Tanzania', 'Ethiopia', 'Uganda', 'Rwanda', 'Mozambique'],
-    image: 'https://images.unsplash.com/photo-sbSjIOUm5gw?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.unsplash.com/photo-1531872036218-4e8a6828e339?auto=format&fit=crop&w=400&q=80',
   },
   {
     region: 'West Africa', color: '#B55D39', href: '/search?region=West+Africa',
     countries: ['Nigeria', 'Ghana', 'Senegal', 'Ivory Coast', 'Mali', 'Benin'],
-    image: 'https://images.unsplash.com/photo-FgtREiQ2rws?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.unsplash.com/photo-1727023663928-1772e2c7e679?auto=format&fit=crop&w=400&q=80',
   },
   {
     region: 'North Africa', color: '#A22E29', href: '/search?region=North+Africa',
     countries: ['Egypt', 'Morocco', 'Tunisia', 'Algeria', 'Libya'],
-    image: 'https://images.unsplash.com/photo-0ZL_juKJzyQ?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.unsplash.com/photo-1760681554227-d7aad73cd57f?auto=format&fit=crop&w=400&q=80',
   },
   {
     region: 'Southern Africa', color: '#29251A', href: '/search?region=Southern+Africa',
     countries: ['South Africa', 'Zimbabwe', 'Zambia', 'Botswana', 'Namibia'],
-    image: 'https://images.unsplash.com/photo-tRPvXfu5Xf0?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.unsplash.com/photo-1744604030401-b24c5975a574?auto=format&fit=crop&w=400&q=80',
   },
   {
     region: 'Central Africa', color: '#B28E38', href: '/search?region=Central+Africa',
     countries: ['DR Congo', 'Cameroon', 'Gabon', 'Republic of Congo'],
-    image: 'https://images.unsplash.com/photo-PIU27R-xL04?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.unsplash.com/photo-1673624522244-8de0d50b8492?auto=format&fit=crop&w=400&q=80',
   },
   {
     region: 'Indian Ocean Islands', color: '#3B403E', href: '/search?region=Indian+Ocean+Islands',
     countries: ['Madagascar', 'Mauritius', 'Seychelles', 'Comoros', 'Zanzibar'],
-    image: 'https://images.unsplash.com/photo-hMXZwS4_LcY?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.unsplash.com/photo-1513415277900-a62401e19be4?auto=format&fit=crop&w=400&q=80',
   },
 ]
 
@@ -381,10 +381,10 @@ export default function Nav() {
                 <p className="font-display font-bold text-lg text-cream mb-6">Latest Guides</p>
                 <div className="space-y-4">
                   {[
-                    { title: 'Pyramids of Giza: The Complete Guide',     tag: 'Egypt',    slug: 'pyramids-of-giza',                 img: 'https://images.unsplash.com/photo-rxYpXRpmpY0?auto=format&fit=crop&w=280&q=80'  },
-                    { title: 'Bwindi: Mountain Gorilla Trekking Guide',  tag: 'Uganda',   slug: 'bwindi-impenetrable-national-park', img: 'https://images.unsplash.com/photo-PIU27R-xL04?auto=format&fit=crop&w=280&q=80'  },
-                    { title: 'Table Mountain: Cape Town Complete Guide', tag: 'South Africa', slug: 'table-mountain',               img: 'https://images.unsplash.com/photo-6gn7jdejEoQ?auto=format&fit=crop&w=280&q=80'  },
-                    { title: 'Serengeti: The Great Migration Guide',     tag: 'Tanzania', slug: 'serengeti-national-park',           img: 'https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=280&q=80'  },
+                    { title: 'Pyramids of Giza: The Complete Guide',     tag: 'Egypt',    slug: 'pyramids-of-giza',                 img: 'https://images.unsplash.com/photo-1736443830251-dda3cb6df76c?auto=format&fit=crop&w=280&q=80'  },
+                    { title: 'Bwindi: Mountain Gorilla Trekking Guide',  tag: 'Uganda',   slug: 'bwindi-impenetrable-national-park', img: 'https://images.unsplash.com/photo-1673624522244-8de0d50b8492?auto=format&fit=crop&w=280&q=80'  },
+                    { title: 'Table Mountain: Cape Town Complete Guide', tag: 'South Africa', slug: 'table-mountain',               img: 'https://images.unsplash.com/photo-1746876269545-c23ecff55722?auto=format&fit=crop&w=280&q=80'  },
+                    { title: 'Serengeti: The Great Migration Guide',     tag: 'Tanzania', slug: 'serengeti-national-park',           img: 'https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=280&q=80'  },
                   ].map(a => (
                     <Link key={a.slug} href={`/attractions/${a.slug}`} onClick={close}
                       className="group flex gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors">
@@ -446,7 +446,7 @@ export default function Nav() {
               <div className="col-span-3 border-l border-line dark:border-white/8 pl-8 flex flex-col">
                 <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-4">Featured</p>
                 <Link href="/destinations/egypt" onClick={close} className="group relative rounded-2xl overflow-hidden flex-1 min-h-[200px] block">
-                  <Image src="https://images.unsplash.com/photo-lWH4VkvUcss?auto=format&fit=crop&w=400&q=80" alt="Egypt" fill className="object-cover group-hover:scale-105 transition-transform duration-500"/>
+                  <Image src="https://images.unsplash.com/photo-1640005438758-861043e64aa5?auto=format&fit=crop&w=400&q=80" alt="Egypt" fill className="object-cover group-hover:scale-105 transition-transform duration-500"/>
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent"/>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <p className="font-inter text-[9px] uppercase tracking-[0.12em] text-gold-400 mb-1">North Africa</p>
@@ -531,9 +531,9 @@ export default function Nav() {
                 <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Featured Guides</p>
                 <div className="space-y-3">
                   {[
-                    { title: 'Pyramids of Giza: The Complete Guide',    tag: 'Egypt',    slug: 'pyramids-of-giza',                 img: 'https://images.unsplash.com/photo-rxYpXRpmpY0?auto=format&fit=crop&w=280&q=80'  },
-                    { title: 'Bwindi: Mountain Gorilla Trekking Guide', tag: 'Uganda',   slug: 'bwindi-impenetrable-national-park', img: 'https://images.unsplash.com/photo-PIU27R-xL04?auto=format&fit=crop&w=280&q=80'  },
-                    { title: 'Serengeti: The Great Migration Guide',    tag: 'Tanzania', slug: 'serengeti-national-park',           img: 'https://images.unsplash.com/photo-oymHjI4qPJI?auto=format&fit=crop&w=280&q=80'  },
+                    { title: 'Pyramids of Giza: The Complete Guide',    tag: 'Egypt',    slug: 'pyramids-of-giza',                 img: 'https://images.unsplash.com/photo-1736443830251-dda3cb6df76c?auto=format&fit=crop&w=280&q=80'  },
+                    { title: 'Bwindi: Mountain Gorilla Trekking Guide', tag: 'Uganda',   slug: 'bwindi-impenetrable-national-park', img: 'https://images.unsplash.com/photo-1673624522244-8de0d50b8492?auto=format&fit=crop&w=280&q=80'  },
+                    { title: 'Serengeti: The Great Migration Guide',    tag: 'Tanzania', slug: 'serengeti-national-park',           img: 'https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=280&q=80'  },
                   ].map(a => (
                     <Link key={a.slug} href={`/attractions/${a.slug}`} onClick={close}
                       className="group flex items-center gap-4 p-3 rounded-xl hover:bg-sand dark:hover:bg-white/5 transition-colors">

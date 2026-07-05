@@ -1,4 +1,4 @@
-import Image from 'next/image'
+﻿import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     description: 'Stories and perspectives from across the African continent.',
     type: 'website',
     url: 'https://myafrowaka.com/blog',
-    images: ['https://images.unsplash.com/photo-7T6BXB4ahZw?auto=format&fit=crop&w=1200&q=80'],
+    images: ['https://images.unsplash.com/photo-1664304214202-93f2988a25a4?auto=format&fit=crop&w=1200&q=80'],
   },
 }
 
@@ -55,7 +55,7 @@ export default async function BlogPage(
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[420px] md:min-h-[500px] flex items-end">
         <Image
-          src="https://images.unsplash.com/photo-7T6BXB4ahZw?auto=format&fit=crop&w=1920&q=85"
+          src="https://images.unsplash.com/photo-1664304214202-93f2988a25a4?auto=format&fit=crop&w=1920&q=85"
           alt="The MyAfroWaka Journal"
           fill priority
           className="object-cover object-center"

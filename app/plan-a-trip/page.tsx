@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import Image from 'next/image'
@@ -46,7 +46,7 @@ export default function PlanATripPage() {
       {/* Hero */}
       <div className="relative overflow-hidden min-h-[380px] flex items-end">
         <Image
-          src="https://images.unsplash.com/photo-2mz1kYGlBZc?auto=format&fit=crop&w=1920&q=85"
+          src="https://images.unsplash.com/photo-1577455486223-089171b4572f?auto=format&fit=crop&w=1920&q=85"
           alt="Plan your Africa trip"
           fill priority
           className="object-cover object-center"
