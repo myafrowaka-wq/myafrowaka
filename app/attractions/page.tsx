@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: 'Africa Travel Guides – MyAfroWaka',
     description: 'Verified travel guides to extraordinary destinations across Africa.',
     url: 'https://myafrowaka.com/attractions',
-    images: ['https://images.unsplash.com/photo-1531872036218-4e8a6828e339?auto=format&fit=crop&w=1200&q=80'],
+    images: ['https://images.unsplash.com/photo-1577948000111-9c970dfe3743?auto=format&fit=crop&w=1200&q=80'],
   },
 }
 
@@ -41,7 +41,7 @@ const ATTRACTION_IMAGES: Record<string, string> = {
   'cape-point-south-africa':           '1746876269545-c23ecff55722',
   'lalibela-rock-hewn-churches':       '1782283849015-df78517d4765',
   'maasai-mara-national-reserve':      '1664304214202-93f2988a25a4',
-  'stone-town-zanzibar':               '1697730083060-f024eecacd48',
+  'stone-town-zanzibar':               '1678042955980-c173f0460d0a',
   'ngorongoro-conservation-area':      '1635865897833-38bc0f8aee44',
 }
 
@@ -118,8 +118,8 @@ export default async function AttractionsPage({
       {/* Hero */}
       <div className="relative overflow-hidden min-h-[520px] flex items-center">
         <Image
-          src="https://images.unsplash.com/photo-1531872036218-4e8a6828e339?auto=format&fit=crop&w=1920&q=85"
-          alt="Explore Africa" fill priority
+          src="https://images.unsplash.com/photo-1577948000111-9c970dfe3743?auto=format&fit=crop&w=1920&q=85"
+          alt="Johannesburg city skyline, South Africa" fill priority
           className="object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/80 to-ink/50"/>

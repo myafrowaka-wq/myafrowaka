@@ -35,7 +35,7 @@ const SLIDES = [
     headline: 'Zanzibar Stone Town: What the Carved Doors Are Actually Saying.',
     body:     "Every carved wooden door in Stone Town tells its owner's story. Indian brass studs, Omani chain carving, Swahili latticework. The architecture of the old town is a record of four centuries of trade.",
     slug:     'zanzibar-stone-town-doors',
-    img:      'https://images.unsplash.com/photo-1697730083060-f024eecacd48?auto=format&fit=crop&w=1200&q=80',
+    img:      'https://images.unsplash.com/photo-1678042955980-c173f0460d0a?auto=format&fit=crop&w=1200&q=80',
   },
 ]
 

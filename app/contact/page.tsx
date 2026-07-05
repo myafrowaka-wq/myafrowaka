@@ -23,8 +23,8 @@ export default function ContactPage() {
       {/* ── Hero ────────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[420px] flex items-center">
         <Image
-          src="https://images.unsplash.com/photo-1727023663928-1772e2c7e679?auto=format&fit=crop&w=1920&q=85"
-          alt="African cultural destination"
+          src="https://images.unsplash.com/photo-1559833064-6f4573ec1ac9?auto=format&fit=crop&w=1920&q=85"
+          alt="Lagos city skyline, Nigeria"
           fill priority
           className="object-cover object-center"
         />

@@ -118,7 +118,7 @@ const ATTRACTION_IMAGES: Record<string, string> = {
   'cape-point-south-africa':           '1746876269545-c23ecff55722',
   'lalibela-rock-hewn-churches':       '1782283849015-df78517d4765',
   'maasai-mara-national-reserve':      '1664304214202-93f2988a25a4',
-  'stone-town-zanzibar':               '1697730083060-f024eecacd48',
+  'stone-town-zanzibar':               '1678042955980-c173f0460d0a',
   'ngorongoro-conservation-area':      '1635865897833-38bc0f8aee44',
 }
 
