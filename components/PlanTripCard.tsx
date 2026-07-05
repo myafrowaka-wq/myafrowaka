@@ -81,7 +81,7 @@ export function PlanTripCard() {
           <div className="flex -space-x-2.5">
             {[
               'https://images.unsplash.com/photo-1518882570151-157128e78fa1?auto=format&fit=crop&w=72&q=80&crop=faces',
-              'https://images.unsplash.com/photo-1759300063434-482e4d65f9bf?auto=format&fit=crop&w=72&q=80&crop=faces',
+              'https://images.unsplash.com/photo-1573497019418-b400bb3ab074?auto=format&fit=crop&w=72&q=80&crop=faces',
               'https://images.unsplash.com/photo-1713845784497-fe3d7ed176d8?auto=format&fit=crop&w=72&q=80&crop=faces',
               'https://images.unsplash.com/photo-1593351799227-75df2026356b?auto=format&fit=crop&w=72&q=80&crop=faces',
             ].map((src, i) => (

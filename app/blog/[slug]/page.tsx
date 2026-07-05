@@ -26,7 +26,7 @@ const BLOG_COVERS: Record<string, string> = {
   'zanzibar-stone-town-doors':              '1678042955980-c173f0460d0a',
   'marrakech-djemaa-el-fna-guide':          '1597212618440-806262de4f6b',
   'victoria-falls-zimbabwe-guide':          '1674573606969-0b0403e6fce1',
-  'maasai-mara-wildebeest-migration-kenya': '1664304214202-93f2988a25a4',
+  'maasai-mara-wildebeest-migration-kenya': '1531872036218-4e8a6828e339',
   'cape-town-winter-travel-guide':          '1746876269545-c23ecff55722',
   'addis-ababa-walking-guide':              '1782283849015-df78517d4765',
 }
@@ -167,7 +167,7 @@ const ptComponents = {
     image: ({ value }: { value: { asset?: object; alt?: string; caption?: string } }) => {
       const src = value.asset
         ? urlFor(value).width(1200).height(675).fit('crop').auto('format').url()
-        : `https://images.unsplash.com/photo-1664304214202-93f2988a25a4?auto=format&fit=crop&w=800&q=80`
+        : `https://images.unsplash.com/photo-1531872036218-4e8a6828e339?auto=format&fit=crop&w=800&q=80`
       return (
         <figure className="my-8">
           <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">

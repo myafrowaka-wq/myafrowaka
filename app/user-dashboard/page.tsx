@@ -24,7 +24,7 @@ const ATTRACTION_IMAGES: Record<string, string> = {
   'volcanoes-national-park-rwanda':    '1682773083896-95176d8aecf8',
   'cape-point-south-africa':           '1746876269545-c23ecff55722',
   'lalibela-rock-hewn-churches':       '1782283849015-df78517d4765',
-  'maasai-mara-national-reserve':      '1664304214202-93f2988a25a4',
+  'maasai-mara-national-reserve':      '1531872036218-4e8a6828e339',
   'stone-town-zanzibar':               '1678042955980-c173f0460d0a',
   'ngorongoro-conservation-area':      '1635865897833-38bc0f8aee44',
 }

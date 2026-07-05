@@ -17,7 +17,7 @@ export const AUTHORS: Author[] = [
     countryFlag: '\u{1F1EC}\u{1F1ED}',
     bio: 'Amara writes about West African cities, coastal communities, and the living traditions that shape how people move through the continent.',
     fullBio: 'Amara Diallo is a travel writer and cultural correspondent based in Accra, Ghana. She covers West African cities, coastal communities, and the living traditions that shape how people move through the continent. Her writing looks for what is overlooked in conventional travel coverage: the market stall operators, the minor roads, the neighbourhoods that tourists do not reach. Her work has taken her from Lagos to Dakar to Lomé, always with a focus on the human geography beneath the surface.',
-    avatarId: '1759300063434-482e4d65f9bf',
+    avatarId: '1573497019418-b400bb3ab074',
     expertise: ['West Africa', 'Urban Africa', 'Culture', 'Markets'],
   },
   {
@@ -67,7 +67,7 @@ export const AUTHORS: Author[] = [
     countryFlag: '\u{1F1EC}\u{1F1ED}',
     bio: 'Nadia focuses on independent travel in North Africa and has visited every country on the continent.',
     fullBio: 'Nadia Mensah is an independent travel writer from Accra who has visited every country on the African continent. She specialises in North Africa, particularly Morocco, Tunisia, and Egypt, and her guides focus on solo and independent travel: how to move without a tour, where to stay with locals, how to navigate medinas and souks. Her approach is practical and her writing is shaped by the belief that Africa is the most underrated destination on earth.',
-    avatarId: '1593351799227-75df2026356b',
+    avatarId: '1654420571616-25ae4e3a83a5',
     expertise: ['North Africa', 'Independent Travel', 'Morocco', 'Egypt', 'Tunisia'],
   },
   {

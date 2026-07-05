@@ -64,9 +64,15 @@ async function createRole(userId: string, email: string, name: string, role: str
 
 // ── NextAuth config ───────────────────────────────────────────────────────────
 
+// Only load Google provider when real credentials are configured in env vars.
+// Placeholder values from .env.local template ("REPLACE_WITH_...") are treated as absent.
+const googleId     = process.env.AUTH_GOOGLE_ID     ?? ''
+const googleSecret = process.env.AUTH_GOOGLE_SECRET ?? ''
+const hasGoogle    = Boolean(googleId && googleSecret && !googleId.startsWith('REPLACE_WITH') && !googleSecret.startsWith('REPLACE_WITH'))
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
-    Google,
+    ...(hasGoogle ? [Google] : []),
     Credentials({
       credentials: {
         email:    { label: 'Email',    type: 'email'    },
