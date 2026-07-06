@@ -1,8 +1,8 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
 import type { UserRole } from '@/types/next-auth'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -81,6 +81,18 @@ const icons = {
         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
     </svg>
   ),
+  trips: (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+        d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+    </svg>
+  ),
+  profile: (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+    </svg>
+  ),
   signout: (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
@@ -95,12 +107,14 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
   const rm = ROLE_META[role] ?? ROLE_META.subscriber
 
   const navItems: NavItem[] = [
-    { id: 'overview',     label: 'Overview',          href: '#overview',     minRole: null,            icon: icons.overview,     badge: undefined       },
-    { id: 'saved',        label: 'Saved Attractions', href: '#saved',        minRole: null,            icon: icons.saved,        badge: savedCount > 0 ? savedCount : undefined },
-    { id: 'corrections',  label: 'Corrections',       href: '#corrections',  minRole: 'moderator',     icon: icons.corrections,  badge: undefined       },
-    { id: 'submit',       label: 'Submit',            href: '#submit',       minRole: 'contributor',   icon: icons.submit,       badge: undefined       },
-    { id: 'articles',     label: 'Articles',          href: '#articles',     minRole: 'author-editor', icon: icons.articles,     badge: undefined       },
-    { id: 'users',        label: 'Users',             href: '#users',        minRole: 'admin',         icon: icons.users,        badge: undefined       },
+    { id: 'overview',     label: 'Overview',          href: '/user-dashboard#overview',     minRole: null,            icon: icons.overview,     badge: undefined       },
+    { id: 'saved',        label: 'Saved Attractions', href: '/user-dashboard#saved',        minRole: null,            icon: icons.saved,        badge: savedCount > 0 ? savedCount : undefined },
+    { id: 'trips',        label: 'My Trips',          href: '/user-dashboard#trips',        minRole: null,            icon: icons.trips,        badge: undefined       },
+    { id: 'profile',      label: 'My Profile',        href: '/user-dashboard#profile',      minRole: null,            icon: icons.profile,      badge: undefined       },
+    { id: 'corrections',  label: 'Corrections',       href: '/user-dashboard#corrections',  minRole: 'moderator',     icon: icons.corrections,  badge: undefined       },
+    { id: 'submit',       label: 'Submit',            href: '/user-dashboard#submit',       minRole: 'contributor',   icon: icons.submit,       badge: undefined       },
+    { id: 'articles',     label: 'Articles',          href: '/user-dashboard#articles',     minRole: 'author-editor', icon: icons.articles,     badge: undefined       },
+    { id: 'users',        label: 'Users',             href: '/user-dashboard#users',        minRole: 'admin',         icon: icons.users,        badge: undefined       },
   ]
 
   const visibleItems = navItems.filter(item =>
@@ -113,7 +127,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
       <div className="lg:hidden bg-ink border-b border-white/8">
         <div className="flex gap-1.5 overflow-x-auto px-4 py-3 scrollbar-hide">
           {visibleItems.map(item => (
-            <a
+            <Link
               key={item.id}
               href={item.href}
               className="flex items-center gap-1.5 shrink-0 bg-white/8 hover:bg-white/14 text-cream/65 hover:text-cream border border-white/10 font-inter text-[8px] uppercase tracking-[0.12em] px-3 py-1.5 rounded-full transition-all"
@@ -125,7 +139,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
                   {item.badge}
                 </span>
               )}
-            </a>
+            </Link>
           ))}
         </div>
       </div>
@@ -153,7 +167,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
           <p className="font-inter text-[7px] uppercase tracking-[0.22em] text-cream/20 px-2 mb-3">Navigation</p>
           <div className="space-y-0.5">
             {visibleItems.map(item => (
-              <a
+              <Link
                 key={item.id}
                 href={item.href}
                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl group hover:bg-white/8 text-cream/55 hover:text-cream transition-all"
@@ -167,7 +181,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
                     {item.badge}
                   </span>
                 )}
-              </a>
+              </Link>
             ))}
           </div>
 

@@ -122,6 +122,7 @@ function NavUserButton({ close }: { close: () => void }) {
 
 export default function Nav() {
   const t = useTranslations('nav')
+  const { data: session, status } = useSession()
   const [panel, setPanel]         = useState<PanelKey>(null)
   const [langOpen, setLangOpen]   = useState(false)
   const [mobile, setMobile]       = useState(false)
@@ -607,13 +608,36 @@ export default function Nav() {
             ))}
 
             <div className="flex items-center justify-between px-2 py-4 border-b border-white/10">
-              <Link href="/login" onClick={close}
-                className="flex items-center gap-2 text-[14px] font-display font-semibold text-cream/80 hover:text-cream transition-colors">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
-                </svg>
-                Sign In
-              </Link>
+              {/* Mobile auth: session-aware */}
+              {status === 'loading' ? (
+                <div className="w-9 h-9 rounded-full bg-white/10 animate-pulse"/>
+              ) : status === 'authenticated' && session?.user ? (
+                <Link href="/user-dashboard" onClick={close} className="flex items-center gap-2.5 group">
+                  <div className="w-9 h-9 rounded-full overflow-hidden bg-crimson/30 flex items-center justify-center ring-2 ring-gold-400/30 shrink-0">
+                    {session.user.image ? (
+                      <Image src={session.user.image} alt={session.user.name ?? 'User'} width={36} height={36} className="object-cover w-full h-full"/>
+                    ) : (
+                      <span className="font-display font-bold text-[14px] text-cream">
+                        {(session.user.name ?? 'U').charAt(0).toUpperCase()}
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-display font-semibold text-[13px] text-cream group-hover:text-gold-300 transition-colors">
+                      {session.user.name?.split(' ')[0] ?? 'Account'}
+                    </p>
+                    <p className="font-inter text-[9px] uppercase tracking-[0.08em] text-cream/40">My Dashboard</p>
+                  </div>
+                </Link>
+              ) : (
+                <Link href="/login" onClick={close}
+                  className="flex items-center gap-2 text-[14px] font-display font-semibold text-cream/80 hover:text-cream transition-colors">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
+                  </svg>
+                  Sign In
+                </Link>
+              )}
               <div className="flex items-center gap-2">
                 <ThemeToggle/>
                 <select value={lang}

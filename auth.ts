@@ -91,7 +91,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: 'jwt' },
   pages: { signIn: '/login' },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session: updatedSession }) {
+      if (trigger === 'update' && updatedSession?.name) {
+        token.name = updatedSession.name as string
+      }
       if (user) {
         token.id = user.id
 

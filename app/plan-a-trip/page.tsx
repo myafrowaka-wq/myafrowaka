@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import type { Metadata } from 'next'
+import { useSession } from 'next-auth/react'
 
 // Note: metadata can't be exported from a client component.
 // SEO is handled by the parent layout's default metadata.
@@ -13,29 +13,38 @@ const INTERESTS = ['Safari', 'Culture', 'Beach', 'History', 'Hiking', 'Food']
 
 export default function PlanATripPage() {
   const router = useRouter()
+  const { status } = useSession()
   const [destination, setDestination] = useState('')
   const [from, setFrom]               = useState('')
   const [to, setTo]                   = useState('')
   const [travelers, setTravelers]     = useState('')
   const [budget, setBudget]           = useState('')
   const [interests, setInterests]     = useState<string[]>([])
+  const [saving, setSaving]           = useState(false)
 
   function toggleInterest(v: string) {
     setInterests(prev => prev.includes(v) ? prev.filter(i => i !== v) : [...prev, v])
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setSaving(true)
+
+    // If signed in, save the plan to dashboard
+    if (status === 'authenticated' && destination.trim()) {
+      try {
+        await fetch('/api/user/trips', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ destination, from, to, travelers, budget, interests }),
+        })
+      } catch { /* non-fatal — we still proceed to search */ }
+    }
 
     // Build search URL with the collected data
     const params = new URLSearchParams()
     if (destination.trim()) params.set('q', destination.trim())
     if (interests.length > 0) params.set('exp', interests[0])
-
-    // Save the full plan to sessionStorage so a future "save plan" feature can use it
-    try {
-      sessionStorage.setItem('trip_plan', JSON.stringify({ destination, from, to, travelers, budget, interests }))
-    } catch { /* non-fatal */ }
 
     router.push(`/search${params.toString() ? '?' + params.toString() : ''}`)
   }
@@ -174,16 +183,22 @@ export default function PlanATripPage() {
           <div className="pt-2">
             <button
               type="submit"
-              className="w-full bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[13px] uppercase tracking-[0.12em] py-4 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99]"
+              disabled={saving}
+              className="w-full bg-crimson hover:bg-crimson-600 disabled:opacity-70 disabled:cursor-not-allowed text-cream font-display font-bold text-[13px] uppercase tracking-[0.12em] py-4 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99]"
             >
-              Find Attractions
+              {saving ? 'Saving Plan...' : (status === 'authenticated' ? 'Save Plan and Find Attractions' : 'Find Attractions')}
             </button>
             <p className="font-sans text-[12px] text-charcoal/45 dark-flip-muted text-center mt-3 leading-relaxed">
-              You will be taken to the attraction search with your preferences applied.
-              <Link href="/login" className="text-crimson hover:text-crimson/70 transition-colors ml-1">
-                Sign in
-              </Link>
-              {' '}to save a full itinerary.
+              {status === 'authenticated'
+                ? 'Your trip plan will be saved to your dashboard.'
+                : <>
+                    You will be taken to attraction search with your preferences applied.{' '}
+                    <Link href="/login" className="text-crimson hover:text-crimson/70 transition-colors">
+                      Sign in
+                    </Link>
+                    {' '}to save a full itinerary to your dashboard.
+                  </>
+              }
             </p>
           </div>
         </form>

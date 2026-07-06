@@ -11,6 +11,7 @@ export function SaveButton({ slug }: { slug: string }) {
   const [checked, setChecked] = useState(false)
 
   useEffect(() => {
+    if (status === 'loading') return  // keep spinner until session resolves
     if (status !== 'authenticated') { setChecked(true); return }
     fetch('/api/user/saved')
       .then(r => r.json())

@@ -5,6 +5,8 @@ import { auth } from '@/auth'
 import { client } from '@/sanity/lib/client'
 import type { UserRole } from '@/types/next-auth'
 import { DashGreeting } from '@/components/DashGreeting'
+import { DashTrips } from '@/components/DashTrips'
+import { DashProfile } from '@/components/DashProfile'
 import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
@@ -378,7 +380,36 @@ export default async function UserDashboardPage() {
           )}
         </section>
 
-        {/* ── 4. Corrections inbox (Moderator+) ────────────────────────── */}
+        {/* ── 4. My Trips ──────────────────────────────────────────────── */}
+        <section id="trips" className="scroll-mt-8">
+          <SectionHead
+            title="My Trips"
+            icon={icons.map}
+            aside={
+              <Link href="/plan-a-trip"
+                className="font-inter text-[9px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
+                Plan new &#8594;
+              </Link>
+            }
+          />
+          <DashTrips />
+        </section>
+
+        {/* ── 5. My Profile ────────────────────────────────────────────── */}
+        <section id="profile" className="scroll-mt-8">
+          <SectionHead
+            title="My Profile"
+            icon={icons.users}
+          />
+          <DashProfile
+            initialName={user.name ?? ''}
+            email={user.email ?? ''}
+            role={role}
+            initials={firstName.charAt(0).toUpperCase()}
+          />
+        </section>
+
+        {/* ── 6. Corrections inbox (Moderator+) ────────────────────────── */}
         {atLeast(role, 'moderator') && (
           <section id="corrections" className="scroll-mt-8">
             <SectionHead title={t('correctionsInbox')} icon={icons.check}

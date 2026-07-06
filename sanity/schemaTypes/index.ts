@@ -4,8 +4,9 @@ import { city } from './city'
 import { editorialPillar } from './editorialPillar'
 import { author } from './author'
 import { savedAttraction } from './savedAttraction'
+import { savedTrip } from './savedTrip'
 import { comment } from './comment'
 import { userRole } from './userRole'
 import { post } from './post'
 
-export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, comment, userRole, post]
+export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, savedTrip, comment, userRole, post]
