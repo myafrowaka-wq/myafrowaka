@@ -78,6 +78,14 @@ function filterSeparators(blocks: unknown[]): unknown[] {
   })
 }
 
+function hasMeaningfulContent(content: unknown[]): boolean {
+  return (content as PortableBlock[]).some(block => {
+    if (block._type !== 'block') return true  // images, embeds, etc. always count
+    const text = (block.children ?? []).map(c => c.text).join('').trim()
+    return text.length > 0
+  })
+}
+
 function groupByH2(blocks: unknown[]): { title: string; content: unknown[]; defaultOpen: boolean }[] {
   const groups: { title: string; content: unknown[]; defaultOpen: boolean }[] = []
   let current: { title: string; content: unknown[] } | null = null
@@ -470,6 +478,13 @@ export default async function AttractionPage(
   const filteredBody = hasContent ? filterSeparators(a.articleBody!) : []
   const sections = hasContent ? groupByH2(filteredBody) : []
 
+  // True when the first section is a 'Quick Overview' that actually has readable text.
+  // If it's empty (blank preamble or empty QO h2), we inject generated content instead.
+  const firstIsQO      = sections[0]?.title === 'Quick Overview'
+  const firstHasText   = firstIsQO && hasMeaningfulContent(sections[0].content)
+  const needsInjection = hasContent && !firstHasText
+  const generatedOv    = needsInjection && !QUICK_OVERVIEWS[slug] ? generateOverview(a) : null
+
   return (
     <>
       {jsonLd.map((schema, i) => (
@@ -623,10 +638,9 @@ export default async function AttractionPage(
               </div>
 
               {hasContent ? (
-                /* ── Article body: collapsible sections grouped by h2 ── */
                 <div className="divide-y divide-line dark-flip-border border-t border-line dark-flip-border">
-                  {/* Always inject Quick Overview when article doesn't begin with one */}
-                  {sections[0]?.title !== 'Quick Overview' && (
+                  {/* Inject generated Quick Overview when article has none (or an empty one) */}
+                  {needsInjection && (
                     <CollapsibleSection title="Quick Overview" defaultOpen={true}>
                       {QUICK_OVERVIEWS[slug] ? (
                         <div className="space-y-4">
@@ -634,31 +648,31 @@ export default async function AttractionPage(
                             <p key={pi} className={`font-sans text-[15px] leading-[1.8] ${pi === 0 ? 'text-charcoal/75 dark-flip-muted' : 'text-charcoal/60 dark-flip-muted'}`}>{p}</p>
                           ))}
                         </div>
-                      ) : (() => {
-                        const { p1, p2, p3 } = generateOverview(a)
-                        return (
-                          <div className="space-y-4">
-                            <p className="font-sans text-[15px] text-charcoal/75 dark-flip-muted leading-[1.8]">{p1}</p>
-                            <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{p2}</p>
-                            {p3 && <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{p3}</p>}
-                          </div>
-                        )
-                      })()}
+                      ) : (
+                        <div className="space-y-4">
+                          <p className="font-sans text-[15px] text-charcoal/75 dark-flip-muted leading-[1.8]">{generatedOv!.p1}</p>
+                          <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{generatedOv!.p2}</p>
+                          {generatedOv!.p3 && <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{generatedOv!.p3}</p>}
+                        </div>
+                      )}
                     </CollapsibleSection>
                   )}
-                  {sections.map((section, i) => (
-                    <CollapsibleSection
-                      key={i}
-                      title={section.title}
-                      defaultOpen={section.defaultOpen}
-                    >
-                      <div className={PROSE}>
-                        <PortableText
-                          value={section.content as Parameters<typeof PortableText>[0]['value']}
-                        />
-                      </div>
-                    </CollapsibleSection>
-                  ))}
+                  {sections.map((section, i) => {
+                    if (needsInjection && section.title === 'Quick Overview') return null
+                    return (
+                      <CollapsibleSection
+                        key={i}
+                        title={section.title}
+                        defaultOpen={section.defaultOpen}
+                      >
+                        <div className={PROSE}>
+                          <PortableText
+                            value={section.content as Parameters<typeof PortableText>[0]['value']}
+                          />
+                        </div>
+                      </CollapsibleSection>
+                    )
+                  })}
                 </div>
               ) : (
                 /* ── Fallback: structured data sections ────────────────── */
