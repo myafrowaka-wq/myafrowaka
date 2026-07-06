@@ -625,14 +625,25 @@ export default async function AttractionPage(
               {hasContent ? (
                 /* ── Article body: collapsible sections grouped by h2 ── */
                 <div className="divide-y divide-line dark-flip-border border-t border-line dark-flip-border">
-                  {/* If the article has no preamble Quick Overview, inject the static one */}
-                  {sections[0]?.title !== 'Quick Overview' && QUICK_OVERVIEWS[slug] && (
+                  {/* Always inject Quick Overview when article doesn't begin with one */}
+                  {sections[0]?.title !== 'Quick Overview' && (
                     <CollapsibleSection title="Quick Overview" defaultOpen={true}>
-                      <div className="space-y-4">
-                        {QUICK_OVERVIEWS[slug].map((p, pi) => (
-                          <p key={pi} className={`font-sans text-[15px] leading-[1.8] ${pi === 0 ? 'text-charcoal/75 dark-flip-muted' : 'text-charcoal/60 dark-flip-muted'}`}>{p}</p>
-                        ))}
-                      </div>
+                      {QUICK_OVERVIEWS[slug] ? (
+                        <div className="space-y-4">
+                          {QUICK_OVERVIEWS[slug].map((p, pi) => (
+                            <p key={pi} className={`font-sans text-[15px] leading-[1.8] ${pi === 0 ? 'text-charcoal/75 dark-flip-muted' : 'text-charcoal/60 dark-flip-muted'}`}>{p}</p>
+                          ))}
+                        </div>
+                      ) : (() => {
+                        const { p1, p2, p3 } = generateOverview(a)
+                        return (
+                          <div className="space-y-4">
+                            <p className="font-sans text-[15px] text-charcoal/75 dark-flip-muted leading-[1.8]">{p1}</p>
+                            <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{p2}</p>
+                            {p3 && <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{p3}</p>}
+                          </div>
+                        )
+                      })()}
                     </CollapsibleSection>
                   )}
                   {sections.map((section, i) => (
