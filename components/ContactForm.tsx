@@ -75,13 +75,13 @@ export function ContactForm() {
 
       {errorMsg && (
         <div className="bg-crimson/8 border border-crimson/25 rounded-xl px-4 py-3">
-          <p className="font-sans text-[13px] text-crimson">{errorMsg}</p>
+          <p className="font-sans text-[14px] text-crimson">{errorMsg}</p>
         </div>
       )}
 
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
-          <label className="font-display font-semibold text-[13px] text-charcoal/70 dark-flip-muted block mb-2">
+          <label className="font-display font-semibold text-[14px] text-charcoal/70 dark-flip-muted block mb-2">
             Your Name
           </label>
           <input
@@ -93,7 +93,7 @@ export function ContactForm() {
           />
         </div>
         <div>
-          <label className="font-display font-semibold text-[13px] text-charcoal/70 dark-flip-muted block mb-2">
+          <label className="font-display font-semibold text-[14px] text-charcoal/70 dark-flip-muted block mb-2">
             Email Address
           </label>
           <input
@@ -107,7 +107,7 @@ export function ContactForm() {
       </div>
 
       <div>
-        <label className="font-display font-semibold text-[13px] text-charcoal/70 dark-flip-muted block mb-2">
+        <label className="font-display font-semibold text-[14px] text-charcoal/70 dark-flip-muted block mb-2">
           Reason for Contact
         </label>
         <div className="relative">
@@ -124,7 +124,7 @@ export function ContactForm() {
       </div>
 
       <div>
-        <label className="font-display font-semibold text-[13px] text-charcoal/70 dark-flip-muted block mb-2">
+        <label className="font-display font-semibold text-[14px] text-charcoal/70 dark-flip-muted block mb-2">
           Message
         </label>
         <textarea
@@ -139,7 +139,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="inline-flex items-center gap-2.5 bg-crimson hover:bg-crimson-600 disabled:opacity-60 disabled:cursor-not-allowed text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(162,46,41,0.25)]"
+        className="inline-flex items-center gap-2.5 bg-action hover:bg-action-hover disabled:opacity-60 disabled:cursor-not-allowed text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(162,46,41,0.25)]"
       >
         {status === 'loading' ? (
           <>
@@ -159,7 +159,7 @@ export function ContactForm() {
         )}
       </button>
 
-      <p className="font-sans text-[12px] text-charcoal/35 dark-flip-muted">
+      <p className="font-sans text-[14px] text-charcoal/35 dark-flip-muted">
         Your message goes directly to the editorial team. We do not use auto-replies.
       </p>
     </form>

@@ -54,7 +54,7 @@ export default async function LoginPage({
               Africa is not a destination.
               <span className="block text-gold-300 italic mt-1">It is a conversation you never want to end.</span>
             </p>
-            <footer className="font-inter text-[10px] uppercase tracking-[0.16em] text-gold-400/70">
+            <footer className="font-inter text-[14px] uppercase tracking-[0.16em] text-gold-400/70">
               MyAfroWaka
             </footer>
           </blockquote>
@@ -76,7 +76,7 @@ export default async function LoginPage({
           {/* Error message */}
           {hasError && (
             <div className="mb-5 bg-crimson/8 border border-crimson/25 rounded-xl px-4 py-3">
-              <p className="font-sans text-[13px] text-crimson">
+              <p className="font-sans text-[14px] text-crimson">
                 {t('incorrectCreds')}
               </p>
             </div>
@@ -90,6 +90,10 @@ export default async function LoginPage({
             }}>
               <button type="submit"
                 className="w-full flex items-center justify-center gap-3 border border-line dark-flip-border bg-white dark-flip-card hover:bg-sand text-charcoal dark-flip-text font-display font-semibold text-[14px] py-4 rounded-xl transition-colors shadow-sm hover:shadow-[var(--shadow-soft)]">
+                {/* Google's official 4-colour "G" mark. Left as literal hex
+                    deliberately — this is Google's brand mark, not ours, and
+                    it must render in Google's exact colours per their brand
+                    guidelines regardless of our own token palette. */}
                 <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                   <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -104,7 +108,7 @@ export default async function LoginPage({
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-line dark-flip-border"/></div>
             <div className="relative flex justify-center">
-              <span className="bg-cream dark-flip-bg px-3 font-inter text-[10px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted">
+              <span className="bg-cream dark-flip-bg px-3 font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted">
                 {t('orWithEmail')}
               </span>
             </div>
@@ -127,7 +131,7 @@ export default async function LoginPage({
             <div className="space-y-4">
               {isSignup && (
                 <div>
-                  <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">
+                  <label className="font-display font-semibold text-[14px] text-charcoal/55 dark-flip-muted block mb-1.5">
                     {t('nameLabel')}
                   </label>
                   <input type="text" name="name" placeholder="Your name"
@@ -135,14 +139,14 @@ export default async function LoginPage({
                 </div>
               )}
               <div>
-                <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">
+                <label className="font-display font-semibold text-[14px] text-charcoal/55 dark-flip-muted block mb-1.5">
                   {t('emailLabel')}
                 </label>
                 <input type="email" name="email" placeholder="your@email.com"
                   className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
               </div>
               <div>
-                <label className="font-display font-semibold text-[12px] text-charcoal/55 dark-flip-muted block mb-1.5">
+                <label className="font-display font-semibold text-[14px] text-charcoal/55 dark-flip-muted block mb-1.5">
                   {t('passwordLabel')}
                 </label>
                 <input type="password" name="password" placeholder={isSignup ? 'Create a strong password' : 'Enter your password'}
@@ -150,7 +154,7 @@ export default async function LoginPage({
               </div>
 
               <button type="submit"
-                className="w-full bg-ink hover:bg-charcoal text-cream font-display font-bold text-[13px] uppercase tracking-[0.10em] py-4 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99]">
+                className="w-full bg-ink hover:bg-charcoal text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] py-4 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99]">
                 {isSignup ? 'Create Account' : 'Sign In'}
               </button>
             </div>
@@ -165,18 +169,18 @@ export default async function LoginPage({
           {/* ── Demo accounts panel ────────────────────────────────────── */}
           <div className="mt-10 bg-sand dark-flip-surf border border-line dark-flip-border rounded-2xl overflow-hidden">
             <div className="px-5 py-3.5 border-b border-line dark-flip-border">
-              <p className="font-inter text-[8px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted">
+              <p className="font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted">
                 Demo Accounts
               </p>
-              <p className="font-sans text-[12px] text-charcoal/55 dark-flip-muted mt-0.5">
+              <p className="font-sans text-[14px] text-charcoal/55 dark-flip-muted mt-0.5">
                 Try any role. Password for all: <span className="font-inter font-bold text-charcoal dark-flip-text">{DEMO_PASSWORD}</span>
               </p>
             </div>
             <div className="divide-y divide-line dark-flip-border">
               {DEMO_ACCOUNTS.map(({ email, role }) => (
                 <div key={email} className="flex items-center justify-between px-5 py-3">
-                  <p className="font-inter text-[10px] text-charcoal/65 dark-flip-muted">{email}</p>
-                  <span className="font-inter text-[8px] uppercase tracking-[0.1em] text-charcoal/35 dark-flip-muted">
+                  <p className="font-inter text-[14px] text-charcoal/65 dark-flip-muted">{email}</p>
+                  <span className="font-inter text-[14px] uppercase tracking-[0.1em] text-charcoal/35 dark-flip-muted">
                     {role}
                   </span>
                 </div>
@@ -184,7 +188,7 @@ export default async function LoginPage({
             </div>
           </div>
 
-          <p className="font-display text-[9px] text-charcoal/25 dark-flip-muted text-center mt-8">
+          <p className="font-display text-[14px] text-charcoal/25 dark-flip-muted text-center mt-8">
             By continuing you agree to our{' '}
             <Link href="/terms" className="hover:text-charcoal/50 transition-colors">Terms</Link>{' '}and{' '}
             <Link href="/privacy" className="hover:text-charcoal/50 transition-colors">Privacy Policy</Link>.

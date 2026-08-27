@@ -18,7 +18,7 @@ export function Card({ title, country, category, imageUrl, lastVerified, isUNESC
           <img src={imageUrl} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <span className="font-inter text-ochre-300 text-xs uppercase tracking-widest">No image yet</span>
+            <span className="font-inter text-ochre-text text-xs uppercase tracking-widest">No image yet</span>
           </div>
         )}
         {isUNESCO && (

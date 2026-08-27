@@ -2,6 +2,10 @@ import { Button } from '../../components/Button'
 import { Badge } from '../../components/Badge'
 import { Card } from '../../components/Card'
 
+// `hex` here is documentation text only (what this page displays as the
+// value), never used for styling — every swatch below renders from the
+// real var(--color-*) token via `token`, so the swatch can never drift
+// out of sync with the actual token file in globals.css.
 const colors = [
   { name: 'Crimson Pulse', token: 'crimson', hex: '#A22E29', role: 'Primary CTA / movement' },
   { name: 'Ochre Earth', token: 'ochre', hex: '#B55D39', role: 'Warm support / earth' },
@@ -11,10 +15,10 @@ const colors = [
 ]
 
 const surfaces = [
-  { name: 'Cream', hex: '#F7F2E9', border: true },
-  { name: 'Sand', hex: '#EFE7D6', border: true },
-  { name: 'Slate', hex: '#3B403E', border: false },
-  { name: 'Ink', hex: '#1A1813', border: false },
+  { name: 'Cream', token: 'cream', hex: '#F7F2E9', border: true },
+  { name: 'Sand', token: 'sand', hex: '#EFE7D6', border: true },
+  { name: 'Slate', token: 'slate', hex: '#3B403E', border: false },
+  { name: 'Ink', token: 'ink', hex: '#1A1813', border: false },
 ]
 
 export default function StyleGuide() {
@@ -32,7 +36,7 @@ export default function StyleGuide() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-8">
           {colors.map(c => (
             <div key={c.token}>
-              <div className="h-24 rounded-[14px] shadow-soft mb-3" style={{ backgroundColor: c.hex }} />
+              <div className="h-24 rounded-[14px] shadow-soft mb-3" style={{ backgroundColor: `var(--color-${c.token})` }} />
               <p className="font-sans font-semibold text-sm text-charcoal">{c.name}</p>
               <p className="font-inter text-xs text-charcoal-300">{c.hex}</p>
               <p className="font-sans text-xs text-charcoal-300 mt-1">{c.role}</p>
@@ -46,7 +50,7 @@ export default function StyleGuide() {
             <div key={s.name}>
               <div
                 className={`h-16 rounded-[14px] mb-2 ${s.border ? 'border border-line' : ''}`}
-                style={{ backgroundColor: s.hex }}
+                style={{ backgroundColor: `var(--color-${s.token})` }}
               />
               <p className="font-sans font-semibold text-sm text-charcoal">{s.name}</p>
               <p className="font-inter text-xs text-charcoal-300">{s.hex}</p>

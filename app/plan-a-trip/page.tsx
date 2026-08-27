@@ -62,7 +62,7 @@ export default function PlanATripPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/60 to-ink/97"/>
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 w-full pb-14 pt-28 text-center">
-          <p className="font-inter text-[9px] uppercase tracking-[0.22em] text-gold-400 mb-3">Start Here</p>
+          <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-gold-400 mb-3">Start Here</p>
           <h1
             className="font-display font-extrabold text-cream mb-4"
             style={{ fontSize: 'clamp(32px, 5vw, 62px)', lineHeight: '0.95', letterSpacing: '-0.025em' }}
@@ -81,7 +81,7 @@ export default function PlanATripPage() {
 
           {/* Destination */}
           <div>
-            <label htmlFor="destination" className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">
+            <label htmlFor="destination" className="font-display font-semibold text-[14px] text-charcoal dark-flip-text block mb-2">
               Where in Africa do you want to go?
             </label>
             <input
@@ -97,7 +97,7 @@ export default function PlanATripPage() {
           {/* Travel dates */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="from" className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">From</label>
+              <label htmlFor="from" className="font-display font-semibold text-[14px] text-charcoal dark-flip-text block mb-2">From</label>
               <input
                 id="from"
                 type="date"
@@ -107,7 +107,7 @@ export default function PlanATripPage() {
               />
             </div>
             <div>
-              <label htmlFor="to" className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">To</label>
+              <label htmlFor="to" className="font-display font-semibold text-[14px] text-charcoal dark-flip-text block mb-2">To</label>
               <input
                 id="to"
                 type="date"
@@ -120,7 +120,7 @@ export default function PlanATripPage() {
 
           {/* Travelers */}
           <div>
-            <label htmlFor="travelers" className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">
+            <label htmlFor="travelers" className="font-display font-semibold text-[14px] text-charcoal dark-flip-text block mb-2">
               How many travelers?
             </label>
             <select
@@ -140,7 +140,7 @@ export default function PlanATripPage() {
 
           {/* Budget */}
           <div>
-            <label htmlFor="budget" className="font-display font-semibold text-[13px] text-charcoal dark-flip-text block mb-2">
+            <label htmlFor="budget" className="font-display font-semibold text-[14px] text-charcoal dark-flip-text block mb-2">
               Budget range (per person)
             </label>
             <select
@@ -159,7 +159,7 @@ export default function PlanATripPage() {
 
           {/* Interests */}
           <div>
-            <p className="font-display font-semibold text-[13px] text-charcoal dark-flip-text mb-3">
+            <p className="font-display font-semibold text-[14px] text-charcoal dark-flip-text mb-3">
               What interests you most?
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -184,11 +184,11 @@ export default function PlanATripPage() {
             <button
               type="submit"
               disabled={saving}
-              className="w-full bg-crimson hover:bg-crimson-600 disabled:opacity-70 disabled:cursor-not-allowed text-cream font-display font-bold text-[13px] uppercase tracking-[0.12em] py-4 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99]"
+              className="w-full bg-action hover:bg-action-hover disabled:opacity-70 disabled:cursor-not-allowed text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] py-4 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99]"
             >
               {saving ? 'Saving Plan...' : (status === 'authenticated' ? 'Save Plan and Find Attractions' : 'Find Attractions')}
             </button>
-            <p className="font-sans text-[12px] text-charcoal/45 dark-flip-muted text-center mt-3 leading-relaxed">
+            <p className="font-sans text-[14px] text-charcoal/45 dark-flip-muted text-center mt-3 leading-relaxed">
               {status === 'authenticated'
                 ? 'Your trip plan will be saved to your dashboard.'
                 : <>
@@ -209,17 +209,17 @@ export default function PlanATripPage() {
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link href="/search"
-              className="font-inter text-[9px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
+              className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
               Browse all attractions
             </Link>
             <span className="text-charcoal/20">|</span>
             <Link href="/guides"
-              className="font-inter text-[9px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
+              className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
               Read travel guides
             </Link>
             <span className="text-charcoal/20">|</span>
             <Link href="/blog"
-              className="font-inter text-[9px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
+              className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
               Stories from the continent
             </Link>
           </div>

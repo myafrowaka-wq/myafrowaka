@@ -169,8 +169,8 @@ export default async function HomePage() {
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
       <section className="relative min-h-[94vh] flex items-center overflow-hidden">
         <HeroBackground src="https://images.unsplash.com/photo-1746310783422-16df7622e7c9?auto=format&fit=crop&w=1920&q=85" alt="Pyramids of Giza at golden hour"/>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#070F09]/96 via-[#0A1A0C]/88 to-[#0E2010]/55"/>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#070F09]/60 via-transparent to-[#070F09]/15"/>
+        <div className="absolute inset-0 bg-gradient-to-r from-scrim-1/96 via-scrim-2/88 to-scrim-3/55"/>
+        <div className="absolute inset-0 bg-gradient-to-t from-scrim-1/60 via-transparent to-scrim-1/15"/>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-20 lg:py-28">
           <div className="grid lg:grid-cols-7 gap-10 lg:gap-16 items-center">
@@ -208,14 +208,14 @@ export default async function HomePage() {
                   <input name="q" type="search" placeholder="Egypt, safari, Zanzibar..."
                     className="flex-1 py-4 pr-4 text-sm font-sans text-charcoal placeholder-charcoal/35 bg-transparent focus:outline-none"/>
                   <button type="submit"
-                    className="m-1.5 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[11px] uppercase tracking-[0.10em] px-5 py-3 rounded-xl transition-all btn-magnetic">
+                    className="m-1.5 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] px-5 py-3 rounded-xl transition-all btn-magnetic">
                     Search
                   </button>
                 </div>
               </form>
 
               <div>
-                <p className="font-inter text-[11px] uppercase tracking-[0.15em] text-cream/55 mb-3">{t('popularSearches')}</p>
+                <p className="font-inter text-[14px] uppercase tracking-[0.15em] text-cream/55 mb-3">{t('popularSearches')}</p>
                 <PopularPills attractions={popularAttractions} />
               </div>
             </div>
@@ -228,7 +228,7 @@ export default async function HomePage() {
         </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
-          <span className="font-inter text-[8px] uppercase tracking-[0.2em] text-cream">Scroll</span>
+          <span className="font-inter text-[14px] uppercase tracking-[0.2em] text-cream">Scroll</span>
           <div className="w-px h-8 bg-gradient-to-b from-cream to-transparent"/>
         </div>
       </section>
@@ -247,7 +247,7 @@ export default async function HomePage() {
 
           <div className="mt-10 flex justify-center">
             <Link href="/attractions"
-              className="inline-flex items-center gap-2.5 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(180,30,30,0.28)] hover:shadow-[0_8px_36px_rgba(180,30,30,0.38)]">
+              className="inline-flex items-center gap-2.5 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(180,30,30,0.28)] hover:shadow-[0_8px_36px_rgba(180,30,30,0.38)]">
               {t('allDestinations')}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
@@ -268,7 +268,7 @@ export default async function HomePage() {
               {t('featuredAttractions')}
             </h2>
             <Link href="/search"
-              className="inline-link link-arrow hidden sm:inline-flex font-inter text-[11px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
+              className="inline-link link-arrow hidden sm:inline-flex font-inter text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
               {tc('browseAll')}
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
@@ -285,7 +285,7 @@ export default async function HomePage() {
               <div className="absolute inset-0 bg-gradient-to-t from-ink/97 via-ink/50 to-transparent"/>
               <div className="relative mt-auto p-7 lg:p-8">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="font-display font-bold text-[11px] uppercase tracking-[0.12em] text-gold-400">{displayGuides[0].country}</span>
+                  <span className="font-display font-bold text-[14px] uppercase tracking-[0.12em] text-gold-400">{displayGuides[0].country}</span>
                 </div>
                 <h3 className="font-display font-bold text-xl sm:text-2xl text-cream group-hover:text-gold-300 transition-colors leading-snug mb-3"
                   style={{ letterSpacing: '-0.018em' }}>
@@ -294,7 +294,7 @@ export default async function HomePage() {
                 <p className="font-sans text-[15px] text-cream/68 leading-relaxed line-clamp-2 mb-5">
                   {displayGuides[0].editorialSummary}
                 </p>
-                <span className="link-arrow inline-link font-inter text-[12px] uppercase tracking-[0.14em] text-gold-400 group-hover:text-gold-300">
+                <span className="link-arrow inline-link font-inter text-[14px] uppercase tracking-[0.14em] text-gold-400 group-hover:text-gold-300">
                   {t('readGuide')}
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </span>
@@ -309,14 +309,14 @@ export default async function HomePage() {
                   <Image src={g.image} alt={g.name} fill sizes="(max-width:640px) 100vw,50vw"
                     className="object-cover img-editorial img-inner"/>
                   <div className="absolute top-3 left-3">
-                    <span className="bg-white/92 backdrop-blur font-inter text-[11px] uppercase tracking-[0.14em] text-charcoal/65 px-2.5 py-1 rounded-full">
+                    <span className="bg-white/92 backdrop-blur font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/65 px-2.5 py-1 rounded-full">
                       {g.continentRegion}
                     </span>
                   </div>
                 </div>
                 <div className="p-6 flex flex-col flex-1">
                   <div className="flex items-center gap-2.5 mb-3">
-                    <span className="font-display font-bold text-[11px] uppercase tracking-[0.12em] text-crimson">{g.country}</span>
+                    <span className="font-display font-bold text-[14px] uppercase tracking-[0.12em] text-crimson">{g.country}</span>
                   </div>
                   <h3 className="font-display font-bold text-lg text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-2 flex-1"
                     style={{ letterSpacing: '-0.015em' }}>
@@ -326,7 +326,7 @@ export default async function HomePage() {
                     {g.editorialSummary}
                   </p>
                   <div className="flex items-center justify-end pt-4 border-t border-line dark-flip-border">
-                    <span className="link-arrow inline-link font-inter text-[12px] text-crimson">
+                    <span className="link-arrow inline-link font-inter text-[14px] text-crimson">
                       Read the guide
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </span>
@@ -342,14 +342,14 @@ export default async function HomePage() {
                 <Image src={displayGuides[3].image} alt={displayGuides[3].name} fill sizes="(max-width:640px) 100vw,384px"
                   className="object-cover img-editorial img-inner"/>
                 <div className="absolute top-3 left-3">
-                  <span className="bg-white/92 backdrop-blur font-inter text-[11px] uppercase tracking-[0.14em] text-charcoal/65 px-2.5 py-1 rounded-full">
+                  <span className="bg-white/92 backdrop-blur font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/65 px-2.5 py-1 rounded-full">
                     {displayGuides[3].continentRegion}
                   </span>
                 </div>
               </div>
               <div className="p-7 lg:p-8 flex flex-col justify-center flex-1">
                 <div className="flex items-center gap-2.5 mb-3">
-                  <span className="font-display font-bold text-[11px] uppercase tracking-[0.12em] text-crimson">{displayGuides[3].country}</span>
+                  <span className="font-display font-bold text-[14px] uppercase tracking-[0.12em] text-crimson">{displayGuides[3].country}</span>
                 </div>
                 <h3 className="font-display font-bold text-xl sm:text-2xl text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-3"
                   style={{ letterSpacing: '-0.018em' }}>
@@ -359,7 +359,7 @@ export default async function HomePage() {
                   {displayGuides[3].editorialSummary}
                 </p>
                 <div className="flex items-center justify-end pt-4 border-t border-line dark-flip-border">
-                  <span className="link-arrow inline-link font-inter text-[12px] text-crimson">
+                  <span className="link-arrow inline-link font-inter text-[14px] text-crimson">
                     {t('readTheGuide')}
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                   </span>
@@ -371,7 +371,7 @@ export default async function HomePage() {
           {/* View all — prominent solid button */}
           <div className="mt-12 flex justify-center">
             <Link href="/attractions"
-              className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(26,24,19,0.22)] hover:shadow-[0_8px_36px_rgba(26,24,19,0.32)]">
+              className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(26,24,19,0.22)] hover:shadow-[0_8px_36px_rgba(26,24,19,0.32)]">
               {t('allAttractions')}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
@@ -405,7 +405,7 @@ export default async function HomePage() {
                 {t('latestAttractions')}
               </h2>
               <Link href="/search"
-                className="inline-link link-arrow hidden sm:inline-flex font-inter text-[11px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
+                className="inline-link link-arrow hidden sm:inline-flex font-inter text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
                 {tc('browseAll')}
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
               </Link>
@@ -423,16 +423,16 @@ export default async function HomePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/97 via-ink/35 to-transparent"/>
                   <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <p className="font-inter text-[11px] uppercase tracking-[0.16em] text-gold-400 mb-1">{a.continentRegion}</p>
+                    <p className="font-inter text-[14px] uppercase tracking-[0.16em] text-gold-400 mb-1">{a.continentRegion}</p>
                     <h3 className="font-display font-bold text-base text-cream group-hover:text-gold-300 transition-colors leading-tight mb-1"
                       style={{ letterSpacing: '-0.015em' }}>
                       {a.name}
                     </h3>
                     {a.editorialSummary && (
-                      <p className="font-sans text-[13px] text-cream/70 leading-snug line-clamp-2 mt-1">{a.editorialSummary}</p>
+                      <p className="font-sans text-[14px] text-cream/70 leading-snug line-clamp-2 mt-1">{a.editorialSummary}</p>
                     )}
                     {a.country?.name && (
-                      <p className="font-inter text-[11px] text-cream/60 mt-2">{a.country.name}</p>
+                      <p className="font-inter text-[14px] text-cream/60 mt-2">{a.country.name}</p>
                     )}
                   </div>
                 </Link>
@@ -446,14 +446,14 @@ export default async function HomePage() {
               </button>
               {[1, 2, 3, 4, 5].map(n => (
                 <Link key={n} href={n === 1 ? '/search' : `/search?page=${n}`}
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-display font-semibold text-[13px] transition-all
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-display font-semibold text-[14px] transition-all
                     ${n === 1 ? 'bg-ink text-cream shadow-[var(--shadow-soft)]' : 'border border-line dark-flip-border text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson'}`}>
                   {n}
                 </Link>
               ))}
-              <span className="font-inter text-[11px] text-charcoal/30 px-1">...</span>
+              <span className="font-inter text-[14px] text-charcoal/30 px-1">...</span>
               <Link href="/search?page=9"
-                className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center font-display font-semibold text-[13px] text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson transition-all">
+                className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center font-display font-semibold text-[14px] text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson transition-all">
                 9
               </Link>
               <Link href="/search?page=2" aria-label="Next page"
@@ -470,7 +470,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between mb-12">
             <div>
-              <p className="font-inter text-[11px] uppercase tracking-[0.22em] text-crimson mb-2">The Journal</p>
+              <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-crimson mb-2">The Journal</p>
               <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
                 style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
                 Stories from Across Africa
@@ -494,16 +494,16 @@ export default async function HomePage() {
                       className="object-cover img-editorial img-inner"
                     />
                     <div className="absolute top-3 left-3">
-                      <span className="bg-ink/75 backdrop-blur font-inter text-[11px] uppercase tracking-[0.14em] text-cream/85 px-2.5 py-1 rounded-full">
+                      <span className="bg-ink/75 backdrop-blur font-inter text-[14px] uppercase tracking-[0.14em] text-cream/85 px-2.5 py-1 rounded-full">
                         {post.category}
                       </span>
                     </div>
                   </div>
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="font-inter text-[11px] uppercase tracking-[0.14em] text-crimson">{post.tags[0]}</span>
+                      <span className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson">{post.tags[0]}</span>
                       <span className="text-charcoal/20 dark-flip-muted">·</span>
-                      <span className="font-inter text-[12px] text-charcoal/55 dark-flip-muted">
+                      <span className="font-inter text-[14px] text-charcoal/55 dark-flip-muted">
                         {new Date(post.publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </span>
                     </div>
@@ -515,8 +515,8 @@ export default async function HomePage() {
                       {post.excerpt}
                     </p>
                     <div className="mt-4 pt-4 border-t border-line dark-flip-border flex items-center justify-between">
-                      <span className="font-sans text-[12px] text-charcoal/55 dark-flip-muted">{post.author.name}</span>
-                      <span className="font-inter text-[12px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
+                      <span className="font-sans text-[14px] text-charcoal/55 dark-flip-muted">{post.author.name}</span>
+                      <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
                         Read &#8594;
                       </span>
                     </div>
@@ -527,7 +527,7 @@ export default async function HomePage() {
           </div>
           <div className="mt-10 flex justify-center">
             <Link href="/blog"
-              className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic">
+              className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic">
               View All Articles
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
@@ -540,14 +540,14 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <p className="font-inter text-[11px] uppercase tracking-[0.22em] text-crimson mb-2">@myafrowaka_</p>
+              <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-crimson mb-2">@myafrowaka_</p>
               <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
                 style={{ fontSize: 'clamp(20px, 2.5vw, 34px)' }}>
                 Follow Our Journey
               </h2>
             </div>
             <a href="https://instagram.com/myafrowaka_" target="_blank" rel="noopener noreferrer"
-              className="inline-link link-arrow hidden sm:inline-flex font-inter text-[11px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
+              className="inline-link link-arrow hidden sm:inline-flex font-inter text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
               Instagram
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </a>
@@ -584,12 +584,12 @@ export default async function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/search"
-              className="inline-flex items-center justify-center gap-2 bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic">
+              className="inline-flex items-center justify-center gap-2 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic">
               Explore Destinations
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
             <Link href="/about"
-              className="inline-flex items-center justify-center border border-white/25 hover:border-white/55 text-cream/75 hover:text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-colors">
+              className="inline-flex items-center justify-center border border-white/25 hover:border-white/55 text-cream/75 hover:text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-colors">
               Our Story
             </Link>
           </div>

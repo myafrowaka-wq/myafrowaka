@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { GUIDE_BY_SLUG_QUERY, ALL_GUIDE_SLUGS_QUERY } from '@/sanity/lib/queries'
+import { REGION_COLOR, REGION_COLOR_FALLBACK } from '@/lib/regionColors'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -34,15 +35,6 @@ interface Guide {
 }
 
 // ── Region accent colours ─────────────────────────────────────────────────────
-
-const REGION_COLOR: Record<string, string> = {
-  'East Africa':          '#3F6A3D',
-  'West Africa':          '#B55D39',
-  'Southern Africa':      '#29251A',
-  'North Africa':         '#A22E29',
-  'Central Africa':       '#D5A942',
-  'Indian Ocean Islands': '#3B403E',
-}
 
 // ── Static params ─────────────────────────────────────────────────────────────
 
@@ -138,7 +130,7 @@ export default async function GuidePage(
         <div className="absolute inset-0 bg-gradient-to-b from-ink/20 via-ink/55 to-ink/97"/>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">
           {guide.focusKeyword && (
-            <p className="font-inter text-[9px] uppercase tracking-[0.22em] text-gold-400 mb-3">
+            <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-gold-400 mb-3">
               {guide.focusKeyword}
             </p>
           )}
@@ -151,7 +143,7 @@ export default async function GuidePage(
           </h1>
 
           {validItems.length > 0 && (
-            <p className="font-inter text-[9px] uppercase tracking-[0.14em] text-cream/35 mt-4">
+            <p className="font-inter text-[14px] uppercase tracking-[0.14em] text-cream/35 mt-4">
               {validItems.length} {validItems.length === 1 ? 'attraction' : 'attractions'} in this guide
             </p>
           )}
@@ -172,7 +164,7 @@ export default async function GuidePage(
               ) : (
                 validItems.map((item, i) => {
                   const a = item.attraction
-                  const accent = a.continentRegion ? (REGION_COLOR[a.continentRegion] ?? '#B55D39') : '#B55D39'
+                  const accent = a.continentRegion ? (REGION_COLOR[a.continentRegion] ?? REGION_COLOR_FALLBACK) : REGION_COLOR_FALLBACK
                   const typeLabel = a.type?.[0]?.replace('UNESCO World Heritage Site | ', '') ?? ''
                   const num = String(i + 1).padStart(2, '0')
                   return (
@@ -193,12 +185,12 @@ export default async function GuidePage(
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap gap-2 items-center mb-2">
                             {typeLabel && (
-                              <span className="font-inter text-[8px] uppercase tracking-[0.14em] text-charcoal/38 dark-flip-muted">
+                              <span className="font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/38 dark-flip-muted">
                                 {typeLabel}
                               </span>
                             )}
                             {a.country && (
-                              <span className="font-inter text-[8px] uppercase tracking-[0.12em] text-charcoal/28 dark-flip-muted">
+                              <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-charcoal/28 dark-flip-muted">
                                 {a.city ? `${a.city.name}, ` : ''}{a.country.name}
                               </span>
                             )}
@@ -210,19 +202,19 @@ export default async function GuidePage(
                           </h2>
 
                           {item.framingText && (
-                            <p className="font-sans text-[13px] text-charcoal/60 dark-flip-muted leading-relaxed mb-4">
+                            <p className="font-sans text-[14px] text-charcoal/60 dark-flip-muted leading-relaxed mb-4">
                               {item.framingText}
                             </p>
                           )}
 
                           {a.editorialSummary && !item.framingText && (
-                            <p className="font-sans text-[13px] text-charcoal/55 dark-flip-muted leading-relaxed mb-4 line-clamp-2">
+                            <p className="font-sans text-[14px] text-charcoal/55 dark-flip-muted leading-relaxed mb-4 line-clamp-2">
                               {a.editorialSummary}
                             </p>
                           )}
 
                           <Link href={`/attractions/${a.slug}`}
-                            className="inline-flex items-center gap-2 font-inter text-[9px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
+                            className="inline-flex items-center gap-2 font-inter text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
                             Read the full guide
                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -241,19 +233,19 @@ export default async function GuidePage(
 
               {/* About this guide */}
               <div className="bg-ink rounded-3xl p-6 text-cream">
-                <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-gold-400/70 mb-3">About this guide</p>
+                <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-gold-400/70 mb-3">About this guide</p>
                 {guide.focusKeyword && (
-                  <p className="font-sans text-[13px] text-cream/55 leading-relaxed mb-3">
+                  <p className="font-sans text-[14px] text-cream/55 leading-relaxed mb-3">
                     This guide targets searches for <span className="text-cream/80 font-medium">{guide.focusKeyword}</span>.
                   </p>
                 )}
                 {guide.metaDescription && (
-                  <p className="font-sans text-[13px] text-cream/50 leading-relaxed">
+                  <p className="font-sans text-[14px] text-cream/50 leading-relaxed">
                     {guide.metaDescription}
                   </p>
                 )}
                 {!guide.focusKeyword && !guide.metaDescription && (
-                  <p className="font-sans text-[13px] text-cream/45 leading-relaxed">
+                  <p className="font-sans text-[14px] text-cream/45 leading-relaxed">
                     A curated selection of attractions verified by the MyAfroWaka editorial team.
                   </p>
                 )}
@@ -261,12 +253,12 @@ export default async function GuidePage(
 
               {/* Item count */}
               <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-3">In this guide</p>
+                <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-3">In this guide</p>
                 <p className="font-display font-bold text-charcoal dark-flip-text"
                   style={{ fontSize: 'clamp(28px, 3vw, 40px)', letterSpacing: '-0.02em' }}>
                   {validItems.length}
                 </p>
-                <p className="font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/30 dark-flip-muted mt-1">
+                <p className="font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/30 dark-flip-muted mt-1">
                   verified attractions
                 </p>
               </div>
@@ -275,7 +267,7 @@ export default async function GuidePage(
               <Link href="/guides"
                 className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
                 <div>
-                  <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-1">More</p>
+                  <p className="font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-1">More</p>
                   <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                     All travel guides
                   </p>
@@ -289,7 +281,7 @@ export default async function GuidePage(
               <Link href="/search"
                 className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
                 <div>
-                  <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-1">Explore</p>
+                  <p className="font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-1">Explore</p>
                   <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                     Browse all attractions
                   </p>

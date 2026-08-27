@@ -49,19 +49,27 @@ export async function POST(req: NextRequest) {
       to:      [toEmail],
       replyTo: email,
       subject: `[Contact] ${escapeHtml(subject)} from ${escapeHtml(name)}`,
+      // Inline hex here is a deliberate, documented exception, not a gap in
+      // the token sweep: this HTML is rendered by email clients (Gmail,
+      // Outlook, Apple Mail), none of which support CSS custom properties —
+      // var(--color-charcoal) would render as literally nothing. Email HTML
+      // has always needed fully inline, literal styles; that's a constraint
+      // of the medium, not a design-token violation. Font sizes below the
+      // site's 14px floor ARE fixed here regardless — the accessibility
+      // reasoning for a real minimum doesn't stop at the browser's edge.
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
           <h2 style="margin:0 0 20px;color:#1A1813">New contact form submission</h2>
           <table style="width:100%;border-collapse:collapse">
-            <tr><td style="padding:8px 0;color:#666;font-size:13px;width:100px">Name</td><td style="padding:8px 0;font-size:13px;color:#1A1813"><strong>${escapeHtml(name)}</strong></td></tr>
-            <tr><td style="padding:8px 0;color:#666;font-size:13px">Email</td><td style="padding:8px 0;font-size:13px;color:#1A1813"><a href="mailto:${escapeHtml(email)}" style="color:#A22E29">${escapeHtml(email)}</a></td></tr>
-            <tr><td style="padding:8px 0;color:#666;font-size:13px">Reason</td><td style="padding:8px 0;font-size:13px;color:#1A1813">${escapeHtml(subject)}</td></tr>
+            <tr><td style="padding:8px 0;color:#666;font-size:14px;width:100px">Name</td><td style="padding:8px 0;font-size:14px;color:#1A1813"><strong>${escapeHtml(name)}</strong></td></tr>
+            <tr><td style="padding:8px 0;color:#666;font-size:14px">Email</td><td style="padding:8px 0;font-size:14px;color:#1A1813"><a href="mailto:${escapeHtml(email)}" style="color:#A22E29">${escapeHtml(email)}</a></td></tr>
+            <tr><td style="padding:8px 0;color:#666;font-size:14px">Reason</td><td style="padding:8px 0;font-size:14px;color:#1A1813">${escapeHtml(subject)}</td></tr>
           </table>
           <hr style="margin:20px 0;border:none;border-top:1px solid #eee"/>
-          <p style="color:#666;font-size:13px;margin:0 0 8px">Message:</p>
+          <p style="color:#666;font-size:14px;margin:0 0 8px">Message:</p>
           <p style="font-size:14px;color:#1A1813;line-height:1.6;white-space:pre-wrap">${escapeHtml(message)}</p>
           <hr style="margin:24px 0;border:none;border-top:1px solid #eee"/>
-          <p style="color:#999;font-size:11px">Sent via myafrowaka.com contact form</p>
+          <p style="color:#999;font-size:14px">Sent via myafrowaka.com contact form</p>
         </div>
       `,
     })

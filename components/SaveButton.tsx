@@ -42,7 +42,7 @@ export function SaveButton({ slug }: { slug: string }) {
 
   if (!checked) {
     return (
-      <div className="flex items-center justify-center gap-2 w-full bg-crimson/40 text-cream font-display font-bold text-[12px] uppercase tracking-[0.1em] py-3.5 rounded-xl">
+      <div className="flex items-center justify-center gap-2 w-full bg-crimson/40 text-cream font-display font-bold text-[14px] uppercase tracking-[0.1em] py-3.5 rounded-xl">
         <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
@@ -56,7 +56,7 @@ export function SaveButton({ slug }: { slug: string }) {
       type="button"
       onClick={toggle}
       disabled={loading}
-      className={`flex items-center justify-center gap-2 w-full font-display font-bold text-[12px] uppercase tracking-[0.1em] py-3.5 rounded-xl transition-all disabled:opacity-60 ${
+      className={`flex items-center justify-center gap-2 w-full font-display font-bold text-[14px] uppercase tracking-[0.1em] py-3.5 rounded-xl transition-all disabled:opacity-60 ${
         saved
           ? 'bg-gold-400 text-ink hover:bg-gold-300'
           : 'bg-crimson hover:bg-crimson/90 text-cream'

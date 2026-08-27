@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { REGION_COLOR } from '@/lib/regionColors'
 
 const AFRICA_PATH =
   'M 130,20 C 162,10 202,6 255,13 C 300,20 330,36 358,68 ' +
@@ -28,40 +29,46 @@ interface Region {
   lines:  string[]
 }
 
+// Note: Central Africa here used --color-gold-600 (#B28E38), one shade
+// darker than the #D5A942 the other REGION_COLOR consumers use for the
+// same region — kept as its own value since AfricaMap's circles sit
+// directly on the cream continent fill and needed the extra contrast;
+// not consolidated into the shared gold-500 to avoid changing the map's
+// current look as a side effect of a token cleanup.
 const REGIONS: Region[] = [
   {
     name: 'North Africa', slug: 'North+Africa',
-    color: '#A22E29', textColor: '#fff',
+    color: REGION_COLOR['North Africa'], textColor: 'var(--color-cream)',
     cx: 215, cy: 92, r: 34,
     lines: ['North', 'Africa'],
   },
   {
     name: 'West Africa', slug: 'West+Africa',
-    color: '#B55D39', textColor: '#fff',
+    color: REGION_COLOR['West Africa'], textColor: 'var(--color-cream)',
     cx: 90, cy: 226, r: 30,
     lines: ['West', 'Africa'],
   },
   {
     name: 'East Africa', slug: 'East+Africa',
-    color: '#3F6A3D', textColor: '#fff',
+    color: REGION_COLOR['East Africa'], textColor: 'var(--color-cream)',
     cx: 328, cy: 225, r: 30,
     lines: ['East', 'Africa'],
   },
   {
     name: 'Central Africa', slug: 'Central+Africa',
-    color: '#B28E38', textColor: '#fff',
+    color: 'var(--color-gold-600)', textColor: 'var(--color-cream)',
     cx: 200, cy: 308, r: 30,
     lines: ['Central', 'Africa'],
   },
   {
     name: 'Southern Africa', slug: 'Southern+Africa',
-    color: '#29251A', textColor: '#fff',
+    color: REGION_COLOR['Southern Africa'], textColor: 'var(--color-cream)',
     cx: 200, cy: 418, r: 32,
     lines: ['Southern', 'Africa'],
   },
   {
     name: 'Indian Ocean Islands', slug: 'Indian+Ocean+Islands',
-    color: '#3B403E', textColor: '#fff',
+    color: REGION_COLOR['Indian Ocean Islands'], textColor: 'var(--color-cream)',
     cx: 383, cy: 375, r: 28,
     lines: ['Islands'],
   },
@@ -81,8 +88,8 @@ export function AfricaMap() {
         {/* ── Continent outline ────────────────────────────────── */}
         <path
           d={AFRICA_PATH}
-          fill="#EFE7D6"
-          stroke="#D9CDB6"
+          fill="var(--color-sand)"
+          stroke="var(--color-line)"
           strokeWidth="1.5"
           strokeLinejoin="round"
         />
@@ -90,14 +97,14 @@ export function AfricaMap() {
         {/* ── Madagascar ───────────────────────────────────────── */}
         <path
           d={MADAGASCAR_PATH}
-          fill="#EFE7D6"
-          stroke="#D9CDB6"
+          fill="var(--color-sand)"
+          stroke="var(--color-line)"
           strokeWidth="1"
         />
 
         {/* ── IO Islands connecting dot ─────────────────────────── */}
-        <circle cx="360" cy="330" r="2" fill="#D9CDB6" />
-        <circle cx="370" cy="345" r="1.5" fill="#D9CDB6" />
+        <circle cx="360" cy="330" r="2" fill="var(--color-line)" />
+        <circle cx="370" cy="345" r="1.5" fill="var(--color-line)" />
 
         {/* ── Region zones ─────────────────────────────────────── */}
         {REGIONS.map(r => {

@@ -34,7 +34,7 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
             <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
               <div className="overflow-hidden">
                 <div className="px-5 pb-5 pt-2 border-t border-line dark-flip-border">
-                  <p className="font-sans text-[13px] text-charcoal/60 dark-flip-muted leading-relaxed">
+                  <p className="font-sans text-[14px] text-charcoal/60 dark-flip-muted leading-relaxed">
                     {item.answer}
                   </p>
                 </div>

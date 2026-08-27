@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { CITY_BY_SLUG_QUERY, ALL_CITY_SLUGS_QUERY } from '@/sanity/lib/queries'
+import { REGION_COLOR, REGION_COLOR_FALLBACK } from '@/lib/regionColors'
 
 interface Attraction {
   name: string
@@ -47,15 +48,6 @@ export async function generateMetadata(
   }
 }
 
-const REGION_COLOR: Record<string, string> = {
-  'East Africa':          '#3F6A3D',
-  'West Africa':          '#B55D39',
-  'Southern Africa':      '#29251A',
-  'North Africa':         '#A22E29',
-  'Central Africa':       '#D5A942',
-  'Indian Ocean Islands': '#3B403E',
-}
-
 export default async function CityPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {
@@ -94,7 +86,7 @@ export default async function CityPage(
       <div className="bg-sand border-b border-line">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-12">
           {city.country && (
-            <p className="font-inter text-[11px] uppercase tracking-[0.16em] text-ochre-600 mb-2">
+            <p className="font-inter text-[14px] uppercase tracking-[0.16em] text-ochre-600 mb-2">
               {city.country.name}
             </p>
           )}
@@ -118,7 +110,7 @@ export default async function CityPage(
             Attractions near {city.name}
           </h2>
           {city.attractions.length > 0 && (
-            <span className="font-inter text-[10px] uppercase tracking-[0.12em] text-charcoal/35">
+            <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-charcoal/35">
               {city.attractions.length} published
             </span>
           )}
@@ -126,14 +118,14 @@ export default async function CityPage(
 
         {city.attractions.length === 0 ? (
           <div className="bg-sand rounded-2xl p-12 text-center border border-line">
-            <p className="font-inter text-[11px] text-charcoal/40 uppercase tracking-[0.14em]">
+            <p className="font-inter text-[14px] text-charcoal/40 uppercase tracking-[0.14em]">
               Attraction guides coming soon
             </p>
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2">
             {city.attractions.map(attraction => {
-              const borderColor = REGION_COLOR[attraction.continentRegion || ''] || '#B55D39'
+              const borderColor = REGION_COLOR[attraction.continentRegion || ''] || REGION_COLOR_FALLBACK
               const typeLabel   = attraction.type?.[0]?.replace('UNESCO World Heritage Site | ', '') || ''
               return (
                 <Link
@@ -144,7 +136,7 @@ export default async function CityPage(
                   <div className="h-[3px]" style={{ backgroundColor: borderColor }} />
                   <div className="p-5">
                     {typeLabel && (
-                      <span className="font-inter text-[10px] uppercase tracking-[0.12em] text-ochre-600 block mb-2">
+                      <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-ochre-600 block mb-2">
                         {typeLabel}
                       </span>
                     )}
@@ -156,7 +148,7 @@ export default async function CityPage(
                         {attraction.editorialSummary}
                       </p>
                     )}
-                    <p className="mt-3 font-inter text-[10px] uppercase tracking-[0.12em] text-ochre-600 group-hover:text-ochre-700 transition-colors">
+                    <p className="mt-3 font-inter text-[14px] uppercase tracking-[0.12em] text-ochre-600 group-hover:text-ochre-700 transition-colors">
                       Read guide &rarr;
                     </p>
                   </div>

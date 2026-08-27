@@ -76,7 +76,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/72 to-ink/92"/>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-24 sm:py-32">
-          <p className="font-inter text-[9px] uppercase tracking-[0.22em] text-gold-400 mb-5">About MyAfroWaka</p>
+          <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-gold-400 mb-5">About MyAfroWaka</p>
           <h1 className="font-display font-extrabold text-cream max-w-3xl" style={{ fontSize: 'clamp(32px, 4vw, 52px)', lineHeight: '0.96', letterSpacing: '-0.025em' }}>
             <TypewriterHero
               speed={28}
@@ -162,7 +162,7 @@ export default function AboutPage() {
                   <div key={p.title}
                     className="group border border-line dark-flip-border rounded-2xl p-6 hover:border-gold-300 hover:shadow-[var(--shadow-soft)] transition-all">
                     <div className="flex items-start gap-4">
-                      <span className="font-inter text-[9px] text-charcoal/25 dark-flip-muted mt-1 shrink-0">0{i + 1}</span>
+                      <span className="font-inter text-[14px] text-charcoal/25 dark-flip-muted mt-1 shrink-0">0{i + 1}</span>
                       <div>
                         <h3 className="font-display font-bold text-base text-charcoal dark-flip-text mb-2 group-hover:text-crimson transition-colors">{p.title}</h3>
                         <p className="font-sans text-sm text-charcoal/60 dark-flip-muted leading-relaxed">{p.body}</p>
@@ -208,31 +208,31 @@ export default function AboutPage() {
 
             {/* Get in Touch card */}
             <div className="bg-ink rounded-3xl p-7 text-cream">
-              <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-gold-400 mb-3">Say Hello</p>
+              <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-gold-400 mb-3">Say Hello</p>
               <h3 className="font-display font-bold text-xl mb-3" style={{ letterSpacing: '-0.015em' }}>
                 We actually read our emails.
               </h3>
-              <p className="font-sans text-[13px] text-cream/60 leading-relaxed mb-6">
+              <p className="font-sans text-[14px] text-cream/60 leading-relaxed mb-6">
                 Partnerships, press, corrections, or just a travel question you can&rsquo;t find answered anywhere else.
               </p>
               <a href="mailto:info@myafrowaka.com"
-                className="flex items-center gap-2 font-inter text-[10px] uppercase tracking-[0.14em] text-gold-400 hover:text-gold-300 transition-colors mb-2">
+                className="flex items-center gap-2 font-inter text-[14px] uppercase tracking-[0.14em] text-gold-400 hover:text-gold-300 transition-colors mb-2">
                 info@myafrowaka.com
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
               </a>
               <Link href="/contact"
-                className="mt-5 inline-flex w-full items-center justify-center bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.10em] py-3.5 rounded-xl transition-all btn-magnetic">
+                className="mt-5 inline-flex w-full items-center justify-center bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] py-3.5 rounded-xl transition-all btn-magnetic">
                 Send a Message
               </Link>
             </div>
 
             {/* Quick navigation */}
             <div className="bg-sand dark-flip-surf rounded-3xl p-7">
-              <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/40 dark-flip-muted mb-4">On This Page</p>
+              <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-charcoal/40 dark-flip-muted mb-4">On This Page</p>
               <nav className="space-y-1">
                 {QUICK_LINKS.map(l => (
                   <a key={l.label} href={l.href}
-                    className="flex items-center gap-2 font-sans text-[13px] text-charcoal/65 dark-flip-muted hover:text-crimson transition-colors py-1.5">
+                    className="flex items-center gap-2 font-sans text-[14px] text-charcoal/65 dark-flip-muted hover:text-crimson transition-colors py-1.5">
                     <span className="w-4 h-px bg-current opacity-40 shrink-0"/>
                     {l.label}
                   </a>
@@ -242,7 +242,7 @@ export default function AboutPage() {
 
             {/* What we believe */}
             <div className="border border-line dark-flip-border rounded-3xl p-7">
-              <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/40 dark-flip-muted mb-5">What We Believe</p>
+              <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-charcoal/40 dark-flip-muted mb-5">What We Believe</p>
               <ul className="space-y-4">
                 {[
                   'Africa is not a monolith. Dozens of countries, thousands of languages, and more variation than most people are taught to expect.',
@@ -250,8 +250,8 @@ export default function AboutPage() {
                   'Accuracy is not optional. A wrong entry fee or a closed attraction is not a typo. It is a broken promise to a reader who planned a trip around it.',
                 ].map((belief, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <span className="font-inter text-[8px] text-gold-500 mt-0.5 shrink-0">0{i + 1}</span>
-                    <p className="font-sans text-[12px] text-charcoal/60 dark-flip-muted leading-relaxed">{belief}</p>
+                    <span className="font-inter text-[14px] text-gold-text dark:text-gold-400 mt-0.5 shrink-0">0{i + 1}</span>
+                    <p className="font-sans text-[14px] text-charcoal/60 dark-flip-muted leading-relaxed">{belief}</p>
                   </li>
                 ))}
               </ul>
@@ -261,7 +261,7 @@ export default function AboutPage() {
             <Link href="/search"
               className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
               <div>
-                <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted mb-1">Ready?</p>
+                <p className="font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted mb-1">Ready?</p>
                 <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">Browse All Attractions</p>
               </div>
               <svg className="w-5 h-5 text-charcoal/30 group-hover:text-crimson transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">

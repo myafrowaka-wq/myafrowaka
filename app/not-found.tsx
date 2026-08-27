@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <div className="min-h-[70vh] flex items-center">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-24 text-center">
-        <p className="font-inter text-[11px] uppercase tracking-[0.22em] text-ochre-600 mb-4">404</p>
+        <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-ochre-600 mb-4">404</p>
         <h1 className="font-display text-5xl md:text-6xl text-charcoal mb-5 leading-tight">
           This Page<br />Doesn&rsquo;t Exist
         </h1>
@@ -15,18 +15,18 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/"
-            className="inline-flex items-center justify-center bg-crimson hover:bg-crimson-600 text-cream font-inter text-[11px] uppercase tracking-[0.14em] px-7 py-3.5 rounded-full transition-colors"
+            className="inline-flex items-center justify-center bg-action hover:bg-action-hover text-cream font-inter text-[14px] uppercase tracking-[0.14em] px-7 py-3.5 rounded-full transition-colors"
           >
             Back to Home
           </Link>
           <Link
             href="/search"
-            className="inline-flex items-center justify-center border border-ochre-300 text-ochre-600 hover:bg-ochre-50 font-inter text-[11px] uppercase tracking-[0.14em] px-7 py-3.5 rounded-full transition-colors"
+            className="inline-flex items-center justify-center border border-ochre-300 text-ochre-600 hover:bg-ochre-50 font-inter text-[14px] uppercase tracking-[0.14em] px-7 py-3.5 rounded-full transition-colors"
           >
             Search Attractions
           </Link>
         </div>
-        <p className="font-inter text-[10px] text-charcoal/25 uppercase tracking-[0.14em] mt-12">
+        <p className="font-inter text-[14px] text-charcoal/25 uppercase tracking-[0.14em] mt-12">
           africa explained by africans.
         </p>
       </div>

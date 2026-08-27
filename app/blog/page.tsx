@@ -67,7 +67,7 @@ export default async function BlogPage(
 
             {/* Left: headline */}
             <div>
-              <p className="font-inter text-[11px] uppercase tracking-[0.24em] text-gold-400 mb-4">
+              <p className="font-inter text-[14px] uppercase tracking-[0.24em] text-gold-400 mb-4">
                 MyAfroWaka
               </p>
               <h1
@@ -85,7 +85,7 @@ export default async function BlogPage(
             {/* Right: latest teaser */}
             {featuredTitle && (
               <div className="border-l-2 border-gold-400/40 pl-5 max-w-xs shrink-0">
-                <p className="font-inter text-[11px] uppercase tracking-[0.2em] text-gold-400/80 mb-2">Latest</p>
+                <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-2">Latest</p>
                 <p className="font-display font-semibold text-cream/80 leading-snug line-clamp-2"
                   style={{ fontSize: 'clamp(13px, 1.2vw, 15px)' }}>
                   {featuredTitle}
@@ -114,7 +114,7 @@ export default async function BlogPage(
               )}
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
                 <Link key={n} href={`/blog?page=${n}`}
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-display font-semibold text-[13px] transition-all
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-display font-semibold text-[14px] transition-all
                     ${n === safePage
                       ? 'bg-ink text-cream shadow-[var(--shadow-soft)]'
                       : 'border border-line dark-flip-border text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson'}`}>

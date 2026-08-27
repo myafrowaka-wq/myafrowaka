@@ -81,7 +81,7 @@ export function DashTrips() {
           Use the trip planner to map out your next African adventure. Saved plans appear here.
         </p>
         <Link href="/plan-a-trip"
-          className="inline-flex items-center gap-2 bg-ink hover:bg-charcoal text-cream font-inter text-[11px] uppercase tracking-[0.14em] px-5 py-2.5 rounded-full transition-colors">
+          className="inline-flex items-center gap-2 bg-ink hover:bg-charcoal text-cream font-inter text-[14px] uppercase tracking-[0.14em] px-5 py-2.5 rounded-full transition-colors">
           Plan a Trip
         </Link>
       </div>
@@ -96,7 +96,7 @@ export function DashTrips() {
 
           {/* Header bar */}
           <div className="bg-ink px-5 py-4">
-            <p className="font-inter text-[11px] uppercase tracking-[0.2em] text-gold-400/80 mb-1">Planned Trip</p>
+            <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-1">Planned Trip</p>
             <p className="font-display font-bold text-cream"
               style={{ fontSize: 'clamp(14px, 1.6vw, 17px)', letterSpacing: '-0.012em' }}>
               {trip.destination}
@@ -109,7 +109,7 @@ export function DashTrips() {
                 <svg className="w-3.5 h-3.5 text-charcoal/25 dark-flip-muted shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
-                <span className="font-sans text-[13px] text-charcoal/65 dark-flip-muted">
+                <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">
                   {[formatDate(trip.dates?.from), formatDate(trip.dates?.to)].filter(Boolean).join(' to ')}
                 </span>
               </div>
@@ -119,7 +119,7 @@ export function DashTrips() {
                 <svg className="w-3.5 h-3.5 text-charcoal/25 dark-flip-muted shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
-                <span className="font-sans text-[13px] text-charcoal/65 dark-flip-muted">
+                <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">
                   {TRAVELER_LABELS[trip.travelers] ?? trip.travelers}
                 </span>
               </div>
@@ -129,7 +129,7 @@ export function DashTrips() {
                 <svg className="w-3.5 h-3.5 text-charcoal/25 dark-flip-muted shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                <span className="font-sans text-[13px] text-charcoal/65 dark-flip-muted">
+                <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">
                   {BUDGET_LABELS[trip.budget] ?? trip.budget}
                 </span>
               </div>
@@ -137,7 +137,7 @@ export function DashTrips() {
             {trip.interests && trip.interests.length > 0 && (
               <div className="flex flex-wrap gap-1.5 pt-1">
                 {trip.interests.map(i => (
-                  <span key={i} className="font-inter text-[11px] uppercase tracking-[0.12em] bg-gold-50 dark:bg-gold-900/20 text-gold-700 dark:text-gold-400 px-2.5 py-0.5 rounded-full">
+                  <span key={i} className="font-inter text-[14px] uppercase tracking-[0.12em] bg-gold-50 dark:bg-gold-900/20 text-gold-700 dark:text-gold-400 px-2.5 py-0.5 rounded-full">
                     {i}
                   </span>
                 ))}
@@ -146,13 +146,13 @@ export function DashTrips() {
 
             <div className="flex items-center justify-between pt-2 border-t border-line dark-flip-border mt-3">
               <Link href={`/search?q=${encodeURIComponent(trip.destination)}`}
-                className="font-inter text-[11px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
+                className="font-inter text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
                 Find attractions &#8594;
               </Link>
               <button
                 onClick={() => deleteTrip(trip._id)}
                 disabled={deleting === trip._id}
-                className="font-inter text-[11px] uppercase tracking-[0.12em] text-charcoal/55 hover:text-crimson transition-colors disabled:opacity-40">
+                className="font-inter text-[14px] uppercase tracking-[0.12em] text-charcoal/55 hover:text-crimson transition-colors disabled:opacity-40">
                 {deleting === trip._id ? 'Removing...' : 'Remove'}
               </button>
             </div>

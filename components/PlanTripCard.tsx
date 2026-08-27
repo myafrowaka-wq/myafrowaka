@@ -25,7 +25,7 @@ export function PlanTripCard() {
 
         <form onSubmit={handleFind} className="space-y-0">
           <div className="mb-4">
-            <label className="font-sans text-[11px] font-semibold text-charcoal/65 block mb-1.5">Where to?</label>
+            <label className="font-sans text-[14px] font-semibold text-charcoal/65 block mb-1.5">Where to?</label>
             <input
               type="text"
               value={dest}
@@ -35,7 +35,7 @@ export function PlanTripCard() {
             />
           </div>
           <div className="mb-4">
-            <label className="font-sans text-[11px] font-semibold text-charcoal/65 block mb-1.5">Type of trip</label>
+            <label className="font-sans text-[14px] font-semibold text-charcoal/65 block mb-1.5">Type of trip</label>
             <input
               type="text"
               value={tripType}
@@ -47,7 +47,7 @@ export function PlanTripCard() {
 
           <div className="grid grid-cols-2 gap-3 mb-5">
             <div>
-              <label className="font-sans text-[11px] font-semibold text-charcoal/65 block mb-1.5">Month</label>
+              <label className="font-sans text-[14px] font-semibold text-charcoal/65 block mb-1.5">Month</label>
               <select
                 value={month}
                 onChange={e => setMonth(e.target.value)}
@@ -57,7 +57,7 @@ export function PlanTripCard() {
               </select>
             </div>
             <div>
-              <label className="font-sans text-[11px] font-semibold text-charcoal/65 block mb-1.5">Duration</label>
+              <label className="font-sans text-[14px] font-semibold text-charcoal/65 block mb-1.5">Duration</label>
               <select
                 value={duration}
                 onChange={e => setDuration(e.target.value)}
@@ -70,7 +70,7 @@ export function PlanTripCard() {
 
           <button
             type="submit"
-            className="block w-full text-center bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.12em] py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="block w-full text-center bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] py-3.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             Find My Destination
           </button>
@@ -90,9 +90,9 @@ export function PlanTripCard() {
               </div>
             ))}
           </div>
-          <p className="font-sans text-[13px] text-charcoal/55 leading-snug">
+          <p className="font-sans text-[14px] text-charcoal/55 leading-snug">
             <strong className="font-bold text-charcoal/80 text-[14px]">4.6k+</strong>
-            <span className="block text-[11px]">travellers exploring Africa with intention</span>
+            <span className="block text-[14px]">travellers exploring Africa with intention</span>
           </p>
         </div>
       </div>
@@ -130,7 +130,7 @@ export function PlanTripCard() {
             <div className="space-y-3">
               <Link
                 href="/login"
-                className="flex items-center justify-center gap-2 w-full bg-ink text-cream font-display font-bold text-[13px] py-3.5 rounded-xl transition-all hover:bg-charcoal hover:scale-[1.01]"
+                className="flex items-center justify-center gap-2 w-full bg-ink text-cream font-display font-bold text-[14px] py-3.5 rounded-xl transition-all hover:bg-charcoal hover:scale-[1.01]"
               >
                 Sign in to plan your trip
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,13 +139,13 @@ export function PlanTripCard() {
               </Link>
               <Link
                 href="/login?tab=signup"
-                className="flex items-center justify-center w-full border border-line text-charcoal/70 hover:text-charcoal font-display font-semibold text-[13px] py-3.5 rounded-xl transition-all hover:border-charcoal/35"
+                className="flex items-center justify-center w-full border border-line text-charcoal/70 hover:text-charcoal font-display font-semibold text-[14px] py-3.5 rounded-xl transition-all hover:border-charcoal/35"
               >
                 Create a free account
               </Link>
             </div>
 
-            <p className="font-inter text-[9px] text-charcoal/25 text-center mt-5">
+            <p className="font-inter text-[14px] text-charcoal/25 text-center mt-5">
               Free forever. No credit card required.
             </p>
           </div>

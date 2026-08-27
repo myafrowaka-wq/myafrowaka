@@ -5,6 +5,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --color-ochre-text: #7A4A29;
+  --color-gold-text: #7A5A16;
+  --color-action: var(--color-crimson);
+  --color-action-hover: var(--color-crimson-600);
   /* ── Core brand ─────────────────────────────────────────────── */
   --color-ochre:     #B55D39;
   --color-ochre-50:  #EFE0D4;
@@ -72,12 +76,78 @@
   --color-slate:    #3B403E;
   --color-ink:      #1A1813;
   --color-ink-soft: #262219;
+  --color-ink-card: #211E17; /* dark-mode raised card, one step above ink-soft */
+  --color-ink-surf: #1E1B14; /* dark-mode secondary surface */
+  --color-cream-dim: #EDE8DF; /* dark-mode body text — dimmer than cream, never pure white */
   --color-line:     #D9CDB6;
 
+  /* Hero photo scrim — a near-black-green wash for text legibility over a
+     photograph, not a decorative gradient (WDOS C-07 governs decoration;
+     a legibility scrim over real photography is a different, permitted
+     job). Used on the homepage and country-page heroes. */
+  --color-scrim-1: #070F09;
+  --color-scrim-2: #0A1A0C;
+  --color-scrim-3: #0E2010;
+
+  /* Nav's own dark-green surfaces — distinct from the main ink/moss
+     scales, kept as their own named set rather than forced onto an
+     existing shade that doesn't match, to avoid changing Nav's actual
+     rendered colour as a side effect of a token cleanup. */
+  --color-nav-header:   #1C3D20;
+  --color-nav-mega:     #101E12;
+  --color-nav-dropdown: #181510;
+  --color-nav-mobile:   #172F19;
+  --color-footer-bg:    #131009;
+  --color-admin-bg:     #0E1C10;
+
+  /* ── Region accent (AfricaMap, region badges — one source, no
+     per-file duplication; see lib/regionColors.ts) ─────────────── */
+  --color-region-north:   var(--color-crimson);
+  --color-region-west:    var(--color-ochre);
+  --color-region-east:    var(--color-moss);
+  --color-region-central: var(--color-gold);
+  --color-region-south:   var(--color-charcoal);
+  --color-region-islands: var(--color-slate);
+
+  /* ── Country accent tints (DestinationsGrid) — a deliberately
+     wider decorative set for card variety, still centrally defined
+     so nothing is hardcoded at the call site. Each is a tint or
+     shade within the five brand hue families, not an invented hue. */
+  --color-country-egypt:        var(--color-crimson);
+  --color-country-kenya:        var(--color-moss);
+  --color-country-south-africa: var(--color-charcoal);
+  --color-country-tanzania:     var(--color-gold-600);
+  --color-country-morocco:      #8C4A28;
+  --color-country-ghana:        var(--color-ochre);
+  --color-country-nigeria:      #3B7A5E;
+  --color-country-rwanda:       #2D6B50;
+  --color-country-ethiopia:     #2D5A29;
+  --color-country-uganda:       var(--color-moss);
+  --color-country-senegal:      var(--color-ochre);
+  --color-country-zimbabwe:     var(--color-charcoal);
+  --color-country-namibia:      #8C6A28;
+  --color-country-botswana:     #4A3218;
+  --color-country-madagascar:   var(--color-slate);
+  --color-country-tunisia:      var(--color-crimson);
+  --color-country-ivory-coast:  var(--color-ochre);
+  --color-country-mozambique:   #3B6E58;
+  --color-country-zambia:       #5A3A1A;
+  --color-country-mauritius:    #2E5B6E;
+
   /* ── Typography ─────────────────────────────────────────────── */
-  --font-display: 'Poppins', system-ui, sans-serif;
+  --font-display: 'Poppins', system-ui, sans-serif; /* swapped to Unbounded in Session 1.2 */
   --font-sans:    'Outfit', system-ui, sans-serif;
   --font-mono:    'Space Mono', monospace;
+
+  /* ── Type scale override ────────────────────────────────────────
+     Tailwind's own default --text-xs is 12px (0.75rem), below the
+     14px floor this session set. 17 real caption/label uses of the
+     bare `text-xs` utility across the site were rendering at 12px —
+     missed by the text-[Npx] arbitrary-value sweep because they use
+     Tailwind's named scale, not an arbitrary value. Overriding the
+     token here fixes every current and future use in one place. */
+  --text-xs: 14px;
+  --text-xs--line-height: 1.5;
 
   /* ── Radius ──────────────────────────────────────────────────── */
   --radius-s: 8px;
@@ -89,25 +159,35 @@
   --shadow-lift: 0 2px 6px rgba(20,17,11,.10), 0 22px 60px rgba(20,17,11,.18);
 }
 
+
 /* ──────────────────────────────────────────────────────────────
-   TYPOGRAPHY SYSTEM
-   WordPress Block Editor preset sizes + Web Standard heading scale
+   TYPOGRAPHY SYSTEM — declared scale, WDOS Brief §3.5, locked
+   2026-08-27. Replaces the old 16→40px / weight-400-600 scale
+   (X-29 fail) and the site-wide floor now holds at 14px, replacing
+   634 instances that ran as low as 7px (X-04 fail).
+
+   Font-family stays Poppins/Outfit here — the swap to Unbounded for
+   the display role is Session 1.2. This session fixes size, weight
+   and contrast; the next one fixes the typeface itself.
 ─────────────────────────────────────────────────────────────── */
 :root {
-  /* WordPress Block Editor font size presets */
-  --font-size-small:   13px;   /* captions, minor metadata */
+  /* WordPress Block Editor presets — kept for the editor content
+     pipeline, floor raised to match the site-wide 14px minimum */
+  --font-size-small:   14px;   /* captions, minor metadata — was 13px, now the floor */
   --font-size-medium:  20px;   /* body paragraphs in block themes */
   --font-size-large:   36px;   /* secondary subheadings, featured text */
   --font-size-x-large: 42px;   /* page headers, hero sections */
 
-  /* Web standard heading hierarchy */
-  --font-size-body: 16px;
-  --font-size-h1:   40px;
-  --font-size-h2:   24px;
-  --font-size-h3:   20px;
-  --font-size-h4:   18px;
-  --font-size-h5:   16px;
-  --font-size-h6:   14px;
+  /* The declared scale */
+  --font-size-display: 96px;   /* hero only */
+  --font-size-body:    17px;   /* one point above the 16px floor — deliberate
+                                   margin for an older, international readership */
+  --font-size-h1:      48px;
+  --font-size-h2:      32px;
+  --font-size-h3:      22px;
+  --font-size-h4:      18px;
+  --font-size-h5:      16px;
+  --font-size-h6:      14px;   /* the floor — nothing on the page goes below this */
 }
 
 /* ── Foundational rendering ──────────────────────────────────── */
@@ -115,14 +195,15 @@ html {
   scroll-behavior: smooth;
   font-optical-sizing: auto;
   text-size-adjust: 100%;
-  font-size: var(--font-size-body); /* 16px base */
+  font-size: var(--font-size-body); /* 17px base */
 }
 
 body {
-  background-color: #F7F2E9;
-  color: #29251A;
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
   font-family: 'Outfit', system-ui, sans-serif;
-  font-size: var(--font-size-body); /* 16px */
+  font-size: var(--font-size-body); /* 17px */
+  font-weight: 400;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -132,27 +213,27 @@ body {
 
 /* ── Dark mode overrides ─────────────────────────────────────── */
 .dark body {
-  background-color: #1A1813;
-  color: #F7F2E9;
+  background-color: var(--color-ink);
+  color: var(--color-cream);
 }
 
 .dark .dark-flip-bg,
 .dark .dark-flip-card,
 .dark .dark-flip-surf {
-  color: #EDE8DF;
+  color: var(--color-cream-dim);
 }
 
-.dark .dark-flip-bg   { background-color: #1A1813 !important; }
-.dark .dark-flip-card { background-color: #211E17 !important; border-color: rgba(255,255,255,0.08) !important; }
-.dark .dark-flip-surf { background-color: #1E1B14 !important; }
-.dark .dark-flip-text { color: #F7F2E9 !important; }
+.dark .dark-flip-bg   { background-color: var(--color-ink) !important; }
+.dark .dark-flip-card { background-color: var(--color-ink-card) !important; border-color: rgba(255,255,255,0.08) !important; }
+.dark .dark-flip-surf { background-color: var(--color-ink-surf) !important; }
+.dark .dark-flip-text { color: var(--color-cream) !important; }
 .dark .dark-flip-muted { color: rgba(247,242,233,0.65) !important; }
 .dark .dark-flip-border { border-color: rgba(255,255,255,0.08) !important; }
 
 /* ── Selection ───────────────────────────────────────────────── */
 ::selection {
-  background: #D5A942;
-  color: #29251A;
+  background: var(--color-gold);
+  color: var(--color-charcoal);
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -169,22 +250,33 @@ body {
   font-feature-settings: "kern" 1, "liga" 1;
 }
 
-/* Web standard heading sizes — inline style overrides for hero sections are intentional */
+/* Declared scale, WDOS Brief §3.5. Weight and tracking on h1/h2 use the
+   display face (still Poppins here, Unbounded from Session 1.2); h3 is
+   already on Outfit, matching the brief's "H3 22px/600 Outfit" — headings
+   don't need to escalate the display face all the way down the hierarchy. */
 h1 {
-  font-size: var(--font-size-h1);   /* 40px */
-  line-height: 1.1;
+  font-family: var(--font-display);
+  font-size: var(--font-size-h1);   /* 48px */
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
   font-feature-settings: "kern" 1, "liga" 1;
   text-rendering: optimizeLegibility;
 }
 h2 {
-  font-size: var(--font-size-h2);   /* 24px */
-  line-height: 1.2;
+  font-family: var(--font-display);
+  font-size: var(--font-size-h2);   /* 32px */
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
   font-feature-settings: "kern" 1, "liga" 1;
   text-rendering: optimizeLegibility;
 }
 h3 {
-  font-size: var(--font-size-h3);   /* 20px */
-  line-height: 1.3;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-h3);   /* 22px */
+  font-weight: 600;
+  line-height: 1.25;
   font-feature-settings: "kern" 1, "liga" 1;
   text-rendering: optimizeLegibility;
 }
@@ -201,14 +293,34 @@ h5 {
   text-rendering: optimizeLegibility;
 }
 h6 {
-  font-size: var(--font-size-h6);   /* 14px */
+  font-size: var(--font-size-h6);   /* 14px — the floor */
   line-height: 1.4;
   font-feature-settings: "kern" 1, "liga" 1;
   text-rendering: optimizeLegibility;
 }
 
+/* Hero display size — the one place the scale goes above H1.
+   Not applied via a bare element selector since only one thing per
+   page should ever carry it (WDOS §5.1, the one orchestrated moment). */
+.text-display {
+  font-family: var(--font-display);
+  font-size: var(--font-size-display); /* 96px */
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+/* The "Small" token role — captions, metadata, timestamps. This is what
+   every sub-14px arbitrary value in the codebase should have been. */
+.text-small {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small); /* 14px, the floor */
+  font-weight: 500;
+  line-height: 1.5;
+}
+
 /* WordPress preset size utility classes */
-.has-small-font-size   { font-size: var(--font-size-small);   }  /* 13px */
+.has-small-font-size   { font-size: var(--font-size-small);   }  /* 14px */
 .has-medium-font-size  { font-size: var(--font-size-medium);  }  /* 20px */
 .has-large-font-size   { font-size: var(--font-size-large);   }  /* 36px */
 .has-x-large-font-size { font-size: var(--font-size-x-large); }  /* 42px */
@@ -355,7 +467,7 @@ h6 {
 
 /* Keyboard focus — WCAG AA 2.4.7 */
 :focus-visible {
-  outline: 2px solid #D5A942;
+  outline: 2px solid var(--color-gold);
   outline-offset: 3px;
   border-radius: 4px;
 }

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { ALL_POSTS_QUERY } from '@/sanity/lib/queries'
+import { CATEGORY_COLOR, CATEGORY_COLOR_FALLBACK } from '@/lib/regionColors'
 import { AUTHORS, getAuthorBySlug } from '@/lib/authors'
 import { FALLBACK_POSTS } from '@/lib/fallbackPosts'
 
@@ -59,14 +60,6 @@ export async function generateMetadata(
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-
-const CATEGORY_COLOR: Record<string, string> = {
-  'Destinations':       '#B55D39',
-  'Culture & Heritage': '#3F6A3D',
-  'Travel Planning':    '#A22E29',
-  'Food Tourism':       '#D5A942',
-  'Experiences':        '#3B403E',
-}
 
 function formatDate(iso?: string) {
   if (!iso) return ''
@@ -153,7 +146,7 @@ export default async function AuthorPage(
 
             {/* Info */}
             <div>
-              <p className="font-inter text-[9px] uppercase tracking-[0.22em] text-gold-400 mb-2">
+              <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-gold-400 mb-2">
                 Contributor
               </p>
               <h1
@@ -164,7 +157,7 @@ export default async function AuthorPage(
               </h1>
               <div className="flex items-center gap-2 mt-3 flex-wrap">
                 <span className="text-base">{author.countryFlag}</span>
-                <span className="font-inter text-[10px] uppercase tracking-[0.16em] text-cream/45">
+                <span className="font-inter text-[14px] uppercase tracking-[0.16em] text-cream/45">
                   {author.country}
                 </span>
               </div>
@@ -173,7 +166,7 @@ export default async function AuthorPage(
                 {author.expertise.map(tag => (
                   <span
                     key={tag}
-                    className="font-inter text-[8px] uppercase tracking-[0.14em] text-cream/55 border border-white/12 px-3 py-1 rounded-full"
+                    className="font-inter text-[14px] uppercase tracking-[0.14em] text-cream/55 border border-white/12 px-3 py-1 rounded-full"
                   >
                     {tag}
                   </span>
@@ -192,7 +185,7 @@ export default async function AuthorPage(
             {/* ── Bio sidebar ──────────────────────────────────────── */}
             <div className="lg:sticky lg:top-24 space-y-6">
               <div>
-                <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">
+                <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">
                   About
                 </p>
                 <p className="font-sans text-[15px] text-charcoal/70 dark-flip-muted leading-[1.8]">
@@ -203,7 +196,7 @@ export default async function AuthorPage(
               {/* Back link */}
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted hover:text-crimson transition-colors"
+                className="inline-flex items-center gap-2 font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted hover:text-crimson transition-colors"
               >
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
@@ -214,7 +207,7 @@ export default async function AuthorPage(
 
             {/* ── Articles ─────────────────────────────────────────── */}
             <div>
-              <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-6">
+              <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-6">
                 Articles
               </p>
 
@@ -225,7 +218,7 @@ export default async function AuthorPage(
               ) : (
                 <div className="space-y-5">
                   {posts.map(post => {
-                    const accent = post.category ? (CATEGORY_COLOR[post.category] ?? '#B55D39') : '#B55D39'
+                    const accent = post.category ? (CATEGORY_COLOR[post.category] ?? CATEGORY_COLOR_FALLBACK) : CATEGORY_COLOR_FALLBACK
                     return (
                       <Link
                         key={post.slug}
@@ -243,7 +236,7 @@ export default async function AuthorPage(
                             />
                             {post.category && (
                               <span
-                                className="absolute top-3 left-3 font-inter text-[7px] uppercase tracking-[0.14em] px-2.5 py-1 rounded-full text-cream"
+                                className="absolute top-3 left-3 font-inter text-[14px] uppercase tracking-[0.14em] px-2.5 py-1 rounded-full text-cream"
                                 style={{ backgroundColor: accent + 'ee' }}
                               >
                                 {post.category}
@@ -261,18 +254,18 @@ export default async function AuthorPage(
                                 {post.title}
                               </h2>
                               {post.excerpt && (
-                                <p className="font-sans text-[12px] text-charcoal/50 dark-flip-muted leading-relaxed line-clamp-2 mb-3">
+                                <p className="font-sans text-[14px] text-charcoal/50 dark-flip-muted leading-relaxed line-clamp-2 mb-3">
                                   {post.excerpt}
                                 </p>
                               )}
                             </div>
                             <div className="flex items-center justify-between gap-2">
                               {post.publishedAt && (
-                                <span className="font-inter text-[9px] text-charcoal/30 dark-flip-muted">
+                                <span className="font-inter text-[14px] text-charcoal/30 dark-flip-muted">
                                   {formatDate(post.publishedAt)}
                                 </span>
                               )}
-                              <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors shrink-0">
+                              <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors shrink-0">
                                 Read &#8594;
                               </span>
                             </div>

@@ -6,37 +6,42 @@ import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
+import { REGION_COLOR } from '@/lib/regionColors'
 
 // ─── data ─────────────────────────────────────────────────────────────────────
+// Central Africa here uses --color-gold-600, one shade darker than the
+// #D5A942 the shared REGION_COLOR map uses for the other 5 regions —
+// preserved as-is rather than unified, to avoid changing Nav's actual
+// rendered colour as a side effect of a token cleanup.
 
 const REGIONS = [
   {
-    region: 'East Africa', color: '#3F6A3D', href: '/search?region=East+Africa',
+    region: 'East Africa', color: REGION_COLOR['East Africa'], href: '/search?region=East+Africa',
     countries: ['Kenya', 'Tanzania', 'Ethiopia', 'Uganda', 'Rwanda', 'Mozambique'],
     image: 'https://images.unsplash.com/photo-1531872036218-4e8a6828e339?auto=format&fit=crop&w=400&q=80',
   },
   {
-    region: 'West Africa', color: '#B55D39', href: '/search?region=West+Africa',
+    region: 'West Africa', color: REGION_COLOR['West Africa'], href: '/search?region=West+Africa',
     countries: ['Nigeria', 'Ghana', 'Senegal', 'Ivory Coast', 'Mali', 'Benin'],
     image: 'https://images.unsplash.com/photo-1727023663928-1772e2c7e679?auto=format&fit=crop&w=400&q=80',
   },
   {
-    region: 'North Africa', color: '#A22E29', href: '/search?region=North+Africa',
+    region: 'North Africa', color: REGION_COLOR['North Africa'], href: '/search?region=North+Africa',
     countries: ['Egypt', 'Morocco', 'Tunisia', 'Algeria', 'Libya'],
     image: 'https://images.unsplash.com/photo-1760681554227-d7aad73cd57f?auto=format&fit=crop&w=400&q=80',
   },
   {
-    region: 'Southern Africa', color: '#29251A', href: '/search?region=Southern+Africa',
+    region: 'Southern Africa', color: REGION_COLOR['Southern Africa'], href: '/search?region=Southern+Africa',
     countries: ['South Africa', 'Zimbabwe', 'Zambia', 'Botswana', 'Namibia'],
     image: 'https://images.unsplash.com/photo-1744604030401-b24c5975a574?auto=format&fit=crop&w=400&q=80',
   },
   {
-    region: 'Central Africa', color: '#B28E38', href: '/search?region=Central+Africa',
+    region: 'Central Africa', color: 'var(--color-gold-600)', href: '/search?region=Central+Africa',
     countries: ['DR Congo', 'Cameroon', 'Gabon', 'Republic of Congo'],
     image: 'https://images.unsplash.com/photo-1673624522244-8de0d50b8492?auto=format&fit=crop&w=400&q=80',
   },
   {
-    region: 'Indian Ocean Islands', color: '#3B403E', href: '/search?region=Indian+Ocean+Islands',
+    region: 'Indian Ocean Islands', color: REGION_COLOR['Indian Ocean Islands'], href: '/search?region=Indian+Ocean+Islands',
     countries: ['Madagascar', 'Mauritius', 'Seychelles', 'Comoros', 'Zanzibar'],
     image: 'https://images.unsplash.com/photo-1513415277900-a62401e19be4?auto=format&fit=crop&w=400&q=80',
   },
@@ -97,10 +102,10 @@ function NavUserButton({ close }: { close: () => void }) {
             className="rounded-full ring-2 ring-gold-400/40"/>
         ) : (
           <div className="w-[30px] h-[30px] rounded-full bg-crimson/30 flex items-center justify-center">
-            <span className="font-display font-bold text-[13px] text-cream">{(u.name ?? 'U').charAt(0)}</span>
+            <span className="font-display font-bold text-[14px] text-cream">{(u.name ?? 'U').charAt(0)}</span>
           </div>
         )}
-        <span className="font-display font-semibold text-[12px] text-cream/75 group-hover:text-cream transition-colors max-w-[90px] truncate">
+        <span className="font-display font-semibold text-[14px] text-cream/75 group-hover:text-cream transition-colors max-w-[90px] truncate">
           {u.name?.split(' ')[0]}
         </span>
       </Link>
@@ -109,7 +114,7 @@ function NavUserButton({ close }: { close: () => void }) {
 
   return (
     <Link href="/login" onClick={close}
-      className="hidden lg:flex items-center gap-2 text-cream/80 hover:text-cream hover:bg-white/10 text-[13px] font-display font-semibold px-3 py-2 rounded-lg transition-all ml-1 whitespace-nowrap">
+      className="hidden lg:flex items-center gap-2 text-cream/80 hover:text-cream hover:bg-white/10 text-[14px] font-display font-semibold px-3 py-2 rounded-lg transition-all ml-1 whitespace-nowrap">
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
       </svg>
@@ -174,7 +179,7 @@ export default function Nav() {
   )
 
   return (
-    <header ref={navRef} className="sticky top-0 z-50 bg-[#1C3D20]" style={{ boxShadow: '0 2px 20px rgba(0,0,0,0.28)' }}>
+    <header ref={navRef} className="sticky top-0 z-50 bg-nav-header" style={{ boxShadow: '0 2px 20px rgba(0,0,0,0.28)' }}>
 
       {/* ── Main bar ─────────────────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[66px] flex items-center justify-between gap-4">
@@ -262,14 +267,14 @@ export default function Nav() {
 
           <div className="hidden lg:block relative">
             <button onClick={() => setLangOpen(v => !v)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-display font-semibold text-cream/60 hover:text-cream hover:bg-white/10 rounded-full transition-all">
+              className="flex items-center gap-1.5 px-3 py-1.5 text-[14px] font-display font-semibold text-cream/60 hover:text-cream hover:bg-white/10 rounded-full transition-all">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802"/>
               </svg>
               {lang} {chevron(langOpen)}
             </button>
             {langOpen && (
-              <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-[#1E1B14] border border-line dark:border-white/10 rounded-2xl py-2 shadow-[0_8px_40px_rgba(0,0,0,0.18)]">
+              <div className="absolute top-full right-0 mt-2 w-44 bg-white dark:bg-ink-surf border border-line dark:border-white/10 rounded-2xl py-2 shadow-[0_8px_40px_rgba(0,0,0,0.18)]">
                 {LANGUAGES.map(l => {
                   const supported = ['EN', 'FR', 'PT'].includes(l.code)
                   return (
@@ -284,7 +289,7 @@ export default function Nav() {
                       }}
                       className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-sans transition-colors ${supported ? 'hover:bg-cream dark:hover:bg-white/5 cursor-pointer' : 'opacity-40 cursor-not-allowed'} ${lang === l.code ? 'text-ochre-600 font-semibold' : 'text-charcoal/70 dark:text-cream/65'}`}>
                       <span>{l.label}</span>
-                      {!supported && <span className="ml-auto font-inter text-[8px] uppercase tracking-[0.1em] text-charcoal/30 dark:text-cream/25">Soon</span>}
+                      {!supported && <span className="ml-auto font-inter text-[14px] uppercase tracking-[0.1em] text-charcoal/30 dark:text-cream/25">Soon</span>}
                       {lang === l.code && supported && <svg className="w-3.5 h-3.5 ml-auto text-ochre-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>}
                     </button>
                   )
@@ -299,9 +304,9 @@ export default function Nav() {
 
           {/* Plan a Trip — visible on BOTH mobile and desktop */}
           <Link href="/plan-a-trip" onClick={close}
-            className="inline-flex items-center bg-crimson hover:bg-crimson-600 text-cream font-display font-bold uppercase tracking-[0.10em] rounded-full transition-all hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap
-              text-[11px] px-4 py-2 ml-1
-              lg:text-[12px] lg:px-5 lg:py-2.5 lg:ml-2">
+            className="inline-flex items-center bg-action hover:bg-action-hover text-cream font-display font-bold uppercase tracking-[0.10em] rounded-full transition-all hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap
+              text-[14px] px-4 py-2 ml-1
+              lg:text-[14px] lg:px-5 lg:py-2.5 lg:ml-2">
             {t('planATrip')}
           </Link>
         </div>
@@ -310,7 +315,7 @@ export default function Nav() {
       {/* ══ DESKTOP FULL MENU OVERLAY (hamburger) ══════════════════════════════ */}
       {menuOpen && (
         <div
-          className="hidden lg:block absolute top-full left-0 w-full bg-[#101E12] z-50 overlay-panel overflow-y-auto"
+          className="hidden lg:block absolute top-full left-0 w-full bg-nav-mega z-50 overlay-panel overflow-y-auto"
           style={{ maxHeight: 'calc(100vh - 66px)', boxShadow: '0 24px 64px rgba(0,0,0,0.45)' }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
@@ -339,7 +344,7 @@ export default function Nav() {
                       <div className="flex flex-wrap gap-x-3 gap-y-0.5 pl-5">
                         {r.countries.slice(0, 3).map(c => (
                           <Link key={c} href={`/destinations/${c.toLowerCase().replace(/\s+/g, '-')}`} onClick={close}
-                            className="font-sans text-[12px] text-cream/45 hover:text-cream/80 transition-colors">
+                            className="font-sans text-[14px] text-cream/45 hover:text-cream/80 transition-colors">
                             {c}
                           </Link>
                         ))}
@@ -348,7 +353,7 @@ export default function Nav() {
                   ))}
                 </div>
                 <Link href="/search" onClick={close}
-                  className="mt-7 inline-flex items-center gap-1.5 font-inter text-[10px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
+                  className="mt-7 inline-flex items-center gap-1.5 font-inter text-[14px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
                   View all countries
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </Link>
@@ -393,14 +398,14 @@ export default function Nav() {
                         <Image src={a.img} alt={a.title} fill className="object-cover"/>
                       </div>
                       <div>
-                        <p className="font-inter text-[9px] uppercase tracking-[0.1em] text-ochre-400 mb-1">{a.tag}</p>
-                        <p className="font-display font-semibold text-[13px] text-cream/80 group-hover:text-cream transition-colors leading-snug">{a.title}</p>
+                        <p className="font-inter text-[14px] uppercase tracking-[0.1em] text-ochre-400 mb-1">{a.tag}</p>
+                        <p className="font-display font-semibold text-[14px] text-cream/80 group-hover:text-cream transition-colors leading-snug">{a.title}</p>
                       </div>
                     </Link>
                   ))}
                 </div>
                 <Link href="/search" onClick={close}
-                  className="mt-5 inline-flex items-center gap-1.5 font-inter text-[10px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
+                  className="mt-5 inline-flex items-center gap-1.5 font-inter text-[14px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
                   Browse all guides
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </Link>
@@ -413,7 +418,7 @@ export default function Nav() {
       {/* ══ MEGA — DESTINATIONS ══════════════════════════════════════════════════ */}
       {panel === 'destinations' && (
         <div
-          className="absolute top-full left-0 w-full bg-white dark:bg-[#181510] border-b border-line dark:border-white/8 mega-panel"
+          className="absolute top-full left-0 w-full bg-white dark:bg-nav-dropdown border-b border-line dark:border-white/8 mega-panel"
           style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
           onMouseEnter={keepOpen} onMouseLeave={hoverClose}
         >
@@ -424,7 +429,7 @@ export default function Nav() {
                   <div key={r.region}>
                     <Link href={r.href} onClick={close} className="group flex items-center gap-2 mb-3">
                       <span className="w-2 h-2 rounded-full" style={{ backgroundColor: r.color }}/>
-                      <span className="font-display font-bold text-[12px] uppercase tracking-[0.12em] text-charcoal/50 dark:text-cream/40 group-hover:text-ochre-600 transition-colors">{r.region}</span>
+                      <span className="font-display font-bold text-[14px] uppercase tracking-[0.12em] text-charcoal/50 dark:text-cream/40 group-hover:text-ochre-600 transition-colors">{r.region}</span>
                     </Link>
                     <ul className="space-y-2">
                       {r.countries.map(c => (
@@ -436,7 +441,7 @@ export default function Nav() {
                         </li>
                       ))}
                       <li>
-                        <Link href={r.href} onClick={close} className="font-inter text-[11px] text-ochre-500 hover:text-ochre-600 transition-colors mt-0.5 inline-block">
+                        <Link href={r.href} onClick={close} className="font-inter text-[14px] text-ochre-500 hover:text-ochre-600 transition-colors mt-0.5 inline-block">
                           More &rarr;
                         </Link>
                       </li>
@@ -445,18 +450,18 @@ export default function Nav() {
                 ))}
               </div>
               <div className="col-span-3 border-l border-line dark:border-white/8 pl-8 flex flex-col">
-                <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-4">Featured</p>
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-4">Featured</p>
                 <Link href="/destinations/egypt" onClick={close} className="group relative rounded-2xl overflow-hidden flex-1 min-h-[200px] block">
                   <Image src="https://images.unsplash.com/photo-1640005438758-861043e64aa5?auto=format&fit=crop&w=400&q=80" alt="Egypt" fill className="object-cover group-hover:scale-105 transition-transform duration-500"/>
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent"/>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <p className="font-inter text-[9px] uppercase tracking-[0.12em] text-gold-400 mb-1">North Africa</p>
+                    <p className="font-inter text-[14px] uppercase tracking-[0.12em] text-gold-400 mb-1">North Africa</p>
                     <p className="font-display font-bold text-lg text-cream leading-tight">Egypt</p>
-                    <p className="font-sans text-[11px] text-cream/55 mt-0.5">North Africa</p>
+                    <p className="font-sans text-[14px] text-cream/55 mt-0.5">North Africa</p>
                   </div>
                 </Link>
                 <Link href="/search" onClick={close}
-                  className="mt-4 block text-center bg-crimson hover:bg-crimson-600 text-cream font-display font-bold text-[11px] uppercase tracking-[0.10em] px-4 py-3 rounded-xl transition-colors">
+                  className="mt-4 block text-center bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] px-4 py-3 rounded-xl transition-colors">
                   Browse all attractions &rarr;
                 </Link>
               </div>
@@ -468,7 +473,7 @@ export default function Nav() {
       {/* ══ MEGA — GUIDES ════════════════════════════════════════════════════════ */}
       {panel === 'media' && (
         <div
-          className="absolute top-full left-0 w-full bg-white dark:bg-[#181510] border-b border-line dark:border-white/8 mega-panel"
+          className="absolute top-full left-0 w-full bg-white dark:bg-nav-dropdown border-b border-line dark:border-white/8 mega-panel"
           style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
           onMouseEnter={keepOpen} onMouseLeave={hoverClose}
         >
@@ -477,7 +482,7 @@ export default function Nav() {
 
               {/* Col 1: Browse by type */}
               <div className="col-span-3">
-                <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Type</p>
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Type</p>
                 <ul className="space-y-2">
                   {[
                     { label: 'Safari and Wildlife',   exp: 'Safari'           },
@@ -502,7 +507,7 @@ export default function Nav() {
 
               {/* Col 2: Browse by region */}
               <div className="col-span-3 border-l border-line dark:border-white/8 pl-8">
-                <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Region</p>
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Region</p>
                 <ul className="space-y-2">
                   {[
                     { label: 'East Africa',          href: '/search?region=East+Africa'          },
@@ -521,7 +526,7 @@ export default function Nav() {
                   ))}
                 </ul>
                 <Link href="/search" onClick={close}
-                  className="mt-5 inline-flex items-center gap-1.5 font-inter text-[10px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
+                  className="mt-5 inline-flex items-center gap-1.5 font-inter text-[14px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
                   All destinations
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </Link>
@@ -529,7 +534,7 @@ export default function Nav() {
 
               {/* Col 3+4: Featured guides */}
               <div className="col-span-6 border-l border-line dark:border-white/8 pl-8">
-                <p className="font-display font-bold text-[11px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Featured Guides</p>
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Featured Guides</p>
                 <div className="space-y-3">
                   {[
                     { title: 'Pyramids of Giza: The Complete Guide',    tag: 'Egypt',    slug: 'pyramids-of-giza',                 img: 'https://images.unsplash.com/photo-1736443830251-dda3cb6df76c?auto=format&fit=crop&w=280&q=80'  },
@@ -542,16 +547,16 @@ export default function Nav() {
                         <Image src={a.img} alt={a.title} fill className="object-cover"/>
                       </div>
                       <div>
-                        <p className="font-inter text-[9px] uppercase tracking-[0.1em] text-crimson mb-1">{a.tag}</p>
-                        <p className="font-display font-semibold text-[13px] text-charcoal/80 dark:text-cream/75 group-hover:text-crimson transition-colors leading-snug">{a.title}</p>
+                        <p className="font-inter text-[14px] uppercase tracking-[0.1em] text-crimson mb-1">{a.tag}</p>
+                        <p className="font-display font-semibold text-[14px] text-charcoal/80 dark:text-cream/75 group-hover:text-crimson transition-colors leading-snug">{a.title}</p>
                       </div>
                     </Link>
                   ))}
                 </div>
                 <div className="mt-5 pt-4 border-t border-line dark:border-white/8 flex items-center justify-between">
-                  <p className="font-sans text-[12px] text-charcoal/40 dark:text-cream/35">Destination guides, written from inside Africa.</p>
+                  <p className="font-sans text-[14px] text-charcoal/40 dark:text-cream/35">Destination guides, written from inside Africa.</p>
                   <Link href="/search" onClick={close}
-                    className="inline-flex items-center gap-1.5 font-inter text-[10px] uppercase tracking-[0.12em] text-ochre-500 hover:text-ochre-600 transition-colors">
+                    className="inline-flex items-center gap-1.5 font-inter text-[14px] uppercase tracking-[0.12em] text-ochre-500 hover:text-ochre-600 transition-colors">
                     Browse all
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                   </Link>
@@ -564,7 +569,7 @@ export default function Nav() {
 
       {/* ══ MOBILE DRAWER ══════════════════════════════════════════════════════ */}
       {mobile && (
-        <div className="lg:hidden border-t border-white/10 bg-[#172F19] max-h-[80vh] overflow-y-auto">
+        <div className="lg:hidden border-t border-white/10 bg-nav-mobile max-h-[80vh] overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
             <form action="/search" method="GET" className="py-4">
@@ -623,10 +628,10 @@ export default function Nav() {
                     )}
                   </div>
                   <div>
-                    <p className="font-display font-semibold text-[13px] text-cream group-hover:text-gold-300 transition-colors">
+                    <p className="font-display font-semibold text-[14px] text-cream group-hover:text-gold-300 transition-colors">
                       {session.user.name?.split(' ')[0] ?? 'Account'}
                     </p>
-                    <p className="font-inter text-[9px] uppercase tracking-[0.08em] text-cream/40">My Dashboard</p>
+                    <p className="font-inter text-[14px] uppercase tracking-[0.08em] text-cream/40">My Dashboard</p>
                   </div>
                 </Link>
               ) : (
@@ -649,7 +654,7 @@ export default function Nav() {
                       window.location.reload()
                     }
                   }}
-                  className="bg-white/10 text-cream text-[11px] font-inter border border-white/15 rounded-full px-3 py-1.5 focus:outline-none">
+                  className="bg-white/10 text-cream text-[14px] font-inter border border-white/15 rounded-full px-3 py-1.5 focus:outline-none">
                   {LANGUAGES.map(l => (
                     <option key={l.code} value={l.code} className="text-charcoal bg-white">{l.label}</option>
                   ))}

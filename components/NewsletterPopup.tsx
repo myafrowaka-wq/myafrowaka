@@ -35,7 +35,7 @@ export function NewsletterPopup() {
       className="fixed bottom-6 right-6 z-[200] w-[340px] max-w-[calc(100vw-2rem)] rounded-2xl overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.35)] border border-white/10 popup-slide-up"
     >
       {/* Dark header strip */}
-      <div className="bg-[#1A1813] px-6 pt-5 pb-4 relative">
+      <div className="bg-ink px-6 pt-5 pb-4 relative">
         <button
           onClick={dismiss}
           aria-label="Close newsletter popup"
@@ -47,18 +47,18 @@ export function NewsletterPopup() {
         </button>
 
         <div className="flex items-center gap-2 mb-2">
-          <span className="font-inter text-[9px] uppercase tracking-[0.18em] text-gold-400">MyAfroWaka</span>
+          <span className="font-inter text-[14px] uppercase tracking-[0.18em] text-gold-400">MyAfroWaka</span>
         </div>
         <h3 className="font-display font-bold text-[18px] text-cream leading-snug pr-6">
           Africa in Your Inbox Every Week
         </h3>
-        <p className="font-sans text-[12px] text-cream/55 mt-1.5 leading-relaxed">
+        <p className="font-sans text-[14px] text-cream/55 mt-1.5 leading-relaxed">
           Hidden gems, visa updates, and expert travel guides. One email, no spam.
         </p>
       </div>
 
       {/* Form section */}
-      <div className="bg-[#F7F2E9] px-6 py-5">
+      <div className="bg-cream px-6 py-5">
         {submitted ? (
           <div className="text-center py-2">
             <div className="w-10 h-10 bg-moss-500 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -67,7 +67,7 @@ export function NewsletterPopup() {
               </svg>
             </div>
             <p className="font-display font-bold text-charcoal text-[15px]">You are in.</p>
-            <p className="font-sans text-[12px] text-charcoal/55 mt-1">First guide arriving soon.</p>
+            <p className="font-sans text-[14px] text-charcoal/55 mt-1">First guide arriving soon.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-3">
@@ -81,13 +81,13 @@ export function NewsletterPopup() {
             />
             <button
               type="submit"
-              className="w-full bg-ochre-500 hover:bg-ochre-600 text-cream font-display font-bold text-[12px] uppercase tracking-[0.10em] py-3 rounded-xl transition-colors"
+              className="w-full bg-ochre-500 hover:bg-ochre-600 text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] py-3 rounded-xl transition-colors"
             >
               Subscribe Free
             </button>
           </form>
         )}
-        <p className="font-inter text-[9px] text-charcoal/30 text-center mt-3">
+        <p className="font-inter text-[14px] text-charcoal/30 text-center mt-3">
           No spam. Unsubscribe any time.
         </p>
       </div>

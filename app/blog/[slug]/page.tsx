@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { PortableText } from '@portabletext/react'
 import imageUrlBuilder from '@sanity/image-url'
+import { CATEGORY_COLOR, CATEGORY_COLOR_FALLBACK } from '@/lib/regionColors'
 import { client } from '@/sanity/lib/client'
 import { POST_BY_SLUG_QUERY, ALL_POST_SLUGS_QUERY, ALL_POSTS_QUERY } from '@/sanity/lib/queries'
 import { FALLBACK_POSTS, type FallbackPost } from '@/lib/fallbackPosts'
@@ -103,14 +104,6 @@ export async function generateMetadata(
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-const CATEGORY_COLOR: Record<string, string> = {
-  'Destinations':       '#B55D39',
-  'Culture & Heritage': '#3F6A3D',
-  'Travel Planning':    '#A22E29',
-  'Food Tourism':       '#D5A942',
-  'Experiences':        '#3B403E',
-}
-
 function formatDate(iso?: string) {
   if (!iso) return ''
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -179,7 +172,7 @@ const ptComponents = {
             />
           </div>
           {value.caption && (
-            <figcaption className="text-center font-inter text-[9px] text-charcoal/35 dark-flip-muted uppercase tracking-[0.1em] mt-2">
+            <figcaption className="text-center font-inter text-[14px] text-charcoal/35 dark-flip-muted uppercase tracking-[0.1em] mt-2">
               {value.caption}
             </figcaption>
           )}
@@ -237,7 +230,7 @@ export default async function BlogPostPage(
     featuredCountry: undefined,
   }
 
-  const accent = post.category ? (CATEGORY_COLOR[post.category] ?? '#B55D39') : '#B55D39'
+  const accent = post.category ? (CATEGORY_COLOR[post.category] ?? CATEGORY_COLOR_FALLBACK) : CATEGORY_COLOR_FALLBACK
 
   // Reading time — extract only plain text from PortableText blocks to avoid inflating
   // count with JSON keys, _type, _key, etc.
@@ -316,7 +309,7 @@ export default async function BlogPostPage(
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">
           <div className="lg:max-w-[66%]">
           {post.category && (
-            <span className="inline-block font-inter text-[8px] uppercase tracking-[0.18em] px-3 py-1 rounded-full text-cream mb-4"
+            <span className="inline-block font-inter text-[14px] uppercase tracking-[0.18em] px-3 py-1 rounded-full text-cream mb-4"
               style={{ backgroundColor: accent + 'cc' }}>
               {post.category}
             </span>
@@ -336,21 +329,21 @@ export default async function BlogPostPage(
               return (
                 <Link
                   href={`/authors/${authorSlug}`}
-                  className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/50 hover:text-cream/80 transition-colors"
+                  className="font-inter text-[14px] uppercase tracking-[0.12em] text-cream/50 hover:text-cream/80 transition-colors"
                 >
                   {post.author!.name}
                 </Link>
               )
             })()}
             {post.publishedAt && (
-              <span className="font-inter text-[9px] text-cream/35">{formatDate(post.publishedAt)}</span>
+              <span className="font-inter text-[14px] text-cream/35">{formatDate(post.publishedAt)}</span>
             )}
           </div>
           <div className="mt-3 flex items-center gap-2">
             <svg className="w-3 h-3 text-cream/35" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            <span className="font-inter text-[9px] text-cream/35">{readingTime} min read</span>
+            <span className="font-inter text-[14px] text-cream/35">{readingTime} min read</span>
           </div>
           </div>{/* end lg:max-w-[66%] */}
         </div>
@@ -396,7 +389,7 @@ export default async function BlogPostPage(
                 <div className="mt-10 pt-6 border-t border-line dark-flip-border flex flex-wrap gap-2">
                   {post.tags.map(tag => (
                     <span key={tag}
-                      className="font-inter text-[9px] uppercase tracking-[0.12em] text-charcoal/40 dark-flip-muted border border-line dark-flip-border px-3 py-1 rounded-full">
+                      className="font-inter text-[14px] uppercase tracking-[0.12em] text-charcoal/40 dark-flip-muted border border-line dark-flip-border px-3 py-1 rounded-full">
                       {tag}
                     </span>
                   ))}
@@ -423,7 +416,7 @@ export default async function BlogPostPage(
                           />
                         </div>
                         <div className="p-4">
-                          <h3 className="font-display font-bold text-[13px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors line-clamp-2"
+                          <h3 className="font-display font-bold text-[14px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors line-clamp-2"
                             style={{ letterSpacing: '-0.01em' }}>
                             {r.title}
                           </h3>
@@ -446,7 +439,7 @@ export default async function BlogPostPage(
                 const authorSlug = authorData?.slug ?? nameToSlug(post.author.name)
                 return (
                   <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                    <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">Written by</p>
+                    <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">Written by</p>
                     <Link href={`/authors/${authorSlug}`} className="flex items-center gap-3 mb-3 group/author">
                       <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-gold-300/40">
                         <Image
@@ -461,12 +454,12 @@ export default async function BlogPostPage(
                         {post.author.name}
                       </p>
                     </Link>
-                    <p className="font-sans text-[12px] text-charcoal/50 dark-flip-muted leading-relaxed mb-4">
+                    <p className="font-sans text-[14px] text-charcoal/50 dark-flip-muted leading-relaxed mb-4">
                       {bio}
                     </p>
                     <Link
                       href={`/authors/${authorSlug}`}
-                      className="font-inter text-[9px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors"
+                      className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors"
                     >
                       View profile &#8594;
                     </Link>
@@ -476,7 +469,7 @@ export default async function BlogPostPage(
 
               {/* Follow MyAfroWaka */}
               <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">Follow MyAfroWaka</p>
+                <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">Follow MyAfroWaka</p>
                 <div className="flex items-center gap-3">
                   {SOCIAL_LINKS.map(s => (
                     <a
@@ -500,7 +493,7 @@ export default async function BlogPostPage(
                 <Link href={`/destinations/${post.featuredCountry.slug}`}
                   className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
                   <div>
-                    <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-1">Destination</p>
+                    <p className="font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-1">Destination</p>
                     <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                       {post.featuredCountry.name}
                     </p>
@@ -515,7 +508,7 @@ export default async function BlogPostPage(
               <Link href="/search"
                 className="flex items-center justify-between bg-ink rounded-3xl p-6 group transition-all">
                 <div>
-                  <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-gold-400/60 mb-1">Explore</p>
+                  <p className="font-inter text-[14px] uppercase tracking-[0.18em] text-gold-400/60 mb-1">Explore</p>
                   <p className="font-display font-bold text-base text-cream group-hover:text-gold-400 transition-colors">
                     Browse Attractions
                   </p>
@@ -527,7 +520,7 @@ export default async function BlogPostPage(
 
               {/* Back to blog */}
               <Link href="/blog"
-                className="flex items-center gap-2 justify-center font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/30 dark-flip-muted hover:text-charcoal/55 transition-colors py-2">
+                className="flex items-center gap-2 justify-center font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/30 dark-flip-muted hover:text-charcoal/55 transition-colors py-2">
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
                 </svg>
@@ -541,7 +534,7 @@ export default async function BlogPostPage(
       {alsoRead.length > 0 && (
         <div className="bg-sand dark-flip-surf border-t border-line dark-flip-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-            <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-6">Also Read</p>
+            <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-6">Also Read</p>
             <div className="grid sm:grid-cols-3 gap-4">
               {alsoRead.map(r => (
                 <Link key={r.slug} href={`/blog/${r.slug}`}
@@ -555,14 +548,14 @@ export default async function BlogPostPage(
                   </div>
                   <div className="p-5">
                     {r.category && (
-                      <p className="font-inter text-[8px] uppercase tracking-[0.14em] text-crimson mb-2">{r.category}</p>
+                      <p className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson mb-2">{r.category}</p>
                     )}
-                    <h3 className="font-display font-bold text-[13px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug line-clamp-2"
+                    <h3 className="font-display font-bold text-[14px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug line-clamp-2"
                       style={{ letterSpacing: '-0.01em' }}>
                       {r.title}
                     </h3>
                     {r.excerpt && (
-                      <p className="font-sans text-[11px] text-charcoal/45 dark-flip-muted leading-relaxed mt-2 line-clamp-2">{r.excerpt}</p>
+                      <p className="font-sans text-[14px] text-charcoal/45 dark-flip-muted leading-relaxed mt-2 line-clamp-2">{r.excerpt}</p>
                     )}
                   </div>
                 </Link>
