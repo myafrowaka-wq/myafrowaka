@@ -529,7 +529,7 @@ export default async function AttractionPage(
 
           {/* Location */}
           {locationParts.length > 0 && (
-            <p className="font-inter text-[10px] uppercase tracking-[0.2em] text-gold-400 mb-4">
+            <p className="font-inter text-[12px] uppercase tracking-[0.2em] text-gold-400 mb-4">
               {locationParts.join(' · ')}
             </p>
           )}
@@ -554,56 +554,56 @@ export default async function AttractionPage(
 
               {/* Mobile-only At a Glance */}
               <div className="lg:hidden bg-ink rounded-3xl p-6 text-cream mb-8">
-                <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-gold-400 mb-5">At a Glance</p>
+                <p className="font-inter text-[11px] uppercase tracking-[0.2em] text-gold-400 mb-5">At a Glance</p>
                 <div className="space-y-0">
                   {a.country && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Country</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.country.name}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Country</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.country.name}</span>
                     </div>
                   )}
                   {a.continentRegion && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Region</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.continentRegion}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Region</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.continentRegion}</span>
                     </div>
                   )}
                   {a.type && a.type.length > 0 && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Type</span>
-                      <span className="font-sans text-[12px] text-cream/80 text-right leading-snug">{a.type[0].replace('UNESCO World Heritage Site | ', '')}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Type</span>
+                      <span className="font-sans text-[13px] text-cream/88 text-right leading-snug">{a.type[0].replace('UNESCO World Heritage Site | ', '')}</span>
                     </div>
                   )}
                   {a.city && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Nearest City</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.city.name}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Nearest City</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.city.name}</span>
                     </div>
                   )}
                   {a.nearestAirportIATA && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Airport</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Airport</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">
                         {a.nearestAirportIATA}{a.nearestAirportDistanceKm ? ` (${a.nearestAirportDistanceKm} km)` : ''}
                       </span>
                     </div>
                   )}
                   {a.heritageEra && a.heritageEra.length > 0 && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Era</span>
-                      <span className="font-sans text-[12px] text-cream/80 text-right leading-snug">{a.heritageEra.join(', ')}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Era</span>
+                      <span className="font-sans text-[13px] text-cream/88 text-right leading-snug">{a.heritageEra.join(', ')}</span>
                     </div>
                   )}
                   {a.suitableFor && a.suitableFor.length > 0 && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Suitable For</span>
-                      <span className="font-sans text-[12px] text-cream/80 text-right leading-snug">{a.suitableFor.slice(0, 3).join(', ')}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Suitable For</span>
+                      <span className="font-sans text-[13px] text-cream/88 text-right leading-snug">{a.suitableFor.slice(0, 3).join(', ')}</span>
                     </div>
                   )}
                   {(a.entryFeeDisplayText || a.entryFeeInternational != null) && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Entry</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Entry</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">
                         {a.entryFeeDisplayText
                           ? a.entryFeeDisplayText.split('\n')[0]
                           : a.entryFeeInternational === 0 ? 'Free' : `From $${a.entryFeeInternational} USD`}
@@ -612,26 +612,26 @@ export default async function AttractionPage(
                   )}
                   {a.bestTimeToVisit && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Best Time</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.bestTimeToVisit}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Best Time</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.bestTimeToVisit}</span>
                     </div>
                   )}
                   {a.timeNeeded != null && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Time Needed</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.timeNeeded} hr{a.timeNeeded !== 1 ? 's' : ''} min</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Time Needed</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.timeNeeded} hr{a.timeNeeded !== 1 ? 's' : ''} min</span>
                     </div>
                   )}
                   {a.difficultyAccessLevel && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Access</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.difficultyAccessLevel}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Access</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.difficultyAccessLevel}</span>
                     </div>
                   )}
                   {a.unescoStatus && (
                     <div className="flex items-start justify-between gap-3 pt-3">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">UNESCO</span>
-                      <span className="font-sans text-[12px] text-gold-300 text-right leading-snug">{a.unescoStatus}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">UNESCO</span>
+                      <span className="font-sans text-[13px] text-gold-300 text-right leading-snug">{a.unescoStatus}</span>
                     </div>
                   )}
                 </div>
@@ -706,7 +706,7 @@ export default async function AttractionPage(
                       </p>
                       {a.addressDirections && (
                         <div className="bg-sand dark-flip-surf rounded-2xl p-5 border border-line dark-flip-border">
-                          <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted mb-2">Address</p>
+                          <p className="font-inter text-[11px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted mb-2">Address</p>
                           <p className="font-sans text-[14px] text-charcoal/75 dark-flip-muted">{a.addressDirections}</p>
                         </div>
                       )}
@@ -724,7 +724,7 @@ export default async function AttractionPage(
                         <div className="flex gap-8">
                           {a.entryFeeInternational != null && (
                             <div>
-                              <p className="font-inter text-[9px] uppercase tracking-[0.16em] text-charcoal/35 dark-flip-muted mb-1">International</p>
+                              <p className="font-inter text-[11px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted mb-1">International</p>
                               <p className="font-display font-bold text-4xl text-charcoal dark-flip-text" style={{ letterSpacing: '-0.02em' }}>
                                 {a.entryFeeInternational === 0 ? 'Free' : `$${a.entryFeeInternational}`}
                               </p>
@@ -732,7 +732,7 @@ export default async function AttractionPage(
                           )}
                           {a.entryFeeLocal != null && (
                             <div>
-                              <p className="font-inter text-[9px] uppercase tracking-[0.16em] text-charcoal/35 dark-flip-muted mb-1">Local / Resident</p>
+                              <p className="font-inter text-[11px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted mb-1">Local / Resident</p>
                               <p className="font-display font-bold text-4xl text-charcoal dark-flip-text" style={{ letterSpacing: '-0.02em' }}>
                                 {a.entryFeeLocal === 0 ? 'Free' : `$${a.entryFeeLocal}`}
                               </p>
@@ -775,12 +775,12 @@ export default async function AttractionPage(
               {/* Experience tags */}
               {a.experienceTags && a.experienceTags.length > 0 && (
                 <div className="mt-10 pt-6 border-t border-line dark-flip-border">
-                  <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-4">Tagged</p>
+                  <p className="font-inter text-[11px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted mb-4">Tagged</p>
                   <div className="flex flex-wrap gap-2">
                     {a.experienceTags.map(tag => (
                       <span
                         key={tag}
-                        className="bg-sand dark-flip-surf text-charcoal/60 dark-flip-muted text-[11px] font-inter px-3 py-1.5 rounded-full border border-line dark-flip-border"
+                        className="bg-sand dark-flip-surf text-charcoal/60 dark-flip-muted text-[12px] font-inter px-3 py-1.5 rounded-full border border-line dark-flip-border"
                       >
                         {tag}
                       </span>
@@ -790,7 +790,7 @@ export default async function AttractionPage(
               )}
 
               {a.lastVerifiedDate && (
-                <p className="mt-8 font-inter text-[9px] uppercase tracking-[0.16em] text-charcoal/25 dark-flip-muted">
+                <p className="mt-8 font-inter text-[11px] uppercase tracking-[0.16em] text-charcoal/50 dark-flip-muted">
                   Last updated: {formatVerifiedDate(a.lastVerifiedDate)}
                 </p>
               )}
@@ -801,56 +801,56 @@ export default async function AttractionPage(
 
               {/* At a Glance - desktop only (mobile version appears above article body) */}
               <div className="hidden lg:block bg-ink rounded-3xl p-6 text-cream">
-                <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-gold-400 mb-5">At a Glance</p>
+                <p className="font-inter text-[11px] uppercase tracking-[0.2em] text-gold-400 mb-5">At a Glance</p>
                 <div className="space-y-0">
                   {a.country && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Country</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.country.name}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Country</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.country.name}</span>
                     </div>
                   )}
                   {a.continentRegion && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Region</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.continentRegion}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Region</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.continentRegion}</span>
                     </div>
                   )}
                   {a.type && a.type.length > 0 && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Type</span>
-                      <span className="font-sans text-[12px] text-cream/80 text-right leading-snug">{a.type[0].replace('UNESCO World Heritage Site | ', '')}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Type</span>
+                      <span className="font-sans text-[13px] text-cream/88 text-right leading-snug">{a.type[0].replace('UNESCO World Heritage Site | ', '')}</span>
                     </div>
                   )}
                   {a.city && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Nearest City</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.city.name}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Nearest City</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.city.name}</span>
                     </div>
                   )}
                   {a.nearestAirportIATA && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Airport</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Airport</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">
                         {a.nearestAirportIATA}{a.nearestAirportDistanceKm ? ` (${a.nearestAirportDistanceKm} km)` : ''}
                       </span>
                     </div>
                   )}
                   {a.heritageEra && a.heritageEra.length > 0 && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Era</span>
-                      <span className="font-sans text-[12px] text-cream/80 text-right leading-snug">{a.heritageEra.join(', ')}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Era</span>
+                      <span className="font-sans text-[13px] text-cream/88 text-right leading-snug">{a.heritageEra.join(', ')}</span>
                     </div>
                   )}
                   {a.suitableFor && a.suitableFor.length > 0 && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Suitable For</span>
-                      <span className="font-sans text-[12px] text-cream/80 text-right leading-snug">{a.suitableFor.slice(0, 3).join(', ')}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Suitable For</span>
+                      <span className="font-sans text-[13px] text-cream/88 text-right leading-snug">{a.suitableFor.slice(0, 3).join(', ')}</span>
                     </div>
                   )}
                   {(a.entryFeeDisplayText || a.entryFeeInternational != null) && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Entry</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Entry</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">
                         {a.entryFeeDisplayText
                           ? a.entryFeeDisplayText.split('\n')[0]
                           : a.entryFeeInternational === 0
@@ -861,28 +861,28 @@ export default async function AttractionPage(
                   )}
                   {a.bestTimeToVisit && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Best Time</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.bestTimeToVisit}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Best Time</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.bestTimeToVisit}</span>
                     </div>
                   )}
                   {a.timeNeeded != null && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Time Needed</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Time Needed</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">
                         {a.timeNeeded} hr{a.timeNeeded !== 1 ? 's' : ''} min
                       </span>
                     </div>
                   )}
                   {a.difficultyAccessLevel && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">Access</span>
-                      <span className="font-sans text-[13px] text-cream/80 text-right">{a.difficultyAccessLevel}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Access</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.difficultyAccessLevel}</span>
                     </div>
                   )}
                   {a.unescoStatus && (
                     <div className="flex items-start justify-between gap-3 pt-3">
-                      <span className="font-inter text-[9px] uppercase tracking-[0.12em] text-cream/35 mt-0.5 shrink-0">UNESCO</span>
-                      <span className="font-sans text-[12px] text-gold-300 text-right leading-snug">{a.unescoStatus}</span>
+                      <span className="font-inter text-[11px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">UNESCO</span>
+                      <span className="font-sans text-[13px] text-gold-300 text-right leading-snug">{a.unescoStatus}</span>
                     </div>
                   )}
                 </div>
@@ -891,7 +891,7 @@ export default async function AttractionPage(
               {/* Getting There */}
               {(a.nearestAirportIATA || a.addressDirections || a.googleMapsPlaceId) && (
                 <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                  <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-5">Getting There</p>
+                  <p className="font-inter text-[11px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-5">Getting There</p>
                   <div className="space-y-4">
                     {a.nearestAirportIATA && (
                       <div className="flex items-start gap-3">
@@ -926,7 +926,7 @@ export default async function AttractionPage(
                         href={`https://www.google.com/maps/place/?q=place_id:${a.googleMapsPlaceId}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 font-inter text-[9px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors mt-1"
+                        className="inline-flex items-center gap-2 font-inter text-[11px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors mt-1"
                       >
                         View on Google Maps
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -940,7 +940,7 @@ export default async function AttractionPage(
 
               {/* Save to Trip */}
               <div className="border border-line dark-flip-border rounded-3xl p-6">
-                <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-3">Plan Your Visit</p>
+                <p className="font-inter text-[11px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-3">Plan Your Visit</p>
                 <p className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-5" style={{ letterSpacing: '-0.012em' }}>
                   Save this attraction to your trip planner.
                 </p>
@@ -950,10 +950,10 @@ export default async function AttractionPage(
               {/* Suitable For */}
               {a.suitableFor && a.suitableFor.length > 0 && (
                 <div className="border border-line dark-flip-border rounded-3xl p-6">
-                  <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-4">Suitable For</p>
+                  <p className="font-inter text-[11px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">Suitable For</p>
                   <div className="flex flex-wrap gap-2">
                     {a.suitableFor.map(s => (
-                      <span key={s} className="bg-sand dark-flip-surf text-charcoal/65 dark-flip-muted font-sans text-[12px] px-3.5 py-1.5 rounded-full border border-line dark-flip-border">
+                      <span key={s} className="bg-sand dark-flip-surf text-charcoal/65 dark-flip-muted font-sans text-[13px] px-3.5 py-1.5 rounded-full border border-line dark-flip-border">
                         {s}
                       </span>
                     ))}
@@ -964,7 +964,7 @@ export default async function AttractionPage(
               {/* Featured In */}
               {a.featuredIn && a.featuredIn.length > 0 && (
                 <div className="border border-line dark-flip-border rounded-3xl p-6">
-                  <p className="font-inter text-[9px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-4">Featured In</p>
+                  <p className="font-inter text-[11px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">Featured In</p>
                   <div className="space-y-2">
                     {a.featuredIn.map(g => (
                       <Link key={g.slug} href={`/guides/${g.slug}`}
@@ -972,7 +972,7 @@ export default async function AttractionPage(
                         <svg className="w-3.5 h-3.5 text-gold-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
                         </svg>
-                        <span className="font-sans text-[12px] text-charcoal/60 dark-flip-muted group-hover:text-crimson transition-colors leading-snug">
+                        <span className="font-sans text-[13px] text-charcoal/65 dark-flip-muted group-hover:text-crimson transition-colors leading-snug">
                           {g.title}
                         </span>
                       </Link>
@@ -988,7 +988,7 @@ export default async function AttractionPage(
                   className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all"
                 >
                   <div>
-                    <p className="font-inter text-[9px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-1">Explore more</p>
+                    <p className="font-inter text-[11px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted mb-1">Explore more</p>
                     <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                       All attractions in {a.country.name}
                     </p>
@@ -1002,7 +1002,7 @@ export default async function AttractionPage(
               {/* Report correction */}
               <a
                 href={`mailto:info@myafrowaka.com?subject=Attraction Correction: ${encodeURIComponent(a.name)}`}
-                className="flex items-center gap-2 justify-center font-inter text-[9px] uppercase tracking-[0.14em] text-charcoal/28 dark-flip-muted hover:text-charcoal/55 transition-colors py-2"
+                className="flex items-center gap-2 justify-center font-inter text-[11px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted hover:text-charcoal/70 transition-colors py-2"
               >
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -1018,7 +1018,7 @@ export default async function AttractionPage(
       {faqItems.length > 0 && (
         <div className="bg-sand dark-flip-surf border-t border-line dark-flip-border">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 md:py-20">
-            <p className="font-inter text-[9px] uppercase tracking-[0.22em] text-charcoal/35 dark-flip-muted mb-3">
+            <p className="font-inter text-[11px] uppercase tracking-[0.22em] text-charcoal/55 dark-flip-muted mb-3">
               Common Questions
             </p>
             <h2
@@ -1038,14 +1038,14 @@ export default async function AttractionPage(
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-20">
             <div className="flex items-end justify-between mb-8 gap-4">
               <div>
-                <p className="font-inter text-[9px] uppercase tracking-[0.22em] text-crimson mb-2">Keep Exploring</p>
+                <p className="font-inter text-[11px] uppercase tracking-[0.22em] text-crimson mb-2">Keep Exploring</p>
                 <h2 className="font-display font-bold text-charcoal dark-flip-text"
                   style={{ fontSize: 'clamp(20px, 2.5vw, 32px)', letterSpacing: '-0.018em' }}>
                   More to See in {a.country.name}
                 </h2>
               </div>
               <Link href={`/destinations/${a.country.slug}`}
-                className="inline-link link-arrow hidden sm:inline-flex font-inter text-[9px] uppercase tracking-[0.16em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors shrink-0">
+                className="inline-link link-arrow hidden sm:inline-flex font-inter text-[11px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors shrink-0">
                 All {a.country.name} guides
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
               </Link>
@@ -1064,7 +1064,7 @@ export default async function AttractionPage(
                         className="object-cover img-editorial img-inner"
                       />
                       {typeLabel && (
-                        <span className="absolute top-2 left-2 bg-ink/75 backdrop-blur font-inter text-[7px] uppercase tracking-[0.13em] text-cream/80 px-2 py-0.5 rounded-full">
+                        <span className="absolute top-2 left-2 bg-ink/75 backdrop-blur font-inter text-[11px] uppercase tracking-[0.13em] text-cream/85 px-2.5 py-0.5 rounded-full">
                           {typeLabel}
                         </span>
                       )}
@@ -1073,11 +1073,11 @@ export default async function AttractionPage(
                       <h3 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug text-[14px]"
                         style={{ letterSpacing: '-0.012em' }}>{rel.name}</h3>
                       {rel.editorialSummary && (
-                        <p className="font-sans text-[11px] text-charcoal/50 dark-flip-muted leading-relaxed line-clamp-2 mt-1.5">
+                        <p className="font-sans text-[13px] text-charcoal/65 dark-flip-muted leading-relaxed line-clamp-2 mt-1.5">
                           {rel.editorialSummary}
                         </p>
                       )}
-                      <p className="mt-3 font-inter text-[9px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
+                      <p className="mt-3 font-inter text-[11px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
                         Read guide &#8594;
                       </p>
                     </div>

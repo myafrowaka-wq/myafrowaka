@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
@@ -53,7 +53,7 @@ export function DashProfile({ initialName, email, role, initials }: Props) {
 
       {/* Avatar + account info */}
       <div className="bg-cream dark-flip-card border border-line dark-flip-border rounded-2xl p-6">
-        <p className="font-inter text-[7px] uppercase tracking-[0.22em] text-charcoal/25 dark-flip-muted mb-5">Account</p>
+        <p className="font-inter text-[11px] uppercase tracking-[0.22em] text-charcoal/55 dark-flip-muted mb-5">Account</p>
 
         <div className="flex items-center gap-4 mb-6">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-crimson/80 to-ochre/70 flex items-center justify-center shrink-0">
@@ -64,29 +64,29 @@ export function DashProfile({ initialName, email, role, initials }: Props) {
               style={{ letterSpacing: '-0.01em' }}>
               {name || 'User'}
             </p>
-            <p className="font-inter text-[9px] text-charcoal/35 dark-flip-muted truncate">{email}</p>
+            <p className="font-inter text-[12px] text-charcoal/55 dark-flip-muted truncate">{email}</p>
           </div>
         </div>
 
         <dl className="space-y-3">
           <div className="flex items-center justify-between">
-            <dt className="font-inter text-[8px] uppercase tracking-[0.16em] text-charcoal/30 dark-flip-muted">Role</dt>
+            <dt className="font-inter text-[11px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted">Role</dt>
             <dd>
-              <span className="font-inter text-[8px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-full bg-charcoal/8 dark-flip-surf text-charcoal/55 dark-flip-muted">
+              <span className="font-inter text-[11px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-full bg-charcoal/8 dark-flip-surf text-charcoal/65 dark-flip-muted">
                 {ROLE_LABELS[role] ?? role}
               </span>
             </dd>
           </div>
           <div className="flex items-center justify-between">
-            <dt className="font-inter text-[8px] uppercase tracking-[0.16em] text-charcoal/30 dark-flip-muted">Email</dt>
-            <dd className="font-sans text-[12px] text-charcoal/55 dark-flip-muted truncate max-w-[160px]">{email}</dd>
+            <dt className="font-inter text-[11px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted">Email</dt>
+            <dd className="font-sans text-[13px] text-charcoal/65 dark-flip-muted truncate max-w-[160px]">{email}</dd>
           </div>
         </dl>
       </div>
 
       {/* Edit display name */}
       <div className="bg-cream dark-flip-card border border-line dark-flip-border rounded-2xl p-6">
-        <p className="font-inter text-[7px] uppercase tracking-[0.22em] text-charcoal/25 dark-flip-muted mb-5">Edit Profile</p>
+        <p className="font-inter text-[11px] uppercase tracking-[0.22em] text-charcoal/55 dark-flip-muted mb-5">Edit Profile</p>
 
         <form onSubmit={handleSave} className="space-y-4">
           <div>
@@ -116,14 +116,14 @@ export function DashProfile({ initialName, email, role, initials }: Props) {
           <button
             type="submit"
             disabled={saving || !name.trim() || name.trim() === initialName}
-            className="w-full bg-ink hover:bg-charcoal disabled:opacity-40 disabled:cursor-not-allowed text-cream font-inter text-[9px] uppercase tracking-[0.14em] py-3 rounded-xl transition-all">
+            className="w-full bg-ink hover:bg-charcoal disabled:opacity-40 disabled:cursor-not-allowed text-cream font-inter text-[11px] uppercase tracking-[0.14em] py-3 rounded-xl transition-all">
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
         </form>
 
         <div className="mt-6 pt-5 border-t border-line dark-flip-border">
-          <p className="font-inter text-[7px] uppercase tracking-[0.16em] text-charcoal/20 dark-flip-muted mb-2">Password</p>
-          <p className="font-sans text-[12px] text-charcoal/40 dark-flip-muted leading-relaxed">
+          <p className="font-inter text-[11px] uppercase tracking-[0.16em] text-charcoal/50 dark-flip-muted mb-2">Password</p>
+          <p className="font-sans text-[13px] text-charcoal/60 dark-flip-muted leading-relaxed">
             Password changes are managed through your sign-in provider. Sign out and use the reset option on the login page.
           </p>
         </div>

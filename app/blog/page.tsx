@@ -67,7 +67,7 @@ export default async function BlogPage(
 
             {/* Left: headline */}
             <div>
-              <p className="font-inter text-[9px] uppercase tracking-[0.24em] text-gold-400 mb-4">
+              <p className="font-inter text-[11px] uppercase tracking-[0.24em] text-gold-400 mb-4">
                 MyAfroWaka
               </p>
               <h1
@@ -76,7 +76,7 @@ export default async function BlogPage(
               >
                 The<br/>Journal
               </h1>
-              <p className="font-sans text-cream/45 mt-4"
+              <p className="font-sans text-cream/65 mt-4"
                 style={{ fontSize: 'clamp(12px, 1.2vw, 15px)' }}>
                 Perspectives, dispatches, and stories from across the continent.
               </p>
@@ -85,7 +85,7 @@ export default async function BlogPage(
             {/* Right: latest teaser */}
             {featuredTitle && (
               <div className="border-l-2 border-gold-400/40 pl-5 max-w-xs shrink-0">
-                <p className="font-inter text-[8px] uppercase tracking-[0.2em] text-gold-400/60 mb-2">Latest</p>
+                <p className="font-inter text-[11px] uppercase tracking-[0.2em] text-gold-400/80 mb-2">Latest</p>
                 <p className="font-display font-semibold text-cream/80 leading-snug line-clamp-2"
                   style={{ fontSize: 'clamp(13px, 1.2vw, 15px)' }}>
                   {featuredTitle}

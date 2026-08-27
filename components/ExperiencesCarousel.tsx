@@ -33,7 +33,7 @@ export function ExperiencesCarousel() {
               <div className="absolute bottom-0 left-0 right-0 p-3">
                 <h3 className="font-display font-bold text-sm text-cream group-hover:text-gold-300 transition-colors leading-tight"
                   style={{ letterSpacing: '-0.01em' }}>{e.label}</h3>
-                <p className="font-sans text-[10px] text-cream/55 mt-0.5 leading-tight">{e.desc}</p>
+                <p className="font-sans text-[13px] text-cream/70 mt-0.5 leading-tight">{e.desc}</p>
               </div>
             </Link>
           ))}
@@ -49,9 +49,9 @@ export function ExperiencesCarousel() {
               className="object-cover img-editorial img-inner"/>
             <div className="absolute inset-0 bg-gradient-to-t from-ink/92 via-ink/25 to-transparent"/>
             <div className="absolute bottom-0 left-0 right-0 p-4">
-              <h3 className="font-display font-bold text-[13px] text-cream group-hover:text-gold-300 transition-colors leading-tight"
+              <h3 className="font-display font-bold text-[15px] text-cream group-hover:text-gold-300 transition-colors leading-tight"
                 style={{ letterSpacing: '-0.01em' }}>{e.label}</h3>
-              <p className="font-sans text-[10px] text-cream/55 mt-1 leading-tight">{e.desc}</p>
+              <p className="font-sans text-[13px] text-cream/70 mt-1 leading-tight">{e.desc}</p>
             </div>
           </Link>
         ))}
