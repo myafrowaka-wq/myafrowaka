@@ -121,6 +121,9 @@ export default async function DestinationPage({
   const currentPage            = Math.max(1, parseInt(pageParam ?? '1', 10))
   const dest = await client.fetch<Destination | null>(DESTINATION_BY_SLUG_QUERY, { slug })
   if (!dest) notFound()
+  // A country record with no published attractions and no overview has
+  // nothing for a visitor or a crawler to use — serve 404, not an empty page.
+  if (dest.attractions.length === 0 && !dest.overview) notFound()
 
   const filtered = q
     ? dest.attractions.filter(a =>

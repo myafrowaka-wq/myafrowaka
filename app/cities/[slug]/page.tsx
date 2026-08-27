@@ -62,6 +62,9 @@ export default async function CityPage(
   const { slug } = await params
   const city = await client.fetch<City | null>(CITY_BY_SLUG_QUERY, { slug })
   if (!city) notFound()
+  // A city record with no published attractions and no overview has nothing
+  // for a visitor or a crawler to use — serve 404 rather than an empty page.
+  if (city.attractions.length === 0 && !city.overview) notFound()
 
   const jsonLd = {
     '@context': 'https://schema.org',

@@ -43,8 +43,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // ── Destination (country) pages ───────────────────────────────────────────
+  // Only countries with at least one published attraction — an empty country
+  // page submitted to Google is thin content with nothing for a crawler to index.
   const countries = await client.fetch<{ slug: string }[]>(`
-    *[_type == "country"]{ "slug": slug.current }
+    *[_type == "country" && count(*[_type == "attraction" && references(^._id) && contentStatus == "Published"]) > 0]{ "slug": slug.current }
   `).catch(() => [])
 
   const countryEntries: MetadataRoute.Sitemap = countries.map(c => ({
@@ -55,8 +57,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // ── City pages ────────────────────────────────────────────────────────────
+  // Same rule as countries: only cities with at least one published attraction.
   const cities = await client.fetch<{ slug: string }[]>(`
-    *[_type == "city"]{ "slug": slug.current }
+    *[_type == "city" && count(*[_type == "attraction" && references(^._id) && contentStatus == "Published"]) > 0]{ "slug": slug.current }
   `).catch(() => [])
 
   const cityEntries: MetadataRoute.Sitemap = cities.map(c => ({
