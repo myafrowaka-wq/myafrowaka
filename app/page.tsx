@@ -55,6 +55,12 @@ const GUIDES_QUERY = `
   }
 `
 const POPULAR_QUERY = `*[_type == "attraction" && contentStatus == "Published"][0..29]{ name, "slug": slug.current }`
+const LATEST_POSTS_QUERY = `
+  *[_type == "post" && contentStatus == "Published"] | order(publishedAt desc)[0..2]{
+    title, "slug": slug.current, publishedAt, excerpt, category, tags,
+    "author": author->{ name }
+  }
+`
 
 type GuideItem = {
   name: string; slug: string; continentRegion: string
@@ -137,15 +143,18 @@ const BLOG_COVERS: Record<string, string> = {
 }
 
 export default async function HomePage() {
-  const [t, tc, [featured, guides, popularRaw]] = await Promise.all([
+  const [t, tc, [featured, guides, popularRaw, latestPosts]] = await Promise.all([
     getTranslations('home'),
     getTranslations('common'),
     Promise.all([
       client.fetch(FEATURED_QUERY).catch(() => []),
       client.fetch(GUIDES_QUERY).catch(() => []),
       client.fetch<{ name: string; slug: string }[]>(POPULAR_QUERY).catch(() => []),
+      client.fetch<typeof FALLBACK_POSTS>(LATEST_POSTS_QUERY).catch(() => []),
     ]),
   ])
+
+  const displayPosts = latestPosts.length > 0 ? latestPosts : FALLBACK_POSTS.slice(0, 3)
 
   const popularAttractions = popularRaw.map((a: { name: string; slug: string }) => ({ label: a.name, slug: a.slug }))
 
@@ -484,7 +493,7 @@ export default async function HomePage() {
 
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
-            {FALLBACK_POSTS.slice(0, 3).map(post => {
+            {displayPosts.map(post => {
               const coverSrc = BLOG_COVERS[post.slug]
                 ? `https://images.unsplash.com/photo-${BLOG_COVERS[post.slug]}?auto=format&fit=crop&w=800&q=80`
                 : 'https://images.unsplash.com/photo-1682773083896-95176d8aecf8?auto=format&fit=crop&w=800&q=80'
@@ -506,8 +515,12 @@ export default async function HomePage() {
                   </div>
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson">{post.tags[0]}</span>
-                      <span className="text-charcoal/20 dark-flip-muted">·</span>
+                      {post.tags?.[0] && (
+                        <>
+                          <span className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson">{post.tags[0]}</span>
+                          <span className="text-charcoal/20 dark-flip-muted">·</span>
+                        </>
+                      )}
                       <span className="font-sans text-[14px] text-charcoal/55 dark-flip-muted">
                         {new Date(post.publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </span>
@@ -520,7 +533,7 @@ export default async function HomePage() {
                       {post.excerpt}
                     </p>
                     <div className="mt-4 pt-4 border-t border-line dark-flip-border flex items-center justify-between">
-                      <span className="font-sans text-[14px] text-charcoal/55 dark-flip-muted">{post.author.name}</span>
+                      <span className="font-sans text-[14px] text-charcoal/55 dark-flip-muted">{post.author?.name}</span>
                       <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
                         Read &#8594;
                       </span>

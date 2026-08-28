@@ -14,7 +14,7 @@ export interface BlogPost {
   excerpt?: string
   category?: string
   tags?: string[]
-  author?: { name: string }
+  author?: { name: string; slug?: string }
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────

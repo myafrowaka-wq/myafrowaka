@@ -69,6 +69,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
+  // ── Authors ───────────────────────────────────────────────────────────────
+  const authors = await client.fetch<{ slug: string }[]>(`
+    *[_type == "author"]{ "slug": slug.current }
+  `).catch(() => [])
+
+  const authorEntries: MetadataRoute.Sitemap = authors.map(a => ({
+    url: `${BASE}/authors/${a.slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.5,
+  }))
+
   // ── Guide (editorial pillar) pages ───────────────────────────────────────
   const guides = await client.fetch<{ slug: string }[]>(`
     *[_type == "editorialPillar" && contentStatus == "Published"]{ "slug": slug.current }
@@ -81,5 +93,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.75,
   }))
 
-  return [...statics, ...attractionEntries, ...postEntries, ...guideEntries, ...countryEntries, ...cityEntries]
+  return [...statics, ...attractionEntries, ...postEntries, ...authorEntries, ...guideEntries, ...countryEntries, ...cityEntries]
 }

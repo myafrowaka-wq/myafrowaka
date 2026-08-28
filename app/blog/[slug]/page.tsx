@@ -7,8 +7,7 @@ import imageUrlBuilder from '@sanity/image-url'
 import { CATEGORY_COLOR, CATEGORY_COLOR_FALLBACK } from '@/lib/regionColors'
 import { client } from '@/sanity/lib/client'
 import { POST_BY_SLUG_QUERY, ALL_POST_SLUGS_QUERY, ALL_POSTS_QUERY } from '@/sanity/lib/queries'
-import { FALLBACK_POSTS, type FallbackPost } from '@/lib/fallbackPosts'
-import { getAuthorByName, nameToSlug } from '@/lib/authors'
+import { AuthorAvatar } from '@/components/AuthorAvatar'
 
 const builder = imageUrlBuilder(client)
 function urlFor(source: Parameters<typeof builder.image>[0]) {
@@ -52,18 +51,15 @@ interface Post {
   body?: unknown[]
   metaTitle?: string
   metaDescription?: string
-  author?: { name: string }
+  author?: { name: string; slug?: string; bio?: string; photo?: unknown }
   featuredCountry?: { name: string; slug: string }
 }
 
 // ── Static params ─────────────────────────────────────────────────────────────
 
 export async function generateStaticParams() {
-  const sanityslugs = await client.fetch<{ slug: string }[]>(ALL_POST_SLUGS_QUERY).catch(() => [])
-  const fallbackSlugs = FALLBACK_POSTS.map(p => ({ slug: p.slug }))
-  const all = [...sanityslugs, ...fallbackSlugs]
-  const seen = new Set<string>()
-  return all.filter(s => { if (seen.has(s.slug)) return false; seen.add(s.slug); return true })
+  const slugs = await client.fetch<{ slug: string }[]>(ALL_POST_SLUGS_QUERY).catch(() => [])
+  return slugs
 }
 
 // ── Metadata ──────────────────────────────────────────────────────────────────
@@ -72,12 +68,11 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params
-  const sanityPost = await client.fetch<Post | null>(POST_BY_SLUG_QUERY, { slug }).catch(() => null)
-  const post = sanityPost ?? FALLBACK_POSTS.find(p => p.slug === slug)
+  const post = await client.fetch<Post | null>(POST_BY_SLUG_QUERY, { slug }).catch(() => null)
   if (!post) return {}
 
-  const title       = ('metaTitle' in post && post.metaTitle) ? post.metaTitle : `${post.title} – MyAfroWaka`
-  const description = ('metaDescription' in post && post.metaDescription) ? post.metaDescription : (post.excerpt ?? `Read ${post.title} on MyAfroWaka.`)
+  const title       = post.metaTitle || `${post.title} – MyAfroWaka`
+  const description = post.metaDescription || post.excerpt || `Read ${post.title} on MyAfroWaka.`
 
   const canonicalUrl = `https://myafrowaka.com/blog/${slug}`
   return {
@@ -212,31 +207,18 @@ export default async function BlogPostPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params
-  const [sanityPost, allSanityPosts] = await Promise.all([
+  const [post, allPosts] = await Promise.all([
     client.fetch<Post | null>(POST_BY_SLUG_QUERY, { slug }).catch(() => null),
     client.fetch<Post[]>(ALL_POSTS_QUERY).catch(() => [] as Post[]),
   ])
-
-  const fallback     = FALLBACK_POSTS.find(p => p.slug === slug)
-  const isFallback   = !sanityPost && !!fallback
-  if (!sanityPost && !fallback) notFound()
-
-  const post = sanityPost ?? {
-    title: fallback!.title, slug: fallback!.slug, publishedAt: fallback!.publishedAt,
-    excerpt: fallback!.excerpt, category: fallback!.category, tags: fallback!.tags,
-    coverImage: undefined, body: undefined, metaTitle: fallback!.metaTitle,
-    metaDescription: fallback!.metaDescription, author: fallback!.author,
-    featuredCountry: undefined,
-  }
+  if (!post) notFound()
 
   const accent = post.category ? (CATEGORY_COLOR[post.category] ?? CATEGORY_COLOR_FALLBACK) : CATEGORY_COLOR_FALLBACK
 
-  // Reading time — extract only plain text from PortableText blocks to avoid inflating
-  // count with JSON keys, _type, _key, etc.
+  // Reading time — extract only plain text from PortableText blocks to avoid
+  // inflating the count with JSON keys, _type, _key, etc.
   let wordCount = 0
-  if (isFallback && fallback?.content) {
-    wordCount = fallback.content.join(' ').split(/\s+/).filter(Boolean).length
-  } else if (post.body) {
+  if (post.body) {
     const text = (post.body as Array<{ children?: Array<{ text?: string }> }>)
       .flatMap(block => (block.children ?? []).map(span => span.text ?? ''))
       .join(' ')
@@ -245,22 +227,12 @@ export default async function BlogPostPage(
   const readingTime = Math.max(1, Math.round(wordCount / 200))
 
   // Also Read: posts sharing at least one tag
-  const allWithTags: { slug: string; title: string; tags?: string[]; excerpt?: string; category?: string }[] = [
-    ...allSanityPosts.map(p => ({ slug: p.slug, title: p.title, tags: p.tags, excerpt: p.excerpt, category: p.category })),
-    ...FALLBACK_POSTS
-      .filter(fp => !allSanityPosts.find(sp => sp.slug === fp.slug))
-      .map(fp => ({ slug: fp.slug, title: fp.title, tags: fp.tags, excerpt: fp.excerpt, category: fp.category })),
-  ]
   const alsoRead = (post.tags && post.tags.length > 0)
-    ? allWithTags.filter(p => p.slug !== slug && p.tags?.some(t => post.tags!.includes(t))).slice(0, 3)
+    ? allPosts.filter(p => p.slug !== slug && p.tags?.some(t => post.tags!.includes(t))).slice(0, 3)
     : []
 
-  // Related: from Sanity first, then fallbacks
-  const allForRelated: { slug: string; title: string; category?: string }[] = [
-    ...allSanityPosts,
-    ...FALLBACK_POSTS.filter(fp => !allSanityPosts.find(sp => sp.slug === fp.slug)),
-  ]
-  const related = allForRelated.filter(p => p.slug !== slug && p.category === post.category).slice(0, 3)
+  // Related: same category
+  const related = allPosts.filter(p => p.slug !== slug && p.category === post.category).slice(0, 3)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -276,7 +248,7 @@ export default async function BlogPostPage(
       author: {
         '@type': 'Person',
         name: post.author.name,
-        url: 'https://myafrowaka.com/about',
+        url: post.author.slug ? `https://myafrowaka.com/authors/${post.author.slug}` : 'https://myafrowaka.com/about',
       }
     } : {
       author: { '@type': 'Organization', name: 'MyAfroWaka Editorial Team', url: 'https://myafrowaka.com/about' }
@@ -321,18 +293,20 @@ export default async function BlogPostPage(
           </h1>
 
           <div className="flex items-center gap-4 flex-wrap mt-4">
-            {post.author && (() => {
-              const authorData = getAuthorByName(post.author!.name)
-              const authorSlug = authorData?.slug ?? nameToSlug(post.author!.name)
-              return (
+            {post.author && (
+              post.author.slug ? (
                 <Link
-                  href={`/authors/${authorSlug}`}
+                  href={`/authors/${post.author.slug}`}
                   className="font-sans text-[14px] uppercase tracking-[0.12em] text-cream/50 hover:text-cream/80 transition-colors"
                 >
-                  {post.author!.name}
+                  {post.author.name}
                 </Link>
+              ) : (
+                <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-cream/50">
+                  {post.author.name}
+                </span>
               )
-            })()}
+            )}
             {post.publishedAt && (
               <span className="font-sans text-[14px] text-cream/35">{formatDate(post.publishedAt)}</span>
             )}
@@ -362,21 +336,11 @@ export default async function BlogPostPage(
               )}
 
               {/* Sanity PortableText body */}
-              {!isFallback && post.body && (post.body as unknown[]).length > 0 && (
+              {post.body && (post.body as unknown[]).length > 0 ? (
                 <div>
                   <PortableText value={post.body as Parameters<typeof PortableText>[0]['value']} components={ptComponents} />
                 </div>
-              )}
-
-              {/* Fallback plain-text paragraphs */}
-              {isFallback && fallback?.content.map((para, i) => (
-                <p key={i} className="font-sans text-[15px] text-charcoal/78 dark-flip-muted leading-[1.8] mb-5">
-                  {para}
-                </p>
-              ))}
-
-              {/* No body placeholder (Sanity post without body) */}
-              {!isFallback && (!post.body || (post.body as unknown[]).length === 0) && (
+              ) : (
                 <p className="font-sans text-sm text-charcoal/35 dark-flip-muted italic">
                   Article body coming soon.
                 </p>
@@ -431,36 +395,46 @@ export default async function BlogPostPage(
 
               {/* Author */}
               {post.author && (() => {
-                const authorData = getAuthorByName(post.author.name)
-                const bio = authorData?.bio ?? 'A contributor to the MyAfroWaka editorial team, writing about travel and culture across the African continent.'
-                const avatarId = authorData?.avatarId ?? '1518882570151-157128e78fa1'
-                const authorSlug = authorData?.slug ?? nameToSlug(post.author.name)
+                const bio = post.author.bio ?? 'A contributor to the MyAfroWaka editorial team, writing about travel and culture across the African continent.'
+                const authorSlug = post.author.slug
+                const avatar = (
+                  <AuthorAvatar
+                    photo={post.author.photo as Parameters<typeof AuthorAvatar>[0]['photo']}
+                    name={post.author.name}
+                    size={44}
+                    className="border-2 border-gold-300/40"
+                  />
+                )
                 return (
                   <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
                     <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">Written by</p>
-                    <Link href={`/authors/${authorSlug}`} className="flex items-center gap-3 mb-3 group/author">
-                      <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 border-2 border-gold-300/40">
-                        <Image
-                          src={`https://images.unsplash.com/photo-${avatarId}?auto=format&fit=crop&w=88&q=80&crop=faces`}
-                          alt={post.author.name}
-                          fill
-                          className="object-cover"
-                        />
+                    {authorSlug ? (
+                      <Link href={`/authors/${authorSlug}`} className="flex items-center gap-3 mb-3 group/author">
+                        {avatar}
+                        <p className="font-display font-bold text-[15px] text-charcoal dark-flip-text group-hover/author:text-crimson transition-colors leading-tight"
+                          style={{ letterSpacing: '-0.01em' }}>
+                          {post.author.name}
+                        </p>
+                      </Link>
+                    ) : (
+                      <div className="flex items-center gap-3 mb-3">
+                        {avatar}
+                        <p className="font-display font-bold text-[15px] text-charcoal dark-flip-text leading-tight" style={{ letterSpacing: '-0.01em' }}>
+                          {post.author.name}
+                        </p>
                       </div>
-                      <p className="font-display font-bold text-[15px] text-charcoal dark-flip-text group-hover/author:text-crimson transition-colors leading-tight"
-                        style={{ letterSpacing: '-0.01em' }}>
-                        {post.author.name}
-                      </p>
-                    </Link>
+                    )}
                     <p className="font-sans text-[14px] text-charcoal/50 dark-flip-muted leading-relaxed mb-4">
                       {bio}
                     </p>
-                    <Link
-                      href={`/authors/${authorSlug}`}
-                      className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors"
-                    >
-                      View profile &#8594;
-                    </Link>
+                    {authorSlug && (
+                      <Link
+                        href={`/authors/${authorSlug}`}
+                        className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors"
+                      >
+                        View profile &#8594;
+                      </Link>
+                    )}
                   </div>
                 )
               })()}

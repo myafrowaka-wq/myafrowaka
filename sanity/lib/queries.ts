@@ -93,7 +93,7 @@ export const ALL_POSTS_QUERY = `
     category,
     tags,
     coverImage,
-    "author": author->{ name }
+    "author": author->{ name, "slug": slug.current, bio, photo }
   }
 `
 
@@ -102,6 +102,7 @@ export const POST_BY_SLUG_QUERY = `
     title,
     "slug": slug.current,
     publishedAt,
+    _updatedAt,
     excerpt,
     category,
     tags,
@@ -109,9 +110,26 @@ export const POST_BY_SLUG_QUERY = `
     body,
     metaTitle,
     metaDescription,
-    "author": author->{ name },
+    "author": author->{ name, "slug": slug.current, bio, photo },
     "featuredCountry": featuredCountry->{ name, "slug": slug.current }
   }
+`
+
+export const AUTHOR_BY_SLUG_QUERY = `
+  *[_type == "author" && slug.current == $slug][0] {
+    name,
+    "slug": slug.current,
+    bio,
+    role,
+    country,
+    specialism,
+    photo,
+    socialLinks
+  }
+`
+
+export const ALL_AUTHOR_SLUGS_QUERY = `
+  *[_type == "author"]{ "slug": slug.current }
 `
 
 export const ALL_POST_SLUGS_QUERY = `

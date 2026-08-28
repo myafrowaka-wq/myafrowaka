@@ -4,7 +4,6 @@ import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { ALL_POSTS_QUERY } from '@/sanity/lib/queries'
 import { BlogGrid, type BlogPost } from '@/components/BlogGrid'
-import { FALLBACK_POSTS } from '@/lib/fallbackPosts'
 
 const POSTS_PER_PAGE = 6
 
@@ -30,8 +29,7 @@ export default async function BlogPage(
 ) {
   const { page: pageParam, category } = await searchParams
   const page    = Math.max(1, parseInt(pageParam ?? '1', 10) || 1)
-  const fetched = await client.fetch<BlogPost[]>(ALL_POSTS_QUERY).catch(() => [] as BlogPost[])
-  const allPosts: BlogPost[] = fetched.length > 0 ? fetched : FALLBACK_POSTS
+  const allPosts = await client.fetch<BlogPost[]>(ALL_POSTS_QUERY).catch(() => [] as BlogPost[])
 
   const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE)
   const safePage   = Math.min(page, totalPages)

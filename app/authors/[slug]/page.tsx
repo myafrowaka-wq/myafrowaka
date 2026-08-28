@@ -2,11 +2,14 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import imageUrlBuilder from '@sanity/image-url'
 import { client } from '@/sanity/lib/client'
-import { ALL_POSTS_QUERY } from '@/sanity/lib/queries'
+import { ALL_POSTS_QUERY, AUTHOR_BY_SLUG_QUERY, ALL_AUTHOR_SLUGS_QUERY } from '@/sanity/lib/queries'
 import { CATEGORY_COLOR, CATEGORY_COLOR_FALLBACK } from '@/lib/regionColors'
-import { AUTHORS, getAuthorBySlug } from '@/lib/authors'
-import { FALLBACK_POSTS } from '@/lib/fallbackPosts'
+import { AuthorAvatar } from '@/components/AuthorAvatar'
+
+const builder = imageUrlBuilder(client)
+type SanityImage = Parameters<typeof builder.image>[0]
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -16,13 +19,25 @@ interface Post {
   publishedAt?: string
   excerpt?: string
   category?: string
-  author?: { name: string }
+  author?: { name: string; slug?: string }
+}
+
+interface Author {
+  name: string
+  slug: string
+  bio?: string
+  role?: string
+  country?: string
+  specialism?: string[]
+  photo?: SanityImage | null
+  socialLinks?: { platform: string; url: string }[]
 }
 
 // ── Static params ─────────────────────────────────────────────────────────────
 
 export async function generateStaticParams() {
-  return AUTHORS.map(a => ({ slug: a.slug }))
+  const slugs = await client.fetch<{ slug: string }[]>(ALL_AUTHOR_SLUGS_QUERY).catch(() => [])
+  return slugs.map(s => ({ slug: s.slug }))
 }
 
 // ── Metadata ──────────────────────────────────────────────────────────────────
@@ -31,13 +46,13 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params
-  const author = getAuthorBySlug(slug)
+  const author = await client.fetch<Author | null>(AUTHOR_BY_SLUG_QUERY, { slug })
   if (!author) return {}
 
   const title       = `${author.name} – MyAfroWaka`
-  const description = author.bio
+  const description = author.bio ?? `Travel writing from ${author.name} on MyAfroWaka.`
   const canonicalUrl = `https://myafrowaka.com/authors/${slug}`
-  const ogImage = `https://images.unsplash.com/photo-${author.avatarId}?auto=format&fit=crop&w=1200&q=80`
+  const ogImage = author.photo ? builder.image(author.photo).width(1200).height(630).fit('crop').url() : undefined
 
   return {
     title,
@@ -48,13 +63,13 @@ export async function generateMetadata(
       description,
       type: 'profile',
       url: canonicalUrl,
-      images: [ogImage],
+      ...(ogImage ? { images: [ogImage] } : {}),
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [ogImage],
+      ...(ogImage ? { images: [ogImage] } : {}),
     },
   }
 }
@@ -93,23 +108,11 @@ export default async function AuthorPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params
-  const author = getAuthorBySlug(slug)
+  const author = await client.fetch<Author | null>(AUTHOR_BY_SLUG_QUERY, { slug })
   if (!author) notFound()
 
-  // Fetch all Sanity posts, filter by author name
-  const sanityPosts = await client.fetch<Post[]>(ALL_POSTS_QUERY).catch(() => [] as Post[])
-  const sanityByAuthor = sanityPosts.filter(p => p.author?.name === author.name)
-
-  // Fallback posts filtered by author name
-  const fallbackByAuthor = FALLBACK_POSTS.filter(
-    p => p.author.name === author.name &&
-    !sanityByAuthor.find(sp => sp.slug === p.slug)
-  )
-
-  const posts: Post[] = [
-    ...sanityByAuthor,
-    ...fallbackByAuthor,
-  ]
+  const allPosts = await client.fetch<Post[]>(ALL_POSTS_QUERY).catch(() => [] as Post[])
+  const posts = allPosts.filter(p => p.author?.slug === author.slug)
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -117,6 +120,9 @@ export default async function AuthorPage(
     name: author.name,
     description: author.bio,
     url: `https://myafrowaka.com/authors/${slug}`,
+    ...(author.socialLinks && author.socialLinks.length > 0
+      ? { sameAs: author.socialLinks.map(s => s.url) }
+      : {}),
     worksFor: {
       '@type': 'Organization',
       name: 'MyAfroWaka',
@@ -134,20 +140,14 @@ export default async function AuthorPage(
           <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 items-start sm:items-center">
 
             {/* Avatar */}
-            <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-gold-400/30 shrink-0 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
-              <Image
-                src={`https://images.unsplash.com/photo-${author.avatarId}?auto=format&fit=crop&w=256&q=80&crop=faces`}
-                alt={author.name}
-                fill
-                className="object-cover"
-                priority
-              />
+            <div className="border-2 border-gold-400/30 rounded-full shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+              <AuthorAvatar photo={author.photo} name={author.name} size={128} className="sm:w-32 sm:h-32 w-24 h-24" />
             </div>
 
             {/* Info */}
             <div>
               <p className="font-sans text-[14px] uppercase tracking-[0.22em] text-gold-400 mb-2">
-                Contributor
+                {author.role ?? 'Contributor'}
               </p>
               <h1
                 className="font-display font-extrabold text-cream"
@@ -155,23 +155,24 @@ export default async function AuthorPage(
               >
                 {author.name}
               </h1>
-              <div className="flex items-center gap-2 mt-3 flex-wrap">
-                <span className="text-base">{author.countryFlag}</span>
-                <span className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/45">
-                  {author.country}
-                </span>
-              </div>
-              {/* Expertise tags */}
-              <div className="flex flex-wrap gap-2 mt-4">
-                {author.expertise.map(tag => (
-                  <span
-                    key={tag}
-                    className="font-sans text-[14px] uppercase tracking-[0.14em] text-cream/55 border border-white/12 px-3 py-1 rounded-full"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              {author.country && (
+                <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/45 mt-3">
+                  Based in {author.country}
+                </p>
+              )}
+              {/* Specialism tags */}
+              {author.specialism && author.specialism.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {author.specialism.map(tag => (
+                    <span
+                      key={tag}
+                      className="font-sans text-[14px] uppercase tracking-[0.14em] text-cream/55 border border-white/12 px-3 py-1 rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -189,7 +190,7 @@ export default async function AuthorPage(
                   About
                 </p>
                 <p className="font-sans text-[15px] text-charcoal/70 dark-flip-muted leading-[1.8]">
-                  {author.fullBio}
+                  {author.bio}
                 </p>
               </div>
 
