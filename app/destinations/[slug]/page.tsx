@@ -8,6 +8,8 @@ import { REGION_COLOR } from '@/lib/regionColors'
 import { DestinationSearch } from '@/components/DestinationSearch'
 import { TypewriterHero } from '@/components/TypewriterHero'
 import { PopularPills } from '@/components/PopularPills'
+import { CountryOverview } from '@/components/CountryOverview'
+import { Flag } from '@/components/Flag'
 
 interface AttractionSummary {
   name: string; slug: string; type?: string[]; editorialSummary?: string
@@ -16,9 +18,13 @@ interface AttractionSummary {
 
 interface Destination {
   name: string; slug: { current: string }; continentRegion?: string
-  overview?: string; quickFacts?: string; flagEmoji?: string
+  countryCode?: string
+  overview?: string; quickFacts?: string
+  whenToGo?: string; knownFor?: string; surprises?: string; gettingAround?: string
+  visaInfo?: string; safetyInfo?: string
+  startHereAttractions?: AttractionSummary[]
   attractions: AttractionSummary[]
-  relatedCountries?: { name: string; slug: string; flagEmoji?: string }[]
+  relatedCountries?: { name: string; slug: string; countryCode?: string }[]
 }
 
 const COUNTRY_IMAGES: Record<string, string> = {
@@ -86,7 +92,7 @@ export async function generateMetadata(
   const { slug } = await params
   const dest = await client.fetch<Destination | null>(DESTINATION_BY_SLUG_QUERY, { slug })
   if (!dest) return {}
-  const title = `${dest.flagEmoji ? dest.flagEmoji + ' ' : ''}${dest.name} Travel Guide – MyAfroWaka`
+  const title = `${dest.name} Travel Guide – MyAfroWaka`
   const description = dest.overview || `Discover attractions in ${dest.name}. Verified travel guides from MyAfroWaka.`
   const canonicalUrl = `https://myafrowaka.com/destinations/${slug}`
   return {
@@ -168,8 +174,8 @@ export default async function DestinationPage({
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-20 lg:py-28">
           {dest.continentRegion && (
-            <p className="font-sans text-[14px] uppercase tracking-[0.22em] mb-4 text-gold">
-              {dest.flagEmoji && <span className="mr-2">{dest.flagEmoji}</span>}
+            <p className="font-sans text-[14px] uppercase tracking-[0.22em] mb-4 text-gold flex items-center gap-2">
+              <Flag code={dest.countryCode} className="text-base" />
               {dest.continentRegion}
             </p>
           )}
@@ -212,6 +218,19 @@ export default async function DestinationPage({
           <div className="w-px h-8 bg-gradient-to-b from-cream to-transparent"/>
         </div>
       </div>
+
+      <CountryOverview
+        countryName={dest.name}
+        countrySlug={slug}
+        whenToGo={dest.whenToGo}
+        knownFor={dest.knownFor}
+        surprises={dest.surprises}
+        gettingAround={dest.gettingAround}
+        visaInfo={dest.visaInfo}
+        safetyInfo={dest.safetyInfo}
+        startHereAttractions={dest.startHereAttractions}
+        attractionImageUrl={attractionImageUrl}
+      />
 
       {/* Attractions Grid */}
       <div className="bg-cream dark-flip-bg">
@@ -332,7 +351,7 @@ export default async function DestinationPage({
                 {dest.relatedCountries.map(c => (
                   <Link key={c.slug} href={`/destinations/${c.slug}`}
                     className="flex items-center gap-2 bg-sand dark-flip-surf border border-line dark-flip-border hover:border-crimson px-4 py-2.5 rounded-full group transition-all">
-                    {c.flagEmoji && <span className="text-sm">{c.flagEmoji}</span>}
+                    <Flag code={c.countryCode} />
                     <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted group-hover:text-crimson transition-colors">
                       {c.name}
                     </span>

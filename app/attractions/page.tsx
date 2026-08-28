@@ -7,6 +7,7 @@ import { ALL_ATTRACTIONS_QUERY } from '@/sanity/lib/queries'
 import { AttractionSearch } from '@/components/AttractionSearch'
 import { AttractionsFilter } from '@/components/AttractionsFilter'
 import { TypewriterHero } from '@/components/TypewriterHero'
+import { Flag } from '@/components/Flag'
 
 export const metadata: Metadata = {
   title: 'Africa Travel Guides – MyAfroWaka',
@@ -25,7 +26,7 @@ interface AttractionSummary {
   slug: string
   type?: string[]
   editorialSummary?: string
-  country?: { name: string; slug: string; flagEmoji?: string }
+  country?: { name: string; slug: string; countryCode?: string }
   city?: { name: string }
 }
 
@@ -52,18 +53,18 @@ function attractionImageUrl(slug: string, width = 800) {
 }
 
 const FALLBACK_ATTRACTIONS: AttractionSummary[] = [
-  { name: 'Pyramids of Giza',                 slug: 'pyramids-of-giza',                  type: ['UNESCO World Heritage Site'],  country: { name: 'Egypt',        slug: 'egypt',        flagEmoji: '\u{1F1EA}\u{1F1EC}' }, city: { name: 'Cairo' },          editorialSummary: 'Three structures built over four thousand years ago that remain among the most astonishing on earth.' },
-  { name: 'Serengeti National Park',           slug: 'serengeti-national-park',           type: ['National Park'],               country: { name: 'Tanzania',     slug: 'tanzania',     flagEmoji: '\u{1F1F9}\u{1F1FF}' }, city: { name: 'Arusha Region' },  editorialSummary: 'The annual wildebeest migration through the Serengeti is the largest mammal movement on earth.' },
-  { name: 'Victoria Falls',                    slug: 'victoria-falls',                    type: ['Natural Wonder'],              country: { name: 'Zimbabwe',     slug: 'zimbabwe',     flagEmoji: '\u{1F1FF}\u{1F1FC}' }, city: { name: 'Victoria Falls' }, editorialSummary: 'One of the largest curtains of falling water on earth, audible from two kilometres away.' },
-  { name: 'Bwindi Impenetrable National Park', slug: 'bwindi-impenetrable-national-park', type: ['National Park'],               country: { name: 'Uganda',       slug: 'uganda',       flagEmoji: '\u{1F1FA}\u{1F1EC}' }, city: { name: 'Kigezi Region' },  editorialSummary: "Home to roughly half the world's remaining mountain gorilla population." },
-  { name: 'Djemaa el-Fna',                    slug: 'djemaa-el-fna-marrakech',           type: ['Cultural Site', 'UNESCO'],     country: { name: 'Morocco',      slug: 'morocco',      flagEmoji: '\u{1F1F2}\u{1F1E6}' }, city: { name: 'Marrakech' },      editorialSummary: 'A square that transforms from morning market to night festival, recognised by UNESCO for its intangible heritage.' },
-  { name: 'Sossusvlei Dunes',                 slug: 'sossusvlei-namib-desert',           type: ['Natural Wonder'],              country: { name: 'Namibia',      slug: 'namibia',      flagEmoji: '\u{1F1F3}\u{1F1E6}' }, city: { name: 'Namib-Naukluft' }, editorialSummary: 'The tallest dunes in the world change colour across a spectrum that has no adequate name in English.' },
-  { name: 'Volcanoes National Park',           slug: 'volcanoes-national-park-rwanda',    type: ['National Park'],               country: { name: 'Rwanda',       slug: 'rwanda',       flagEmoji: '\u{1F1F7}\u{1F1FC}' }, city: { name: 'Musanze' },        editorialSummary: "Trekking through Virunga forest to find mountain gorilla families is one of Africa's defining wildlife experiences." },
-  { name: 'Cape Point',                        slug: 'cape-point-south-africa',           type: ['Nature Reserve'],              country: { name: 'South Africa', slug: 'south-africa', flagEmoji: '\u{1F1FF}\u{1F1E6}' }, city: { name: 'Cape Town' },      editorialSummary: 'Where the Atlantic and the cliffs of the Cape Peninsula come together at the southwestern tip of the continent.' },
-  { name: 'Lalibela Rock-Hewn Churches',       slug: 'lalibela-rock-hewn-churches',       type: ['UNESCO World Heritage Site'],  country: { name: 'Ethiopia',     slug: 'ethiopia',     flagEmoji: '\u{1F1EA}\u{1F1F9}' }, city: { name: 'Lalibela' },       editorialSummary: 'Eleven monolithic churches carved directly from the rock in the twelfth century and still used for active worship.' },
-  { name: 'Maasai Mara National Reserve',     slug: 'maasai-mara-national-reserve',      type: ['National Reserve'],            country: { name: 'Kenya',        slug: 'kenya',        flagEmoji: '\u{1F1F0}\u{1F1EA}' }, city: { name: 'Narok County' },   editorialSummary: 'The Kenyan portion of the Serengeti ecosystem and the site of the annual Mara River crossing.' },
-  { name: 'Stone Town',                       slug: 'stone-town-zanzibar',               type: ['UNESCO World Heritage Site'],  country: { name: 'Tanzania',     slug: 'tanzania',     flagEmoji: '\u{1F1F9}\u{1F1FF}' }, city: { name: 'Zanzibar' },       editorialSummary: 'Six centuries of Swahili, Arab, Indian, and British influence compressed into one navigable old town.' },
-  { name: 'Ngorongoro Crater',                slug: 'ngorongoro-conservation-area',      type: ['UNESCO World Heritage Site'],  country: { name: 'Tanzania',     slug: 'tanzania',     flagEmoji: '\u{1F1F9}\u{1F1FF}' }, city: { name: 'Ngorongoro' },     editorialSummary: "The world's largest intact volcanic caldera contains one of the densest concentrations of wildlife in Africa." },
+  { name: 'Pyramids of Giza',                 slug: 'pyramids-of-giza',                  type: ['UNESCO World Heritage Site'],  country: { name: 'Egypt', slug: 'egypt', countryCode: 'eg' }, city: { name: 'Cairo' },          editorialSummary: 'Three structures built over four thousand years ago that remain among the most astonishing on earth.' },
+  { name: 'Serengeti National Park',           slug: 'serengeti-national-park',           type: ['National Park'],               country: { name: 'Tanzania', slug: 'tanzania', countryCode: 'tz' }, city: { name: 'Arusha Region' },  editorialSummary: 'The annual wildebeest migration through the Serengeti is the largest mammal movement on earth.' },
+  { name: 'Victoria Falls',                    slug: 'victoria-falls',                    type: ['Natural Wonder'],              country: { name: 'Zimbabwe', slug: 'zimbabwe', countryCode: 'zw' }, city: { name: 'Victoria Falls' }, editorialSummary: 'One of the largest curtains of falling water on earth, audible from two kilometres away.' },
+  { name: 'Bwindi Impenetrable National Park', slug: 'bwindi-impenetrable-national-park', type: ['National Park'],               country: { name: 'Uganda', slug: 'uganda', countryCode: 'ug' }, city: { name: 'Kigezi Region' },  editorialSummary: "Home to roughly half the world's remaining mountain gorilla population." },
+  { name: 'Djemaa el-Fna',                    slug: 'djemaa-el-fna-marrakech',           type: ['Cultural Site', 'UNESCO'],     country: { name: 'Morocco', slug: 'morocco', countryCode: 'ma' }, city: { name: 'Marrakech' },      editorialSummary: 'A square that transforms from morning market to night festival, recognised by UNESCO for its intangible heritage.' },
+  { name: 'Sossusvlei Dunes',                 slug: 'sossusvlei-namib-desert',           type: ['Natural Wonder'],              country: { name: 'Namibia', slug: 'namibia', countryCode: 'na' }, city: { name: 'Namib-Naukluft' }, editorialSummary: 'The tallest dunes in the world change colour across a spectrum that has no adequate name in English.' },
+  { name: 'Volcanoes National Park',           slug: 'volcanoes-national-park-rwanda',    type: ['National Park'],               country: { name: 'Rwanda', slug: 'rwanda', countryCode: 'rw' }, city: { name: 'Musanze' },        editorialSummary: "Trekking through Virunga forest to find mountain gorilla families is one of Africa's defining wildlife experiences." },
+  { name: 'Cape Point',                        slug: 'cape-point-south-africa',           type: ['Nature Reserve'],              country: { name: 'South Africa', slug: 'south-africa', countryCode: 'za' }, city: { name: 'Cape Town' },      editorialSummary: 'Where the Atlantic and the cliffs of the Cape Peninsula come together at the southwestern tip of the continent.' },
+  { name: 'Lalibela Rock-Hewn Churches',       slug: 'lalibela-rock-hewn-churches',       type: ['UNESCO World Heritage Site'],  country: { name: 'Ethiopia', slug: 'ethiopia', countryCode: 'et' }, city: { name: 'Lalibela' },       editorialSummary: 'Eleven monolithic churches carved directly from the rock in the twelfth century and still used for active worship.' },
+  { name: 'Maasai Mara National Reserve',     slug: 'maasai-mara-national-reserve',      type: ['National Reserve'],            country: { name: 'Kenya', slug: 'kenya', countryCode: 'ke' }, city: { name: 'Narok County' },   editorialSummary: 'The Kenyan portion of the Serengeti ecosystem and the site of the annual Mara River crossing.' },
+  { name: 'Stone Town',                       slug: 'stone-town-zanzibar',               type: ['UNESCO World Heritage Site'],  country: { name: 'Tanzania', slug: 'tanzania', countryCode: 'tz' }, city: { name: 'Zanzibar' },       editorialSummary: 'Six centuries of Swahili, Arab, Indian, and British influence compressed into one navigable old town.' },
+  { name: 'Ngorongoro Crater',                slug: 'ngorongoro-conservation-area',      type: ['UNESCO World Heritage Site'],  country: { name: 'Tanzania', slug: 'tanzania', countryCode: 'tz' }, city: { name: 'Ngorongoro' },     editorialSummary: "The world's largest intact volcanic caldera contains one of the densest concentrations of wildlife in Africa." },
 ]
 
 const ITEMS_PER_PAGE = 12
@@ -207,7 +208,7 @@ export default async function AttractionsPage({
                     <div className="p-5">
                       {a.country && (
                         <div className="flex items-center gap-1.5 mb-2">
-                          {a.country.flagEmoji && <span className="text-xs">{a.country.flagEmoji}</span>}
+                          <Flag code={a.country.countryCode} />
                           <span className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson">{a.country.name}</span>
                           {a.city && (
                             <>

@@ -34,7 +34,7 @@ export const ATTRACTION_BY_SLUG_QUERY = `
     contentStatus,
     lastVerifiedDate,
     articleBody,
-    "country": country->{ name, "slug": slug.current },
+    "country": country->{ name, "slug": slug.current, countryCode, overview, whenToGo },
     "city": city->{ name, "slug": slug.current },
     "nearbyCities": nearbyCities[]->{ name, "slug": slug.current },
     "featuredIn": *[_type == "editorialPillar" && contentStatus == "Published" && references(^._id)]{
@@ -163,7 +163,7 @@ export const ALL_ATTRACTIONS_QUERY = `
     "slug": slug.current,
     type,
     editorialSummary,
-    "country": country->{ name, "slug": slug.current, flagEmoji },
+    "country": country->{ name, "slug": slug.current, countryCode },
     "city": city->{ name }
   }
 `
@@ -173,15 +173,25 @@ export const DESTINATION_BY_SLUG_QUERY = `
     name,
     slug,
     continentRegion,
+    countryCode,
     overview,
+    whenToGo,
+    knownFor,
+    surprises,
+    gettingAround,
+    visaInfo,
+    safetyInfo,
     quickFacts,
-    flagEmoji,
+    "startHereAttractions": startHereAttractions[]->{
+      name, "slug": slug.current, type, editorialSummary,
+      "city": city->{ name }
+    },
     "attractions": *[_type == "attraction" && references(^._id) && contentStatus == "Published"]{
       name, "slug": slug.current, type, continentRegion, editorialSummary, lastVerifiedDate,
       "city": city->{ name }
     } | order(name asc),
     "relatedCountries": *[_type == "country" && continentRegion == ^.continentRegion && slug.current != $slug][0..4]{
-      name, "slug": slug.current, flagEmoji
+      name, "slug": slug.current, countryCode
     }
   }
 `

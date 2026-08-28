@@ -9,6 +9,7 @@ import { Badge } from '@/components/Badge'
 import { FaqAccordion } from '@/components/FaqAccordion'
 import { SaveButton } from '@/components/SaveButton'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
+import { Flag } from '@/components/Flag'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -47,7 +48,7 @@ interface Attraction {
   contentStatus: string
   lastVerifiedDate?: string
   articleBody?: unknown[]
-  country?: { name: string; slug: string }
+  country?: { name: string; slug: string; countryCode?: string; overview?: string; whenToGo?: string }
   city?: { name: string; slug: string }
   nearbyCities?: { name: string; slug: string }[]
   featuredIn?: { title: string; slug: string }[]
@@ -559,7 +560,10 @@ export default async function AttractionPage(
                   {a.country && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
                       <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Country</span>
-                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.country.name}</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right flex items-center gap-1.5 justify-end">
+                        <Flag code={a.country.countryCode} />
+                        {a.country.name}
+                      </span>
                     </div>
                   )}
                   {a.continentRegion && (
@@ -806,7 +810,10 @@ export default async function AttractionPage(
                   {a.country && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
                       <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-cream/60 mt-0.5 shrink-0">Country</span>
-                      <span className="font-sans text-[14px] text-cream/88 text-right">{a.country.name}</span>
+                      <span className="font-sans text-[14px] text-cream/88 text-right flex items-center gap-1.5 justify-end">
+                        <Flag code={a.country.countryCode} />
+                        {a.country.name}
+                      </span>
                     </div>
                   )}
                   {a.continentRegion && (
@@ -887,6 +894,30 @@ export default async function AttractionPage(
                   )}
                 </div>
               </div>
+
+              {/* About the country — short summary, links through to the full overview */}
+              {a.country?.overview && (
+                <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
+                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4 flex items-center gap-2">
+                    <Flag code={a.country.countryCode} />
+                    About {a.country.name}
+                  </p>
+                  <p className="font-sans text-[14px] text-charcoal/70 dark-flip-muted leading-relaxed mb-2">
+                    {a.country.overview}
+                  </p>
+                  {a.country.whenToGo && (
+                    <p className="font-sans text-[14px] text-charcoal/55 dark-flip-muted leading-relaxed mb-4">
+                      <span className="font-semibold text-charcoal/70 dark-flip-text">Best time to go: </span>
+                      {a.country.whenToGo}
+                    </p>
+                  )}
+                  <Link href={`/destinations/${a.country.slug}`}
+                    className="inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
+                    Full {a.country.name} guide
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                  </Link>
+                </div>
+              )}
 
               {/* Getting There */}
               {(a.nearestAirportIATA || a.addressDirections || a.googleMapsPlaceId) && (
