@@ -12,12 +12,11 @@ const securityHeaders = [
 
 const nextConfig = {
   images: {
+    // images.unsplash.com removed here in Session 2.4 — every former hotlink
+    // is now a self-hosted file under public/images/stock (see
+    // lib/stockImageCredits.ts). WDOS TOOLING: "Self-host every image. Do
+    // not hotlink."
     remotePatterns: [
-      {
-        protocol: 'https' as const,
-        hostname: 'images.unsplash.com',
-        pathname: '/photo-**',
-      },
       {
         protocol: 'https' as const,
         hostname: 'cdn.sanity.io',

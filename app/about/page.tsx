@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { TypewriterHero } from '@/components/TypewriterHero'
+import { stockImage } from '@/lib/stockImageCredits'
 
 export const metadata: Metadata = {
   title: 'About MyAfroWaka – Africa Explained by Africans',
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
     description: 'A travel and destination discovery platform built from Abuja, Nigeria. Verified guides written by people who live here.',
     type: 'website',
     url: 'https://myafrowaka.com/about',
-    images: ['https://images.unsplash.com/photo-1741991110666-88115e724741?auto=format&fit=crop&w=1200&q=80'],
+    images: [stockImage('1741991110666-88115e724741')],
   },
 }
 
@@ -67,7 +68,7 @@ export default function AboutPage() {
       {/* Hero — static image, vertically centred text */}
       <div className="relative overflow-hidden min-h-[520px] flex items-center">
         <Image
-          src="https://images.unsplash.com/photo-1741991110666-88115e724741?auto=format&fit=crop&w=1920&q=85"
+          src={stockImage('1741991110666-88115e724741')}
           alt="Nairobi city skyline, Kenya"
           fill
           priority

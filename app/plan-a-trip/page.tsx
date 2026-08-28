@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { stockImage } from '@/lib/stockImageCredits'
 
 // Note: metadata can't be exported from a client component.
 // SEO is handled by the parent layout's default metadata.
@@ -55,7 +56,7 @@ export default function PlanATripPage() {
       {/* Hero */}
       <div className="relative overflow-hidden min-h-[380px] flex items-end">
         <Image
-          src="https://images.unsplash.com/photo-1577455486223-089171b4572f?auto=format&fit=crop&w=1920&q=85"
+          src={stockImage('1577455486223-089171b4572f')}
           alt="Plan your Africa trip"
           fill priority
           className="object-cover object-center"

@@ -1,13 +1,14 @@
 ﻿import Image from 'next/image'
 import Link from 'next/link'
+import { stockImage } from '@/lib/stockImageCredits'
 
 const EXPERIENCES = [
-  { label: 'Safari',  slug: 'safari',  desc: 'The Big Five and beyond',               image: 'https://images.unsplash.com/photo-1741850820849-1b63a5911606?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'Culture', slug: 'culture', desc: 'Living traditions across the continent', image: 'https://images.unsplash.com/photo-1597212618440-806262de4f6b?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'Beach',   slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',       image: 'https://images.unsplash.com/photo-1577455486223-089171b4572f?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'History', slug: 'history', desc: 'Ancient kingdoms and World Heritage',    image: 'https://images.unsplash.com/photo-1640005438758-861043e64aa5?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'Hiking',  slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',   image: 'https://images.unsplash.com/photo-1563985336376-568060942b80?auto=format&fit=crop&w=600&q=80'  },
-  { label: 'Food',    slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: 'https://images.unsplash.com/photo-1664992960082-0ea299a9c53e?auto=format&fit=crop&w=600&q=80'  },
+  { label: 'Safari',  slug: 'safari',  desc: 'The Big Five and beyond',               image: stockImage('1741850820849-1b63a5911606')  },
+  { label: 'Culture', slug: 'culture', desc: 'Living traditions across the continent', image: stockImage('1597212618440-806262de4f6b')  },
+  { label: 'Beach',   slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',       image: stockImage('1577455486223-089171b4572f')  },
+  { label: 'History', slug: 'history', desc: 'Ancient kingdoms and World Heritage',    image: stockImage('1640005438758-861043e64aa5')  },
+  { label: 'Hiking',  slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',   image: stockImage('1563985336376-568060942b80')  },
+  { label: 'Food',    slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: stockImage('1664992960082-0ea299a9c53e')  },
 ]
 
 export function ExperiencesCarousel() {

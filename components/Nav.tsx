@@ -7,6 +7,7 @@ import { useTheme } from 'next-themes'
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { REGION_COLOR } from '@/lib/regionColors'
+import { stockImage } from '@/lib/stockImageCredits'
 
 // ─── data ─────────────────────────────────────────────────────────────────────
 // Central Africa here uses --color-gold-600, one shade darker than the
@@ -18,32 +19,32 @@ const REGIONS = [
   {
     region: 'East Africa', color: REGION_COLOR['East Africa'], href: '/search?region=East+Africa',
     countries: ['Kenya', 'Tanzania', 'Ethiopia', 'Uganda', 'Rwanda', 'Mozambique'],
-    image: 'https://images.unsplash.com/photo-1531872036218-4e8a6828e339?auto=format&fit=crop&w=400&q=80',
+    image: stockImage('1531872036218-4e8a6828e339'),
   },
   {
     region: 'West Africa', color: REGION_COLOR['West Africa'], href: '/search?region=West+Africa',
     countries: ['Nigeria', 'Ghana', 'Senegal', 'Ivory Coast', 'Mali', 'Benin'],
-    image: 'https://images.unsplash.com/photo-1727023663928-1772e2c7e679?auto=format&fit=crop&w=400&q=80',
+    image: stockImage('1727023663928-1772e2c7e679'),
   },
   {
     region: 'North Africa', color: REGION_COLOR['North Africa'], href: '/search?region=North+Africa',
     countries: ['Egypt', 'Morocco', 'Tunisia', 'Algeria', 'Libya'],
-    image: 'https://images.unsplash.com/photo-1760681554227-d7aad73cd57f?auto=format&fit=crop&w=400&q=80',
+    image: stockImage('1760681554227-d7aad73cd57f'),
   },
   {
     region: 'Southern Africa', color: REGION_COLOR['Southern Africa'], href: '/search?region=Southern+Africa',
     countries: ['South Africa', 'Zimbabwe', 'Zambia', 'Botswana', 'Namibia'],
-    image: 'https://images.unsplash.com/photo-1744604030401-b24c5975a574?auto=format&fit=crop&w=400&q=80',
+    image: stockImage('1744604030401-b24c5975a574'),
   },
   {
     region: 'Central Africa', color: 'var(--color-gold-600)', href: '/search?region=Central+Africa',
     countries: ['DR Congo', 'Cameroon', 'Gabon', 'Republic of Congo'],
-    image: 'https://images.unsplash.com/photo-1673624522244-8de0d50b8492?auto=format&fit=crop&w=400&q=80',
+    image: stockImage('1673624522244-8de0d50b8492'),
   },
   {
     region: 'Indian Ocean Islands', color: REGION_COLOR['Indian Ocean Islands'], href: '/search?region=Indian+Ocean+Islands',
     countries: ['Madagascar', 'Mauritius', 'Seychelles', 'Comoros', 'Zanzibar'],
-    image: 'https://images.unsplash.com/photo-1513415277900-a62401e19be4?auto=format&fit=crop&w=400&q=80',
+    image: stockImage('1513415277900-a62401e19be4'),
   },
 ]
 
@@ -59,9 +60,9 @@ const ATTRACTION_TYPES = [
 ]
 
 const FEATURED_ATTRACTIONS = [
-  { title: 'Pyramids of Giza: The Complete Guide',     tag: 'Egypt',        slug: 'pyramids-of-giza',                 img: 'https://images.unsplash.com/photo-1736443830251-dda3cb6df76c?auto=format&fit=crop&w=280&q=80' },
-  { title: 'Bwindi: Mountain Gorilla Trekking Guide',  tag: 'Uganda',       slug: 'bwindi-impenetrable-national-park', img: 'https://images.unsplash.com/photo-1673624522244-8de0d50b8492?auto=format&fit=crop&w=280&q=80' },
-  { title: 'Serengeti: The Great Migration Guide',     tag: 'Tanzania',     slug: 'serengeti-national-park',           img: 'https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=280&q=80' },
+  { title: 'Pyramids of Giza: The Complete Guide',     tag: 'Egypt',        slug: 'pyramids-of-giza',                 img: stockImage('1736443830251-dda3cb6df76c') },
+  { title: 'Bwindi: Mountain Gorilla Trekking Guide',  tag: 'Uganda',       slug: 'bwindi-impenetrable-national-park', img: stockImage('1673624522244-8de0d50b8492') },
+  { title: 'Serengeti: The Great Migration Guide',     tag: 'Tanzania',     slug: 'serengeti-national-park',           img: stockImage('1542729841-c5af4aed2152') },
 ]
 
 const STORY_CATEGORIES = [
@@ -73,8 +74,8 @@ const STORY_CATEGORIES = [
 ]
 
 const FEATURED_STORIES = [
-  { title: 'What Lagos Rush Hour Teaches You About African City Life', tag: 'Nigeria', slug: 'lagos-rush-hour-city-life', img: 'https://images.unsplash.com/photo-1618828665011-0abd973f7bb8?auto=format&fit=crop&w=280&q=80' },
-  { title: 'Slow Travel in Rwanda: The Country That Made You Stop Rushing', tag: 'Rwanda', slug: 'slow-travel-rwanda', img: 'https://images.unsplash.com/photo-1682773083896-95176d8aecf8?auto=format&fit=crop&w=280&q=80' },
+  { title: 'What Lagos Rush Hour Teaches You About African City Life', tag: 'Nigeria', slug: 'lagos-rush-hour-city-life', img: stockImage('1618828665011-0abd973f7bb8') },
+  { title: 'Slow Travel in Rwanda: The Country That Made You Stop Rushing', tag: 'Rwanda', slug: 'slow-travel-rwanda', img: stockImage('1682773083896-95176d8aecf8') },
 ]
 
 const PLAN_INTERESTS = ['Safari', 'Culture', 'Beach', 'History', 'Hiking', 'Food']
@@ -610,7 +611,7 @@ export default function Nav() {
               <div className="col-span-3 border-l border-line dark:border-white/8 pl-8 flex flex-col">
                 <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-4">Featured</p>
                 <Link href="/destinations/egypt" onClick={close} className="group relative rounded-2xl overflow-hidden flex-1 min-h-[200px] block">
-                  <Image src="https://images.unsplash.com/photo-1640005438758-861043e64aa5?auto=format&fit=crop&w=400&q=80" alt="Egypt" fill className="object-cover group-hover:scale-105 transition-transform duration-500"/>
+                  <Image src={stockImage('1640005438758-861043e64aa5')} alt="Egypt" fill className="object-cover group-hover:scale-105 transition-transform duration-500"/>
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent"/>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <p className="font-sans text-[14px] uppercase tracking-[0.12em] text-gold-400 mb-1">North Africa</p>

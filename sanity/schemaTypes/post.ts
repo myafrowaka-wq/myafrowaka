@@ -42,9 +42,9 @@ export const post = defineType({
     defineField({
       name: 'coverImage',
       title: 'Cover Image',
-      type: 'image',
-      options: { hotspot: true },
-      description: 'Displayed in listing cards and as the article hero. Min 1200px wide.',
+      type: 'sourcedImage',
+      description:
+        'Displayed in listing cards and as the article hero. Min 1200px wide. Optional for now — the 11 posts migrated in Session 2.3 have none yet and still serve self-hosted stock placeholders (see lib/stockImageCredits.ts) — but if you add one, it needs real credit/licence/source/alt text, same as an attraction image.',
     }),
     defineField({
       name: 'category',
@@ -101,6 +101,6 @@ export const post = defineType({
     defineField({ name: 'focusKeyword',    title: 'Focus Keyword',    type: 'string'  }),
   ],
   preview: {
-    select: { title: 'title', subtitle: 'contentStatus', media: 'coverImage' },
+    select: { title: 'title', subtitle: 'contentStatus', media: 'coverImage.image' },
   },
 })

@@ -16,7 +16,7 @@ type CountryOverviewProps = {
   visaInfo?: string
   safetyInfo?: string
   startHereAttractions?: StartHereAttraction[]
-  attractionImageUrl: (slug: string, width?: number) => string
+  attractionImageUrl: (slug: string) => string
 }
 
 // Sourced, time-sensitive claims (visa rules, safety advisories) are stored
@@ -113,7 +113,7 @@ export function CountryOverview({
                   className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
                   <div className="relative h-40 overflow-hidden bg-cream">
                     <Image
-                      src={attractionImageUrl(a.slug, 600)}
+                      src={attractionImageUrl(a.slug)}
                       alt={a.name} fill
                       sizes="(max-width:640px)100vw,(max-width:1024px)50vw,33vw"
                       className="object-cover img-editorial img-inner"

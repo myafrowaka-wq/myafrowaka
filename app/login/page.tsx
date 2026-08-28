@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { signIn } from '@/auth'
 import { getTranslations } from 'next-intl/server'
+import { stockImage } from '@/lib/stockImageCredits'
 
 export const metadata: Metadata = {
   title: 'Sign In – MyAfroWaka',
@@ -40,7 +41,7 @@ export default async function LoginPage({
       {/* ── Left panel (desktop only) ─────────────────────────────────── */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden flex-col">
         <Image
-          src="https://images.unsplash.com/photo-1635865897833-38bc0f8aee44?auto=format&fit=crop&w=900&q=85"
+          src={stockImage('1635865897833-38bc0f8aee44')}
           alt="African cultural landmark"
           fill priority
           className="object-cover object-center"

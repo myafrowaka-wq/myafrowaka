@@ -87,6 +87,7 @@ export const attraction = defineType({
   type: 'document',
   groups: [
     { name: 'record', title: 'Record ID' },
+    { name: 'media', title: 'Media' },
     { name: 'geographic', title: 'Geographic' },
     { name: 'profile', title: 'Profile' },
     { name: 'logistics', title: 'Logistics' },
@@ -114,6 +115,30 @@ export const attraction = defineType({
       description: 'Pattern: {attraction-name}-{city}-{country}. Lowercase, hyphens only. Max 70 chars. Permanent once published.',
       options: { source: 'name' },
       validation: r => r.required(),
+    }),
+
+    // ─── MEDIA ───────────────────────────────────────────────────────────────
+    // Session 2.4's real image pipeline. Required — see sourcedImage.ts for
+    // why. No attraction has a real photo yet (the site was hotlinking
+    // Unsplash before this session, and none of that was attraction-specific
+    // sourced photography); this field is the gate that keeps the next 557
+    // attraction photos honest as real ones start arriving via tourism-board
+    // partnerships.
+    defineField({
+      name: 'heroImage',
+      title: 'Hero Image',
+      type: 'sourcedImage',
+      group: 'media',
+      description: 'The primary image for this attraction. Required before publishing.',
+      validation: r => r.required(),
+    }),
+    defineField({
+      name: 'galleryImages',
+      title: 'Gallery Images',
+      type: 'array',
+      of: [{ type: 'sourcedImage' }],
+      group: 'media',
+      description: 'Additional images for this attraction. Each one carries its own credit, licence, source and alt text.',
     }),
 
     // ─── GEOGRAPHIC ──────────────────────────────────────────────────────────
@@ -415,12 +440,13 @@ export const attraction = defineType({
     select: {
       title: 'name',
       subtitle: 'contentStatus',
-      media: 'heroImage',
+      media: 'heroImage.image',
     },
-    prepare({ title, subtitle }) {
+    prepare({ title, subtitle, media }) {
       return {
         title: title || 'Untitled Attraction',
         subtitle: subtitle ? `Status: ${subtitle}` : 'Status: Draft',
+        media,
       }
     },
   },

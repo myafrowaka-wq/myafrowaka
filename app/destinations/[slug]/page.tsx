@@ -10,6 +10,7 @@ import { TypewriterHero } from '@/components/TypewriterHero'
 import { PopularPills } from '@/components/PopularPills'
 import { CountryOverview } from '@/components/CountryOverview'
 import { Flag } from '@/components/Flag'
+import { countryStockImage, attractionStockImage } from '@/lib/stockImageCredits'
 
 interface AttractionSummary {
   name: string; slug: string; type?: string[]; editorialSummary?: string
@@ -27,57 +28,8 @@ interface Destination {
   relatedCountries?: { name: string; slug: string; countryCode?: string }[]
 }
 
-const COUNTRY_IMAGES: Record<string, string> = {
-  'egypt':         '1640005438758-861043e64aa5',
-  'kenya':         '1531872036218-4e8a6828e339',
-  'south-africa':  '1744604030401-b24c5975a574',
-  'tanzania':      '1635865897833-38bc0f8aee44',
-  'morocco':       '1760681554227-d7aad73cd57f',
-  'ghana':         '1727023663928-1772e2c7e679',
-  'nigeria':       '1618828665011-0abd973f7bb8',
-  'rwanda':        '1682773083896-95176d8aecf8',
-  'ethiopia':      '1782283849015-df78517d4765',
-  'uganda':        '1614528767034-70de9fe166e0',
-  'senegal':       '1644772088209-c71d5c59f719',
-  'zimbabwe':      '1618811308896-d279d72fdf4d',
-  'namibia':       '1563985336376-568060942b80',
-  'botswana':      '1531208853003-c1ec1b8a81d7',
-  'madagascar':    '1558694440-03ade9215d7b',
-  'tunisia':       '1737276812695-a930ae18aec2',
-  'ivory-coast':   '1690975719788-c0cf5b5692de',
-  'mozambique':    '1544298903-35eee5a95b4d',
-  'zambia':        '1678714001094-ba90abd57fec',
-  'mauritius':     '1513415277900-a62401e19be4',
-}
-
-const ATTRACTION_IMAGES: Record<string, string> = {
-  'pyramids-of-giza':                  '1736443830251-dda3cb6df76c',
-  'serengeti-national-park':           '1542729841-c5af4aed2152',
-  'victoria-falls':                    '1674573606969-0b0403e6fce1',
-  'bwindi-impenetrable-national-park': '1673624522244-8de0d50b8492',
-  'djemaa-el-fna-marrakech':           '1597212618440-806262de4f6b',
-  'sossusvlei-namib-desert':           '1666837147745-1c9dea9908a4',
-  'volcanoes-national-park-rwanda':    '1682773083896-95176d8aecf8',
-  'cape-point-south-africa':           '1746876269545-c23ecff55722',
-  'lalibela-rock-hewn-churches':       '1782283849015-df78517d4765',
-  'maasai-mara-national-reserve':      '1531872036218-4e8a6828e339',
-  'stone-town-zanzibar':               '1678042955980-c173f0460d0a',
-  'ngorongoro-conservation-area':      '1635865897833-38bc0f8aee44',
-}
-
-function countryImageUrl(slug: string, width = 1920) {
-  const id = COUNTRY_IMAGES[slug]
-  return id
-    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=85`
-    : `https://images.unsplash.com/photo-1531872036218-4e8a6828e339?auto=format&fit=crop&w=${width}&q=85`
-}
-
-function attractionImageUrl(slug: string, width = 800) {
-  const id = ATTRACTION_IMAGES[slug]
-  return id
-    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
-    : `https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=${width}&q=80`
-}
+const countryImageUrl = countryStockImage
+const attractionImageUrl = attractionStockImage
 
 const ITEMS_PER_PAGE = 12
 
@@ -101,7 +53,7 @@ export async function generateMetadata(
     openGraph: {
       title, description, type: 'website',
       url: canonicalUrl,
-      images: [countryImageUrl(slug, 1200)],
+      images: [countryImageUrl(slug)],
     },
   }
 }
@@ -164,7 +116,7 @@ export default async function DestinationPage({
       <div className="relative min-h-[94vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
         <Image
-          src={countryImageUrl(slug, 1920)}
+          src={countryImageUrl(slug)}
           alt={dest.name} fill priority
           className="object-cover object-center scale-110"
         />
@@ -276,7 +228,7 @@ export default async function DestinationPage({
                     className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
                     <div className="relative h-48 overflow-hidden bg-sand">
                       <Image
-                        src={attractionImageUrl(a.slug, 800)}
+                        src={attractionImageUrl(a.slug)}
                         alt={a.name} fill
                         sizes="(max-width:640px)100vw,(max-width:1024px)50vw,(max-width:1280px)33vw,25vw"
                         className="object-cover img-editorial img-inner"

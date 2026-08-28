@@ -8,6 +8,7 @@ import { CATEGORY_COLOR, CATEGORY_COLOR_FALLBACK } from '@/lib/regionColors'
 import { client } from '@/sanity/lib/client'
 import { POST_BY_SLUG_QUERY, ALL_POST_SLUGS_QUERY, ALL_POSTS_QUERY } from '@/sanity/lib/queries'
 import { AuthorAvatar } from '@/components/AuthorAvatar'
+import { blogStockImage } from '@/lib/stockImageCredits'
 
 const builder = imageUrlBuilder(client)
 function urlFor(source: Parameters<typeof builder.image>[0]) {
@@ -16,26 +17,7 @@ function urlFor(source: Parameters<typeof builder.image>[0]) {
 
 // ── Blog image helpers ────────────────────────────────────────────────────────
 
-const BLOG_COVERS: Record<string, string> = {
-  'lagos-rush-hour-city-life':              '1618828665011-0abd973f7bb8',
-  'kumasi-central-market-west-africa':      '1776153380872-108ba14dc63d',
-  'slow-travel-rwanda':                     '1682773083896-95176d8aecf8',
-  'namib-desert-first-light':              '1666837147745-1c9dea9908a4',
-  'west-africa-food-culture':               '1665333048952-a3ee97714c6b',
-  'zanzibar-stone-town-doors':              '1678042955980-c173f0460d0a',
-  'marrakech-djemaa-el-fna-guide':          '1597212618440-806262de4f6b',
-  'victoria-falls-zimbabwe-guide':          '1674573606969-0b0403e6fce1',
-  'maasai-mara-wildebeest-migration-kenya': '1531872036218-4e8a6828e339',
-  'cape-town-winter-travel-guide':          '1746876269545-c23ecff55722',
-  'addis-ababa-walking-guide':              '1782283849015-df78517d4765',
-}
-
-function blogCoverUrl(slug: string, width = 1200) {
-  const id = BLOG_COVERS[slug]
-  return id
-    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
-    : `https://images.unsplash.com/photo-1682773083896-95176d8aecf8?auto=format&fit=crop&w=${width}&q=80`
-}
+const blogCoverUrl = blogStockImage
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -85,13 +67,13 @@ export async function generateMetadata(
       type: 'article',
       url: canonicalUrl,
       publishedTime: post.publishedAt,
-      images: [blogCoverUrl(slug, 1200)],
+      images: [blogCoverUrl(slug)],
     },
     twitter: {
       card:        'summary_large_image',
       title,
       description,
-      images:      [blogCoverUrl(slug, 1200)],
+      images:      [blogCoverUrl(slug)],
     },
   }
 }
@@ -154,7 +136,7 @@ const ptComponents = {
     image: ({ value }: { value: { asset?: object; alt?: string; caption?: string } }) => {
       const src = value.asset
         ? urlFor(value).width(1200).height(675).fit('crop').auto('format').url()
-        : `https://images.unsplash.com/photo-1531872036218-4e8a6828e339?auto=format&fit=crop&w=800&q=80`
+        : blogStockImage('__missing__')
       return (
         <figure className="my-8">
           <div className="relative aspect-[16/9] rounded-2xl overflow-hidden">
@@ -243,7 +225,7 @@ export default async function BlogPostPage(
     dateModified: post._updatedAt ?? post.publishedAt,
     url: `https://myafrowaka.com/blog/${slug}`,
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://myafrowaka.com/blog/${slug}` },
-    image: { '@type': 'ImageObject', url: blogCoverUrl(slug, 1200), width: 1200, height: 630 },
+    image: { '@type': 'ImageObject', url: blogCoverUrl(slug), width: 1200, height: 630 },
     ...(post.author ? {
       author: {
         '@type': 'Person',
@@ -270,7 +252,7 @@ export default async function BlogPostPage(
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[420px] flex items-end">
         <Image
-          src={blogCoverUrl(slug, 1920)}
+          src={blogCoverUrl(slug)}
           alt={post.title}
           fill priority
           className="object-cover object-center"
@@ -371,7 +353,7 @@ export default async function BlogPostPage(
                         className="group block bg-sand dark-flip-surf border border-line dark-flip-border hover:border-gold-300 rounded-xl overflow-hidden hover:shadow-[var(--shadow-soft)] transition-all">
                         <div className="relative aspect-[16/9] overflow-hidden">
                           <Image
-                            src={blogCoverUrl(r.slug, 400)}
+                            src={blogCoverUrl(r.slug)}
                             alt={r.title}
                             fill
                             className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
@@ -513,7 +495,7 @@ export default async function BlogPostPage(
                   className="group block bg-white dark-flip-card rounded-2xl overflow-hidden border border-line dark-flip-border hover:border-gold-300 hover:shadow-[var(--shadow-soft)] transition-all">
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <Image
-                      src={blogCoverUrl(r.slug, 400)}
+                      src={blogCoverUrl(r.slug)}
                       alt={r.title} fill
                       className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
                     />

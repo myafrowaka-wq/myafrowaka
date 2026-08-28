@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { ALL_POSTS_QUERY } from '@/sanity/lib/queries'
 import { BlogGrid, type BlogPost } from '@/components/BlogGrid'
+import { stockImage } from '@/lib/stockImageCredits'
 
 const POSTS_PER_PAGE = 6
 
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
     description: 'Stories and perspectives from across the African continent.',
     type: 'website',
     url: 'https://myafrowaka.com/blog',
-    images: ['https://images.unsplash.com/photo-1531872036218-4e8a6828e339?auto=format&fit=crop&w=1200&q=80'],
+    images: [stockImage('1531872036218-4e8a6828e339')],
   },
 }
 
@@ -53,7 +54,7 @@ export default async function BlogPage(
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[420px] md:min-h-[500px] flex items-end">
         <Image
-          src="https://images.unsplash.com/photo-1531872036218-4e8a6828e339?auto=format&fit=crop&w=1920&q=85"
+          src={stockImage('1531872036218-4e8a6828e339')}
           alt="The MyAfroWaka Journal"
           fill priority
           className="object-cover object-center"

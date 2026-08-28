@@ -7,6 +7,7 @@ import { client } from '@/sanity/lib/client'
 import { ALL_POSTS_QUERY, AUTHOR_BY_SLUG_QUERY, ALL_AUTHOR_SLUGS_QUERY } from '@/sanity/lib/queries'
 import { CATEGORY_COLOR, CATEGORY_COLOR_FALLBACK } from '@/lib/regionColors'
 import { AuthorAvatar } from '@/components/AuthorAvatar'
+import { blogStockImage } from '@/lib/stockImageCredits'
 
 const builder = imageUrlBuilder(client)
 type SanityImage = Parameters<typeof builder.image>[0]
@@ -81,26 +82,7 @@ function formatDate(iso?: string) {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
-const BLOG_COVERS: Record<string, string> = {
-  'lagos-rush-hour-city-life':              '1618828665011-0abd973f7bb8',
-  'kumasi-central-market-west-africa':      '1776153380872-108ba14dc63d',
-  'slow-travel-rwanda':                     '1682773083896-95176d8aecf8',
-  'namib-desert-first-light':               '1666837147745-1c9dea9908a4',
-  'west-africa-food-culture':               '1665333048952-a3ee97714c6b',
-  'zanzibar-stone-town-doors':              '1678042955980-c173f0460d0a',
-  'marrakech-djemaa-el-fna-guide':          '1597212618440-806262de4f6b',
-  'victoria-falls-zimbabwe-guide':          '1674573606969-0b0403e6fce1',
-  'maasai-mara-wildebeest-migration-kenya': '1531872036218-4e8a6828e339',
-  'cape-town-winter-travel-guide':          '1746876269545-c23ecff55722',
-  'addis-ababa-walking-guide':              '1782283849015-df78517d4765',
-}
-
-function blogCoverUrl(slug: string, width = 600) {
-  const id = BLOG_COVERS[slug]
-  return id
-    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
-    : `https://images.unsplash.com/photo-1682773083896-95176d8aecf8?auto=format&fit=crop&w=${width}&q=80`
-}
+const blogCoverUrl = blogStockImage
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
@@ -230,7 +212,7 @@ export default async function AuthorPage(
                           {/* Cover */}
                           <div className="relative sm:w-52 h-40 sm:h-auto shrink-0 overflow-hidden">
                             <Image
-                              src={blogCoverUrl(post.slug, 400)}
+                              src={blogCoverUrl(post.slug)}
                               alt={post.title}
                               fill
                               className="object-cover group-hover:scale-[1.04] transition-transform duration-500"

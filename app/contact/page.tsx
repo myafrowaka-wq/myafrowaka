@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { TypewriterHero } from '@/components/TypewriterHero'
 import { ContactForm } from '@/components/ContactForm'
+import { stockImage } from '@/lib/stockImageCredits'
 
 export const metadata: Metadata = {
   title: 'Contact MyAfroWaka – Get in Touch',
@@ -23,7 +24,7 @@ export default function ContactPage() {
       {/* ── Hero ────────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[420px] flex items-center">
         <Image
-          src="https://images.unsplash.com/photo-1559833064-6f4573ec1ac9?auto=format&fit=crop&w=1920&q=85"
+          src={stockImage('1559833064-6f4573ec1ac9')}
           alt="Lagos city skyline, Nigeria"
           fill priority
           className="object-cover object-center"

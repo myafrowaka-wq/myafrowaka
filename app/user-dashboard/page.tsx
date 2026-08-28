@@ -8,6 +8,7 @@ import { DashGreeting } from '@/components/DashGreeting'
 import { DashTrips } from '@/components/DashTrips'
 import { DashProfile } from '@/components/DashProfile'
 import { getTranslations } from 'next-intl/server'
+import { attractionStockImage } from '@/lib/stockImageCredits'
 
 export const metadata: Metadata = {
   title: 'My Dashboard – MyAfroWaka',
@@ -16,27 +17,7 @@ export const metadata: Metadata = {
 
 // ── Attraction image helpers ──────────────────────────────────────────────────
 
-const ATTRACTION_IMAGES: Record<string, string> = {
-  'pyramids-of-giza':                  '1736443830251-dda3cb6df76c',
-  'serengeti-national-park':           '1542729841-c5af4aed2152',
-  'victoria-falls':                    '1674573606969-0b0403e6fce1',
-  'bwindi-impenetrable-national-park': '1673624522244-8de0d50b8492',
-  'djemaa-el-fna-marrakech':           '1597212618440-806262de4f6b',
-  'sossusvlei-namib-desert':           '1666837147745-1c9dea9908a4',
-  'volcanoes-national-park-rwanda':    '1682773083896-95176d8aecf8',
-  'cape-point-south-africa':           '1746876269545-c23ecff55722',
-  'lalibela-rock-hewn-churches':       '1782283849015-df78517d4765',
-  'maasai-mara-national-reserve':      '1531872036218-4e8a6828e339',
-  'stone-town-zanzibar':               '1678042955980-c173f0460d0a',
-  'ngorongoro-conservation-area':      '1635865897833-38bc0f8aee44',
-}
-
-function attractionImageUrl(slug: string, width = 600) {
-  const id = ATTRACTION_IMAGES[slug]
-  return id
-    ? `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${width}&q=80`
-    : `https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=${width}&q=80`
-}
+const attractionImageUrl = attractionStockImage
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -345,7 +326,7 @@ export default async function UserDashboardPage() {
                     <div className="relative h-40 overflow-hidden bg-sand dark-flip-surf">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={attractionImageUrl(a.slug, 600)}
+                        src={attractionImageUrl(a.slug)}
                         alt={a.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />

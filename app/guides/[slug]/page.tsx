@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { GUIDE_BY_SLUG_QUERY, ALL_GUIDE_SLUGS_QUERY } from '@/sanity/lib/queries'
 import { REGION_COLOR, REGION_COLOR_FALLBACK } from '@/lib/regionColors'
+import { stockImage } from '@/lib/stockImageCredits'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -65,13 +66,13 @@ export async function generateMetadata(
       description,
       type: 'article',
       url: canonicalUrl,
-      images: [`https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=1200&q=80`],
+      images: [stockImage('1542729841-c5af4aed2152')],
     },
     twitter: {
       card:   'summary_large_image',
       title,
       description,
-      images: [`https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=1200&q=80`],
+      images: [stockImage('1542729841-c5af4aed2152')],
     },
   }
 }
@@ -122,7 +123,7 @@ export default async function GuidePage(
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[380px] flex items-end">
         <Image
-          src="https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=1920&q=85"
+          src={stockImage('1542729841-c5af4aed2152')}
           alt={guide.title}
           fill priority
           className="object-cover object-center"

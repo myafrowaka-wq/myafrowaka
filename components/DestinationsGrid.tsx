@@ -5,32 +5,33 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { COUNTRY_COLOR } from '@/lib/regionColors'
 import { Flag } from '@/components/Flag'
+import { stockImage } from '@/lib/stockImageCredits'
 
 type Country = {
   name: string; slug: string; region: string; code: string; color: string; image: string
 }
 
 const ALL_COUNTRIES: Country[] = [
-  { name: 'Egypt',        slug: 'egypt',        region: 'North Africa',         code: 'eg', color: COUNTRY_COLOR['Egypt'], image: 'https://images.unsplash.com/photo-1640005438758-861043e64aa5?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Kenya',        slug: 'kenya',        region: 'East Africa',          code: 'ke', color: COUNTRY_COLOR['Kenya'], image: 'https://images.unsplash.com/photo-1531872036218-4e8a6828e339?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'South Africa', slug: 'south-africa', region: 'Southern Africa',      code: 'za', color: COUNTRY_COLOR['South Africa'], image: 'https://images.unsplash.com/photo-1744604030401-b24c5975a574?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Tanzania',     slug: 'tanzania',     region: 'East Africa',          code: 'tz', color: COUNTRY_COLOR['Tanzania'], image: 'https://images.unsplash.com/photo-1635865897833-38bc0f8aee44?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Morocco',      slug: 'morocco',      region: 'North Africa',         code: 'ma', color: COUNTRY_COLOR['Morocco'], image: 'https://images.unsplash.com/photo-1760681554227-d7aad73cd57f?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Ghana',        slug: 'ghana',        region: 'West Africa',          code: 'gh', color: COUNTRY_COLOR['Ghana'], image: 'https://images.unsplash.com/photo-1727023663928-1772e2c7e679?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Nigeria',      slug: 'nigeria',      region: 'West Africa',          code: 'ng', color: COUNTRY_COLOR['Nigeria'], image: 'https://images.unsplash.com/photo-1618828665011-0abd973f7bb8?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Rwanda',       slug: 'rwanda',       region: 'East Africa',          code: 'rw', color: COUNTRY_COLOR['Rwanda'], image: 'https://images.unsplash.com/photo-1682773083896-95176d8aecf8?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Ethiopia',     slug: 'ethiopia',     region: 'East Africa',          code: 'et', color: COUNTRY_COLOR['Ethiopia'], image: 'https://images.unsplash.com/photo-1782283849015-df78517d4765?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Uganda',       slug: 'uganda',       region: 'East Africa',          code: 'ug', color: COUNTRY_COLOR['Uganda'], image: 'https://images.unsplash.com/photo-1614528767034-70de9fe166e0?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Senegal',      slug: 'senegal',      region: 'West Africa',          code: 'sn', color: COUNTRY_COLOR['Senegal'], image: 'https://images.unsplash.com/photo-1644772088209-c71d5c59f719?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Zimbabwe',     slug: 'zimbabwe',     region: 'Southern Africa',      code: 'zw', color: COUNTRY_COLOR['Zimbabwe'], image: 'https://images.unsplash.com/photo-1618811308896-d279d72fdf4d?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Namibia',      slug: 'namibia',      region: 'Southern Africa',      code: 'na', color: COUNTRY_COLOR['Namibia'], image: 'https://images.unsplash.com/photo-1563985336376-568060942b80?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Botswana',     slug: 'botswana',     region: 'Southern Africa',      code: 'bw', color: COUNTRY_COLOR['Botswana'], image: 'https://images.unsplash.com/photo-1531208853003-c1ec1b8a81d7?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Madagascar',   slug: 'madagascar',   region: 'Indian Ocean Islands', code: 'mg', color: COUNTRY_COLOR['Madagascar'], image: 'https://images.unsplash.com/photo-1558694440-03ade9215d7b?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Tunisia',      slug: 'tunisia',      region: 'North Africa',         code: 'tn', color: COUNTRY_COLOR['Tunisia'], image: 'https://images.unsplash.com/photo-1737276812695-a930ae18aec2?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Ivory Coast',  slug: 'ivory-coast',  region: 'West Africa',          code: 'ci', color: COUNTRY_COLOR['Ivory Coast'], image: 'https://images.unsplash.com/photo-1690975719788-c0cf5b5692de?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Mozambique',   slug: 'mozambique',   region: 'East Africa',          code: 'mz', color: COUNTRY_COLOR['Mozambique'], image: 'https://images.unsplash.com/photo-1544298903-35eee5a95b4d?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Zambia',       slug: 'zambia',       region: 'Southern Africa',      code: 'zm', color: COUNTRY_COLOR['Zambia'], image: 'https://images.unsplash.com/photo-1678714001094-ba90abd57fec?auto=format&fit=crop&w=600&q=80'  },
-  { name: 'Mauritius',    slug: 'mauritius',    region: 'Indian Ocean Islands', code: 'mu', color: COUNTRY_COLOR['Mauritius'], image: 'https://images.unsplash.com/photo-1513415277900-a62401e19be4?auto=format&fit=crop&w=600&q=80'  },
+  { name: 'Egypt',        slug: 'egypt',        region: 'North Africa',         code: 'eg', color: COUNTRY_COLOR['Egypt'], image: stockImage('1640005438758-861043e64aa5')  },
+  { name: 'Kenya',        slug: 'kenya',        region: 'East Africa',          code: 'ke', color: COUNTRY_COLOR['Kenya'], image: stockImage('1531872036218-4e8a6828e339')  },
+  { name: 'South Africa', slug: 'south-africa', region: 'Southern Africa',      code: 'za', color: COUNTRY_COLOR['South Africa'], image: stockImage('1744604030401-b24c5975a574')  },
+  { name: 'Tanzania',     slug: 'tanzania',     region: 'East Africa',          code: 'tz', color: COUNTRY_COLOR['Tanzania'], image: stockImage('1635865897833-38bc0f8aee44')  },
+  { name: 'Morocco',      slug: 'morocco',      region: 'North Africa',         code: 'ma', color: COUNTRY_COLOR['Morocco'], image: stockImage('1760681554227-d7aad73cd57f')  },
+  { name: 'Ghana',        slug: 'ghana',        region: 'West Africa',          code: 'gh', color: COUNTRY_COLOR['Ghana'], image: stockImage('1727023663928-1772e2c7e679')  },
+  { name: 'Nigeria',      slug: 'nigeria',      region: 'West Africa',          code: 'ng', color: COUNTRY_COLOR['Nigeria'], image: stockImage('1618828665011-0abd973f7bb8')  },
+  { name: 'Rwanda',       slug: 'rwanda',       region: 'East Africa',          code: 'rw', color: COUNTRY_COLOR['Rwanda'], image: stockImage('1682773083896-95176d8aecf8')  },
+  { name: 'Ethiopia',     slug: 'ethiopia',     region: 'East Africa',          code: 'et', color: COUNTRY_COLOR['Ethiopia'], image: stockImage('1782283849015-df78517d4765')  },
+  { name: 'Uganda',       slug: 'uganda',       region: 'East Africa',          code: 'ug', color: COUNTRY_COLOR['Uganda'], image: stockImage('1614528767034-70de9fe166e0')  },
+  { name: 'Senegal',      slug: 'senegal',      region: 'West Africa',          code: 'sn', color: COUNTRY_COLOR['Senegal'], image: stockImage('1644772088209-c71d5c59f719')  },
+  { name: 'Zimbabwe',     slug: 'zimbabwe',     region: 'Southern Africa',      code: 'zw', color: COUNTRY_COLOR['Zimbabwe'], image: stockImage('1618811308896-d279d72fdf4d')  },
+  { name: 'Namibia',      slug: 'namibia',      region: 'Southern Africa',      code: 'na', color: COUNTRY_COLOR['Namibia'], image: stockImage('1563985336376-568060942b80')  },
+  { name: 'Botswana',     slug: 'botswana',     region: 'Southern Africa',      code: 'bw', color: COUNTRY_COLOR['Botswana'], image: stockImage('1531208853003-c1ec1b8a81d7')  },
+  { name: 'Madagascar',   slug: 'madagascar',   region: 'Indian Ocean Islands', code: 'mg', color: COUNTRY_COLOR['Madagascar'], image: stockImage('1558694440-03ade9215d7b')  },
+  { name: 'Tunisia',      slug: 'tunisia',      region: 'North Africa',         code: 'tn', color: COUNTRY_COLOR['Tunisia'], image: stockImage('1737276812695-a930ae18aec2')  },
+  { name: 'Ivory Coast',  slug: 'ivory-coast',  region: 'West Africa',          code: 'ci', color: COUNTRY_COLOR['Ivory Coast'], image: stockImage('1690975719788-c0cf5b5692de')  },
+  { name: 'Mozambique',   slug: 'mozambique',   region: 'East Africa',          code: 'mz', color: COUNTRY_COLOR['Mozambique'], image: stockImage('1544298903-35eee5a95b4d')  },
+  { name: 'Zambia',       slug: 'zambia',       region: 'Southern Africa',      code: 'zm', color: COUNTRY_COLOR['Zambia'], image: stockImage('1678714001094-ba90abd57fec')  },
+  { name: 'Mauritius',    slug: 'mauritius',    region: 'Indian Ocean Islands', code: 'mu', color: COUNTRY_COLOR['Mauritius'], image: stockImage('1513415277900-a62401e19be4')  },
 ]
 
 function CountryCard({ d }: { d: Country }) {
