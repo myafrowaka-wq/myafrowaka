@@ -284,6 +284,29 @@ export const ALL_EVENTS_QUERY = `
   }
 `
 
+export const ALL_EVENT_COLLECTION_SLUGS_QUERY = `
+  *[_type == "eventCollection" && contentStatus == "Published"]{ "slug": slug.current }
+`
+
+export const EVENT_COLLECTION_BY_SLUG_QUERY = `
+  *[_type == "eventCollection" && slug.current == $slug && contentStatus == "Published"][0]{
+    title,
+    "slug": slug.current,
+    description,
+    metaTitle,
+    metaDescription,
+    "items": items[]{
+      framingText,
+      "event": event->{
+        name, "slug": slug.current, heroImage, shortDescription, category,
+        experienceTags, suitableFor, dateType, startDate, endDate, estimatedTiming, verificationStatus,
+        "country": country->{ name, "slug": slug.current, countryCode, continentRegion },
+        "city": city->{ name }
+      }
+    }
+  }
+`
+
 export const ALL_COUNTRIES_QUERY = `
   *[_type == "country"] | order(name asc){
     name, "slug": slug.current, countryCode, continentRegion

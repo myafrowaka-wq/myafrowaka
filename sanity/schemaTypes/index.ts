@@ -10,5 +10,6 @@ import { userRole } from './userRole'
 import { post } from './post'
 import { sourcedImage } from './sourcedImage'
 import { event } from './event'
+import { eventCollection } from './eventCollection'
 
-export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, savedTrip, comment, userRole, post, sourcedImage, event]
+export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, savedTrip, comment, userRole, post, sourcedImage, event, eventCollection]

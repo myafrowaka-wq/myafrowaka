@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { client } from '@/sanity/lib/client'
+import { EVENT_MONTHS, matchesMonth, toSlug } from '@/lib/eventFilters'
 
 const BASE = 'https://myafrowaka.com'
 
@@ -44,11 +45,44 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // ── Events (Session 3.3 built the page template; the country/region/
-  // month/category/collections discovery paths are Session 3.4's job) ──────
-  const events = await client.fetch<{ slug: string; verificationDate?: string }[]>(`
-    *[_type == "event" && contentStatus == "Published"]{ "slug": slug.current, verificationDate }
+  // ── Events (Session 3.3 built the page template; Session 3.4 the six
+  // discovery doors — country/region/month/category/collections — all
+  // pulling from this same query, "one database, many doors in") ─────────
+  const events = await client.fetch<{
+    slug: string; verificationDate?: string; category?: string
+    country?: { slug?: string; continentRegion?: string }
+    startDate?: string; estimatedTiming?: string
+  }[]>(`
+    *[_type == "event" && contentStatus == "Published"]{
+      "slug": slug.current, verificationDate, category, startDate, estimatedTiming,
+      "country": country->{ "slug": slug.current, continentRegion }
+    }
   `).catch(() => [])
+
+  const eventCountrySlugs = [...new Set(events.map(e => e.country?.slug).filter((s): s is string => !!s))]
+  const eventRegions = [...new Set(events.map(e => e.country?.continentRegion).filter((r): r is string => !!r))]
+  const eventCategoriesUsed = [...new Set(events.map(e => e.category).filter((c): c is string => !!c))]
+  const eventMonthsUsed = EVENT_MONTHS.filter(m => events.some(e => matchesMonth(e, m)))
+
+  const eventCountryEntries: MetadataRoute.Sitemap = eventCountrySlugs.map(slug => ({
+    url: `${BASE}/events/country/${slug}`, lastModified: now, changeFrequency: 'weekly', priority: 0.65,
+  }))
+  const eventRegionEntries: MetadataRoute.Sitemap = eventRegions.map(r => ({
+    url: `${BASE}/events/region/${toSlug(r)}`, lastModified: now, changeFrequency: 'weekly', priority: 0.6,
+  }))
+  const eventCategoryEntries: MetadataRoute.Sitemap = eventCategoriesUsed.map(c => ({
+    url: `${BASE}/events/category/${toSlug(c)}`, lastModified: now, changeFrequency: 'weekly', priority: 0.6,
+  }))
+  const eventMonthEntries: MetadataRoute.Sitemap = eventMonthsUsed.map(m => ({
+    url: `${BASE}/events/month/${toSlug(m)}`, lastModified: now, changeFrequency: 'weekly', priority: 0.6,
+  }))
+
+  const eventCollections = await client.fetch<{ slug: string }[]>(`
+    *[_type == "eventCollection" && contentStatus == "Published"]{ "slug": slug.current }
+  `).catch(() => [])
+  const eventCollectionEntries: MetadataRoute.Sitemap = eventCollections.map(c => ({
+    url: `${BASE}/events/collections/${c.slug}`, lastModified: now, changeFrequency: 'monthly', priority: 0.6,
+  }))
 
   const eventEntries: MetadataRoute.Sitemap = events.map(e => ({
     url: `${BASE}/events/${e.slug}`,
@@ -108,5 +142,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.75,
   }))
 
-  return [...statics, ...attractionEntries, ...eventEntries, ...postEntries, ...authorEntries, ...guideEntries, ...countryEntries, ...cityEntries]
+  return [
+    ...statics, ...attractionEntries, ...eventEntries,
+    ...eventCountryEntries, ...eventRegionEntries, ...eventCategoryEntries, ...eventMonthEntries, ...eventCollectionEntries,
+    ...postEntries, ...authorEntries, ...guideEntries, ...countryEntries, ...cityEntries,
+  ]
 }

@@ -8,11 +8,13 @@ import { client } from '@/sanity/lib/client'
 import { EVENT_BY_SLUG_QUERY, ALL_EVENT_SLUGS_QUERY } from '@/sanity/lib/queries'
 import { Flag } from '@/components/Flag'
 import { NotifyMeForm } from '@/components/NotifyMeForm'
+import { VerificationBadge } from '@/components/EventCard'
 import { eventDateDisplay } from '@/lib/eventDateDisplay'
 import { hasConfirmedDate, buildGoogleCalendarUrl, buildICSDataUrl } from '@/lib/eventCalendar'
 import { overallExperienceScore, SCORE_DIMENSIONS } from '@/lib/experienceScore'
-import { EVENT_CATEGORY_COLOR, EVENT_CATEGORY_COLOR_FALLBACK, VERIFICATION_STATUS_COLOR } from '@/lib/regionColors'
+import { EVENT_CATEGORY_COLOR, EVENT_CATEGORY_COLOR_FALLBACK } from '@/lib/regionColors'
 import { stockImage } from '@/lib/stockImageCredits'
+import { toSlug } from '@/lib/eventFilters'
 
 const builder = imageUrlBuilder(client)
 type SanityImage = Parameters<typeof builder.image>[0]
@@ -126,18 +128,6 @@ function Section({ title, children }: { title: string; children: React.ReactNode
       </h2>
       {children}
     </section>
-  )
-}
-
-function VerificationBadge({ status }: { status?: string }) {
-  const label = status || 'Date to be confirmed'
-  const color = VERIFICATION_STATUS_COLOR[label] ?? VERIFICATION_STATUS_COLOR['Date to be confirmed']
-  return (
-    <span className="inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.1em] px-2.5 py-1 rounded-full text-cream"
-      style={{ backgroundColor: color }}>
-      <span className="w-1.5 h-1.5 rounded-full bg-cream/80"/>
-      {label}
-    </span>
   )
 }
 
@@ -274,9 +264,11 @@ export default async function EventPage(
           </nav>
           <div className="flex flex-wrap items-center gap-2 mb-4">
             {event.category && (
-              <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-cream px-2.5 py-1 rounded-full" style={{ backgroundColor: accent + 'ee' }}>
+              <Link href={`/events/category/${toSlug(event.category)}`}
+                className="font-sans text-[14px] uppercase tracking-[0.12em] text-cream px-2.5 py-1 rounded-full hover:opacity-80 transition-opacity"
+                style={{ backgroundColor: accent + 'ee' }}>
                 {event.category}
-              </span>
+              </Link>
             )}
             <VerificationBadge status={event.verificationStatus} />
           </div>
@@ -289,10 +281,11 @@ export default async function EventPage(
           )}
           <div className="flex flex-wrap items-center gap-3">
             {event.country && (
-              <span className="inline-flex items-center gap-1.5 font-sans text-[15px] text-cream/85">
+              <Link href={`/events/country/${event.country.slug}`}
+                className="inline-flex items-center gap-1.5 font-sans text-[15px] text-cream/85 hover:text-gold-300 transition-colors">
                 <Flag code={event.country.countryCode} />
                 {[event.city?.name, event.country.name].filter(Boolean).join(', ')}
-              </span>
+              </Link>
             )}
             <span className={`font-sans text-[15px] ${isConfirmedFact ? 'text-cream/85' : 'text-cream/55 italic'}`}>{dateText}</span>
           </div>

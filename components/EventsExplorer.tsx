@@ -3,15 +3,12 @@
 import { useState, useCallback, useMemo, useRef } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
-import imageUrlBuilder from '@sanity/image-url'
-import { client } from '@/sanity/lib/client'
 import { Flag } from '@/components/Flag'
+import { EventCard, type EventSummary } from '@/components/EventCard'
 import {
-  EVENT_CATEGORY_COLOR, EVENT_CATEGORY_COLOR_FALLBACK,
-  VERIFICATION_STATUS_COLOR,
-} from '@/lib/regionColors'
-import { eventDateDisplay } from '@/lib/eventDateDisplay'
+  EVENT_CATEGORIES, EVENT_REGIONS, EVENT_MONTHS, EVENT_TRAVEL_STYLES, EVENT_VERIFICATION_STATUSES,
+  matchesCategory, matchesRegion, matchesCountry, matchesStyle, matchesStatus, matchesMonth,
+} from '@/lib/eventFilters'
 
 // Session 3.2 — the real discovery tool the plan asks for: search across
 // name/country/city/category, six independent filters (country, region,
@@ -24,25 +21,7 @@ import { eventDateDisplay } from '@/lib/eventDateDisplay'
 // server-rendered metadata for SEO, because this database is explicitly
 // the site's best SEO territory per the plan.
 
-const builder = imageUrlBuilder(client)
-type SanityImage = Parameters<typeof builder.image>[0]
-
-export interface EventSummary {
-  name: string
-  slug: string
-  heroImage?: { image?: SanityImage; alt?: string } | null
-  shortDescription?: string
-  category?: string
-  experienceTags?: string[]
-  suitableFor?: string[]
-  dateType?: string
-  startDate?: string
-  endDate?: string
-  estimatedTiming?: string
-  verificationStatus?: string
-  country?: { name: string; slug: string; countryCode?: string; continentRegion?: string } | null
-  city?: { name: string } | null
-}
+export type { EventSummary }
 
 export interface CountryOption {
   name: string
@@ -51,29 +30,11 @@ export interface CountryOption {
   continentRegion?: string
 }
 
-const CATEGORIES = [
-  'Music', 'Food and Drink', 'Cultural', 'Religious and Spiritual',
-  'Arts / Film / Fashion', 'National Celebrations', 'Tourism Industry',
-]
-
-const REGIONS = [
-  'North Africa', 'West Africa', 'East Africa',
-  'Southern Africa', 'Central Africa', 'Indian Ocean Islands',
-]
-
-const MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
-]
-
-const TRAVEL_STYLES = [
-  'Solo Travelers', 'Couples', 'Families', 'Backpackers',
-  'Photographers', 'Culture Enthusiasts', 'Luxury Travelers', 'Adventure Seekers',
-]
-
-const VERIFICATION_STATUSES = [
-  'Verified', 'Date to be confirmed', 'Annual, dates vary', 'Cancelled or postponed',
-]
+const CATEGORIES = EVENT_CATEGORIES
+const REGIONS = EVENT_REGIONS
+const MONTHS = EVENT_MONTHS
+const TRAVEL_STYLES = EVENT_TRAVEL_STYLES
+const VERIFICATION_STATUSES = EVENT_VERIFICATION_STATUSES
 
 function AccordionSection({
   title, defaultOpen = false, children,
@@ -178,68 +139,6 @@ function FilterAccordions({ category, status, region, country, month, style, cou
   )
 }
 
-function VerificationBadge({ status }: { status?: string }) {
-  const label = status || 'Date to be confirmed'
-  const color = VERIFICATION_STATUS_COLOR[label] ?? VERIFICATION_STATUS_COLOR['Date to be confirmed']
-  return (
-    <span
-      className="inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.1em] px-2.5 py-1 rounded-full text-cream"
-      style={{ backgroundColor: color }}
-    >
-      <span className="w-1.5 h-1.5 rounded-full bg-cream/80"/>
-      {label}
-    </span>
-  )
-}
-
-function EventCard({ event }: { event: EventSummary }) {
-  const accent = event.category ? (EVENT_CATEGORY_COLOR[event.category] ?? EVENT_CATEGORY_COLOR_FALLBACK) : EVENT_CATEGORY_COLOR_FALLBACK
-  const { text: dateText, isConfirmedFact } = eventDateDisplay(event)
-  const imgSrc = event.heroImage?.image ? builder.image(event.heroImage.image).width(600).height(400).fit('crop').url() : null
-
-  return (
-    <Link href={`/events/${event.slug}`}
-      className="group block bg-white dark-flip-card border border-line dark-flip-border hover:border-gold-300 rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-[var(--shadow-soft)] hover:-translate-y-0.5">
-      <div className="relative h-44 overflow-hidden bg-sand dark-flip-surf">
-        {imgSrc ? (
-          <Image src={imgSrc} alt={event.heroImage?.alt ?? event.name} fill
-            sizes="(max-width:640px) 100vw, (max-width:1280px) 50vw, 33vw"
-            className="object-cover group-hover:scale-[1.04] transition-transform duration-500" />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center" style={{ backgroundColor: accent + '22' }}>
-            <span className="font-display font-bold text-[14px] uppercase tracking-[0.14em]" style={{ color: accent }}>
-              {event.category ?? 'Event'}
-            </span>
-          </div>
-        )}
-        {event.category && (
-          <span className="absolute top-3 left-3 font-sans text-[14px] uppercase tracking-[0.12em] text-cream px-2.5 py-0.5 rounded-full"
-            style={{ backgroundColor: accent + 'ee' }}>
-            {event.category}
-          </span>
-        )}
-      </div>
-      <div className="p-5">
-        {event.country && (
-          <div className="flex items-center gap-1.5 mb-2">
-            <Flag code={event.country.countryCode} />
-            <span className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/55 dark-flip-muted">
-              {[event.city?.name, event.country.name].filter(Boolean).join(' · ')}
-            </span>
-          </div>
-        )}
-        <h3 className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-2"
-          style={{ letterSpacing: '-0.012em' }}>
-          {event.name}
-        </h3>
-        <p className={`font-sans text-[14px] mb-3 ${isConfirmedFact ? 'text-charcoal/70 dark-flip-muted' : 'text-charcoal/45 dark-flip-muted italic'}`}>
-          {dateText}
-        </p>
-        <VerificationBadge status={event.verificationStatus} />
-      </div>
-    </Link>
-  )
-}
 
 export function EventsExplorer({ events, countries }: { events: EventSummary[]; countries: CountryOption[] }) {
   const searchParams = useSearchParams()
@@ -294,17 +193,12 @@ export function EventsExplorer({ events, countries }: { events: EventSummary[]; 
   const hasFilters = !!(q || country || region || month || category || style || status)
 
   const filtered = useMemo(() => events.filter(e => {
-    if (country && e.country?.slug !== country) return false
-    if (region && e.country?.continentRegion !== region) return false
-    if (category && e.category !== category) return false
-    if (style && !(e.suitableFor ?? []).includes(style)) return false
-    if (status && (e.verificationStatus ?? 'Date to be confirmed') !== status) return false
-    if (month) {
-      const monthIndex = MONTHS.indexOf(month)
-      const matchesStart = e.startDate ? new Date(e.startDate + 'T00:00:00').getMonth() === monthIndex : false
-      const matchesEstimate = (e.estimatedTiming ?? '').toLowerCase().includes(month.toLowerCase())
-      if (!matchesStart && !matchesEstimate) return false
-    }
+    if (country && !matchesCountry(e, country)) return false
+    if (region && !matchesRegion(e, region)) return false
+    if (category && !matchesCategory(e, category)) return false
+    if (style && !matchesStyle(e, style)) return false
+    if (status && !matchesStatus(e, status)) return false
+    if (month && !matchesMonth(e, month)) return false
     if (q) {
       const needle = q.toLowerCase()
       const haystack = [e.name, e.country?.name, e.city?.name, e.category, e.shortDescription].filter(Boolean).join(' ').toLowerCase()
