@@ -213,6 +213,19 @@ export const EVENT_BY_SLUG_QUERY = `
     addressDirections,
     latitude,
     longitude,
+    scoreCulturalDepth,
+    scoreInternationalAppeal,
+    scoreMusic,
+    scoreFood,
+    scoreFamilySuitability,
+    scoreAccessibility,
+    scorePhotography,
+    scoreTravelInfrastructure,
+    scoringNotes,
+    whatToExpect,
+    safetyInfo,
+    whatToWear,
+    suggestedItinerary,
     gettingThere,
     whereToStay,
     costEstimate,
@@ -225,7 +238,26 @@ export const EVENT_BY_SLUG_QUERY = `
     metaTitle,
     metaDescription,
     "country": country->{ name, "slug": slug.current, countryCode },
-    "city": city->{ name, "slug": slug.current }
+    "city": city->{ name, "slug": slug.current },
+    // "What else is nearby" — derived, not manually curated, so it works
+    // from day one without an editor having to hand-pick attractions for
+    // every one of the first 100 events. Same city first; if the event has
+    // no city reference or nothing published there yet, same country.
+    "nearbyAttractions": select(
+      defined(city) => *[_type == "attraction" && contentStatus == "Published" && references(^.city._ref)][0...4]{
+        name, "slug": slug.current, editorialSummary, type,
+        "city": city->{ name }
+      },
+      *[_type == "attraction" && contentStatus == "Published" && references(^.country._ref)][0...4]{
+        name, "slug": slug.current, editorialSummary, type,
+        "city": city->{ name }
+      }
+    ),
+    "nearbyEvents": *[_type == "event" && contentStatus == "Published" && references(^.country._ref) && slug.current != $slug][0...3]{
+      name, "slug": slug.current, category, heroImage, dateType, startDate, endDate, estimatedTiming, verificationStatus,
+      "country": country->{ name, "slug": slug.current, countryCode },
+      "city": city->{ name }
+    }
   }
 `
 

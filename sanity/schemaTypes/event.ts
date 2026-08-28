@@ -55,6 +55,8 @@ export const event = defineType({
     { name: 'dates', title: 'Dates' },
     { name: 'verification', title: 'Verification' },
     { name: 'geography', title: 'Geography' },
+    { name: 'experience', title: 'MyAfroWaka Experience Score' },
+    { name: 'onTheGround', title: 'On the Ground' },
     { name: 'logistics', title: 'Travel Logistics' },
     { name: 'cultural', title: 'Cultural Etiquette' },
     { name: 'organizer', title: 'Organizer / Source' },
@@ -269,6 +271,116 @@ export const event = defineType({
       title: 'Longitude',
       type: 'number',
       group: 'geography',
+    }),
+
+    // ─── MYAFROWAKA EXPERIENCE SCORE ────────────────────────────────────────
+    // Session 3.3, "Added in v1.1" per the plan: the one piece of the events
+    // product a competitor cannot copy by scraping, because it is a
+    // documented editorial judgement, not a fact pulled off an official
+    // page. All 8 optional at the schema level — an editor can start a
+    // draft before scoring is done — but the frontend only ever renders the
+    // rollup once every single one is actually filled in. A 5-of-8-filled
+    // "score" presented as complete would be its own quiet fabrication.
+    // The published rubric defining what each number means lives at
+    // /events/experience-score, linked from every event page that shows a
+    // score, so "documented" is a real, checkable claim.
+    defineField({
+      name: 'scoreCulturalDepth',
+      title: 'Cultural Depth (1-5)',
+      type: 'number',
+      group: 'experience',
+      validation: r => r.min(1).max(5).integer(),
+    }),
+    defineField({
+      name: 'scoreInternationalAppeal',
+      title: 'International Appeal (1-5)',
+      type: 'number',
+      group: 'experience',
+      validation: r => r.min(1).max(5).integer(),
+    }),
+    defineField({
+      name: 'scoreMusic',
+      title: 'Music (1-5)',
+      type: 'number',
+      group: 'experience',
+      validation: r => r.min(1).max(5).integer(),
+    }),
+    defineField({
+      name: 'scoreFood',
+      title: 'Food (1-5)',
+      type: 'number',
+      group: 'experience',
+      validation: r => r.min(1).max(5).integer(),
+    }),
+    defineField({
+      name: 'scoreFamilySuitability',
+      title: 'Family Suitability (1-5)',
+      type: 'number',
+      group: 'experience',
+      validation: r => r.min(1).max(5).integer(),
+    }),
+    defineField({
+      name: 'scoreAccessibility',
+      title: 'Accessibility (1-5)',
+      type: 'number',
+      group: 'experience',
+      validation: r => r.min(1).max(5).integer(),
+    }),
+    defineField({
+      name: 'scorePhotography',
+      title: 'Photography (1-5)',
+      type: 'number',
+      group: 'experience',
+      validation: r => r.min(1).max(5).integer(),
+    }),
+    defineField({
+      name: 'scoreTravelInfrastructure',
+      title: 'Travel Infrastructure (1-5)',
+      type: 'number',
+      group: 'experience',
+      validation: r => r.min(1).max(5).integer(),
+    }),
+    defineField({
+      name: 'scoringNotes',
+      title: 'Scoring Notes',
+      type: 'text',
+      rows: 3,
+      group: 'experience',
+      description: 'Optional: the editorial reasoning behind these numbers, in case a reader or a future editor asks why.',
+    }),
+
+    // ─── ON THE GROUND ───────────────────────────────────────────────────────
+    defineField({
+      name: 'whatToExpect',
+      title: 'What to Expect',
+      type: 'text',
+      rows: 4,
+      group: 'onTheGround',
+      description: 'The atmosphere, the crowd size, the pace of the day — what a first-time visitor should actually expect to walk into.',
+    }),
+    defineField({
+      name: 'safetyInfo',
+      title: 'Safety',
+      type: 'text',
+      rows: 4,
+      group: 'onTheGround',
+      description: 'Crowd safety, valuables, any real advisory relevant to this specific event — not generic travel-safety filler. Include [VERIFY] and a source where a claim is time-sensitive.',
+    }),
+    defineField({
+      name: 'whatToWear',
+      title: 'What to Wear',
+      type: 'text',
+      rows: 3,
+      group: 'onTheGround',
+      description: 'Practical guidance, and any dress requirement tied to the venue or occasion (distinct from Cultural Etiquette below, which covers conduct and access rules, not clothing).',
+    }),
+    defineField({
+      name: 'suggestedItinerary',
+      title: 'Suggested Itinerary',
+      type: 'array',
+      of: [{ type: 'block' }],
+      group: 'onTheGround',
+      description: 'A short, real suggested plan for building a trip around this event — not required, but where it exists it should be specific (day 1 / day 2, not generic advice).',
     }),
 
     // ─── TRAVEL LOGISTICS ────────────────────────────────────────────────────

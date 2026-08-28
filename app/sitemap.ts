@@ -11,6 +11,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: BASE,               lastModified: now, changeFrequency: 'daily',   priority: 1.0 },
     { url: `${BASE}/blog`,        lastModified: now, changeFrequency: 'daily',   priority: 0.9 },
     { url: `${BASE}/attractions`,  lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${BASE}/events`,   lastModified: now, changeFrequency: 'daily',   priority: 0.9 },
+    { url: `${BASE}/events/experience-score`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE}/guides`,   lastModified: now, changeFrequency: 'weekly',  priority: 0.85 },
     { url: `${BASE}/about`,    lastModified: now, changeFrequency: 'monthly', priority: 0.5  },
     { url: `${BASE}/contact`,  lastModified: now, changeFrequency: 'monthly', priority: 0.4  },
@@ -40,6 +42,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: p.publishedAt ? new Date(p.publishedAt) : now,
     changeFrequency: 'monthly',
     priority: 0.7,
+  }))
+
+  // ── Events (Session 3.3 built the page template; the country/region/
+  // month/category/collections discovery paths are Session 3.4's job) ──────
+  const events = await client.fetch<{ slug: string; verificationDate?: string }[]>(`
+    *[_type == "event" && contentStatus == "Published"]{ "slug": slug.current, verificationDate }
+  `).catch(() => [])
+
+  const eventEntries: MetadataRoute.Sitemap = events.map(e => ({
+    url: `${BASE}/events/${e.slug}`,
+    lastModified: e.verificationDate ? new Date(e.verificationDate) : now,
+    changeFrequency: 'weekly',
+    priority: 0.75,
   }))
 
   // ── Destination (country) pages ───────────────────────────────────────────
@@ -93,5 +108,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.75,
   }))
 
-  return [...statics, ...attractionEntries, ...postEntries, ...authorEntries, ...guideEntries, ...countryEntries, ...cityEntries]
+  return [...statics, ...attractionEntries, ...eventEntries, ...postEntries, ...authorEntries, ...guideEntries, ...countryEntries, ...cityEntries]
 }

@@ -1,9 +1,9 @@
 ﻿'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { stockImage } from '@/lib/stockImageCredits'
 
@@ -12,10 +12,22 @@ import { stockImage } from '@/lib/stockImageCredits'
 
 const INTERESTS = ['Safari', 'Culture', 'Beach', 'History', 'Hiking', 'Food']
 
-export default function PlanATripPage() {
+function PlanATripInner() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { status } = useSession()
-  const [destination, setDestination] = useState('')
+
+  // "Plan a trip around this event" (Session 3.3) arrives here as
+  // ?destination=<country/city>&event=<name>&eventSlug=<slug> — pre-fills
+  // the one field this page can honestly pre-fill today. This is NOT the
+  // real Phase 4 trip planner the plan describes ("drops the event
+  // straight into the trip planner") — that planner doesn't exist yet, so
+  // rather than fake an integration to something unbuilt, this pre-fills
+  // the real intent-capture flow that already exists and routes to search.
+  const eventName = searchParams.get('event') ?? ''
+  const eventSlug = searchParams.get('eventSlug') ?? ''
+
+  const [destination, setDestination] = useState(searchParams.get('destination') ?? '')
   const [from, setFrom]               = useState('')
   const [to, setTo]                   = useState('')
   const [travelers, setTravelers]     = useState('')
@@ -73,6 +85,18 @@ export default function PlanATripPage() {
           <p className="font-sans text-cream/60 leading-relaxed" style={{ fontSize: 'clamp(14px, 1.4vw, 17px)' }}>
             Tell us what you are looking for. We will find the right destinations, experiences, and guides.
           </p>
+          {eventName && (
+            <div className="mt-6 inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2">
+              <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-gold-400">Planning around</span>
+              {eventSlug ? (
+                <Link href={`/events/${eventSlug}`} className="font-sans text-[14px] text-cream hover:text-gold-300 transition-colors underline underline-offset-2">
+                  {eventName}
+                </Link>
+              ) : (
+                <span className="font-sans text-[14px] text-cream">{eventName}</span>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -227,5 +251,13 @@ export default function PlanATripPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function PlanATripPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-cream dark-flip-bg" />}>
+      <PlanATripInner />
+    </Suspense>
   )
 }
