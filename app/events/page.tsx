@@ -1,43 +1,55 @@
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import { client } from '@/sanity/lib/client'
+import { ALL_EVENTS_QUERY, ALL_COUNTRIES_QUERY } from '@/sanity/lib/queries'
+import { EventsExplorer, type EventSummary, type CountryOption } from '@/components/EventsExplorer'
+import { stockImage } from '@/lib/stockImageCredits'
 
 export const metadata: Metadata = {
-  title: 'Events – MyAfroWaka',
-  description: 'Festivals, cultural celebrations, and dated happenings across Africa. Coming to MyAfroWaka soon.',
+  title: 'African Events & Festivals – MyAfroWaka',
+  description:
+    'Festivals, cultural celebrations, and dated happenings across Africa, verified against an official source before they go live. Search by country, region, month, category, or travel style.',
   alternates: { canonical: 'https://myafrowaka.com/events' },
+  openGraph: {
+    title: 'African Events & Festivals – MyAfroWaka',
+    description: 'Verified African events, not a guessed calendar.',
+    url: 'https://myafrowaka.com/events',
+    images: [stockImage('1531872036218-4e8a6828e339')],
+  },
 }
 
-export default function EventsPage() {
-  return (
-    <div className="min-h-screen bg-cream dark-flip-bg">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-24 sm:py-32 text-center">
-        <p className="font-sans text-[14px] uppercase tracking-[0.22em] text-gold-text dark:text-gold-400 mb-5">
-          Events
-        </p>
-        <h1
-          className="font-display font-extrabold text-charcoal dark-flip-text mb-6"
-          style={{ fontSize: 'clamp(32px, 5vw, 56px)', lineHeight: '0.98', letterSpacing: '-0.025em' }}
-        >
-          Coming soon.
-        </h1>
-        <p className="font-sans text-charcoal/70 dark-flip-muted leading-relaxed max-w-xl mx-auto"
-          style={{ fontSize: 'clamp(15px, 1.4vw, 17px)' }}>
-          We are building a real, dated events calendar: festivals, cultural celebrations, and seasonal happenings
-          across Africa, each one verified before it goes live. Not a placeholder grid of stock photos, an actual
-          database of things worth planning a trip around.
-        </p>
+const JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'African Events & Festivals',
+  description: 'A verified calendar of festivals, cultural celebrations, and dated happenings across Africa.',
+  url: 'https://myafrowaka.com/events',
+}
 
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
-          <Link href="/blog"
-            className="inline-flex items-center gap-2 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-8 py-3.5 rounded-full transition-colors">
-            Read Stories From the Continent
-          </Link>
-          <Link href="/destinations/kenya"
-            className="inline-flex items-center gap-2 border border-line dark-flip-border text-charcoal dark-flip-text hover:border-crimson font-display font-bold text-[14px] uppercase tracking-[0.12em] px-8 py-3.5 rounded-full transition-colors">
-            Explore Destinations
-          </Link>
+export default async function EventsPage() {
+  const [events, countries] = await Promise.all([
+    client.fetch<EventSummary[]>(ALL_EVENTS_QUERY).catch(() => [] as EventSummary[]),
+    client.fetch<CountryOption[]>(ALL_COUNTRIES_QUERY).catch(() => [] as CountryOption[]),
+  ])
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
+      <Suspense fallback={
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+          <div className="h-10 bg-sand rounded-xl w-64 mb-6 animate-pulse"/>
+          <div className="flex gap-8">
+            <div className="hidden md:block w-72 h-96 bg-sand rounded-2xl animate-pulse shrink-0"/>
+            <div className="flex-1 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="bg-sand rounded-2xl h-44 animate-pulse"/>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      }>
+        <EventsExplorer events={events} countries={countries} />
+      </Suspense>
+    </>
   )
 }

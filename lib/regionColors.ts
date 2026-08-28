@@ -40,6 +40,40 @@ export const CATEGORY_COLOR: Record<string, string> = {
 
 export const CATEGORY_COLOR_FALLBACK = 'var(--color-ochre)'
 
+/** Session 3.2 — the 7 event categories, mapped onto the same restrained
+ *  5-colour core brand palette rather than inventing a 6th or 7th hue.
+ *  Only 5 named "core brand" swatches exist (ochre/gold/moss/crimson/
+ *  charcoal) by design — see the "Core brand" section of globals.css.
+ *  With 7 categories to cover, National Celebrations and Tourism Industry
+ *  deliberately share slate: they're the two institutional/governmental
+ *  categories, the least likely pair to be visually confused with each
+ *  other or with the vibrant cultural/artistic categories in an unfiltered
+ *  grid. Food and Drink reuses gold to stay consistent with the blog's
+ *  existing Food Tourism = gold mapping above. */
+export const EVENT_CATEGORY_COLOR: Record<string, string> = {
+  'Music':                    'var(--color-crimson)',
+  'Food and Drink':           'var(--color-gold)',
+  'Cultural':                 'var(--color-moss)',
+  'Religious and Spiritual':  'var(--color-charcoal)',
+  'Arts / Film / Fashion':    'var(--color-ochre)',
+  'National Celebrations':    'var(--color-slate)',
+  'Tourism Industry':         'var(--color-slate)',
+}
+
+export const EVENT_CATEGORY_COLOR_FALLBACK = 'var(--color-slate)'
+
+/** Semantic, not decorative — deliberately separate from the accent hues
+ *  above. This is the frontend half of "an unverified date never displays
+ *  as a fact": the verification badge always uses one of these four
+ *  colours, never a category colour, so a viewer can tell trust level at
+ *  a glance regardless of which category they're looking at. */
+export const VERIFICATION_STATUS_COLOR: Record<string, string> = {
+  'Verified':                 'var(--color-moss)',
+  'Date to be confirmed':     'var(--color-gold)',
+  'Annual, dates vary':       'var(--color-slate)',
+  'Cancelled or postponed':   'var(--color-crimson)',
+}
+
 export const COUNTRY_COLOR: Record<string, string> = {
   'Egypt':        'var(--color-country-egypt)',
   'Kenya':        'var(--color-country-kenya)',

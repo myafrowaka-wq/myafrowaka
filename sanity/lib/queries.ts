@@ -240,13 +240,21 @@ export const ALL_EVENTS_QUERY = `
     heroImage,
     shortDescription,
     category,
+    experienceTags,
+    suitableFor,
     dateType,
     startDate,
     endDate,
     estimatedTiming,
     verificationStatus,
-    "country": country->{ name, "slug": slug.current, countryCode },
+    "country": country->{ name, "slug": slug.current, countryCode, continentRegion },
     "city": city->{ name }
+  }
+`
+
+export const ALL_COUNTRIES_QUERY = `
+  *[_type == "country"] | order(name asc){
+    name, "slug": slug.current, countryCode, continentRegion
   }
 `
 

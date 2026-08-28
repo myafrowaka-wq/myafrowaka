@@ -89,11 +89,13 @@ const LANGUAGES = [
 ]
 
 // The three primary nav items that actually have real, distinct mega-menu
-// content. Events has none yet (ships "coming soon", Phase 3 fills it —
-// forcing a near-empty dropdown onto it just for visual uniformity would be
-// its own small dishonesty) and Plan already works best as a direct,
-// single-purpose CTA to the planner — a disclosure toggle there would slow
-// down the site's actual primary conversion action for no real benefit.
+// content. Events links straight to the real /events discovery tool
+// (Session 3.2) rather than opening a dropdown — no submenu content (e.g.
+// per-region event picks) exists yet, and forcing a near-empty dropdown
+// onto it just for visual uniformity would be its own small dishonesty.
+// Plan already works best as a direct, single-purpose CTA to the planner —
+// a disclosure toggle there would slow down the site's actual primary
+// conversion action for no real benefit.
 type PanelKey = 'destinations' | 'attractions' | 'stories' | null
 
 // ─── theme toggle ─────────────────────────────────────────────────────────────
@@ -380,18 +382,18 @@ export default function Nav() {
             </button>
           </div>
 
-          {/* Events: no submenu content exists yet — a plain link with a
-              "Soon" badge is honest; a dropdown with nothing real in it
-              would not be. */}
+          {/* Events: Session 3.2 built the real discovery tool at /events —
+              search, six filters, a real results grid. No submenu content
+              exists yet (that's a future session), so this stays a plain
+              link, but the "Coming Soon" badge is gone: the page itself is
+              no longer that, even though the database it searches is
+              honestly still empty pending Session 3.4's first 100 events. */}
           <Link
             ref={el => { triggerRefs.current.events = el }}
-            href="/events" onClick={close} className={`${ni} gap-1.5`}
+            href="/events" onClick={close} className={ni}
             onKeyDown={e => handleTriggerKeyDown(e, 'events')}
           >
             {t('events')}
-            <span className="font-sans text-[14px] uppercase tracking-[0.06em] text-gold-400/70 border border-gold-400/25 rounded-full px-1.5 py-0.5 leading-none">
-              {t('comingSoon')}
-            </span>
           </Link>
 
           <div className="relative" onMouseEnter={() => hoverOpen('stories')} onMouseLeave={hoverClose}>
@@ -813,13 +815,10 @@ export default function Nav() {
               )}
             </div>
 
-            {/* Events — plain link, Coming Soon */}
+            {/* Events — plain link, real discovery tool since Session 3.2 */}
             <Link href="/events" onClick={close}
               className="flex items-center justify-between px-2 py-4 text-[15px] font-display font-semibold text-cream/85 border-b border-white/10">
               {t('events')}
-              <span className="font-sans text-[14px] uppercase tracking-[0.06em] text-gold-400/70 border border-gold-400/25 rounded-full px-1.5 py-0.5 leading-none">
-                {t('comingSoon')}
-              </span>
             </Link>
 
             {/* Stories accordion */}
