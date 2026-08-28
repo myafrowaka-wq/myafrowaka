@@ -64,14 +64,14 @@ export default function AboutPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ABOUT_JSON_LD) }} />
-      {/* Hero — Ken Burns slow-zoom with vertically centred text */}
+      {/* Hero — static image, vertically centred text */}
       <div className="relative overflow-hidden min-h-[520px] flex items-center">
         <Image
           src="https://images.unsplash.com/photo-1741991110666-88115e724741?auto=format&fit=crop&w=1920&q=85"
           alt="Nairobi city skyline, Kenya"
           fill
           priority
-          className="object-cover object-center img-kenburns"
+          className="object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/72 to-ink/92"/>
 
@@ -221,7 +221,7 @@ export default function AboutPage() {
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
               </a>
               <Link href="/contact"
-                className="mt-5 inline-flex w-full items-center justify-center bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] py-3.5 rounded-xl transition-all btn-magnetic">
+                className="mt-5 inline-flex w-full items-center justify-center bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] py-3.5 rounded-xl transition-all">
                 Send a Message
               </Link>
             </div>

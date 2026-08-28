@@ -7,7 +7,6 @@ import { ALL_ATTRACTIONS_QUERY } from '@/sanity/lib/queries'
 import { AttractionSearch } from '@/components/AttractionSearch'
 import { AttractionsFilter } from '@/components/AttractionsFilter'
 import { TypewriterHero } from '@/components/TypewriterHero'
-import { ParallaxHero } from '@/components/ParallaxHero'
 
 export const metadata: Metadata = {
   title: 'Africa Travel Guides – MyAfroWaka',

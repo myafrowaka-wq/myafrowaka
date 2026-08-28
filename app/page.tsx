@@ -3,8 +3,6 @@ import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
 import { EditorialSlider } from '@/components/EditorialSlider'
 import { TypewriterHero } from '@/components/TypewriterHero'
-import { HeroBackground } from '@/components/HeroBackground'
-import { ParallaxHero } from '@/components/ParallaxHero'
 import { PlanTripCard } from '@/components/PlanTripCard'
 import { DestinationsGrid } from '@/components/DestinationsGrid'
 import { PopularPills } from '@/components/PopularPills'
@@ -168,7 +166,14 @@ export default async function HomePage() {
 
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
       <section className="relative min-h-[94vh] flex items-center overflow-hidden">
-        <HeroBackground src="https://images.unsplash.com/photo-1746310783422-16df7622e7c9?auto=format&fit=crop&w=1920&q=85" alt="Pyramids of Giza at golden hour"/>
+        <Image
+          src="https://images.unsplash.com/photo-1746310783422-16df7622e7c9?auto=format&fit=crop&w=1920&q=85"
+          alt="Pyramids of Giza at golden hour"
+          fill priority
+          className="object-cover object-center"
+          sizes="100vw"
+          quality={85}
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-scrim-1/96 via-scrim-2/88 to-scrim-3/55"/>
         <div className="absolute inset-0 bg-gradient-to-t from-scrim-1/60 via-transparent to-scrim-1/15"/>
 
@@ -208,7 +213,7 @@ export default async function HomePage() {
                   <input name="q" type="search" placeholder="Egypt, safari, Zanzibar..."
                     className="flex-1 py-4 pr-4 text-sm font-sans text-charcoal placeholder-charcoal/35 bg-transparent focus:outline-none"/>
                   <button type="submit"
-                    className="m-1.5 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] px-5 py-3 rounded-xl transition-all btn-magnetic">
+                    className="m-1.5 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] px-5 py-3 rounded-xl transition-all">
                     Search
                   </button>
                 </div>
@@ -234,7 +239,7 @@ export default async function HomePage() {
       </section>
 
       {/* ══ DESTINATIONS — 6 random countries, 1 row desktop, 2 col mobile ════ */}
-      <section className="py-24 lg:py-32 bg-cream dark-flip-bg" data-reveal>
+      <section className="py-24 lg:py-32 bg-cream dark-flip-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
           <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial mb-12"
@@ -247,7 +252,7 @@ export default async function HomePage() {
 
           <div className="mt-10 flex justify-center">
             <Link href="/attractions"
-              className="inline-flex items-center gap-2.5 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(180,30,30,0.28)] hover:shadow-[0_8px_36px_rgba(180,30,30,0.38)]">
+              className="inline-flex items-center gap-2.5 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all shadow-[0_4px_24px_rgba(180,30,30,0.28)] hover:shadow-[0_8px_36px_rgba(180,30,30,0.38)]">
               {t('allDestinations')}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
@@ -259,7 +264,7 @@ export default async function HomePage() {
       <EditorialSlider />
 
       {/* ══ FEATURED ATTRACTIONS (was: Latest Travel Guides) ══════════════════ */}
-      <section className="py-24 lg:py-32 bg-sand dark-flip-surf" id="guides" data-reveal>
+      <section className="py-24 lg:py-32 bg-sand dark-flip-surf" id="guides">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
           <div className="flex items-end justify-between mb-12">
@@ -371,7 +376,7 @@ export default async function HomePage() {
           {/* View all — prominent solid button */}
           <div className="mt-12 flex justify-center">
             <Link href="/attractions"
-              className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic shadow-[0_4px_24px_rgba(26,24,19,0.22)] hover:shadow-[0_8px_36px_rgba(26,24,19,0.32)]">
+              className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all shadow-[0_4px_24px_rgba(26,24,19,0.22)] hover:shadow-[0_8px_36px_rgba(26,24,19,0.32)]">
               {t('allAttractions')}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
@@ -380,7 +385,7 @@ export default async function HomePage() {
       </section>
 
       {/* ══ EXPLORE BY EXPERIENCE — 1 row 6 cols desktop, 2 col mobile ════════ */}
-      <section className="py-24 lg:py-32 bg-cream dark-flip-bg" id="experiences" data-reveal>
+      <section className="py-24 lg:py-32 bg-cream dark-flip-bg" id="experiences">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
           <div className="flex items-end justify-between mb-12">
@@ -396,7 +401,7 @@ export default async function HomePage() {
 
       {/* ══ LATEST TRAVEL ATTRACTIONS (was: Featured Attractions) ════════════════ */}
       {(featured as AttrItem[]).length > 0 && (
-        <section className="py-24 lg:py-32 bg-sand dark-flip-surf" data-reveal>
+        <section className="py-24 lg:py-32 bg-sand dark-flip-surf">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
             <div className="flex items-end justify-between mb-12">
@@ -466,7 +471,7 @@ export default async function HomePage() {
       )}
 
       {/* ══ FROM THE JOURNAL ════════════════════════════════════════════════════ */}
-      <section className="py-24 lg:py-32 bg-sand dark-flip-surf border-t border-line dark-flip-border" data-reveal>
+      <section className="py-24 lg:py-32 bg-sand dark-flip-surf border-t border-line dark-flip-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between mb-12">
             <div>
@@ -527,7 +532,7 @@ export default async function HomePage() {
           </div>
           <div className="mt-10 flex justify-center">
             <Link href="/blog"
-              className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic">
+              className="inline-flex items-center gap-2.5 bg-ink hover:bg-charcoal text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all">
               View All Articles
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
@@ -536,7 +541,7 @@ export default async function HomePage() {
       </section>
 
       {/* ══ INSTAGRAM GALLERY ══════════════════════════════════════════════════ */}
-      <section className="py-24 lg:py-28 bg-cream dark-flip-bg" data-reveal>
+      <section className="py-24 lg:py-28 bg-cream dark-flip-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between mb-8">
             <div>
@@ -570,7 +575,7 @@ export default async function HomePage() {
       </section>
 
       {/* ══ CTA BANNER ═════════════════════════════════════════════════════════ */}
-      <section className="relative py-28 lg:py-36 overflow-hidden" data-reveal>
+      <section className="relative py-28 lg:py-36 overflow-hidden">
         <Image src="https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=1920&q=85" alt="" fill className="object-cover img-editorial"/>
         <div className="absolute inset-0 bg-ink/88"/>
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
@@ -584,7 +589,7 @@ export default async function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/search"
-              className="inline-flex items-center justify-center gap-2 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all btn-magnetic">
+              className="inline-flex items-center justify-center gap-2 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all">
               Explore Destinations
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>

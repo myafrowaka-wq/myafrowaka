@@ -9,7 +9,6 @@ import { client } from '@/sanity/lib/client'
 import { POST_BY_SLUG_QUERY, ALL_POST_SLUGS_QUERY, ALL_POSTS_QUERY } from '@/sanity/lib/queries'
 import { FALLBACK_POSTS, type FallbackPost } from '@/lib/fallbackPosts'
 import { getAuthorByName, nameToSlug } from '@/lib/authors'
-import { ScrollProgress } from '@/components/ScrollProgress'
 
 const builder = imageUrlBuilder(client)
 function urlFor(source: Parameters<typeof builder.image>[0]) {
@@ -294,7 +293,6 @@ export default async function BlogPostPage(
 
   return (
     <>
-      <ScrollProgress />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}

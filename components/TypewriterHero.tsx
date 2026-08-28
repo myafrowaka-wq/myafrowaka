@@ -14,14 +14,31 @@ export function TypewriterHero({
   const fullText = lines.map(l => l.text).join('\n')
   const [charIndex, setCharIndex] = useState(0)
   const [done, setDone] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
+
+  // X-11 / M-08: the per-character reveal is driven by setTimeout, not CSS
+  // animation, so the global prefers-reduced-motion override in globals.css
+  // can't stop it — it has to be checked here and skipped entirely.
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setReducedMotion(mq.matches)
+    const onChange = () => setReducedMotion(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
 
   useEffect(() => {
+    if (reducedMotion) {
+      setCharIndex(fullText.length)
+      setDone(true)
+      return
+    }
     if (charIndex < fullText.length) {
       const t = setTimeout(() => setCharIndex(i => i + 1), speed)
       return () => clearTimeout(t)
     }
     setDone(true)
-  }, [charIndex, fullText, speed])
+  }, [charIndex, fullText, speed, reducedMotion])
 
   // Split the typed chars back into lines
   let remaining = charIndex

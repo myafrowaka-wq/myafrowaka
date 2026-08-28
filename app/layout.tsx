@@ -6,9 +6,7 @@ import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SessionProviderWrapper } from "@/components/SessionProviderWrapper";
 import { ScrollToTop } from "@/components/ScrollToTop";
-import { ScrollRevealInit } from "@/components/ScrollRevealInit";
 import { NewsletterPopup } from "@/components/NewsletterPopup";
-import { CustomCursor } from "@/components/CustomCursor";
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 
@@ -99,8 +97,6 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <SessionProviderWrapper>
             <ThemeProvider>
-              <CustomCursor />
-              <ScrollRevealInit />
               <Nav />
               <main id="main-content" className="flex-1">{children}</main>
               <Footer />

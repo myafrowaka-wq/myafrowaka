@@ -7,7 +7,6 @@ import { DESTINATION_BY_SLUG_QUERY, ALL_COUNTRY_SLUGS_QUERY } from '@/sanity/lib
 import { REGION_COLOR } from '@/lib/regionColors'
 import { DestinationSearch } from '@/components/DestinationSearch'
 import { TypewriterHero } from '@/components/TypewriterHero'
-import { ParallaxHero } from '@/components/ParallaxHero'
 import { PopularPills } from '@/components/PopularPills'
 
 interface AttractionSummary {
@@ -157,13 +156,13 @@ export default async function DestinationPage({
 
       {/* Hero — matches homepage hero style */}
       <div className="relative min-h-[94vh] flex items-center overflow-hidden">
-        <ParallaxHero>
+        <div className="absolute inset-0">
         <Image
           src={countryImageUrl(slug, 1920)}
           alt={dest.name} fill priority
           className="object-cover object-center scale-110"
         />
-        </ParallaxHero>
+        </div>
         <div className="absolute inset-0 bg-gradient-to-r from-scrim-1/96 via-scrim-2/88 to-scrim-3/55"/>
         <div className="absolute inset-0 bg-gradient-to-t from-scrim-1/60 via-transparent to-scrim-1/15"/>
 

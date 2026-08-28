@@ -9,7 +9,6 @@ import { Badge } from '@/components/Badge'
 import { FaqAccordion } from '@/components/FaqAccordion'
 import { SaveButton } from '@/components/SaveButton'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
-import { ParallaxHero } from '@/components/ParallaxHero'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -497,14 +496,14 @@ export default async function AttractionPage(
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[480px] flex items-end">
-        <ParallaxHero>
+        <div className="absolute inset-0">
         <Image
           src={attractionImageUrl(slug, 1920)}
           alt={a.name}
           fill priority
           className="object-cover object-center scale-110"
         />
-        </ParallaxHero>
+        </div>
         <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/65 to-ink/97"/>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">

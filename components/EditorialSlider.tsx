@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -41,40 +41,18 @@ const SLIDES = [
 
 export function EditorialSlider() {
   const [current, setCurrent] = useState(0)
-  const [paused, setPaused]   = useState(false)
-  const [progress, setProgress] = useState(0)
 
   const next = useCallback(() => {
     setCurrent(c => (c + 1) % SLIDES.length)
-    setProgress(0)
   }, [])
   const prev = useCallback(() => {
     setCurrent(c => (c - 1 + SLIDES.length) % SLIDES.length)
-    setProgress(0)
   }, [])
-
-  useEffect(() => {
-    if (paused) return
-    setProgress(0)
-    const INTERVAL = 5000
-    const TICK     = 50
-    let elapsed    = 0
-    const timer = setInterval(() => {
-      elapsed += TICK
-      setProgress(elapsed / INTERVAL * 100)
-      if (elapsed >= INTERVAL) next()
-    }, TICK)
-    return () => clearInterval(timer)
-  }, [next, paused, current])
 
   const slide = SLIDES[current]
 
   return (
-    <section
-      className="bg-ink relative overflow-hidden"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
+    <section className="bg-ink relative overflow-hidden">
       <div
         key={`img-${current}`}
         className="absolute inset-0 lg:inset-y-0 lg:left-[45%] lg:right-0 animate-fade-in"
@@ -89,10 +67,6 @@ export function EditorialSlider() {
         <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-ink/5 pointer-events-none"/>
         <div className="hidden lg:block absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-ink/20 pointer-events-none"/>
         <div className="lg:hidden absolute inset-0 bg-ink/88 pointer-events-none"/>
-      </div>
-
-      <div className="absolute top-0 left-0 right-0 h-0.5 bg-white/10 z-20">
-        <div className="h-full bg-gold-400 transition-none" style={{ width: `${progress}%` }}/>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
@@ -115,7 +89,7 @@ export function EditorialSlider() {
 
             <div className="flex flex-wrap gap-3 mb-12">
               <Link href={`/blog/${slide.slug}`}
-                className="inline-flex items-center gap-2 bg-action hover:bg-action-hover text-cream font-sans text-[14px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-all btn-magnetic">
+                className="inline-flex items-center gap-2 bg-action hover:bg-action-hover text-cream font-sans text-[14px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-colors">
                 Read the Full Article
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -136,7 +110,7 @@ export function EditorialSlider() {
               </button>
               <div className="flex gap-2 items-center">
                 {SLIDES.map((_, i) => (
-                  <button key={i} onClick={() => { setCurrent(i); setProgress(0) }} aria-label={`Slide ${i + 1}`}
+                  <button key={i} onClick={() => setCurrent(i)} aria-label={`Slide ${i + 1}`}
                     className={`h-px rounded-full transition-all duration-500 ${i === current ? 'w-10 bg-gold-400' : 'w-3 bg-white/25 hover:bg-white/45'}`}
                   />
                 ))}
