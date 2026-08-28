@@ -58,8 +58,10 @@ function formatDate(iso?: string) {
 
 // ── BlogGrid ──────────────────────────────────────────────────────────────────
 
-export function BlogGrid({ posts }: { posts: BlogPost[] }) {
-  const [active, setActive] = useState('All')
+export function BlogGrid({ posts, initialCategory }: { posts: BlogPost[]; initialCategory?: string }) {
+  const [active, setActive] = useState(
+    initialCategory && CATEGORIES.includes(initialCategory) ? initialCategory : 'All'
+  )
 
   const filtered = active === 'All' ? posts : posts.filter(p => p.category === active)
 

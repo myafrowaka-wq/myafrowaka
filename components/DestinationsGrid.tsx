@@ -1,3 +1,6 @@
+'use client'
+
+import { useRef, useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { COUNTRY_COLOR } from '@/lib/regionColors'
@@ -33,8 +36,8 @@ function CountryCard({ d }: { d: Country }) {
   return (
     <Link
       href={`/destinations/${d.slug}`}
-      className="card-zoom group relative rounded-2xl overflow-hidden shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500 block w-full"
-      style={{ aspectRatio: '3/4' }}
+      className="card-zoom group relative rounded-2xl overflow-hidden shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500 block shrink-0"
+      style={{ aspectRatio: '3/4', width: 'clamp(140px, 30vw, 220px)', scrollSnapAlign: 'start' }}
     >
       <div className="absolute inset-0" style={{ backgroundColor: d.color }}/>
       <Image src={d.image} alt={d.name} fill
@@ -57,14 +60,77 @@ function CountryCard({ d }: { d: Country }) {
   )
 }
 
-// Static, no-JS grid — replaces a mouse-driven mobile auto-carousel and a
-// desktop CSS marquee (both banned: M-09 auto-advance, M-05 marquee).
+const ARROW_BTN = 'w-10 h-10 rounded-full border border-line dark-flip-border bg-cream dark-flip-card flex items-center justify-center text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-line disabled:hover:text-charcoal/50 shrink-0'
+
+// User-controlled horizontal carousel — moves only in direct response to a
+// click, a touch swipe, or a keyboard arrow key while a card is focused
+// (native browser behaviour for a scrollable region). No timer, no
+// auto-advance: WDOS M-09 bans that outright regardless of how it's built.
+// The previous version of this section (Session 1.3) was a static grid with
+// no carousel at all; before that, a CSS marquee + an auto-advancing mobile
+// slider, both deleted as banned AI-site motion (M-05, M-09).
 export function DestinationsGrid() {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [atStart, setAtStart] = useState(true)
+  const [atEnd, setAtEnd]     = useState(false)
+
+  const updateEdges = useCallback(() => {
+    const el = trackRef.current
+    if (!el) return
+    setAtStart(el.scrollLeft <= 4)
+    setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4)
+  }, [])
+
+  useEffect(() => {
+    updateEdges()
+    const el = trackRef.current
+    if (!el) return
+    el.addEventListener('scroll', updateEdges, { passive: true })
+    window.addEventListener('resize', updateEdges)
+    return () => {
+      el.removeEventListener('scroll', updateEdges)
+      window.removeEventListener('resize', updateEdges)
+    }
+  }, [updateEdges])
+
+  function scrollByPage(dir: 1 | -1) {
+    const el = trackRef.current
+    if (!el) return
+    el.scrollBy({ left: dir * el.clientWidth * 0.9, behavior: 'smooth' })
+  }
+
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 lg:gap-4">
-      {ALL_COUNTRIES.map(d => (
-        <CountryCard key={d.slug} d={d} />
-      ))}
+    <div className="relative">
+      <div
+        ref={trackRef}
+        role="region"
+        aria-label="Destinations carousel"
+        className="flex gap-3 lg:gap-4 overflow-x-auto scrollbar-hide"
+        style={{ scrollSnapType: 'x mandatory' }}
+      >
+        {ALL_COUNTRIES.map(d => (
+          <CountryCard key={d.slug} d={d} />
+        ))}
+      </div>
+
+      <div className="flex items-center justify-end gap-2 mt-4">
+        <button
+          type="button" onClick={() => scrollByPage(-1)} disabled={atStart}
+          aria-label="Previous destinations" className={ARROW_BTN}
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <button
+          type="button" onClick={() => scrollByPage(1)} disabled={atEnd}
+          aria-label="Next destinations" className={ARROW_BTN}
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
     </div>
   )
 }

@@ -1,12 +1,14 @@
 {
   "nav": {
     "destinations": "Destinations",
-    "guides":       "Guides",
-    "blog":         "Blog",
+    "attractions":  "Attractions",
+    "events":       "Events",
+    "stories":      "Stories",
     "about":        "About",
     "contact":      "Contact",
     "signIn":       "Sign In",
-    "planATrip":    "Plan a Trip"
+    "planATrip":    "Plan",
+    "comingSoon":   "Coming Soon"
   },
   "common": {
     "browseAll":    "Browse All",

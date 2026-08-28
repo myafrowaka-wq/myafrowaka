@@ -1,6 +1,6 @@
-﻿'use client'
+'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
@@ -47,6 +47,38 @@ const REGIONS = [
   },
 ]
 
+const ATTRACTION_TYPES = [
+  { label: 'Safari and Wildlife',    exp: 'Safari'           },
+  { label: 'Historical Sites',       exp: 'Historical Sites' },
+  { label: 'Beach and Islands',      exp: 'Beach'             },
+  { label: 'Mountain and Hiking',    exp: 'Hiking'            },
+  { label: 'Cultural Experiences',   exp: 'Culture'           },
+  { label: 'Food and Markets',       exp: 'Food'              },
+  { label: 'City Breaks',            exp: 'City'              },
+  { label: 'UNESCO Heritage Sites',  exp: 'UNESCO'            },
+]
+
+const FEATURED_ATTRACTIONS = [
+  { title: 'Pyramids of Giza: The Complete Guide',     tag: 'Egypt',        slug: 'pyramids-of-giza',                 img: 'https://images.unsplash.com/photo-1736443830251-dda3cb6df76c?auto=format&fit=crop&w=280&q=80' },
+  { title: 'Bwindi: Mountain Gorilla Trekking Guide',  tag: 'Uganda',       slug: 'bwindi-impenetrable-national-park', img: 'https://images.unsplash.com/photo-1673624522244-8de0d50b8492?auto=format&fit=crop&w=280&q=80' },
+  { title: 'Serengeti: The Great Migration Guide',     tag: 'Tanzania',     slug: 'serengeti-national-park',           img: 'https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=280&q=80' },
+]
+
+const STORY_CATEGORIES = [
+  { label: 'Destinations',       href: '/blog?category=Destinations'        },
+  { label: 'Culture & Heritage', href: '/blog?category=Culture+%26+Heritage' },
+  { label: 'Travel Planning',    href: '/blog?category=Travel+Planning'      },
+  { label: 'Food Tourism',       href: '/blog?category=Food+Tourism'         },
+  { label: 'Experiences',        href: '/blog?category=Experiences'          },
+]
+
+const FEATURED_STORIES = [
+  { title: 'What Lagos Rush Hour Teaches You About African City Life', tag: 'Nigeria', slug: 'lagos-rush-hour-city-life', img: 'https://images.unsplash.com/photo-1618828665011-0abd973f7bb8?auto=format&fit=crop&w=280&q=80' },
+  { title: 'Slow Travel in Rwanda: The Country That Made You Stop Rushing', tag: 'Rwanda', slug: 'slow-travel-rwanda', img: 'https://images.unsplash.com/photo-1682773083896-95176d8aecf8?auto=format&fit=crop&w=280&q=80' },
+]
+
+const PLAN_INTERESTS = ['Safari', 'Culture', 'Beach', 'History', 'Hiking', 'Food']
+
 const LANGUAGES = [
   { code: 'EN', label: 'English',   flag: '🇬🇧' },
   { code: 'FR', label: 'Français',  flag: '🇫🇷' },
@@ -55,7 +87,13 @@ const LANGUAGES = [
   { code: 'AR', label: 'Arabic',    flag: '🇪🇬' },
 ]
 
-type PanelKey = 'destinations' | 'media' | null
+// The three primary nav items that actually have real, distinct mega-menu
+// content. Events has none yet (ships "coming soon", Phase 3 fills it —
+// forcing a near-empty dropdown onto it just for visual uniformity would be
+// its own small dishonesty) and Plan already works best as a direct,
+// single-purpose CTA to the planner — a disclosure toggle there would slow
+// down the site's actual primary conversion action for no real benefit.
+type PanelKey = 'destinations' | 'attractions' | 'stories' | null
 
 // ─── theme toggle ─────────────────────────────────────────────────────────────
 
@@ -123,6 +161,29 @@ function NavUserButton({ close }: { close: () => void }) {
   )
 }
 
+// ─── focus trap for an open mega-panel ─────────────────────────────────────────
+// WAI-ARIA disclosure pattern: Tab/Shift+Tab wrap within the open panel,
+// Escape closes it and returns focus to the trigger that opened it.
+
+function trapFocus(container: HTMLElement, e: React.KeyboardEvent) {
+  const focusable = container.querySelectorAll<HTMLElement>(
+    'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  )
+  if (focusable.length === 0) return
+  const first = focusable[0]
+  const last = focusable[focusable.length - 1]
+
+  if (e.key === 'Tab') {
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault()
+      last.focus()
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault()
+      first.focus()
+    }
+  }
+}
+
 // ─── component ────────────────────────────────────────────────────────────────
 
 export default function Nav() {
@@ -147,6 +208,8 @@ export default function Nav() {
   const openTimer  = useRef<ReturnType<typeof setTimeout> | null>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const navRef     = useRef<HTMLElement>(null)
+  const panelRef   = useRef<HTMLDivElement>(null)
+  const triggerRefs = useRef<Record<string, HTMLButtonElement | HTMLAnchorElement | null>>({})
 
   const hoverOpen  = (key: PanelKey) => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
@@ -170,12 +233,57 @@ export default function Nav() {
 
   const close = () => { setPanel(null); setLangOpen(false); setMobile(false); setMenuOpen(false) }
 
+  const togglePanel = useCallback((key: PanelKey) => {
+    if (openTimer.current) clearTimeout(openTimer.current)
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    setPanel(p => (p === key ? null : key))
+  }, [])
+
+  const closePanelToTrigger = useCallback((key: PanelKey) => {
+    setPanel(null)
+    triggerRefs.current[key ?? '']?.focus()
+  }, [])
+
+  // Arrow-key roving focus across the 5 primary nav items (3 disclosure
+  // buttons + Events + Plan), Escape closes whatever panel is open.
+  const ALL_TRIGGER_KEYS = ['destinations', 'attractions', 'events', 'stories', 'plan']
+  function handleTriggerKeyDown(e: React.KeyboardEvent, key: string) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault()
+      const i = ALL_TRIGGER_KEYS.indexOf(key)
+      const next = e.key === 'ArrowRight'
+        ? ALL_TRIGGER_KEYS[(i + 1) % ALL_TRIGGER_KEYS.length]
+        : ALL_TRIGGER_KEYS[(i - 1 + ALL_TRIGGER_KEYS.length) % ALL_TRIGGER_KEYS.length]
+      triggerRefs.current[next]?.focus()
+    } else if (e.key === 'Escape' && panel) {
+      e.preventDefault()
+      closePanelToTrigger(panel)
+    }
+  }
+
+  function handlePanelKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      closePanelToTrigger(panel)
+      return
+    }
+    if (panelRef.current) trapFocus(panelRef.current, e)
+  }
+
   const ni = 'flex items-center gap-1 px-3 py-2 text-[15px] font-display font-semibold text-cream/80 hover:text-cream transition-colors rounded-lg hover:bg-white/8 whitespace-nowrap cursor-pointer'
 
   const chevron = (active: boolean) => (
     <svg className={`w-3 h-3 mt-0.5 transition-transform duration-150 ${active ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
     </svg>
+  )
+
+  const viewAllLink = (href: string, label: string) => (
+    <Link href={href} onClick={close}
+      className="inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
+      {label}
+      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </Link>
   )
 
   return (
@@ -207,7 +315,7 @@ export default function Nav() {
             )}
           </button>
 
-          {/* Desktop hamburger — opens the full overlay menu */}
+          {/* Desktop hamburger — opens the full overlay menu (About/Contact/Sign in live here now that the primary row is five parents) */}
           <button
             onClick={() => { setMenuOpen(v => !v); setPanel(null) }}
             aria-label={menuOpen ? 'Close menu' : 'Open full menu'}
@@ -241,17 +349,75 @@ export default function Nav() {
           </Link>
         </div>
 
-        {/* Desktop nav — Destinations | Guides | Blog | About | Contact */}
-        <nav className="hidden lg:flex items-center gap-0">
+        {/* Desktop nav — Destinations | Attractions | Events | Stories | Plan */}
+        <nav className="hidden lg:flex items-center gap-0" aria-label="Primary">
           <div className="relative" onMouseEnter={() => hoverOpen('destinations')} onMouseLeave={hoverClose}>
-            <button className={ni}>Destinations {chevron(panel === 'destinations')}</button>
+            <button
+              ref={el => { triggerRefs.current.destinations = el }}
+              className={ni}
+              aria-expanded={panel === 'destinations'}
+              aria-haspopup="true"
+              aria-controls="mega-destinations"
+              onClick={() => togglePanel('destinations')}
+              onKeyDown={e => handleTriggerKeyDown(e, 'destinations')}
+            >
+              {t('destinations')} {chevron(panel === 'destinations')}
+            </button>
           </div>
-          <div className="relative">
-            <Link href="/attractions" className={ni} onClick={close}>Guides</Link>
+
+          <div className="relative" onMouseEnter={() => hoverOpen('attractions')} onMouseLeave={hoverClose}>
+            <button
+              ref={el => { triggerRefs.current.attractions = el }}
+              className={ni}
+              aria-expanded={panel === 'attractions'}
+              aria-haspopup="true"
+              aria-controls="mega-attractions"
+              onClick={() => togglePanel('attractions')}
+              onKeyDown={e => handleTriggerKeyDown(e, 'attractions')}
+            >
+              {t('attractions')} {chevron(panel === 'attractions')}
+            </button>
           </div>
-          <Link href="/blog"    onClick={close} className={ni}>{t('blog')}</Link>
-          <Link href="/about"   onClick={close} className={ni}>{t('about')}</Link>
-          <Link href="/contact" onClick={close} className={ni}>{t('contact')}</Link>
+
+          {/* Events: no submenu content exists yet — a plain link with a
+              "Soon" badge is honest; a dropdown with nothing real in it
+              would not be. */}
+          <Link
+            ref={el => { triggerRefs.current.events = el }}
+            href="/events" onClick={close} className={`${ni} gap-1.5`}
+            onKeyDown={e => handleTriggerKeyDown(e, 'events')}
+          >
+            {t('events')}
+            <span className="font-sans text-[14px] uppercase tracking-[0.06em] text-gold-400/70 border border-gold-400/25 rounded-full px-1.5 py-0.5 leading-none">
+              {t('comingSoon')}
+            </span>
+          </Link>
+
+          <div className="relative" onMouseEnter={() => hoverOpen('stories')} onMouseLeave={hoverClose}>
+            <button
+              ref={el => { triggerRefs.current.stories = el }}
+              className={ni}
+              aria-expanded={panel === 'stories'}
+              aria-haspopup="true"
+              aria-controls="mega-stories"
+              onClick={() => togglePanel('stories')}
+              onKeyDown={e => handleTriggerKeyDown(e, 'stories')}
+            >
+              {t('stories')} {chevron(panel === 'stories')}
+            </button>
+          </div>
+
+          {/* Plan: a direct CTA, not a disclosure toggle — it already works
+              as the site's primary conversion action, and turning it into
+              a dropdown would slow that down for no real gain. */}
+          <Link
+            ref={el => { triggerRefs.current.plan = el }}
+            href="/plan-a-trip" onClick={close}
+            onKeyDown={e => handleTriggerKeyDown(e, 'plan')}
+            className="inline-flex items-center bg-action hover:bg-action-hover text-cream font-display font-bold uppercase tracking-[0.10em] rounded-full transition-colors whitespace-nowrap text-[14px] px-5 py-2.5 ml-2"
+          >
+            {t('planATrip')}
+          </Link>
         </nav>
 
         {/* Right cluster */}
@@ -301,22 +467,15 @@ export default function Nav() {
           <div className="hidden lg:flex"><ThemeToggle /></div>
 
           <NavUserButton close={close} />
-
-          {/* Plan a Trip — visible on BOTH mobile and desktop */}
-          <Link href="/plan-a-trip" onClick={close}
-            className="inline-flex items-center bg-action hover:bg-action-hover text-cream font-display font-bold uppercase tracking-[0.10em] rounded-full transition-all hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap
-              text-[14px] px-4 py-2 ml-1
-              lg:text-[14px] lg:px-5 lg:py-2.5 lg:ml-2">
-            {t('planATrip')}
-          </Link>
         </div>
       </div>
 
-      {/* ══ DESKTOP FULL MENU OVERLAY (hamburger) ══════════════════════════════ */}
+      {/* ══ DESKTOP FULL MENU OVERLAY (hamburger) — About, Contact, Sign in ═══ */}
       {menuOpen && (
         <div
           className="hidden lg:block absolute top-full left-0 w-full bg-nav-mega z-50 overlay-panel overflow-y-auto"
           style={{ maxHeight: 'calc(100vh - 66px)', boxShadow: '0 24px 64px rgba(0,0,0,0.45)' }}
+          onKeyDown={e => { if (e.key === 'Escape') close() }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
 
@@ -359,26 +518,29 @@ export default function Nav() {
                 </Link>
               </div>
 
-              {/* Column 2: Guides by type */}
+              {/* Column 2: Site */}
               <div>
-                <p className="font-display font-bold text-lg text-cream mb-6">Browse by Type</p>
+                <p className="font-display font-bold text-lg text-cream mb-6">Site</p>
                 <div className="space-y-2">
                   {[
-                    { label: 'Safari and Wildlife',    exp: 'Safari'          },
-                    { label: 'Historical Sites',       exp: 'Historical Sites'},
-                    { label: 'Beach and Islands',      exp: 'Beach'           },
-                    { label: 'Mountain and Hiking',    exp: 'Hiking'          },
-                    { label: 'Cultural Experiences',   exp: 'Culture'         },
-                    { label: 'Food and Markets',       exp: 'Food'            },
-                    { label: 'City Breaks',            exp: 'City'            },
-                    { label: 'UNESCO Heritage Sites',  exp: 'UNESCO'          },
-                  ].map(t => (
-                    <Link key={t.exp} href={`/search?exp=${encodeURIComponent(t.exp)}`} onClick={close}
+                    { label: 'About MyAfroWaka', href: '/about'   },
+                    { label: 'Contact Us',       href: '/contact' },
+                    { label: 'Travel Guides',    href: '/guides'  },
+                    { label: 'Search',           href: '/search'  },
+                  ].map(l => (
+                    <Link key={l.href} href={l.href} onClick={close}
                       className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-cream/75 hover:text-cream hover:bg-white/5 transition-colors font-sans text-[14px]">
                       <span className="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0 opacity-60"/>
-                      {t.label}
+                      {l.label}
                     </Link>
                   ))}
+                  {status !== 'authenticated' && (
+                    <Link href="/login" onClick={close}
+                      className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-cream/75 hover:text-cream hover:bg-white/5 transition-colors font-sans text-[14px]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0 opacity-60"/>
+                      Sign In
+                    </Link>
+                  )}
                 </div>
               </div>
 
@@ -386,12 +548,7 @@ export default function Nav() {
               <div>
                 <p className="font-display font-bold text-lg text-cream mb-6">Latest Guides</p>
                 <div className="space-y-4">
-                  {[
-                    { title: 'Pyramids of Giza: The Complete Guide',     tag: 'Egypt',    slug: 'pyramids-of-giza',                 img: 'https://images.unsplash.com/photo-1736443830251-dda3cb6df76c?auto=format&fit=crop&w=280&q=80'  },
-                    { title: 'Bwindi: Mountain Gorilla Trekking Guide',  tag: 'Uganda',   slug: 'bwindi-impenetrable-national-park', img: 'https://images.unsplash.com/photo-1673624522244-8de0d50b8492?auto=format&fit=crop&w=280&q=80'  },
-                    { title: 'Table Mountain: Cape Town Complete Guide', tag: 'South Africa', slug: 'table-mountain',               img: 'https://images.unsplash.com/photo-1746876269545-c23ecff55722?auto=format&fit=crop&w=280&q=80'  },
-                    { title: 'Serengeti: The Great Migration Guide',     tag: 'Tanzania', slug: 'serengeti-national-park',           img: 'https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=280&q=80'  },
-                  ].map(a => (
+                  {FEATURED_ATTRACTIONS.map(a => (
                     <Link key={a.slug} href={`/attractions/${a.slug}`} onClick={close}
                       className="group flex gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors">
                       <div className="relative w-20 h-14 rounded-xl overflow-hidden shrink-0">
@@ -418,9 +575,10 @@ export default function Nav() {
       {/* ══ MEGA — DESTINATIONS ══════════════════════════════════════════════════ */}
       {panel === 'destinations' && (
         <div
-          className="absolute top-full left-0 w-full bg-white dark:bg-nav-dropdown border-b border-line dark:border-white/8 mega-panel"
+          id="mega-destinations" ref={panelRef} role="region" aria-label={t('destinations')}
+          className="hidden lg:block absolute top-full left-0 w-full bg-white dark:bg-nav-dropdown border-b border-line dark:border-white/8 mega-panel"
           style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
-          onMouseEnter={keepOpen} onMouseLeave={hoverClose}
+          onMouseEnter={keepOpen} onMouseLeave={hoverClose} onKeyDown={handlePanelKeyDown}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
             <div className="grid grid-cols-12 gap-8">
@@ -470,12 +628,13 @@ export default function Nav() {
         </div>
       )}
 
-      {/* ══ MEGA — GUIDES ════════════════════════════════════════════════════════ */}
-      {panel === 'media' && (
+      {/* ══ MEGA — ATTRACTIONS ═══════════════════════════════════════════════════ */}
+      {panel === 'attractions' && (
         <div
-          className="absolute top-full left-0 w-full bg-white dark:bg-nav-dropdown border-b border-line dark:border-white/8 mega-panel"
+          id="mega-attractions" ref={panelRef} role="region" aria-label={t('attractions')}
+          className="hidden lg:block absolute top-full left-0 w-full bg-white dark:bg-nav-dropdown border-b border-line dark:border-white/8 mega-panel"
           style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
-          onMouseEnter={keepOpen} onMouseLeave={hoverClose}
+          onMouseEnter={keepOpen} onMouseLeave={hoverClose} onKeyDown={handlePanelKeyDown}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
             <div className="grid grid-cols-12 gap-8">
@@ -484,21 +643,12 @@ export default function Nav() {
               <div className="col-span-3">
                 <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Type</p>
                 <ul className="space-y-2">
-                  {[
-                    { label: 'Safari and Wildlife',   exp: 'Safari'           },
-                    { label: 'Historical Sites',      exp: 'Historical Sites' },
-                    { label: 'Beach and Islands',     exp: 'Beach'            },
-                    { label: 'Mountain and Hiking',   exp: 'Hiking'           },
-                    { label: 'Cultural Experiences',  exp: 'Culture'          },
-                    { label: 'Food and Markets',      exp: 'Food'             },
-                    { label: 'City Breaks',           exp: 'City'             },
-                    { label: 'UNESCO Heritage Sites', exp: 'UNESCO'           },
-                  ].map(t => (
-                    <li key={t.exp}>
-                      <Link href={`/search?exp=${encodeURIComponent(t.exp)}`} onClick={close}
+                  {ATTRACTION_TYPES.map(item => (
+                    <li key={item.exp}>
+                      <Link href={`/search?exp=${encodeURIComponent(item.exp)}`} onClick={close}
                         className="flex items-center gap-2 font-sans text-[14px] text-charcoal/70 dark:text-cream/65 hover:text-crimson dark:hover:text-crimson-300 transition-colors py-0.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0 opacity-60"/>
-                        {t.label}
+                        {item.label}
                       </Link>
                     </li>
                   ))}
@@ -509,38 +659,23 @@ export default function Nav() {
               <div className="col-span-3 border-l border-line dark:border-white/8 pl-8">
                 <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Region</p>
                 <ul className="space-y-2">
-                  {[
-                    { label: 'East Africa',          href: '/search?region=East+Africa'          },
-                    { label: 'West Africa',          href: '/search?region=West+Africa'          },
-                    { label: 'North Africa',         href: '/search?region=North+Africa'         },
-                    { label: 'Southern Africa',      href: '/search?region=Southern+Africa'      },
-                    { label: 'Central Africa',       href: '/search?region=Central+Africa'       },
-                    { label: 'Indian Ocean Islands', href: '/search?region=Indian+Ocean+Islands' },
-                  ].map(r => (
-                    <li key={r.label}>
+                  {REGIONS.map(r => (
+                    <li key={r.region}>
                       <Link href={r.href} onClick={close}
                         className="font-sans text-[14px] text-charcoal/70 dark:text-cream/65 hover:text-crimson dark:hover:text-crimson-300 transition-colors block py-0.5">
-                        {r.label}
+                        {r.region}
                       </Link>
                     </li>
                   ))}
                 </ul>
-                <Link href="/search" onClick={close}
-                  className="mt-5 inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
-                  All destinations
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                </Link>
+                {viewAllLink('/search', 'All attractions')}
               </div>
 
               {/* Col 3+4: Featured guides */}
               <div className="col-span-6 border-l border-line dark:border-white/8 pl-8">
                 <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Featured Guides</p>
                 <div className="space-y-3">
-                  {[
-                    { title: 'Pyramids of Giza: The Complete Guide',    tag: 'Egypt',    slug: 'pyramids-of-giza',                 img: 'https://images.unsplash.com/photo-1736443830251-dda3cb6df76c?auto=format&fit=crop&w=280&q=80'  },
-                    { title: 'Bwindi: Mountain Gorilla Trekking Guide', tag: 'Uganda',   slug: 'bwindi-impenetrable-national-park', img: 'https://images.unsplash.com/photo-1673624522244-8de0d50b8492?auto=format&fit=crop&w=280&q=80'  },
-                    { title: 'Serengeti: The Great Migration Guide',    tag: 'Tanzania', slug: 'serengeti-national-park',           img: 'https://images.unsplash.com/photo-1542729841-c5af4aed2152?auto=format&fit=crop&w=280&q=80'  },
-                  ].map(a => (
+                  {FEATURED_ATTRACTIONS.map(a => (
                     <Link key={a.slug} href={`/attractions/${a.slug}`} onClick={close}
                       className="group flex items-center gap-4 p-3 rounded-xl hover:bg-sand dark:hover:bg-white/5 transition-colors">
                       <div className="relative w-20 h-14 rounded-xl overflow-hidden shrink-0">
@@ -567,9 +702,64 @@ export default function Nav() {
         </div>
       )}
 
+      {/* ══ MEGA — STORIES ═══════════════════════════════════════════════════════ */}
+      {panel === 'stories' && (
+        <div
+          id="mega-stories" ref={panelRef} role="region" aria-label={t('stories')}
+          className="hidden lg:block absolute top-full left-0 w-full bg-white dark:bg-nav-dropdown border-b border-line dark:border-white/8 mega-panel"
+          style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
+          onMouseEnter={keepOpen} onMouseLeave={hoverClose} onKeyDown={handlePanelKeyDown}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+            <div className="grid grid-cols-12 gap-8">
+
+              {/* Col 1: Categories */}
+              <div className="col-span-4">
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Category</p>
+                <ul className="space-y-2">
+                  {STORY_CATEGORIES.map(c => (
+                    <li key={c.href}>
+                      <Link href={c.href} onClick={close}
+                        className="flex items-center gap-2 font-sans text-[14px] text-charcoal/70 dark:text-cream/65 hover:text-crimson dark:hover:text-crimson-300 transition-colors py-0.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0 opacity-60"/>
+                        {c.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                {viewAllLink('/blog', 'All stories')}
+              </div>
+
+              {/* Col 2+3: Featured stories */}
+              <div className="col-span-8 border-l border-line dark:border-white/8 pl-8">
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Latest From the Journal</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {FEATURED_STORIES.map(s => (
+                    <Link key={s.slug} href={`/blog/${s.slug}`} onClick={close}
+                      className="group flex items-center gap-4 p-3 rounded-xl hover:bg-sand dark:hover:bg-white/5 transition-colors">
+                      <div className="relative w-20 h-14 rounded-xl overflow-hidden shrink-0">
+                        <Image src={s.img} alt={s.title} fill className="object-cover"/>
+                      </div>
+                      <div>
+                        <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-crimson mb-1">{s.tag}</p>
+                        <p className="font-display font-semibold text-[14px] text-charcoal/80 dark:text-cream/75 group-hover:text-crimson transition-colors leading-snug">{s.title}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                <div className="mt-5 pt-4 border-t border-line dark:border-white/8">
+                  <p className="font-sans text-[14px] text-charcoal/40 dark:text-cream/35">Perspectives, dispatches, and stories from across the continent.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ══ MOBILE DRAWER ══════════════════════════════════════════════════════ */}
       {mobile && (
-        <div className="lg:hidden border-t border-white/10 bg-nav-mobile max-h-[80vh] overflow-y-auto">
+        <div className="lg:hidden border-t border-white/10 bg-nav-mobile max-h-[80vh] overflow-y-auto"
+          onKeyDown={e => { if (e.key === 'Escape') close() }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
             <form action="/search" method="GET" className="py-4">
@@ -587,8 +777,9 @@ export default function Nav() {
             {/* Destinations accordion */}
             <div className="border-b border-white/10">
               <button onClick={() => setMobileAcc(mobileAcc === 'destinations' ? null : 'destinations')}
+                aria-expanded={mobileAcc === 'destinations'}
                 className="w-full flex items-center justify-between px-2 py-4 text-[15px] font-display font-semibold text-cream/85">
-                Destinations {chevron(mobileAcc === 'destinations')}
+                {t('destinations')} {chevron(mobileAcc === 'destinations')}
               </button>
               {mobileAcc === 'destinations' && (
                 <div className="border-t border-white/8">
@@ -602,15 +793,67 @@ export default function Nav() {
               )}
             </div>
 
+            {/* Attractions accordion */}
+            <div className="border-b border-white/10">
+              <button onClick={() => setMobileAcc(mobileAcc === 'attractions' ? null : 'attractions')}
+                aria-expanded={mobileAcc === 'attractions'}
+                className="w-full flex items-center justify-between px-2 py-4 text-[15px] font-display font-semibold text-cream/85">
+                {t('attractions')} {chevron(mobileAcc === 'attractions')}
+              </button>
+              {mobileAcc === 'attractions' && (
+                <div className="border-t border-white/8">
+                  {ATTRACTION_TYPES.map(item => (
+                    <Link key={item.exp} href={`/search?exp=${encodeURIComponent(item.exp)}`} onClick={close}
+                      className="flex items-center gap-3 pl-6 pr-4 py-3 text-sm text-cream/60 hover:text-cream transition-colors border-b border-white/5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0 opacity-60"/>{item.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Events — plain link, Coming Soon */}
+            <Link href="/events" onClick={close}
+              className="flex items-center justify-between px-2 py-4 text-[15px] font-display font-semibold text-cream/85 border-b border-white/10">
+              {t('events')}
+              <span className="font-sans text-[14px] uppercase tracking-[0.06em] text-gold-400/70 border border-gold-400/25 rounded-full px-1.5 py-0.5 leading-none">
+                {t('comingSoon')}
+              </span>
+            </Link>
+
+            {/* Stories accordion */}
+            <div className="border-b border-white/10">
+              <button onClick={() => setMobileAcc(mobileAcc === 'stories' ? null : 'stories')}
+                aria-expanded={mobileAcc === 'stories'}
+                className="w-full flex items-center justify-between px-2 py-4 text-[15px] font-display font-semibold text-cream/85">
+                {t('stories')} {chevron(mobileAcc === 'stories')}
+              </button>
+              {mobileAcc === 'stories' && (
+                <div className="border-t border-white/8">
+                  {STORY_CATEGORIES.map(c => (
+                    <Link key={c.href} href={c.href} onClick={close}
+                      className="flex items-center gap-3 pl-6 pr-4 py-3 text-sm text-cream/60 hover:text-cream transition-colors border-b border-white/5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0 opacity-60"/>{c.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* About / Contact — secondary, still reachable */}
             {[
-              { label: 'Guides',   href: '/attractions' },
-              { label: 'Blog',     href: '/blog'   },
-              { label: 'About',    href: '/about'  },
-              { label: 'Contact',  href: '/contact'},
+              { label: t('about'),   href: '/about'   },
+              { label: t('contact'), href: '/contact' },
             ].map(i => (
               <Link key={i.label} href={i.href} onClick={close}
-                className="flex px-2 py-4 text-[15px] font-display font-semibold text-cream/85 border-b border-white/10">{i.label}</Link>
+                className="flex px-2 py-3.5 text-sm font-sans text-cream/55 hover:text-cream/85 transition-colors border-b border-white/10">{i.label}</Link>
             ))}
+
+            {/* Plan a Trip — prominent CTA */}
+            <Link href="/plan-a-trip" onClick={close}
+              className="flex items-center justify-center gap-2 my-4 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] py-3.5 rounded-xl transition-colors">
+              {t('planATrip')}
+            </Link>
 
             <div className="flex items-center justify-between px-2 py-4 border-b border-white/10">
               {/* Mobile auth: session-aware */}

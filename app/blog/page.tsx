@@ -26,9 +26,9 @@ export const metadata: Metadata = {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function BlogPage(
-  { searchParams }: { searchParams: Promise<{ page?: string }> }
+  { searchParams }: { searchParams: Promise<{ page?: string; category?: string }> }
 ) {
-  const { page: pageParam } = await searchParams
+  const { page: pageParam, category } = await searchParams
   const page    = Math.max(1, parseInt(pageParam ?? '1', 10) || 1)
   const fetched = await client.fetch<BlogPost[]>(ALL_POSTS_QUERY).catch(() => [] as BlogPost[])
   const allPosts: BlogPost[] = fetched.length > 0 ? fetched : FALLBACK_POSTS
@@ -99,7 +99,7 @@ export default async function BlogPage(
       {/* ── Body ─────────────────────────────────────────────────────── */}
       <div className="bg-cream dark-flip-bg min-h-[40vh]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-          <BlogGrid posts={posts} />
+          <BlogGrid posts={posts} initialCategory={category} />
 
           {/* ── Pagination ─────────────────────────────────────────────── */}
           {totalPages > 1 && (
