@@ -9,5 +9,6 @@ import { comment } from './comment'
 import { userRole } from './userRole'
 import { post } from './post'
 import { sourcedImage } from './sourcedImage'
+import { event } from './event'
 
-export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, savedTrip, comment, userRole, post, sourcedImage]
+export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, savedTrip, comment, userRole, post, sourcedImage, event]

@@ -186,6 +186,70 @@ export const ALL_ATTRACTIONS_QUERY = `
   }
 `
 
+// ── Events (Session 3.1 schema; consumed starting Session 3.2) ─────────────
+
+export const EVENT_BY_SLUG_QUERY = `
+  *[_type == "event" && slug.current == $slug && contentStatus == "Published"][0]{
+    _id,
+    eventId,
+    name,
+    localName,
+    heroImage,
+    shortDescription,
+    fullDescription,
+    category,
+    experienceTags,
+    dateType,
+    startDate,
+    endDate,
+    estimatedTiming,
+    isAnnual,
+    verificationStatus,
+    verifiedBy,
+    verificationSourceUrl,
+    verificationDate,
+    cancelledNote,
+    venue,
+    addressDirections,
+    latitude,
+    longitude,
+    gettingThere,
+    whereToStay,
+    costEstimate,
+    nearestAirportIATA,
+    suitableFor,
+    culturalEtiquette,
+    organizerName,
+    organizerUrl,
+    officialEventUrl,
+    metaTitle,
+    metaDescription,
+    "country": country->{ name, "slug": slug.current, countryCode },
+    "city": city->{ name, "slug": slug.current }
+  }
+`
+
+export const ALL_EVENT_SLUGS_QUERY = `
+  *[_type == "event" && contentStatus == "Published"]{ "slug": slug.current }
+`
+
+export const ALL_EVENTS_QUERY = `
+  *[_type == "event" && contentStatus == "Published"] | order(startDate asc) {
+    name,
+    "slug": slug.current,
+    heroImage,
+    shortDescription,
+    category,
+    dateType,
+    startDate,
+    endDate,
+    estimatedTiming,
+    verificationStatus,
+    "country": country->{ name, "slug": slug.current, countryCode },
+    "city": city->{ name }
+  }
+`
+
 export const DESTINATION_BY_SLUG_QUERY = `
   *[_type == "country" && slug.current == $slug][0]{
     name,
