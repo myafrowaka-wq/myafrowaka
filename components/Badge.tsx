@@ -10,7 +10,7 @@ export function Badge({ variant, children }: BadgeProps) {
     tag:      'bg-ochre-050 text-ochre-700 border border-ochre-200',
   }
   return (
-    <span className={`inline-flex items-center gap-1 text-xs font-inter font-bold uppercase tracking-wider px-3 py-1 rounded-full ${styles[variant]}`}>
+    <span className={`inline-flex items-center gap-1 text-xs font-sans font-bold uppercase tracking-wider px-3 py-1 rounded-full ${styles[variant]}`}>
       {children}
     </span>
   )

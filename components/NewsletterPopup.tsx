@@ -47,7 +47,7 @@ export function NewsletterPopup() {
         </button>
 
         <div className="flex items-center gap-2 mb-2">
-          <span className="font-inter text-[14px] uppercase tracking-[0.18em] text-gold-400">MyAfroWaka</span>
+          <span className="font-sans text-[14px] uppercase tracking-[0.18em] text-gold-400">MyAfroWaka</span>
         </div>
         <h3 className="font-display font-bold text-[18px] text-cream leading-snug pr-6">
           Africa in Your Inbox Every Week
@@ -87,7 +87,7 @@ export function NewsletterPopup() {
             </button>
           </form>
         )}
-        <p className="font-inter text-[14px] text-charcoal/30 text-center mt-3">
+        <p className="font-sans text-[14px] text-charcoal/30 text-center mt-3">
           No spam. Unsubscribe any time.
         </p>
       </div>

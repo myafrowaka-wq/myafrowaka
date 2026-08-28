@@ -1,5 +1,5 @@
 ﻿import type { Metadata } from "next";
-import { Poppins, Outfit, Inter } from "next/font/google";
+import { Familjen_Grotesk, Outfit } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -12,23 +12,18 @@ import { CustomCursor } from "@/components/CustomCursor";
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 
-const poppins = Poppins({
+const familjenGrotesk = Familjen_Grotesk({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["600", "700"],
 });
 
 const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
+  weight: ["400", "600"],
 });
 
 export const metadata: Metadata = {
@@ -94,7 +89,7 @@ export default async function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${poppins.variable} ${outfit.variable} ${inter.variable}`}
+      className={`${familjenGrotesk.variable} ${outfit.variable}`}
     >
       <body className="min-h-screen flex flex-col">
         <a href="#main-content"

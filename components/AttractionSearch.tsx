@@ -31,7 +31,7 @@ export function AttractionSearch({ initialQ }: { initialQ?: string }) {
         />
       </div>
       <button type="submit"
-        className="shrink-0 bg-crimson hover:bg-crimson/85 text-cream font-inter text-[14px] uppercase tracking-[0.13em] px-5 py-3.5 rounded-r-xl transition-colors">
+        className="shrink-0 bg-crimson hover:bg-crimson/85 text-cream font-sans text-[14px] uppercase tracking-[0.13em] px-5 py-3.5 rounded-r-xl transition-colors">
         Search
       </button>
     </form>

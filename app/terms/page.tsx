@@ -10,14 +10,14 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
-      <nav className="font-inter text-xs uppercase tracking-wider text-charcoal/40 mb-8 flex gap-1">
+      <nav className="font-sans text-xs uppercase tracking-wider text-charcoal/40 mb-8 flex gap-1">
         <Link href="/" className="hover:text-ochre-600 transition-colors">Home</Link>
         <span>/</span>
         <span className="text-charcoal">Terms of Use</span>
       </nav>
 
       <h1 className="font-display text-4xl text-charcoal mb-2">Terms of Use</h1>
-      <p className="font-inter text-xs text-charcoal/40 uppercase tracking-wider mb-8">Last updated: June 2026</p>
+      <p className="font-sans text-xs text-charcoal/40 uppercase tracking-wider mb-8">Last updated: June 2026</p>
 
       <div className="prose prose-lg max-w-none prose-headings:font-display prose-headings:text-charcoal prose-h2:text-2xl prose-p:text-charcoal/80 prose-p:leading-relaxed prose-li:text-charcoal/80">
         <p>

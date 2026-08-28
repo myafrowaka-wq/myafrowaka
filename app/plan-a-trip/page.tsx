@@ -62,7 +62,7 @@ export default function PlanATripPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-ink/60 to-ink/97"/>
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 w-full pb-14 pt-28 text-center">
-          <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-gold-400 mb-3">Start Here</p>
+          <p className="font-sans text-[14px] uppercase tracking-[0.22em] text-gold-400 mb-3">Start Here</p>
           <h1
             className="font-display font-extrabold text-cream mb-4"
             style={{ fontSize: 'clamp(32px, 5vw, 62px)', lineHeight: '0.95', letterSpacing: '-0.025em' }}
@@ -209,17 +209,17 @@ export default function PlanATripPage() {
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link href="/search"
-              className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
+              className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
               Browse all attractions
             </Link>
             <span className="text-charcoal/20">|</span>
             <Link href="/guides"
-              className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
+              className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
               Read travel guides
             </Link>
             <span className="text-charcoal/20">|</span>
             <Link href="/blog"
-              className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
+              className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
               Stories from the continent
             </Link>
           </div>

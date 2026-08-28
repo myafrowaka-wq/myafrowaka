@@ -130,7 +130,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
             <Link
               key={item.id}
               href={item.href}
-              className="flex items-center gap-1.5 shrink-0 bg-white/8 hover:bg-white/14 text-cream/65 hover:text-cream border border-white/10 font-inter text-[14px] uppercase tracking-[0.12em] px-3 py-2 rounded-full transition-all"
+              className="flex items-center gap-1.5 shrink-0 bg-white/8 hover:bg-white/14 text-cream/65 hover:text-cream border border-white/10 font-sans text-[14px] uppercase tracking-[0.12em] px-3 py-2 rounded-full transition-all"
             >
               <span className="w-3 h-3 text-gold-400">{item.icon}</span>
               {item.label}
@@ -157,14 +157,14 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
               <p className="font-display font-bold text-cream text-[14px] leading-none group-hover:text-gold-300 transition-colors" style={{ letterSpacing: '-0.015em' }}>
                 MyAfroWaka
               </p>
-              <p className="font-inter text-[14px] uppercase tracking-[0.18em] text-cream/55 mt-0.5">Dashboard</p>
+              <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-cream/55 mt-0.5">Dashboard</p>
             </div>
           </Link>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 px-3 py-5">
-          <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-cream/50 px-2 mb-3">Navigation</p>
+          <p className="font-sans text-[14px] uppercase tracking-[0.22em] text-cream/50 px-2 mb-3">Navigation</p>
           <div className="space-y-0.5">
             {visibleItems.map(item => (
               <Link
@@ -177,7 +177,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
                 </span>
                 <span className="font-sans text-[14px] flex-1">{item.label}</span>
                 {item.badge != null && (
-                  <span className="bg-crimson text-cream font-inter text-[14px] font-bold min-w-[20px] h-[20px] rounded-full flex items-center justify-center px-1">
+                  <span className="bg-crimson text-cream font-sans text-[14px] font-bold min-w-[20px] h-[20px] rounded-full flex items-center justify-center px-1">
                     {item.badge}
                   </span>
                 )}
@@ -187,7 +187,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
 
           {/* Divider */}
           <div className="border-t border-white/8 my-5"/>
-          <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-cream/50 px-2 mb-3">Browse</p>
+          <p className="font-sans text-[14px] uppercase tracking-[0.22em] text-cream/50 px-2 mb-3">Browse</p>
           <div className="space-y-0.5">
             {[
               { label: 'All Attractions', href: '/search' },
@@ -207,7 +207,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
           {atLeast(role, 'admin') && (
             <>
               <div className="border-t border-white/8 my-5"/>
-              <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-crimson/70 px-2 mb-3">Admin</p>
+              <p className="font-sans text-[14px] uppercase tracking-[0.22em] text-crimson/70 px-2 mb-3">Admin</p>
               <div className="space-y-0.5">
                 {[
                   { label: 'New Article',    href: '/user-dashboard/admin/new-post'       },
@@ -238,12 +238,12 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
                 <p className="font-display font-semibold text-cream text-[14px] truncate" style={{ letterSpacing: '-0.01em' }}>
                   {userName || 'User'}
                 </p>
-                <p className="font-inter text-[14px] text-cream/55 truncate">{userEmail}</p>
+                <p className="font-sans text-[14px] text-cream/55 truncate">{userEmail}</p>
               </div>
             </div>
 
             {/* Role badge */}
-            <span className={`inline-block font-inter text-[14px] uppercase tracking-[0.14em] px-2.5 py-1 rounded-full mb-3 ${rm.color}`}>
+            <span className={`inline-block font-sans text-[14px] uppercase tracking-[0.14em] px-2.5 py-1 rounded-full mb-3 ${rm.color}`}>
               {rm.label}
             </span>
 
@@ -252,7 +252,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
               <button type="submit"
                 className="w-full flex items-center gap-2 text-cream/35 hover:text-cream/70 transition-colors group py-1">
                 <span className="w-4 h-4 group-hover:text-crimson transition-colors">{icons.signout}</span>
-                <span className="font-inter text-[14px] uppercase tracking-[0.12em]">Sign Out</span>
+                <span className="font-sans text-[14px] uppercase tracking-[0.12em]">Sign Out</span>
               </button>
             </form>
           </div>

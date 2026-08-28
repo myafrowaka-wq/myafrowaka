@@ -150,7 +150,7 @@ function SearchInner() {
       {/* Top search bar */}
       <div className="bg-sand dark-flip-surf border-b border-line dark-flip-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          <nav className="font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted mb-4 flex gap-1">
+          <nav className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted mb-4 flex gap-1">
             <Link href="/" className="hover:text-crimson transition-colors">Home</Link>
             <span>/</span>
             <span className="text-charcoal dark-flip-text">Search</span>
@@ -183,23 +183,23 @@ function SearchInner() {
           {/* Active filter chips */}
           {hasFilters && (
             <div className="flex flex-wrap gap-2 mt-4 items-center">
-              <span className="font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted">{ts('filters')}:</span>
+              <span className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted">{ts('filters')}:</span>
               {region && (
                 <button onClick={() => setParam('region', '')}
-                  className="flex items-center gap-1.5 bg-crimson/10 text-crimson font-inter text-[14px] uppercase tracking-[0.1em] px-3 py-1.5 rounded-full border border-crimson/20 hover:bg-crimson/20 transition-colors">
+                  className="flex items-center gap-1.5 bg-crimson/10 text-crimson font-sans text-[14px] uppercase tracking-[0.1em] px-3 py-1.5 rounded-full border border-crimson/20 hover:bg-crimson/20 transition-colors">
                   {region}
                   <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
               )}
               {exp && (
                 <button onClick={() => setParam('exp', '')}
-                  className="flex items-center gap-1.5 bg-gold-400/10 text-gold-600 font-inter text-[14px] uppercase tracking-[0.1em] px-3 py-1.5 rounded-full border border-gold-400/20 hover:bg-gold-400/20 transition-colors">
+                  className="flex items-center gap-1.5 bg-gold-400/10 text-gold-600 font-sans text-[14px] uppercase tracking-[0.1em] px-3 py-1.5 rounded-full border border-gold-400/20 hover:bg-gold-400/20 transition-colors">
                   {exp}
                   <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
               )}
               <button onClick={clearAll}
-                className="font-inter text-[14px] uppercase tracking-[0.12em] text-charcoal/55 hover:text-crimson transition-colors underline underline-offset-2">
+                className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/55 hover:text-crimson transition-colors underline underline-offset-2">
                 {ts('clearAll')}
               </button>
             </div>
@@ -216,7 +216,7 @@ function SearchInner() {
             <div className="bg-white dark-flip-card border border-line dark-flip-border rounded-2xl overflow-hidden">
 
               <div className="px-5 py-4 border-b border-line dark-flip-border">
-                <p className="font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted">{ts('filterResults')}</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted">{ts('filterResults')}</p>
               </div>
 
               <div className="px-5">
@@ -262,7 +262,7 @@ function SearchInner() {
 
           {/* ── Results ── */}
           <div className="flex-1 min-w-0">
-            <p className="font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted mb-6">
+            <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted mb-6">
               {loading ? 'Loading...' : `${filtered.length} attraction${filtered.length !== 1 ? 's' : ''} found`}
             </p>
 
@@ -284,7 +284,7 @@ function SearchInner() {
                 <p className="font-display font-bold text-3xl text-charcoal/20 dark-flip-muted mb-3">{ts('noResults')}</p>
                 <p className="font-sans text-sm text-charcoal/35 dark-flip-muted mb-6">{ts('tryDifferent')}</p>
                 <button onClick={clearAll}
-                  className="inline-flex items-center gap-2 border border-line dark-flip-border text-charcoal/50 dark-flip-muted hover:text-crimson hover:border-crimson font-inter text-[14px] uppercase tracking-[0.12em] px-6 py-3 rounded-full transition-colors">
+                  className="inline-flex items-center gap-2 border border-line dark-flip-border text-charcoal/50 dark-flip-muted hover:text-crimson hover:border-crimson font-sans text-[14px] uppercase tracking-[0.12em] px-6 py-3 rounded-full transition-colors">
                   {ts('clearAllFilters')}
                 </button>
               </div>
@@ -305,7 +305,7 @@ function SearchInner() {
                           className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
                         />
                         {typeLabel && (
-                          <span className="absolute top-3 left-3 bg-ink/75 backdrop-blur font-inter text-[14px] uppercase tracking-[0.12em] text-cream/90 px-2.5 py-0.5 rounded-full">
+                          <span className="absolute top-3 left-3 bg-ink/75 backdrop-blur font-sans text-[14px] uppercase tracking-[0.12em] text-cream/90 px-2.5 py-0.5 rounded-full">
                             {typeLabel}
                           </span>
                         )}
@@ -316,7 +316,7 @@ function SearchInner() {
                           style={{ letterSpacing: '-0.012em' }}>
                           {a.name}
                         </h3>
-                        <p className="font-inter text-[14px] text-charcoal/55 dark-flip-muted uppercase tracking-[0.1em] mb-3">
+                        <p className="font-sans text-[14px] text-charcoal/55 dark-flip-muted uppercase tracking-[0.1em] mb-3">
                           {[a.city?.name, a.country?.name].filter(Boolean).join(' · ')}
                         </p>
                         {a.editorialSummary && (

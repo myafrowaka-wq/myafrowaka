@@ -81,7 +81,7 @@ export function DashTrips() {
           Use the trip planner to map out your next African adventure. Saved plans appear here.
         </p>
         <Link href="/plan-a-trip"
-          className="inline-flex items-center gap-2 bg-ink hover:bg-charcoal text-cream font-inter text-[14px] uppercase tracking-[0.14em] px-5 py-2.5 rounded-full transition-colors">
+          className="inline-flex items-center gap-2 bg-ink hover:bg-charcoal text-cream font-sans text-[14px] uppercase tracking-[0.14em] px-5 py-2.5 rounded-full transition-colors">
           Plan a Trip
         </Link>
       </div>
@@ -96,7 +96,7 @@ export function DashTrips() {
 
           {/* Header bar */}
           <div className="bg-ink px-5 py-4">
-            <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-1">Planned Trip</p>
+            <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-1">Planned Trip</p>
             <p className="font-display font-bold text-cream"
               style={{ fontSize: 'clamp(14px, 1.6vw, 17px)', letterSpacing: '-0.012em' }}>
               {trip.destination}
@@ -137,7 +137,7 @@ export function DashTrips() {
             {trip.interests && trip.interests.length > 0 && (
               <div className="flex flex-wrap gap-1.5 pt-1">
                 {trip.interests.map(i => (
-                  <span key={i} className="font-inter text-[14px] uppercase tracking-[0.12em] bg-gold-50 dark:bg-gold-900/20 text-gold-700 dark:text-gold-400 px-2.5 py-0.5 rounded-full">
+                  <span key={i} className="font-sans text-[14px] uppercase tracking-[0.12em] bg-gold-50 dark:bg-gold-900/20 text-gold-700 dark:text-gold-400 px-2.5 py-0.5 rounded-full">
                     {i}
                   </span>
                 ))}
@@ -146,13 +146,13 @@ export function DashTrips() {
 
             <div className="flex items-center justify-between pt-2 border-t border-line dark-flip-border mt-3">
               <Link href={`/search?q=${encodeURIComponent(trip.destination)}`}
-                className="font-inter text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
+                className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
                 Find attractions &#8594;
               </Link>
               <button
                 onClick={() => deleteTrip(trip._id)}
                 disabled={deleting === trip._id}
-                className="font-inter text-[14px] uppercase tracking-[0.12em] text-charcoal/55 hover:text-crimson transition-colors disabled:opacity-40">
+                className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/55 hover:text-crimson transition-colors disabled:opacity-40">
                 {deleting === trip._id ? 'Removing...' : 'Remove'}
               </button>
             </div>

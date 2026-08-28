@@ -54,7 +54,7 @@ export default async function LoginPage({
               Africa is not a destination.
               <span className="block text-gold-300 italic mt-1">It is a conversation you never want to end.</span>
             </p>
-            <footer className="font-inter text-[14px] uppercase tracking-[0.16em] text-gold-400/70">
+            <footer className="font-sans text-[14px] uppercase tracking-[0.16em] text-gold-400/70">
               MyAfroWaka
             </footer>
           </blockquote>
@@ -108,7 +108,7 @@ export default async function LoginPage({
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-line dark-flip-border"/></div>
             <div className="relative flex justify-center">
-              <span className="bg-cream dark-flip-bg px-3 font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted">
+              <span className="bg-cream dark-flip-bg px-3 font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted">
                 {t('orWithEmail')}
               </span>
             </div>
@@ -169,18 +169,18 @@ export default async function LoginPage({
           {/* ── Demo accounts panel ────────────────────────────────────── */}
           <div className="mt-10 bg-sand dark-flip-surf border border-line dark-flip-border rounded-2xl overflow-hidden">
             <div className="px-5 py-3.5 border-b border-line dark-flip-border">
-              <p className="font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted">
+              <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted">
                 Demo Accounts
               </p>
               <p className="font-sans text-[14px] text-charcoal/55 dark-flip-muted mt-0.5">
-                Try any role. Password for all: <span className="font-inter font-bold text-charcoal dark-flip-text">{DEMO_PASSWORD}</span>
+                Try any role. Password for all: <span className="font-sans font-bold text-charcoal dark-flip-text">{DEMO_PASSWORD}</span>
               </p>
             </div>
             <div className="divide-y divide-line dark-flip-border">
               {DEMO_ACCOUNTS.map(({ email, role }) => (
                 <div key={email} className="flex items-center justify-between px-5 py-3">
-                  <p className="font-inter text-[14px] text-charcoal/65 dark-flip-muted">{email}</p>
-                  <span className="font-inter text-[14px] uppercase tracking-[0.1em] text-charcoal/35 dark-flip-muted">
+                  <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">{email}</p>
+                  <span className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/35 dark-flip-muted">
                     {role}
                   </span>
                 </div>

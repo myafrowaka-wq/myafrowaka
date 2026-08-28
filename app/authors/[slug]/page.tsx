@@ -146,7 +146,7 @@ export default async function AuthorPage(
 
             {/* Info */}
             <div>
-              <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-gold-400 mb-2">
+              <p className="font-sans text-[14px] uppercase tracking-[0.22em] text-gold-400 mb-2">
                 Contributor
               </p>
               <h1
@@ -157,7 +157,7 @@ export default async function AuthorPage(
               </h1>
               <div className="flex items-center gap-2 mt-3 flex-wrap">
                 <span className="text-base">{author.countryFlag}</span>
-                <span className="font-inter text-[14px] uppercase tracking-[0.16em] text-cream/45">
+                <span className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/45">
                   {author.country}
                 </span>
               </div>
@@ -166,7 +166,7 @@ export default async function AuthorPage(
                 {author.expertise.map(tag => (
                   <span
                     key={tag}
-                    className="font-inter text-[14px] uppercase tracking-[0.14em] text-cream/55 border border-white/12 px-3 py-1 rounded-full"
+                    className="font-sans text-[14px] uppercase tracking-[0.14em] text-cream/55 border border-white/12 px-3 py-1 rounded-full"
                   >
                     {tag}
                   </span>
@@ -185,7 +185,7 @@ export default async function AuthorPage(
             {/* ── Bio sidebar ──────────────────────────────────────── */}
             <div className="lg:sticky lg:top-24 space-y-6">
               <div>
-                <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">
+                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">
                   About
                 </p>
                 <p className="font-sans text-[15px] text-charcoal/70 dark-flip-muted leading-[1.8]">
@@ -196,7 +196,7 @@ export default async function AuthorPage(
               {/* Back link */}
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted hover:text-crimson transition-colors"
+                className="inline-flex items-center gap-2 font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted hover:text-crimson transition-colors"
               >
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
@@ -207,7 +207,7 @@ export default async function AuthorPage(
 
             {/* ── Articles ─────────────────────────────────────────── */}
             <div>
-              <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-6">
+              <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-6">
                 Articles
               </p>
 
@@ -236,7 +236,7 @@ export default async function AuthorPage(
                             />
                             {post.category && (
                               <span
-                                className="absolute top-3 left-3 font-inter text-[14px] uppercase tracking-[0.14em] px-2.5 py-1 rounded-full text-cream"
+                                className="absolute top-3 left-3 font-sans text-[14px] uppercase tracking-[0.14em] px-2.5 py-1 rounded-full text-cream"
                                 style={{ backgroundColor: accent + 'ee' }}
                               >
                                 {post.category}
@@ -261,11 +261,11 @@ export default async function AuthorPage(
                             </div>
                             <div className="flex items-center justify-between gap-2">
                               {post.publishedAt && (
-                                <span className="font-inter text-[14px] text-charcoal/30 dark-flip-muted">
+                                <span className="font-sans text-[14px] text-charcoal/30 dark-flip-muted">
                                   {formatDate(post.publishedAt)}
                                 </span>
                               )}
-                              <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors shrink-0">
+                              <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors shrink-0">
                                 Read &#8594;
                               </span>
                             </div>

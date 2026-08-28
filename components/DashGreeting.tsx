@@ -23,7 +23,7 @@ export function DashGreeting({ firstName }: { firstName: string }) {
 
   return (
     <>
-      <p className="font-inter text-[14px] uppercase tracking-[0.24em] text-gold-400/55 mb-1.5">
+      <p className="font-sans text-[14px] uppercase tracking-[0.24em] text-gold-400/55 mb-1.5">
         {date}
       </p>
       <h1

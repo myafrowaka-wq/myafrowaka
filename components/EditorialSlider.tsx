@@ -99,7 +99,7 @@ export function EditorialSlider() {
         <div className="grid lg:grid-cols-2 gap-0 min-h-[580px]">
           <div className="py-20 lg:py-28 pr-0 lg:pr-20 flex flex-col justify-center">
 
-            <p className="font-inter text-[14px] uppercase tracking-[0.24em] text-gold-400/70 mb-5">{slide.tag}</p>
+            <p className="font-sans text-[14px] uppercase tracking-[0.24em] text-gold-400/70 mb-5">{slide.tag}</p>
 
             <h2
               key={`title-${current}`}
@@ -115,14 +115,14 @@ export function EditorialSlider() {
 
             <div className="flex flex-wrap gap-3 mb-12">
               <Link href={`/blog/${slide.slug}`}
-                className="inline-flex items-center gap-2 bg-action hover:bg-action-hover text-cream font-inter text-[14px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-all btn-magnetic">
+                className="inline-flex items-center gap-2 bg-action hover:bg-action-hover text-cream font-sans text-[14px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-all btn-magnetic">
                 Read the Full Article
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
               </Link>
               <Link href={`/destinations/${slide.tagSlug}`}
-                className="inline-flex items-center border border-white/20 hover:border-white/40 text-cream/70 hover:text-cream font-inter text-[14px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-colors">
+                className="inline-flex items-center border border-white/20 hover:border-white/40 text-cream/70 hover:text-cream font-sans text-[14px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-colors">
                 Explore {slide.tag}
               </Link>
             </div>
@@ -147,7 +147,7 @@ export function EditorialSlider() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
                 </svg>
               </button>
-              <span className="font-inter text-[14px] text-cream/22 tabular-nums ml-1">
+              <span className="font-sans text-[14px] text-cream/22 tabular-nums ml-1">
                 {String(current + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
               </span>
             </div>

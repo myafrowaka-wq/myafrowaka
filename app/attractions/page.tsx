@@ -124,7 +124,7 @@ export default async function AttractionsPage({
         />
         <div className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/80 to-ink/50"/>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-24">
-          <p className="font-inter text-[14px] uppercase tracking-[0.22em] text-gold-400/75 mb-5">Destination Guides</p>
+          <p className="font-sans text-[14px] uppercase tracking-[0.22em] text-gold-400/75 mb-5">Destination Guides</p>
           <h1
             className="font-display font-extrabold text-cream mb-6 tracking-hero"
             style={{ fontSize: 'clamp(38px, 4.2vw, 64px)', lineHeight: '0.94' }}
@@ -156,19 +156,19 @@ export default async function AttractionsPage({
           {(q || type) && (
             <div className="mb-6 flex items-center gap-3 flex-wrap">
               {q && (
-                <span className="inline-flex items-center gap-2 font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/50 dark-flip-muted bg-sand dark-flip-surf border border-line dark-flip-border px-3 py-1.5 rounded-full">
+                <span className="inline-flex items-center gap-2 font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/50 dark-flip-muted bg-sand dark-flip-surf border border-line dark-flip-border px-3 py-1.5 rounded-full">
                   &ldquo;{q}&rdquo;
                   <Link href={buildUrl({ q: null })} className="text-crimson hover:text-crimson/70 transition-colors leading-none">&#x2715;</Link>
                 </span>
               )}
               {type && (
-                <span className="inline-flex items-center gap-2 font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/50 dark-flip-muted bg-sand dark-flip-surf border border-line dark-flip-border px-3 py-1.5 rounded-full">
+                <span className="inline-flex items-center gap-2 font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/50 dark-flip-muted bg-sand dark-flip-surf border border-line dark-flip-border px-3 py-1.5 rounded-full">
                   {type}
                   <Link href={buildUrl({ type: null })} className="text-crimson hover:text-crimson/70 transition-colors leading-none">&#x2715;</Link>
                 </span>
               )}
               <Link href="/attractions"
-                className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson/60 hover:text-crimson transition-colors">
+                className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson/60 hover:text-crimson transition-colors">
                 Clear all
               </Link>
             </div>
@@ -181,9 +181,9 @@ export default async function AttractionsPage({
 
           {pageItems.length === 0 ? (
             <div className="text-center py-24">
-              <p className="font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-3">No results</p>
+              <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-3">No results</p>
               <p className="font-sans text-sm text-charcoal/45 dark-flip-muted">Try a different search term or filter.</p>
-              <Link href="/attractions" className="mt-6 inline-flex font-inter text-[14px] uppercase tracking-[0.14em] text-crimson">Browse All Guides</Link>
+              <Link href="/attractions" className="mt-6 inline-flex font-sans text-[14px] uppercase tracking-[0.14em] text-crimson">Browse All Guides</Link>
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5">
@@ -200,7 +200,7 @@ export default async function AttractionsPage({
                         className="object-cover img-editorial img-inner"
                       />
                       {typeLabel && (
-                        <span className="absolute top-3 left-3 bg-ink/75 backdrop-blur font-inter text-[14px] uppercase tracking-[0.13em] text-cream/80 px-2 py-0.5 rounded-full">
+                        <span className="absolute top-3 left-3 bg-ink/75 backdrop-blur font-sans text-[14px] uppercase tracking-[0.13em] text-cream/80 px-2 py-0.5 rounded-full">
                           {typeLabel}
                         </span>
                       )}
@@ -209,11 +209,11 @@ export default async function AttractionsPage({
                       {a.country && (
                         <div className="flex items-center gap-1.5 mb-2">
                           {a.country.flagEmoji && <span className="text-xs">{a.country.flagEmoji}</span>}
-                          <span className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson">{a.country.name}</span>
+                          <span className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson">{a.country.name}</span>
                           {a.city && (
                             <>
                               <span className="text-charcoal/20 dark-flip-muted text-[14px]">&middot;</span>
-                              <span className="font-inter text-[14px] text-charcoal/35 dark-flip-muted">{a.city.name}</span>
+                              <span className="font-sans text-[14px] text-charcoal/35 dark-flip-muted">{a.city.name}</span>
                             </>
                           )}
                         </div>
@@ -228,7 +228,7 @@ export default async function AttractionsPage({
                         </p>
                       )}
                       <div className="mt-4 pt-3 border-t border-line dark-flip-border">
-                        <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
+                        <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
                           Read the guide &#8594;
                         </span>
                       </div>
@@ -252,7 +252,7 @@ export default async function AttractionsPage({
               )}
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
                 <Link key={p} href={buildUrl({ page: p })}
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-inter text-[14px] transition-all
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-sans text-[14px] transition-all
                     ${p === safePage ? 'bg-crimson text-cream border border-crimson' : 'border border-line dark-flip-border text-charcoal/55 dark-flip-muted hover:border-crimson hover:text-crimson'}`}>
                   {p}
                 </Link>

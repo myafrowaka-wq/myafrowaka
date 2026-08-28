@@ -18,7 +18,7 @@ export function Card({ title, country, category, imageUrl, lastVerified, isUNESC
           <img src={imageUrl} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <span className="font-inter text-ochre-text text-xs uppercase tracking-widest">No image yet</span>
+            <span className="font-sans text-ochre-text text-xs uppercase tracking-widest">No image yet</span>
           </div>
         )}
         {isUNESCO && (
@@ -28,7 +28,7 @@ export function Card({ title, country, category, imageUrl, lastVerified, isUNESC
         )}
       </div>
       <div className="p-5">
-        <p className="font-inter text-xs uppercase tracking-widest text-charcoal-300 mb-1">{country} · {category}</p>
+        <p className="font-sans text-xs uppercase tracking-widest text-charcoal-300 mb-1">{country} · {category}</p>
         <h3 className="font-display font-semibold text-lg text-charcoal leading-snug mb-3">{title}</h3>
         {lastVerified && (
           <Badge variant="verified">Verified {lastVerified}</Badge>

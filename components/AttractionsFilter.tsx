@@ -26,7 +26,7 @@ export function AttractionsFilter({ activeType }: { activeType?: string }) {
     <div className="flex flex-wrap gap-2 mb-8">
       <button
         onClick={() => setType(null)}
-        className={`font-inter text-[14px] uppercase tracking-[0.14em] px-4 py-2 rounded-full border transition-all ${
+        className={`font-sans text-[14px] uppercase tracking-[0.14em] px-4 py-2 rounded-full border transition-all ${
           !activeType
             ? 'bg-crimson text-cream border-crimson'
             : 'border-line dark-flip-border text-charcoal/45 dark-flip-muted hover:border-crimson hover:text-crimson'
@@ -38,7 +38,7 @@ export function AttractionsFilter({ activeType }: { activeType?: string }) {
         <button
           key={type}
           onClick={() => setType(activeType === type ? null : type)}
-          className={`font-inter text-[14px] uppercase tracking-[0.14em] px-4 py-2 rounded-full border transition-all ${
+          className={`font-sans text-[14px] uppercase tracking-[0.14em] px-4 py-2 rounded-full border transition-all ${
             activeType === type
               ? 'bg-crimson text-cream border-crimson'
               : 'border-line dark-flip-border text-charcoal/45 dark-flip-muted hover:border-crimson hover:text-crimson'

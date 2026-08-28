@@ -110,7 +110,7 @@ function StatCard({ label, value, icon, bg }: {
         style={{ fontSize: 'clamp(28px, 3vw, 38px)', letterSpacing: '-0.03em', lineHeight: '1' }}>
         {value}
       </p>
-      <p className="font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted mt-2">
+      <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted mt-2">
         {label}
       </p>
     </div>
@@ -229,10 +229,10 @@ export default async function UserDashboardPage() {
                   {ROLE_DESCRIPTIONS[role]}
                 </p>
                 <div className="flex items-center gap-2.5 mt-4 flex-wrap">
-                  <span className={`font-inter text-[14px] uppercase tracking-[0.14em] px-2.5 py-1 rounded-full ${rm.cls}`}>
+                  <span className={`font-sans text-[14px] uppercase tracking-[0.14em] px-2.5 py-1 rounded-full ${rm.cls}`}>
                     {rm.label}
                   </span>
-                  <span className="font-inter text-[14px] text-cream/60 truncate max-w-[200px]">
+                  <span className="font-sans text-[14px] text-cream/60 truncate max-w-[200px]">
                     {user.email}
                   </span>
                 </div>
@@ -306,7 +306,7 @@ export default async function UserDashboardPage() {
             icon={icons.heart}
             aside={saved.length > 0 ? (
               <Link href="/search"
-                className="font-inter text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
+                className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
                 Browse more &#8594;
               </Link>
             ) : undefined}
@@ -324,7 +324,7 @@ export default async function UserDashboardPage() {
                 {t('noSavedDesc')}
               </p>
               <Link href="/search"
-                className="inline-flex items-center gap-2 bg-ink hover:bg-charcoal text-cream font-inter text-[14px] uppercase tracking-[0.14em] px-5 py-2.5 rounded-full transition-colors">
+                className="inline-flex items-center gap-2 bg-ink hover:bg-charcoal text-cream font-sans text-[14px] uppercase tracking-[0.14em] px-5 py-2.5 rounded-full transition-colors">
                 {icons.map}
                 <span>{t('browseToSave')}</span>
               </Link>
@@ -350,7 +350,7 @@ export default async function UserDashboardPage() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                       {typeLabel && (
-                        <span className="absolute top-3 left-3 font-inter text-[14px] uppercase tracking-[0.16em] bg-ink/70 text-cream/90 px-2.5 py-1 rounded-full backdrop-blur-sm">
+                        <span className="absolute top-3 left-3 font-sans text-[14px] uppercase tracking-[0.16em] bg-ink/70 text-cream/90 px-2.5 py-1 rounded-full backdrop-blur-sm">
                           {typeLabel}
                         </span>
                       )}
@@ -363,7 +363,7 @@ export default async function UserDashboardPage() {
                         {a.name}
                       </h3>
                       {a.country && (
-                        <p className="font-inter text-[14px] uppercase tracking-[0.1em] text-charcoal/55 dark-flip-muted">
+                        <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/55 dark-flip-muted">
                           {a.country.name}
                         </p>
                       )}
@@ -387,7 +387,7 @@ export default async function UserDashboardPage() {
             icon={icons.map}
             aside={
               <Link href="/plan-a-trip"
-                className="font-inter text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
+                className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
                 Plan new &#8594;
               </Link>
             }
@@ -414,7 +414,7 @@ export default async function UserDashboardPage() {
           <section id="corrections" className="scroll-mt-8">
             <SectionHead title={t('correctionsInbox')} icon={icons.check}
               aside={
-                <span className="font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted bg-charcoal/6 dark-flip-surf px-3 py-1.5 rounded-full">
+                <span className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted bg-charcoal/6 dark-flip-surf px-3 py-1.5 rounded-full">
                   0 pending
                 </span>
               }
@@ -422,7 +422,7 @@ export default async function UserDashboardPage() {
             <div className="border border-line dark-flip-border rounded-2xl overflow-hidden">
               <div className="bg-sand dark-flip-surf border-b border-line dark-flip-border px-6 py-3 flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-charcoal/15"/>
-                <p className="font-inter text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted">Queue</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted">Queue</p>
               </div>
               <div className="p-10 text-center">
                 <div className="w-12 h-12 rounded-2xl bg-charcoal/6 dark-flip-surf flex items-center justify-center mx-auto mb-4 text-charcoal/25 dark-flip-muted">
@@ -470,7 +470,7 @@ export default async function UserDashboardPage() {
                       Create the attraction record and push it directly to Sanity from here.
                     </p>
                   </div>
-                  <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-crimson bg-crimson/10 px-2.5 py-1 rounded-full w-fit">
+                  <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson bg-crimson/10 px-2.5 py-1 rounded-full w-fit">
                     Admin only
                   </span>
                 </Link>
@@ -487,7 +487,7 @@ export default async function UserDashboardPage() {
                       A guided form for detailed attraction data. Coming soon.
                     </p>
                   </div>
-                  <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-charcoal/55 bg-charcoal/6 px-2.5 py-1 rounded-full w-fit">
+                  <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/55 bg-charcoal/6 px-2.5 py-1 rounded-full w-fit">
                     In Development
                   </span>
                 </div>
@@ -501,7 +501,7 @@ export default async function UserDashboardPage() {
           <section id="articles" className="scroll-mt-8">
             <SectionHead title="Articles and Drafts" icon={icons.pen}
               aside={
-                <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-charcoal/55 dark-flip-muted">
+                <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/55 dark-flip-muted">
                   {articleCount} total
                 </span>
               }
@@ -510,7 +510,7 @@ export default async function UserDashboardPage() {
               <a href="/studio/desk/post"
                 target="_blank" rel="noopener noreferrer"
                 className="group sm:col-span-2 bg-ink hover:bg-charcoal rounded-2xl p-7 transition-colors block">
-                <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-4">Sanity Studio</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-4">Sanity Studio</p>
                 <p className="font-display font-bold text-cream group-hover:text-gold-300 transition-colors mb-1.5"
                   style={{ fontSize: 'clamp(15px, 1.8vw, 18px)', letterSpacing: '-0.012em' }}>
                   Open Content Editor
@@ -518,7 +518,7 @@ export default async function UserDashboardPage() {
                 <p className="font-sans text-[14px] text-cream/60 leading-relaxed">
                   Write, edit, and publish articles from the Sanity content editor. Full image upload, headings, and rich text.
                 </p>
-                <div className="mt-5 flex items-center gap-2 text-gold-400 font-inter text-[14px] uppercase tracking-[0.12em]">
+                <div className="mt-5 flex items-center gap-2 text-gold-400 font-sans text-[14px] uppercase tracking-[0.12em]">
                   <span>Open Studio</span>
                   <span>&#8594;</span>
                 </div>
@@ -526,7 +526,7 @@ export default async function UserDashboardPage() {
               <div className="flex flex-col gap-4">
                 <Link href="/blog"
                   className="group flex-1 block bg-cream dark-flip-card border border-line dark-flip-border hover:border-gold-300 rounded-2xl p-5 hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all">
-                  <p className="font-inter text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted mb-3">Published</p>
+                  <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted mb-3">Published</p>
                   <p className="font-display font-bold text-[14px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                     View The Journal
                   </p>
@@ -535,7 +535,7 @@ export default async function UserDashboardPage() {
                 {atLeast(role, 'admin') ? (
                   <Link href="/user-dashboard/admin/new-post"
                     className="group block bg-crimson/5 border border-crimson/20 hover:border-crimson/40 rounded-2xl p-5 transition-all">
-                    <p className="font-inter text-[14px] uppercase tracking-[0.16em] text-crimson/80 mb-1">Quick write</p>
+                    <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-crimson/80 mb-1">Quick write</p>
                     <p className="font-display font-bold text-[14px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                       New Article
                     </p>
@@ -543,12 +543,12 @@ export default async function UserDashboardPage() {
                   </Link>
                 ) : (
                   <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-2xl p-5">
-                    <p className="font-inter text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted mb-3">Quick stat</p>
+                    <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted mb-3">Quick stat</p>
                     <p className="font-display font-extrabold text-charcoal dark-flip-text"
                       style={{ fontSize: 'clamp(22px, 2.5vw, 28px)', letterSpacing: '-0.025em', lineHeight: '1' }}>
                       {articleCount}
                     </p>
-                    <p className="font-inter text-[14px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted mt-1">
+                    <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted mt-1">
                       Articles
                     </p>
                   </div>
@@ -564,7 +564,7 @@ export default async function UserDashboardPage() {
             <SectionHead title="Admin: Create Content" icon={icons.pen}
               aside={
                 <a href="/studio" target="_blank" rel="noopener noreferrer"
-                  className="font-inter text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
+                  className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
                   Sanity Studio &#8594;
                 </a>
               }
@@ -575,7 +575,7 @@ export default async function UserDashboardPage() {
                 <div className="absolute right-0 top-0 w-24 h-24 opacity-5">
                   <svg viewBox="0 0 24 24" className="w-full h-full fill-cream"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
                 </div>
-                <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-4">Editorial</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-4">Editorial</p>
                 <p className="font-display font-bold text-cream group-hover:text-gold-300 transition-colors mb-1.5"
                   style={{ fontSize: 'clamp(16px, 2vw, 20px)', letterSpacing: '-0.015em' }}>
                   Write New Article
@@ -583,7 +583,7 @@ export default async function UserDashboardPage() {
                 <p className="font-sans text-[14px] text-cream/60 leading-relaxed mb-5">
                   Draft a blog post. Fill in the title, body, and category. It lands in Sanity as a Draft ready for images.
                 </p>
-                <div className="flex items-center gap-2 text-gold-400 font-inter text-[14px] uppercase tracking-[0.12em]">
+                <div className="flex items-center gap-2 text-gold-400 font-sans text-[14px] uppercase tracking-[0.12em]">
                   <span>Start writing</span>
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </div>
@@ -593,7 +593,7 @@ export default async function UserDashboardPage() {
                 <div className="absolute right-0 top-0 w-28 h-28 opacity-5">
                   <svg viewBox="0 0 200 260" className="w-full h-full fill-cream"><path d="M100 5 C60 5 20 30 10 70 C5 90 8 110 5 130 C2 155 10 175 20 195 C35 220 55 235 75 248 C90 258 105 260 115 250 C130 238 145 220 160 200 C175 178 185 155 190 130 C196 103 192 75 185 55 C175 30 140 5 100 5Z"/></svg>
                 </div>
-                <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-cream/65 mb-4">Destinations</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-cream/65 mb-4">Destinations</p>
                 <p className="font-display font-bold text-cream group-hover:text-gold-300 transition-colors mb-1.5"
                   style={{ fontSize: 'clamp(16px, 2vw, 20px)', letterSpacing: '-0.015em' }}>
                   Add New Attraction
@@ -601,7 +601,7 @@ export default async function UserDashboardPage() {
                 <p className="font-sans text-[14px] text-cream/60 leading-relaxed mb-5">
                   Create an attraction record in Sanity. Name it, set the region and type, and add the editorial summary. Add the full article later in Studio.
                 </p>
-                <div className="flex items-center gap-2 text-cream/80 font-inter text-[14px] uppercase tracking-[0.12em]">
+                <div className="flex items-center gap-2 text-cream/80 font-sans text-[14px] uppercase tracking-[0.12em]">
                   <span>Add attraction</span>
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </div>
@@ -617,7 +617,7 @@ export default async function UserDashboardPage() {
               aside={
                 <a href="/studio/desk/userRole"
                   target="_blank" rel="noopener noreferrer"
-                  className="font-inter text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
+                  className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
                   Edit in Studio &#8594;
                 </a>
               }
@@ -626,10 +626,10 @@ export default async function UserDashboardPage() {
             <div className="border border-line dark-flip-border rounded-2xl overflow-hidden">
               {/* Header bar */}
               <div className="bg-sand dark-flip-surf border-b border-line dark-flip-border px-5 py-3 flex items-center justify-between">
-                <p className="font-inter text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted">
+                <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted">
                   All registered users
                 </p>
-                <span className="font-inter text-[14px] text-charcoal/55 dark-flip-muted bg-charcoal/6 dark-flip-card px-2.5 py-1 rounded-full">
+                <span className="font-sans text-[14px] text-charcoal/55 dark-flip-muted bg-charcoal/6 dark-flip-card px-2.5 py-1 rounded-full">
                   {usersCount} total
                 </span>
               </div>
@@ -643,10 +643,10 @@ export default async function UserDashboardPage() {
                   <table className="w-full min-w-[500px]">
                     <thead>
                       <tr className="border-b border-line dark-flip-border">
-                        <th className="text-left font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted px-5 py-3">Name</th>
-                        <th className="text-left font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted px-5 py-3">Email</th>
-                        <th className="text-left font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted px-5 py-3">Role</th>
-                        <th className="text-left font-inter text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted px-5 py-3">Joined</th>
+                        <th className="text-left font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted px-5 py-3">Name</th>
+                        <th className="text-left font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted px-5 py-3">Email</th>
+                        <th className="text-left font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted px-5 py-3">Role</th>
+                        <th className="text-left font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted px-5 py-3">Joined</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-line dark-flip-border">
@@ -667,13 +667,13 @@ export default async function UserDashboardPage() {
                                 <span className="font-sans text-[14px] text-charcoal dark-flip-text">{u.userName || 'Unknown'}</span>
                               </div>
                             </td>
-                            <td className="px-5 py-3.5 font-inter text-[14px] text-charcoal/65 dark-flip-muted">{u.userEmail}</td>
+                            <td className="px-5 py-3.5 font-sans text-[14px] text-charcoal/65 dark-flip-muted">{u.userEmail}</td>
                             <td className="px-5 py-3.5">
-                              <span className={`font-inter text-[14px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-full ${rb.cls}`}>
+                              <span className={`font-sans text-[14px] uppercase tracking-[0.12em] px-2.5 py-1 rounded-full ${rb.cls}`}>
                                 {rb.label}
                               </span>
                             </td>
-                            <td className="px-5 py-3.5 font-inter text-[14px] text-charcoal/55 dark-flip-muted">{joined}</td>
+                            <td className="px-5 py-3.5 font-sans text-[14px] text-charcoal/55 dark-flip-muted">{joined}</td>
                           </tr>
                         )
                       })}
@@ -695,7 +695,7 @@ export default async function UserDashboardPage() {
               { label: 'Homepage',           href: '/'        },
             ].map(link => (
               <Link key={link.href} href={link.href}
-                className="font-inter text-[14px] uppercase tracking-[0.12em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
+                className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
                 {link.label} &#8594;
               </Link>
             ))}

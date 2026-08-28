@@ -145,7 +145,7 @@ export function PlanTripCard() {
               </Link>
             </div>
 
-            <p className="font-inter text-[14px] text-charcoal/25 text-center mt-5">
+            <p className="font-sans text-[14px] text-charcoal/25 text-center mt-5">
               Free forever. No credit card required.
             </p>
           </div>

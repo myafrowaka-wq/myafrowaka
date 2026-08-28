@@ -46,7 +46,7 @@ function CountryCard({ d }: { d: Country }) {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-transparent"/>
       <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-        <p className="font-inter text-[14px] lg:text-[14px] uppercase tracking-[0.12em] text-cream/55 mb-1">
+        <p className="font-sans text-[14px] lg:text-[14px] uppercase tracking-[0.12em] text-cream/55 mb-1">
           {d.flag} {d.region}
         </p>
         <h3

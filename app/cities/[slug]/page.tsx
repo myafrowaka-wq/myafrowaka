@@ -86,7 +86,7 @@ export default async function CityPage(
       <div className="bg-sand border-b border-line">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-12">
           {city.country && (
-            <p className="font-inter text-[14px] uppercase tracking-[0.16em] text-ochre-600 mb-2">
+            <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-ochre-600 mb-2">
               {city.country.name}
             </p>
           )}
@@ -110,7 +110,7 @@ export default async function CityPage(
             Attractions near {city.name}
           </h2>
           {city.attractions.length > 0 && (
-            <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-charcoal/35">
+            <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/35">
               {city.attractions.length} published
             </span>
           )}
@@ -118,7 +118,7 @@ export default async function CityPage(
 
         {city.attractions.length === 0 ? (
           <div className="bg-sand rounded-2xl p-12 text-center border border-line">
-            <p className="font-inter text-[14px] text-charcoal/40 uppercase tracking-[0.14em]">
+            <p className="font-sans text-[14px] text-charcoal/40 uppercase tracking-[0.14em]">
               Attraction guides coming soon
             </p>
           </div>
@@ -136,7 +136,7 @@ export default async function CityPage(
                   <div className="h-[3px]" style={{ backgroundColor: borderColor }} />
                   <div className="p-5">
                     {typeLabel && (
-                      <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-ochre-600 block mb-2">
+                      <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-ochre-600 block mb-2">
                         {typeLabel}
                       </span>
                     )}
@@ -148,7 +148,7 @@ export default async function CityPage(
                         {attraction.editorialSummary}
                       </p>
                     )}
-                    <p className="mt-3 font-inter text-[14px] uppercase tracking-[0.12em] text-ochre-600 group-hover:text-ochre-700 transition-colors">
+                    <p className="mt-3 font-sans text-[14px] uppercase tracking-[0.12em] text-ochre-600 group-hover:text-ochre-700 transition-colors">
                       Read guide &rarr;
                     </p>
                   </div>

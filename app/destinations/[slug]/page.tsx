@@ -169,7 +169,7 @@ export default async function DestinationPage({
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-20 lg:py-28">
           {dest.continentRegion && (
-            <p className="font-inter text-[14px] uppercase tracking-[0.22em] mb-4 text-gold">
+            <p className="font-sans text-[14px] uppercase tracking-[0.22em] mb-4 text-gold">
               {dest.flagEmoji && <span className="mr-2">{dest.flagEmoji}</span>}
               {dest.continentRegion}
             </p>
@@ -202,14 +202,14 @@ export default async function DestinationPage({
 
           {popularPills.length > 0 && (
             <div>
-              <p className="font-inter text-[14px] uppercase tracking-[0.15em] text-cream/30 mb-3">Popular in {dest.name}:</p>
+              <p className="font-sans text-[14px] uppercase tracking-[0.15em] text-cream/30 mb-3">Popular in {dest.name}:</p>
               <PopularPills attractions={popularPills} />
             </div>
           )}
         </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
-          <span className="font-inter text-[14px] uppercase tracking-[0.2em] text-cream">Scroll</span>
+          <span className="font-sans text-[14px] uppercase tracking-[0.2em] text-cream">Scroll</span>
           <div className="w-px h-8 bg-gradient-to-b from-cream to-transparent"/>
         </div>
       </div>
@@ -225,7 +225,7 @@ export default async function DestinationPage({
             </h2>
             {q && (
               <Link href={`/destinations/${slug}`}
-                className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson/70 hover:text-crimson transition-colors">
+                className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson/70 hover:text-crimson transition-colors">
                 Clear search
               </Link>
             )}
@@ -233,7 +233,7 @@ export default async function DestinationPage({
 
           {pageItems.length === 0 ? (
             <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-16 text-center">
-              <p className="font-inter text-[14px] uppercase tracking-[0.16em] text-charcoal/35 dark-flip-muted mb-2">
+              <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/35 dark-flip-muted mb-2">
                 {q ? 'No results' : 'Coming soon'}
               </p>
               <p className="font-sans text-sm text-charcoal/40 dark-flip-muted">
@@ -242,7 +242,7 @@ export default async function DestinationPage({
                   : `Attraction guides for ${dest.name} are being prepared.`}
               </p>
               <Link href="/attractions"
-                className="inline-flex items-center gap-2 mt-6 font-inter text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
+                className="inline-flex items-center gap-2 mt-6 font-sans text-[14px] uppercase tracking-[0.14em] text-crimson hover:text-crimson/70 transition-colors">
                 Browse all guides
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -264,14 +264,14 @@ export default async function DestinationPage({
                         className="object-cover img-editorial img-inner"
                       />
                       {typeLabel && (
-                        <span className="absolute top-3 left-3 bg-ink/75 backdrop-blur font-inter text-[14px] uppercase tracking-[0.13em] text-cream/80 px-2 py-0.5 rounded-full">
+                        <span className="absolute top-3 left-3 bg-ink/75 backdrop-blur font-sans text-[14px] uppercase tracking-[0.13em] text-cream/80 px-2 py-0.5 rounded-full">
                           {typeLabel}
                         </span>
                       )}
                     </div>
                     <div className="p-5">
                       {a.city && (
-                        <p className="font-inter text-[14px] uppercase tracking-[0.14em] text-crimson mb-2">{a.city.name}</p>
+                        <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson mb-2">{a.city.name}</p>
                       )}
                       <h3 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-2"
                         style={{ fontSize: 'clamp(14px, 1.5vw, 16px)', letterSpacing: '-0.012em' }}>
@@ -283,7 +283,7 @@ export default async function DestinationPage({
                         </p>
                       )}
                       <div className="mt-4 pt-3 border-t border-line dark-flip-border">
-                        <span className="font-inter text-[14px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
+                        <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
                           Read the guide &#8594;
                         </span>
                       </div>
@@ -307,7 +307,7 @@ export default async function DestinationPage({
               )}
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
                 <Link key={p} href={`/destinations/${slug}?${q ? `q=${encodeURIComponent(q)}&` : ''}page=${p}`}
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-inter text-[14px] transition-all
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-sans text-[14px] transition-all
                     ${p === safePage ? 'bg-crimson text-cream border border-crimson' : 'border border-line dark-flip-border text-charcoal/55 dark-flip-muted hover:border-crimson hover:text-crimson'}`}>
                   {p}
                 </Link>
@@ -326,7 +326,7 @@ export default async function DestinationPage({
           {/* Also in region */}
           {dest.relatedCountries && dest.relatedCountries.length > 0 && (
             <div className="mt-16 pt-12 border-t border-line dark-flip-border">
-              <p className="font-inter text-[14px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-6">
+              <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-6">
                 Also in {dest.continentRegion}
               </p>
               <div className="flex flex-wrap gap-3">

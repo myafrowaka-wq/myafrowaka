@@ -135,7 +135,7 @@
   --color-country-mauritius:    #2E5B6E;
 
   /* ── Typography ─────────────────────────────────────────────── */
-  --font-display: 'Poppins', system-ui, sans-serif; /* swapped to Unbounded in Session 1.2 */
+  --font-display: 'Familjen Grotesk', system-ui, sans-serif;
   --font-sans:    'Outfit', system-ui, sans-serif;
   --font-mono:    'Space Mono', monospace;
 
@@ -166,9 +166,11 @@
    (X-29 fail) and the site-wide floor now holds at 14px, replacing
    634 instances that ran as low as 7px (X-04 fail).
 
-   Font-family stays Poppins/Outfit here — the swap to Unbounded for
-   the display role is Session 1.2. This session fixes size, weight
-   and contrast; the next one fixes the typeface itself.
+   Display face is Familjen Grotesk, body/UI face is Outfit — swapped in
+   from Poppins/Inter in Session 1.2 (self-hosted via next/font,
+   4 static weights: Familjen Grotesk 600/700, Outfit 400/600. Unbounded
+   was the first Session 1.2 pick but read too playful at hero size on
+   real content; replaced with Familjen Grotesk after a live comparison).
 ─────────────────────────────────────────────────────────────── */
 :root {
   /* WordPress Block Editor presets — kept for the editor content
@@ -201,7 +203,7 @@ html {
 body {
   background-color: var(--color-cream);
   color: var(--color-charcoal);
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: var(--font-size-body); /* 17px */
   font-weight: 400;
   line-height: 1.6;
@@ -242,18 +244,18 @@ body {
 
 /*
   Display text needs negative tracking at large sizes.
-  Poppins reads as generic at 16px; at 96px with -0.03em it reads
+  Familjen Grotesk reads as generic at 16px; at 96px with -0.03em it reads
   as editorial. This is the single highest-ROI CSS change.
 */
 .font-display {
-  font-family: 'Poppins', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-feature-settings: "kern" 1, "liga" 1;
 }
 
 /* Declared scale, WDOS Brief §3.5. Weight and tracking on h1/h2 use the
-   display face (still Poppins here, Unbounded from Session 1.2); h3 is
-   already on Outfit, matching the brief's "H3 22px/600 Outfit" — headings
-   don't need to escalate the display face all the way down the hierarchy. */
+   display face (Familjen Grotesk, Session 1.2); h3 is already on Outfit, matching
+   the brief's "H3 22px/600 Outfit" — headings don't need to escalate the
+   display face all the way down the hierarchy. */
 h1 {
   font-family: var(--font-display);
   font-size: var(--font-size-h1);   /* 48px */
@@ -602,9 +604,6 @@ body::after {
 }
 .marquee-track-exp:hover { animation-play-state: paused; }
 .marquee-wrap-exp { overflow: hidden; }
-/* Inter font utility */
-.font-inter { font-family: var(--font-inter, 'Inter', sans-serif); }
-
 /* Destinations carousel marquee (desktop) */
 .marquee-track-dest {
   display: flex;
