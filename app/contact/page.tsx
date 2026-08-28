@@ -158,7 +158,7 @@ export default function ContactPage() {
               <Link href="/about"
                 className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
                 <div>
-                  <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted mb-1">Learn more</p>
+                  <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted mb-1">Who we are</p>
                   <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">About MyAfroWaka</p>
                 </div>
                 <svg className="w-5 h-5 text-charcoal/30 group-hover:text-crimson transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">

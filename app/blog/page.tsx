@@ -84,7 +84,7 @@ export default async function BlogPage(
 
             {/* Right: latest teaser */}
             {featuredTitle && (
-              <div className="border-l-2 border-gold-400/40 pl-5 max-w-xs shrink-0">
+              <div className="border-t border-gold-400/30 pt-4 max-w-xs shrink-0">
                 <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-2">Latest</p>
                 <p className="font-display font-semibold text-cream/80 leading-snug line-clamp-2"
                   style={{ fontSize: 'clamp(13px, 1.2vw, 15px)' }}>

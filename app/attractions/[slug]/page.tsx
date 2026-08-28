@@ -243,8 +243,9 @@ const PROSE = `prose prose-lg max-w-none
   prose-a:text-crimson prose-a:no-underline hover:prose-a:underline
   prose-strong:text-charcoal dark:prose-strong:text-cream prose-strong:font-semibold
   prose-ul:text-charcoal/75 dark:prose-ul:text-cream/70 prose-li:leading-relaxed
-  prose-blockquote:border-l-4 prose-blockquote:border-gold-400
-  prose-blockquote:italic prose-blockquote:text-charcoal/60 dark:prose-blockquote:text-cream/55`
+  prose-blockquote:border-l-0 prose-blockquote:bg-sand dark:prose-blockquote:bg-ink-surf
+  prose-blockquote:rounded-2xl prose-blockquote:px-6 prose-blockquote:py-5
+  prose-blockquote:italic prose-blockquote:text-charcoal/70 dark:prose-blockquote:text-cream/60`
 
 // ── Smart FAQ answer generator ────────────────────────────────────────────────
 
@@ -357,7 +358,7 @@ function generateOverview(a: Attraction): { p1: string; p2: string; p3?: string 
 
   const p2 = s2.length > 0
     ? s2.join(' ')
-    : `Comprehensive visitor information for ${a.name} — including transport options, booking guidance, and on-site logistics — is maintained by the MyAfroWaka editorial team. Contact info@myafrowaka.com for time-sensitive queries.`
+    : `Comprehensive visitor information for ${a.name}, including transport options, booking guidance, and on-site logistics, is maintained by the MyAfroWaka editorial team. Contact info@myafrowaka.com for time-sensitive queries.`
 
   // ── Paragraph 3: Entry fees (only rendered if data is available) ──────────
   let p3: string | undefined
@@ -535,7 +536,7 @@ export default async function AttractionPage(
 
           {/* Summary */}
           {a.editorialSummary && (
-            <p className="font-sans text-cream/70 leading-relaxed max-w-2xl border-l-2 border-gold-400/50 pl-4"
+            <p className="font-sans italic text-cream/70 leading-relaxed max-w-2xl"
               style={{ fontSize: 'clamp(14px, 1.4vw, 17px)' }}>
               {a.editorialSummary}
             </p>

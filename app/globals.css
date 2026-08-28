@@ -426,6 +426,18 @@ button, a, [role="button"] {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* ── X-09: the "being-pressed" state ──────────────────────────
+   Centralised here rather than repeated per-button, since the same
+   .bg-action primary style is reused on every CTA site-wide (X-08 —
+   one component, one style). A brightness dim, not a scale transform:
+   M-07 already banned the scale-on-press "magnetic button" bounce in
+   Session 1.3, so press feedback here has to come from a different
+   property or it's the same violation back under a new name. */
+.bg-action:active { filter: brightness(0.88); }
+button:disabled, a[aria-disabled="true"], [role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
 /*
   Touch targets: WCAG 2.5.5 recommends 44px.
   Apply to CTA buttons via .btn-cta — NOT globally on every <a>.

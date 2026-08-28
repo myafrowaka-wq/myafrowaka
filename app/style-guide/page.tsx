@@ -3,7 +3,7 @@ import { Badge } from '../../components/Badge'
 import { Card } from '../../components/Card'
 
 // `hex` here is documentation text only (what this page displays as the
-// value), never used for styling — every swatch below renders from the
+// value), never used for styling: every swatch below renders from the
 // real var(--color-*) token via `token`, so the swatch can never drift
 // out of sync with the actual token file in globals.css.
 const colors = [
@@ -27,7 +27,7 @@ export default function StyleGuide() {
       <div className="mb-16">
         <p className="font-sans text-xs uppercase tracking-widest text-charcoal-300 mb-2">MyAfroWaka</p>
         <h1 className="font-display font-black text-5xl text-charcoal mb-3">Style Guide</h1>
-        <p className="font-sans text-charcoal-300 text-lg">Brand colours, typography, and components — the building blocks of the platform.</p>
+        <p className="font-sans text-charcoal-300 text-lg">Brand colours, typography, and components: the building blocks of the platform.</p>
       </div>
 
       {/* COLOURS */}
@@ -64,19 +64,19 @@ export default function StyleGuide() {
         <h2 className="font-display font-semibold text-2xl text-charcoal mb-6">Typography</h2>
         <div className="space-y-8">
           <div className="bg-sand rounded-[22px] p-8">
-            <p className="font-sans text-xs uppercase tracking-widest text-charcoal-300 mb-4">Display — Familjen Grotesk</p>
+            <p className="font-sans text-xs uppercase tracking-widest text-charcoal-300 mb-4">Display: Familjen Grotesk</p>
             <p className="font-display font-black text-5xl text-charcoal leading-tight mb-2">Africa Explained<br/>by Africans.</p>
             <p className="font-display font-semibold text-2xl text-ochre italic">Explore the continent.</p>
           </div>
           <div className="bg-sand rounded-[22px] p-8">
-            <p className="font-sans text-xs uppercase tracking-widest text-charcoal-300 mb-4">Body & UI — Outfit</p>
-            <p className="font-sans font-light text-xl text-charcoal mb-2">Light 300 — Introductory paragraph text at its most elegant.</p>
-            <p className="font-sans text-base text-charcoal mb-2">Regular 400 — Body copy, descriptions, and general interface text across the platform.</p>
-            <p className="font-sans font-semibold text-base text-charcoal mb-2">Semibold 600 — Labels, navigation items, card titles, and UI controls.</p>
-            <p className="font-sans font-bold text-base text-charcoal">Bold 700 — Strong emphasis, callouts, and primary interface actions.</p>
+            <p className="font-sans text-xs uppercase tracking-widest text-charcoal-300 mb-4">Body & UI: Outfit</p>
+            <p className="font-sans font-light text-xl text-charcoal mb-2">Light 300: Introductory paragraph text at its most elegant.</p>
+            <p className="font-sans text-base text-charcoal mb-2">Regular 400: Body copy, descriptions, and general interface text across the platform.</p>
+            <p className="font-sans font-semibold text-base text-charcoal mb-2">Semibold 600: Labels, navigation items, card titles, and UI controls.</p>
+            <p className="font-sans font-bold text-base text-charcoal">Bold 700: Strong emphasis, callouts, and primary interface actions.</p>
           </div>
           <div className="bg-sand rounded-[22px] p-8">
-            <p className="font-sans text-xs uppercase tracking-widest text-charcoal-300 mb-4">Mono — Space Mono</p>
+            <p className="font-sans text-xs uppercase tracking-widest text-charcoal-300 mb-4">Mono: Space Mono</p>
             <p className="font-sans text-sm text-charcoal-300 uppercase tracking-widest mb-2">EXPLORE. CONNECT. AFRICA.</p>
             <p className="font-sans text-sm text-charcoal">Last Verified: Jan 2026 · 6.2°S, 35.7°E · UNESCO #003</p>
           </div>

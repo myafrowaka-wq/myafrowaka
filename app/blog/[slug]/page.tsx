@@ -124,7 +124,7 @@ const ptComponents = {
         style={{ fontSize: 'clamp(16px, 1.8vw, 20px)', letterSpacing: '-0.012em' }}>{children}</h3>
     ),
     blockquote: ({ children }: { children?: React.ReactNode }) => (
-      <blockquote className="border-l-4 border-gold-400 pl-5 py-1 my-6 italic text-charcoal/55 dark-flip-muted font-sans text-[15px] leading-relaxed">
+      <blockquote className="bg-sand dark-flip-surf rounded-2xl px-6 py-5 my-6 italic text-charcoal/70 dark-flip-muted font-sans text-[15px] leading-relaxed">
         {children}
       </blockquote>
     ),
@@ -355,8 +355,8 @@ export default async function BlogPostPage(
             {/* ── Article (2/3) ────────────────────────────────────── */}
             <div className="lg:col-span-2">
               {post.excerpt && (
-                <p className="font-sans text-[17px] text-charcoal/65 dark-flip-muted leading-relaxed mb-8 border-l-4 pl-5 italic"
-                  style={{ borderColor: accent + '88' }}>
+                <p className="font-sans text-[17px] text-charcoal/65 dark-flip-muted leading-relaxed mb-8 italic border-t border-b py-5"
+                  style={{ borderColor: accent + '33' }}>
                   {post.excerpt}
                 </p>
               )}
