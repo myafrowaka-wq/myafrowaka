@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createMagicLinkToken } from '@/lib/magicLink'
+import { safeRedirect } from '@/lib/safeRedirect'
 
 // Session 4.1 — "Add email sign-in alongside Google, because plenty of your
 // audience does not use Google accounts." This issues the magic link;
@@ -23,7 +24,7 @@ const hasResend  = Boolean(
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export async function POST(req: NextRequest) {
-  const body = await req.json().catch(() => null) as { email?: string } | null
+  const body = await req.json().catch(() => null) as { email?: string; next?: string } | null
   const email = body?.email?.trim().toLowerCase()
 
   if (!email || !EMAIL_RE.test(email)) {
@@ -32,8 +33,12 @@ export async function POST(req: NextRequest) {
 
   const rawToken = await createMagicLinkToken(email)
 
+  // Validated again on the way out at the verify step (Route Handlers get
+  // their own untrusted query-string input) — this first pass just keeps a
+  // malicious `next` out of the emailed link at all.
+  const next = safeRedirect(body?.next, '/user-dashboard')
   const origin = req.headers.get('origin') ?? new URL(req.url).origin
-  const link = `${origin}/api/auth/magic-link/verify?email=${encodeURIComponent(email)}&token=${rawToken}`
+  const link = `${origin}/api/auth/magic-link/verify?email=${encodeURIComponent(email)}&token=${rawToken}&next=${encodeURIComponent(next)}`
 
   if (hasResend) {
     try {

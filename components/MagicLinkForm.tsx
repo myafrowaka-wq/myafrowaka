@@ -8,7 +8,12 @@ type Status = 'idle' | 'loading' | 'sent' | 'error'
 // No password: this posts to /api/auth/magic-link, which emails a one-time
 // sign-in link (or, with no Resend key configured yet, hands the link back
 // directly for local testing — see that route for why).
-export function MagicLinkForm() {
+//
+// `next` (Session 4.2) — where to land after the link is clicked and
+// verified, e.g. back on /plan-a-trip so a trip built while signed out is
+// still there. Passed straight through to the request route, which embeds
+// it in the emailed link.
+export function MagicLinkForm({ next }: { next?: string }) {
   const [email, setEmail]     = useState('')
   const [status, setStatus]   = useState<Status>('idle')
   const [errMsg, setErrMsg]   = useState('')
@@ -23,7 +28,7 @@ export function MagicLinkForm() {
       const res = await fetch('/api/auth/magic-link', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, next }),
       })
       const json = await res.json()
       if (!res.ok) {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { signIn } from '@/auth'
+import { safeRedirect } from '@/lib/safeRedirect'
 
 // Session 4.1 — where a clicked magic-link email actually lands. This has
 // to be a Route Handler, not logic inside app/login/page.tsx's render: a
@@ -12,6 +13,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const email = searchParams.get('email') ?? ''
   const token = searchParams.get('token') ?? ''
+  const redirectTo = safeRedirect(searchParams.get('next'), '/user-dashboard')
 
   if (!email || !token) {
     return NextResponse.redirect(new URL('/login?error=CredentialsSignin', req.url))
@@ -21,7 +23,7 @@ export async function GET(req: NextRequest) {
     return await signIn('credentials', {
       email,
       magicToken: token,
-      redirectTo: '/user-dashboard',
+      redirectTo,
       redirect: true,
     })
   } catch (err: unknown) {

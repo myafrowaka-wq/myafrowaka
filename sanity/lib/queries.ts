@@ -340,3 +340,15 @@ export const DESTINATION_BY_SLUG_QUERY = `
     }
   }
 `
+
+// ── Trip planner (Session 4.2) ──────────────────────────────────────────────
+// A lighter country projection than DESTINATION_BY_SLUG_QUERY — enough for
+// the planner's country picker + inline overview, fetched for all 47
+// countries up front (small at this scale) rather than a second round trip
+// once one is picked, without pulling the longer destination-page-only
+// fields (surprises, gettingAround, visaInfo, safetyInfo, quickFacts).
+export const TRIP_PLANNER_COUNTRIES_QUERY = `
+  *[_type == "country"] | order(name asc){
+    name, "slug": slug.current, countryCode, continentRegion, overview, whenToGo, knownFor
+  }
+`

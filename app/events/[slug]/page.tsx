@@ -234,10 +234,13 @@ export default async function EventPage(
     ? builder.image(event.heroImage.image).width(1920).height(900).fit('crop').url()
     : null
 
+  // Session 4.2 — the real trip planner reads `eventSlug` directly (it
+  // already has the full event list loaded, so it looks up the country
+  // and everything else itself) rather than a redundant, less precise
+  // `destination` name string this page would have to derive by hand.
   const planTripParams = new URLSearchParams({
-    event: event.name,
     eventSlug: slug,
-    destination: event.city?.name || event.country?.name || '',
+    ...(event.country?.slug ? { country: event.country.slug } : {}),
   })
 
   const jsonLd = buildJsonLd(event, slug)

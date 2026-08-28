@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { signIn } from '@/auth'
 import { getTranslations } from 'next-intl/server'
 import { stockImage } from '@/lib/stockImageCredits'
+import { safeRedirect } from '@/lib/safeRedirect'
 import { MagicLinkForm } from '@/components/MagicLinkForm'
 
 export const metadata: Metadata = {
@@ -32,10 +33,16 @@ const DEMO_PASSWORD = process.env.DEMO_PASSWORD ?? 'Demo1234!'
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>
+  searchParams: Promise<{ error?: string; next?: string }>
 }) {
-  const { error } = await searchParams
+  const { error, next } = await searchParams
   const t = await getTranslations('auth')
+
+  // ?next= carries where to send someone after signing in — set by, e.g.,
+  // the trip planner's "Save this trip" wall, so a visitor lands back on
+  // the trip they were already building rather than the generic dashboard.
+  // Validated against an open redirect in lib/safeRedirect.ts.
+  const redirectTo = safeRedirect(next, '/user-dashboard')
 
   // A clicked magic link lands on app/api/auth/magic-link/verify (a Route
   // Handler, not this page) and redirects back here with ?error= on
@@ -95,7 +102,7 @@ export default async function LoginPage({
           <div className="mb-6">
             <form action={async () => {
               'use server'
-              await signIn('google', { redirectTo: '/user-dashboard' })
+              await signIn('google', { redirectTo })
             }}>
               <button type="submit"
                 className="w-full flex items-center justify-center gap-3 border border-line dark-flip-border bg-white dark-flip-card hover:bg-sand text-charcoal dark-flip-text font-display font-semibold text-[14px] py-4 rounded-xl transition-colors shadow-sm hover:shadow-[var(--shadow-soft)]">
@@ -126,7 +133,7 @@ export default async function LoginPage({
           {/* Magic-link email sign-in — no password. Works for first-time
               and returning visitors alike; see components/MagicLinkForm.tsx
               and app/api/auth/magic-link/route.ts. */}
-          <MagicLinkForm />
+          <MagicLinkForm next={redirectTo} />
 
           {/* ── Demo accounts panel ────────────────────────────────────── */}
           <div className="mt-10 bg-sand dark-flip-surf border border-line dark-flip-border rounded-2xl overflow-hidden">
@@ -142,7 +149,7 @@ export default async function LoginPage({
               {DEMO_ACCOUNTS.map(({ email, role }) => (
                 <form key={email} action={async () => {
                   'use server'
-                  await signIn('credentials', { email, password: DEMO_PASSWORD, redirectTo: '/user-dashboard' })
+                  await signIn('credentials', { email, password: DEMO_PASSWORD, redirectTo })
                 }}>
                   <button type="submit" className="w-full flex items-center justify-between px-5 py-3 hover:bg-white/50 dark:hover:bg-white/5 transition-colors text-left">
                     <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">{email}</p>

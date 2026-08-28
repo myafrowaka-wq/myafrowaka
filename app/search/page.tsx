@@ -91,7 +91,7 @@ function SearchInner() {
   const region = searchParams.get('region') || ''
   const exp    = searchParams.get('exp')    || ''
 
-  // Keep input field in sync with URL param (e.g. when arriving from plan-a-trip)
+  // Keep input field in sync with URL param (e.g. when arriving from the nav search bar)
   useEffect(() => { setInputVal(query) }, [query])
 
   useEffect(() => {

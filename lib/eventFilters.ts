@@ -86,3 +86,28 @@ export function matchesMonth(event: FilterableEvent, month: string): boolean {
   const matchesEstimate = (event.estimatedTiming ?? '').toLowerCase().includes(month.toLowerCase())
   return matchesStart || matchesEstimate
 }
+
+/**
+ * Session 4.2 — the trip planner's "what's happening while you're there"
+ * check. Deliberately stricter than matchesMonth: this is used to make a
+ * positive claim ("this event is happening during your trip"), so it only
+ * matches a Fixed, Verified date actually overlapping the range — an
+ * estimated or unconfirmed date is a maybe, not a "during your dates" fact,
+ * and lib/eventDateDisplay.ts's whole rule is that a maybe never displays
+ * as a fact. An event with an unconfirmed date can still be added to a
+ * trip manually; it just isn't suggested as a confirmed match.
+ */
+export interface DateRangeEvent {
+  dateType?: string
+  verificationStatus?: string
+  startDate?: string
+  endDate?: string
+}
+
+export function eventOverlapsRange(event: DateRangeEvent, from: string, to: string): boolean {
+  if (!from || !to) return false
+  if (event.dateType !== 'Fixed' || event.verificationStatus !== 'Verified' || !event.startDate) return false
+  const eventStart = event.startDate
+  const eventEnd = event.endDate ?? event.startDate
+  return eventStart <= to && eventEnd >= from
+}

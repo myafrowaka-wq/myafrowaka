@@ -1,42 +1,36 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { Flag } from '@/components/Flag'
 
+// Session 4.2 — rebuilt for the real day-by-day itinerary (see
+// sanity/schemaTypes/savedTrip.ts and app/api/user/trips/route.ts). The
+// old shape (destination string, travelers, budget, interests) is gone —
+// zero real savedTrip documents existed under it, confirmed directly
+// against the dataset before rebuilding, so there was nothing to migrate.
+
+interface TripItem { kind: 'attraction' | 'event'; name?: string; slug?: string; note?: string }
+interface TripDay { date?: string; items?: TripItem[] }
 interface Trip {
   _id: string
-  destination: string
+  name: string
+  country?: { name: string; slug: string; countryCode?: string } | null
   dates?: { from?: string; to?: string }
-  travelers?: string
-  budget?: string
-  interests?: string[]
-  savedAt: string
-}
-
-const TRAVELER_LABELS: Record<string, string> = {
-  solo:   'Solo',
-  couple: 'Couple',
-  small:  'Small group (3–5)',
-  large:  'Large group (6+)',
-  family: 'Family with children',
-}
-
-const BUDGET_LABELS: Record<string, string> = {
-  budget:  'Budget (under $500)',
-  mid:     'Mid-range ($500–$2,000)',
-  comfort: 'Comfortable ($2,000–$5,000)',
-  luxury:  'Luxury ($5,000+)',
+  days?: TripDay[]
+  updatedAt?: string
 }
 
 function formatDate(iso?: string) {
   if (!iso) return ''
-  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+  return new Date(iso + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
 export function DashTrips() {
   const [trips, setTrips]       = useState<Trip[]>([])
   const [loading, setLoading]   = useState(true)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [expanded, setExpanded] = useState<string | null>(null)
 
   useEffect(() => {
     fetch('/api/user/trips')
@@ -90,75 +84,94 @@ export function DashTrips() {
 
   return (
     <div className="grid sm:grid-cols-2 gap-4">
-      {trips.map(trip => (
-        <div key={trip._id}
-          className="bg-cream dark-flip-card border border-line dark-flip-border rounded-2xl overflow-hidden hover:border-gold-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all">
+      {trips.map(trip => {
+        const days = (trip.days ?? []).filter(d => (d.items?.length ?? 0) > 0)
+        const totalItems = days.reduce((n, d) => n + (d.items?.length ?? 0), 0)
+        const isOpen = expanded === trip._id
 
-          {/* Header bar */}
-          <div className="bg-ink px-5 py-4">
-            <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-1">Planned Trip</p>
-            <p className="font-display font-bold text-cream"
-              style={{ fontSize: 'clamp(14px, 1.6vw, 17px)', letterSpacing: '-0.012em' }}>
-              {trip.destination}
-            </p>
-          </div>
+        return (
+          <div key={trip._id}
+            className="bg-cream dark-flip-card border border-line dark-flip-border rounded-2xl overflow-hidden hover:border-gold-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all sm:col-span-1">
 
-          <div className="p-5 space-y-2.5">
-            {(trip.dates?.from || trip.dates?.to) && (
-              <div className="flex items-start gap-2.5">
-                <svg className="w-3.5 h-3.5 text-charcoal/25 dark-flip-muted shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">
-                  {[formatDate(trip.dates?.from), formatDate(trip.dates?.to)].filter(Boolean).join(' to ')}
-                </span>
+            <div className="bg-ink px-5 py-4 flex items-center gap-2.5">
+              <Flag code={trip.country?.countryCode} />
+              <div className="min-w-0">
+                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-0.5">{trip.country?.name}</p>
+                <p className="font-display font-bold text-cream truncate"
+                  style={{ fontSize: 'clamp(14px, 1.6vw, 17px)', letterSpacing: '-0.012em' }}>
+                  {trip.name}
+                </p>
               </div>
-            )}
-            {trip.travelers && (
-              <div className="flex items-start gap-2.5">
-                <svg className="w-3.5 h-3.5 text-charcoal/25 dark-flip-muted shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-                <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">
-                  {TRAVELER_LABELS[trip.travelers] ?? trip.travelers}
-                </span>
-              </div>
-            )}
-            {trip.budget && (
-              <div className="flex items-start gap-2.5">
-                <svg className="w-3.5 h-3.5 text-charcoal/25 dark-flip-muted shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">
-                  {BUDGET_LABELS[trip.budget] ?? trip.budget}
-                </span>
-              </div>
-            )}
-            {trip.interests && trip.interests.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                {trip.interests.map(i => (
-                  <span key={i} className="font-sans text-[14px] uppercase tracking-[0.12em] bg-gold-50 dark:bg-gold-900/20 text-gold-700 dark:text-gold-400 px-2.5 py-0.5 rounded-full">
-                    {i}
+            </div>
+
+            <div className="p-5 space-y-2.5">
+              {(trip.dates?.from || trip.dates?.to) && (
+                <div className="flex items-start gap-2.5">
+                  <svg className="w-3.5 h-3.5 text-charcoal/25 dark-flip-muted shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">
+                    {[formatDate(trip.dates?.from), formatDate(trip.dates?.to)].filter(Boolean).join(' to ')}
                   </span>
-                ))}
-              </div>
-            )}
+                </div>
+              )}
 
-            <div className="flex items-center justify-between pt-2 border-t border-line dark-flip-border mt-3">
-              <Link href={`/search?q=${encodeURIComponent(trip.destination)}`}
-                className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
-                Find attractions &#8594;
-              </Link>
-              <button
-                onClick={() => deleteTrip(trip._id)}
-                disabled={deleting === trip._id}
-                className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/55 hover:text-crimson transition-colors disabled:opacity-40">
-                {deleting === trip._id ? 'Removing...' : 'Remove'}
-              </button>
+              <p className="font-sans text-[14px] text-charcoal/45 dark-flip-muted">
+                {totalItems > 0
+                  ? `${totalItems} item${totalItems !== 1 ? 's' : ''} across ${days.length} day${days.length !== 1 ? 's' : ''}`
+                  : 'No items added yet'}
+              </p>
+
+              {days.length > 0 && (
+                <button type="button" onClick={() => setExpanded(isOpen ? null : trip._id)}
+                  className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
+                  {isOpen ? 'Hide itinerary' : 'View itinerary'}
+                </button>
+              )}
+
+              {isOpen && (
+                <div className="pt-2 space-y-3 border-t border-line dark-flip-border mt-2">
+                  {days.map((day, i) => (
+                    <div key={day.date ?? i}>
+                      <p className="font-display font-semibold text-[14px] text-charcoal dark-flip-text mb-1">
+                        {formatDate(day.date)}
+                      </p>
+                      <ul className="space-y-1">
+                        {(day.items ?? []).map((item, j) => (
+                          <li key={j} className="font-sans text-[14px] text-charcoal/55 dark-flip-muted flex items-center gap-1.5">
+                            <span className="w-1 h-1 rounded-full bg-charcoal/25 dark-flip-muted shrink-0"/>
+                            {item.slug ? (
+                              <Link href={item.kind === 'event' ? `/events/${item.slug}` : `/attractions/${item.slug}`}
+                                className="hover:text-crimson transition-colors truncate">
+                                {item.name ?? 'Untitled'}
+                              </Link>
+                            ) : (
+                              <span className="truncate">{item.name ?? 'Untitled'}</span>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex items-center justify-between pt-2 border-t border-line dark-flip-border mt-3">
+                <Link href={trip.country ? `/destinations/${trip.country.slug}` : '/search'}
+                  className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
+                  Country guide &#8594;
+                </Link>
+                <button
+                  onClick={() => deleteTrip(trip._id)}
+                  disabled={deleting === trip._id}
+                  className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/55 hover:text-crimson transition-colors disabled:opacity-40">
+                  {deleting === trip._id ? 'Removing...' : 'Remove'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
