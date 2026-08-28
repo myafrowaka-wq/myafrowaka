@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import { createClient } from 'next-sanity'
+import { atLeast } from '@/lib/roles'
+import type { UserRole } from '@/types/next-auth'
 
 const readClient = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
@@ -12,8 +14,8 @@ const readClient = createClient({
 
 export async function GET() {
   const session = await auth()
-  const role = session?.user?.role
-  if (role !== 'admin' && role !== 'contributor') {
+  const role = (session?.user?.role ?? 'visitor') as UserRole
+  if (!atLeast(role, 'contributor')) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

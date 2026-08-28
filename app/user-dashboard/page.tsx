@@ -4,11 +4,24 @@ import type { Metadata } from 'next'
 import { auth } from '@/auth'
 import { client } from '@/sanity/lib/client'
 import type { UserRole } from '@/types/next-auth'
+import { atLeast } from '@/lib/roles'
 import { DashGreeting } from '@/components/DashGreeting'
 import { DashTrips } from '@/components/DashTrips'
 import { DashProfile } from '@/components/DashProfile'
 import { getTranslations } from 'next-intl/server'
 import { attractionStockImage } from '@/lib/stockImageCredits'
+import imageUrlBuilder from '@sanity/image-url'
+
+const builder = imageUrlBuilder(client)
+type SanityImage = Parameters<typeof builder.image>[0]
+
+interface FullProfile {
+  photo?: SanityImage | null
+  homeCountry?: { _id: string; name: string; slug: string } | null
+  travelStyle?: string
+  countriesVisited?: { _id: string; name: string; slug: string; countryCode?: string }[]
+  languages?: string[]
+}
 
 export const metadata: Metadata = {
   title: 'My Dashboard – MyAfroWaka',
@@ -43,12 +56,6 @@ interface UserRecord {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-const ROLE_ORDER: UserRole[] = ['visitor', 'subscriber', 'moderator', 'contributor', 'author-editor', 'admin']
-
-function atLeast(userRole: UserRole, minRole: UserRole): boolean {
-  return ROLE_ORDER.indexOf(userRole) >= ROLE_ORDER.indexOf(minRole)
-}
-
 function accentGradient(slug: string): string {
   const palette = [
     'from-crimson/70 to-ochre/60',
@@ -70,9 +77,9 @@ const ROLE_DESCRIPTIONS: Record<string, string> = {
 
 const ROLE_BADGE: Record<string, { label: string; cls: string }> = {
   subscriber:      { label: 'Subscriber',  cls: 'bg-charcoal/8 dark-flip-surf text-charcoal/60 dark-flip-muted'  },
-  moderator:       { label: 'Moderator',   cls: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' },
+  moderator:       { label: 'Moderator',   cls: 'bg-moss-100 text-moss-600 dark:bg-moss-800/30 dark:text-moss-300' },
   contributor:     { label: 'Contributor', cls: 'bg-gold-50 text-gold-text dark:bg-gold-900/20 dark:text-gold-300'  },
-  'author-editor': { label: 'Author',      cls: 'bg-ochre/10 text-ochre-text dark:bg-ochre/20 dark:text-ochre-300'  },
+  'author-editor': { label: 'Editor',      cls: 'bg-ochre/10 text-ochre-text dark:bg-ochre/20 dark:text-ochre-300'  },
   admin:           { label: 'Admin',       cls: 'bg-crimson/10 text-crimson dark:bg-crimson/20'                    },
   visitor:         { label: 'Visitor',     cls: 'bg-charcoal/8 text-charcoal/50'                                   },
 }
@@ -154,6 +161,22 @@ export default async function UserDashboardPage() {
     { userId: user.id }
   ).catch(() => [] as SavedEntry[])
 
+  const [profile, allCountries] = await Promise.all([
+    client.fetch<FullProfile | null>(
+      `*[_type == "userRole" && userId == $userId][0]{
+        photo,
+        "homeCountry": homeCountry->{ _id, name, "slug": slug.current },
+        travelStyle,
+        "countriesVisited": countriesVisited[]->{ _id, name, "slug": slug.current, countryCode },
+        languages
+      }`,
+      { userId: user.id }
+    ).catch(() => null),
+    client.fetch<{ _id: string; name: string; slug: string; countryCode?: string }[]>(
+      `*[_type == "country"] | order(name asc){ _id, name, "slug": slug.current, countryCode }`
+    ).catch(() => []),
+  ])
+
   const articleCount = atLeast(role, 'author-editor')
     ? await client.fetch<number>(`count(*[_type == "post"])`).catch(() => 0)
     : 0
@@ -223,12 +246,12 @@ export default async function UserDashboardPage() {
         </section>
 
         {/* ── Quick actions row ─────────────────────────────────────────── */}
-        <div className={`grid gap-3 ${atLeast(role, 'admin') ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-2 sm:grid-cols-3'}`}>
+        <div className={`grid gap-3 ${atLeast(role, 'author-editor') ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-2 sm:grid-cols-3'}`}>
           {[
-            { label: 'Explore Africa',  href: '/search',      icon: 'map',    accent: 'text-forest bg-forest/10'  },
+            { label: 'Explore Africa',  href: '/search',      icon: 'map',    accent: 'text-moss-600 bg-moss-100 dark:text-moss-300 dark:bg-moss-800/30'  },
             { label: 'The Journal',     href: '/blog',        icon: 'pen',    accent: 'text-ochre-text bg-ochre/10 dark:bg-ochre/20 dark:text-ochre-300' },
             { label: 'Plan a Trip',     href: '/plan-a-trip', icon: 'map',    accent: 'text-gold-text bg-gold-50 dark:bg-gold-900/20 dark:text-gold-400' },
-            ...(atLeast(role, 'admin') ? [
+            ...(atLeast(role, 'author-editor') ? [
               { label: 'New Article',   href: '/user-dashboard/admin/new-post',       icon: 'pen',   accent: 'text-crimson bg-crimson/10' },
             ] : [
               { label: 'Contact',       href: '/contact',     icon: 'clip',   accent: 'text-charcoal/50 bg-charcoal/6 dark:text-cream/50 dark:bg-cream/8' },
@@ -267,13 +290,13 @@ export default async function UserDashboardPage() {
               <StatCard
                 label="Registered Users"
                 value={usersCount}
-                bg="bg-forest/10 text-forest dark:bg-forest/20"
+                bg="bg-moss-100 text-moss-600 dark:bg-moss-800/30 dark:text-moss-300"
                 icon={icons.users}
               />
               <StatCard
                 label="Corrections Queue"
                 value={0}
-                bg="bg-purple-100 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400"
+                bg="bg-ochre-50 text-ochre-text dark:bg-ochre-800/25 dark:text-ochre-300"
                 icon={icons.check}
               />
             </>
@@ -387,6 +410,12 @@ export default async function UserDashboardPage() {
             email={user.email ?? ''}
             role={role}
             initials={firstName.charAt(0).toUpperCase()}
+            photoUrl={profile?.photo ? builder.image(profile.photo).width(160).height(160).fit('crop').url() : null}
+            initialHomeCountry={profile?.homeCountry?._id ?? ''}
+            initialTravelStyle={profile?.travelStyle ?? ''}
+            initialCountriesVisited={profile?.countriesVisited?.map(c => c._id) ?? []}
+            initialLanguages={profile?.languages ?? []}
+            allCountries={allCountries}
           />
         </section>
 
@@ -437,7 +466,7 @@ export default async function UserDashboardPage() {
                   Send us the name, location, and why it deserves a guide.
                 </p>
               </Link>
-              {atLeast(role, 'admin') ? (
+              {atLeast(role, 'contributor') ? (
                 <Link href="/user-dashboard/admin/new-attraction"
                   className="group bg-crimson/5 border border-crimson/20 hover:border-crimson/40 rounded-2xl p-6 flex flex-col gap-4 transition-all hover:shadow-[0_4px_16px_rgba(162,46,41,0.08)]">
                   <div className="w-9 h-9 rounded-xl bg-crimson/12 flex items-center justify-center text-crimson">
@@ -445,14 +474,14 @@ export default async function UserDashboardPage() {
                   </div>
                   <div>
                     <p className="font-display font-bold text-[14px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors mb-1">
-                      Admin: Add to Sanity
+                      Add to Sanity
                     </p>
                     <p className="font-sans text-[14px] text-charcoal/60 dark-flip-muted leading-relaxed">
                       Create the attraction record and push it directly to Sanity from here.
                     </p>
                   </div>
                   <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson bg-crimson/10 px-2.5 py-1 rounded-full w-fit">
-                    Admin only
+                    Contributor+
                   </span>
                 </Link>
               ) : (
@@ -513,7 +542,7 @@ export default async function UserDashboardPage() {
                   </p>
                   <p className="font-sans text-[14px] text-charcoal/60 dark-flip-muted mt-1">Live site view</p>
                 </Link>
-                {atLeast(role, 'admin') ? (
+                {atLeast(role, 'author-editor') ? (
                   <Link href="/user-dashboard/admin/new-post"
                     className="group block bg-crimson/5 border border-crimson/20 hover:border-crimson/40 rounded-2xl p-5 transition-all">
                     <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-crimson/80 mb-1">Quick write</p>

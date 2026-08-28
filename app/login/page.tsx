@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { signIn } from '@/auth'
 import { getTranslations } from 'next-intl/server'
 import { stockImage } from '@/lib/stockImageCredits'
+import { MagicLinkForm } from '@/components/MagicLinkForm'
 
 export const metadata: Metadata = {
   title: 'Sign In – MyAfroWaka',
@@ -21,19 +22,26 @@ const DEMO_ACCOUNTS = [
   { email: 'admin@demo.myafrowaka.com',       role: 'Admin'        },
 ]
 
-const DEMO_PASSWORD = 'Demo1234!'
+// Matches auth.ts's own fallback exactly — previously hardcoded separately
+// here, so a real DEMO_PASSWORD env var would change what actually signs
+// you in without changing what this page told you to type.
+const DEMO_PASSWORD = process.env.DEMO_PASSWORD ?? 'Demo1234!'
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tab?: string; error?: string }>
+  searchParams: Promise<{ error?: string }>
 }) {
-  const { tab, error } = await searchParams
-  const isSignup   = tab === 'signup'
-  const hasError   = error === 'CredentialsSignin'
+  const { error } = await searchParams
   const t = await getTranslations('auth')
+
+  // A clicked magic link lands on app/api/auth/magic-link/verify (a Route
+  // Handler, not this page) and redirects back here with ?error= on
+  // failure — Server Components can't set the session cookie signIn()
+  // needs, so the actual sign-in can't happen directly in this render.
+  const hasError = error === 'CredentialsSignin'
 
   return (
     <div className="min-h-screen bg-cream dark-flip-bg flex">
@@ -68,17 +76,17 @@ export default async function LoginPage({
         <div className="w-full max-w-md">
 
           <h1 className="font-display font-bold text-3xl text-charcoal dark-flip-text mb-2" style={{ letterSpacing: '-0.018em' }}>
-            {isSignup ? t('createAccount') : t('welcomeBack')}
+            {t('welcomeBack')}
           </h1>
           <p className="font-sans text-sm text-charcoal/55 dark-flip-muted mb-8">
-            {isSignup ? t('joinExplorers') : t('signInAccess')}
+            {t('signInAccess')}
           </p>
 
           {/* Error message */}
           {hasError && (
             <div className="mb-5 bg-crimson/8 border border-crimson/25 rounded-xl px-4 py-3">
               <p className="font-sans text-[14px] text-crimson">
-                {t('incorrectCreds')}
+                That sign-in link has expired or was already used — request a new one below. (If you were using a demo account button, try again.)
               </p>
             </div>
           )}
@@ -115,57 +123,10 @@ export default async function LoginPage({
             </div>
           </div>
 
-          {/* Credentials form */}
-          <form action={async (formData: FormData) => {
-            'use server'
-            const email    = formData.get('email')    as string
-            const password = formData.get('password') as string
-            try {
-              await signIn('credentials', { email, password, redirectTo: '/user-dashboard' })
-            } catch (err: unknown) {
-              const msg = err instanceof Error ? err.message : String(err)
-              if (msg.includes('NEXT_REDIRECT')) throw err
-              // Invalid credentials: NextAuth handles redirect to ?error=CredentialsSignin
-              throw err
-            }
-          }}>
-            <div className="space-y-4">
-              {isSignup && (
-                <div>
-                  <label className="font-display font-semibold text-[14px] text-charcoal/55 dark-flip-muted block mb-1.5">
-                    {t('nameLabel')}
-                  </label>
-                  <input type="text" name="name" placeholder="Your name"
-                    className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
-                </div>
-              )}
-              <div>
-                <label className="font-display font-semibold text-[14px] text-charcoal/55 dark-flip-muted block mb-1.5">
-                  {t('emailLabel')}
-                </label>
-                <input type="email" name="email" placeholder="your@email.com"
-                  className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
-              </div>
-              <div>
-                <label className="font-display font-semibold text-[14px] text-charcoal/55 dark-flip-muted block mb-1.5">
-                  {t('passwordLabel')}
-                </label>
-                <input type="password" name="password" placeholder={isSignup ? 'Create a strong password' : 'Enter your password'}
-                  className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 font-sans text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-gold-400 transition-colors"/>
-              </div>
-
-              <button type="submit"
-                className="w-full bg-ink hover:bg-charcoal text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] py-4 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99]">
-                {isSignup ? 'Create Account' : 'Sign In'}
-              </button>
-            </div>
-          </form>
-
-          <p className="font-sans text-sm text-center text-charcoal/45 dark-flip-muted mt-6">
-            {isSignup
-              ? <><span>Already have an account? </span><Link href="/login" className="text-crimson hover:text-crimson/70 font-semibold">Sign in</Link></>
-              : <><span>No account? </span><Link href="/login?tab=signup" className="text-crimson hover:text-crimson/70 font-semibold">Create one free</Link></>}
-          </p>
+          {/* Magic-link email sign-in — no password. Works for first-time
+              and returning visitors alike; see components/MagicLinkForm.tsx
+              and app/api/auth/magic-link/route.ts. */}
+          <MagicLinkForm />
 
           {/* ── Demo accounts panel ────────────────────────────────────── */}
           <div className="mt-10 bg-sand dark-flip-surf border border-line dark-flip-border rounded-2xl overflow-hidden">
@@ -174,17 +135,22 @@ export default async function LoginPage({
                 Demo Accounts
               </p>
               <p className="font-sans text-[14px] text-charcoal/55 dark-flip-muted mt-0.5">
-                Try any role. Password for all: <span className="font-sans font-bold text-charcoal dark-flip-text">{DEMO_PASSWORD}</span>
+                One click, no password needed. (Shared password, if you need it elsewhere: <span className="font-sans font-bold text-charcoal dark-flip-text">{DEMO_PASSWORD}</span>)
               </p>
             </div>
             <div className="divide-y divide-line dark-flip-border">
               {DEMO_ACCOUNTS.map(({ email, role }) => (
-                <div key={email} className="flex items-center justify-between px-5 py-3">
-                  <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">{email}</p>
-                  <span className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/35 dark-flip-muted">
-                    {role}
-                  </span>
-                </div>
+                <form key={email} action={async () => {
+                  'use server'
+                  await signIn('credentials', { email, password: DEMO_PASSWORD, redirectTo: '/user-dashboard' })
+                }}>
+                  <button type="submit" className="w-full flex items-center justify-between px-5 py-3 hover:bg-white/50 dark:hover:bg-white/5 transition-colors text-left">
+                    <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">{email}</p>
+                    <span className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/35 dark-flip-muted">
+                      {role}
+                    </span>
+                  </button>
+                </form>
               ))}
             </div>
           </div>

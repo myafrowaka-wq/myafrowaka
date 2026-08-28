@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { UserRole } from '@/types/next-auth'
+import { atLeast } from '@/lib/roles'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -25,13 +26,6 @@ interface Props {
   signOutAction: () => Promise<void>
 }
 
-// ── Role order ─────────────────────────────────────────────────────────────────
-
-const ROLE_ORDER: UserRole[] = ['visitor', 'subscriber', 'moderator', 'contributor', 'author-editor', 'admin']
-
-function atLeast(userRole: UserRole, minRole: UserRole): boolean {
-  return ROLE_ORDER.indexOf(userRole) >= ROLE_ORDER.indexOf(minRole)
-}
 
 const ROLE_META: Record<string, { label: string; color: string }> = {
   subscriber:      { label: 'Subscriber',   color: 'bg-white/10 text-cream/70'      },

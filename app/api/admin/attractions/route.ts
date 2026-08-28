@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import { createClient } from 'next-sanity'
+import { atLeast } from '@/lib/roles'
+import type { UserRole } from '@/types/next-auth'
 
 const writeClient = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
@@ -10,8 +12,10 @@ const writeClient = createClient({
   token: process.env.SANITY_API_WRITE_TOKEN,
 })
 
+// Contributor and up may touch the pipeline; only Contributor itself is then
+// restricted below to submitting for review rather than publishing directly.
 function requireAdmin(role?: string) {
-  return role === 'admin' || role === 'contributor'
+  return atLeast((role ?? 'visitor') as UserRole, 'contributor')
 }
 
 // GET — fetch all attractions with pipeline fields

@@ -2,6 +2,8 @@
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { createClient } from 'next-sanity'
+import { atLeast } from '@/lib/roles'
+import type { UserRole } from '@/types/next-auth'
 
 const readClient = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
@@ -42,7 +44,7 @@ const STATUS_TEXT: Record<string, string> = {
 
 export default async function AdminPage() {
   const session = await auth()
-  if (!session || (session.user?.role !== 'admin' && session.user?.role !== 'contributor')) {
+  if (!session || !atLeast((session.user?.role ?? 'visitor') as UserRole, 'contributor')) {
     redirect('/')
   }
 
@@ -357,8 +359,10 @@ export default async function AdminPage() {
                 <div className="min-w-0">
                   <p className="font-sans text-[14px] text-cream/75 truncate">{u.userName}</p>
                   <span className={`font-sans text-[14px] uppercase tracking-[0.1em] ${
-                    u.role === 'admin'       ? 'text-gold-400' :
-                    u.role === 'contributor' ? 'text-moss-400' :
+                    u.role === 'admin'         ? 'text-gold-400' :
+                    u.role === 'author-editor' ? 'text-ochre-300' :
+                    u.role === 'contributor'   ? 'text-moss-400' :
+                    u.role === 'moderator'     ? 'text-cream/40' :
                     'text-cream/25'
                   }`}>
                     {u.role}

@@ -138,12 +138,6 @@ export function PlanTripCard() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
               </Link>
-              <Link
-                href="/login?tab=signup"
-                className="flex items-center justify-center w-full border border-line text-charcoal/70 hover:text-charcoal font-display font-semibold text-[14px] py-3.5 rounded-xl transition-all hover:border-charcoal/35"
-              >
-                Create a free account
-              </Link>
             </div>
 
             <p className="font-sans text-[14px] text-charcoal/25 text-center mt-5">

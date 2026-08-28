@@ -11,5 +11,6 @@ import { post } from './post'
 import { sourcedImage } from './sourcedImage'
 import { event } from './event'
 import { eventCollection } from './eventCollection'
+import { magicLinkToken } from './magicLinkToken'
 
-export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, savedTrip, comment, userRole, post, sourcedImage, event, eventCollection]
+export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, savedTrip, comment, userRole, post, sourcedImage, event, eventCollection, magicLinkToken]

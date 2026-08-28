@@ -2,6 +2,7 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { createClient } from 'next-sanity'
 import { PipelineBoard } from '@/components/PipelineBoard'
+import { atLeast } from '@/lib/roles'
 
 const readClient = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
@@ -13,7 +14,10 @@ const readClient = createClient({
 
 export default async function AdminAttractionsPage() {
   const session = await auth()
-  if (!session || (session.user?.role !== 'admin' && session.user?.role !== 'contributor')) {
+  // Contributor and up: contributors submit drafts for review, author-editors
+  // and admins review/publish. Moderator sits below contributor in the role
+  // hierarchy and has no attraction-pipeline access.
+  if (!session || !atLeast(session.user?.role ?? 'visitor', 'contributor')) {
     redirect('/')
   }
 
@@ -39,7 +43,7 @@ export default async function AdminAttractionsPage() {
           Attraction Pipeline
         </h1>
         <p className="font-sans text-[14px] text-cream/40 mt-1">
-          {session.user?.role === 'admin'
+          {atLeast(session.user?.role ?? 'visitor', 'author-editor')
             ? 'Review, publish, and manage all attractions.'
             : 'Submit your draft attractions for editorial review.'}
         </p>

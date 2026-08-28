@@ -14,7 +14,14 @@ const TYPES = [
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
-export function AdminNewAttractionForm() {
+interface Props {
+  // Contributors can only ever create a Draft (enforced server-side too, in
+  // app/api/admin/create-attraction/route.ts) — hide the status picker for
+  // them rather than showing options the server will silently override.
+  canPublish: boolean
+}
+
+export function AdminNewAttractionForm({ canPublish }: Props) {
   const [status, setStatus]   = useState<Status>('idle')
   const [errMsg, setErrMsg]   = useState('')
   const [attrSlug, setAttrSlug] = useState('')
@@ -137,17 +144,21 @@ export function AdminNewAttractionForm() {
           className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 resize-none transition-colors"/>
       </div>
 
-      <div>
-        <label className="font-display font-semibold text-[14px] uppercase tracking-[0.1em] text-charcoal/50 dark-flip-muted block mb-2">Content Status</label>
-        <div className="relative max-w-xs">
-          <select name="contentStatus"
-            className="w-full appearance-none border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text focus:outline-none focus:border-gold-400 transition-colors pr-10">
-            <option value="Draft">Draft (not visible to public)</option>
-            <option value="Published">Published (live on site)</option>
-          </select>
-          <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/35 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+      {canPublish ? (
+        <div>
+          <label className="font-display font-semibold text-[14px] uppercase tracking-[0.1em] text-charcoal/50 dark-flip-muted block mb-2">Content Status</label>
+          <div className="relative max-w-xs">
+            <select name="contentStatus"
+              className="w-full appearance-none border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text focus:outline-none focus:border-gold-400 transition-colors pr-10">
+              <option value="Draft">Draft (not visible to public)</option>
+              <option value="Published">Published (live on site)</option>
+            </select>
+            <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/35 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+          </div>
         </div>
-      </div>
+      ) : (
+        <input type="hidden" name="contentStatus" value="Draft" />
+      )}
 
       <div className="flex items-center gap-4 pt-2">
         <button type="submit" disabled={status === 'loading'}

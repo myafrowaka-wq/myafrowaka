@@ -1,6 +1,8 @@
 'use client'
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import { atLeast } from '@/lib/roles'
+import type { UserRole } from '@/types/next-auth'
 
 type Status = 'Draft' | 'Incomplete' | 'Verified' | 'Published' | 'Needs Update' | 'Archived' | 'All'
 
@@ -44,6 +46,12 @@ export function PipelineBoard({ attractions, role }: Props) {
   const [search, setSearch]       = useState('')
   const [loading, setLoading]     = useState<string | null>(null)
   const [data, setData]           = useState(attractions)
+
+  // Author-Editors are the site's editorial authority alongside Admin — both
+  // can publish, return, flag, and re-publish. Contributors only get Submit
+  // (Draft/Incomplete → Verified), enforced above and mirrored server-side
+  // in the PATCH route.
+  const canPublish = atLeast(role as UserRole, 'author-editor')
 
   const counts = useMemo(() => {
     const c: Record<string, number> = { All: data.length }
@@ -186,7 +194,7 @@ export function PipelineBoard({ attractions, role }: Props) {
                             )}
 
                             {/* Admin only actions */}
-                            {role === 'admin' && a.contentStatus === 'Verified' && (
+                            {canPublish && a.contentStatus === 'Verified' && (
                               <>
                                 <button onClick={() => changeStatus(a._id, 'Published')}
                                   className="font-sans text-[14px] uppercase tracking-[0.1em] text-gold-700 hover:text-gold-600 border border-gold-200 hover:border-gold-400 px-2.5 py-1 rounded-lg transition-all">
@@ -199,14 +207,14 @@ export function PipelineBoard({ attractions, role }: Props) {
                               </>
                             )}
 
-                            {role === 'admin' && a.contentStatus === 'Published' && (
+                            {canPublish && a.contentStatus === 'Published' && (
                               <button onClick={() => changeStatus(a._id, 'Needs Update')}
                                 className="font-sans text-[14px] uppercase tracking-[0.1em] text-crimson/70 hover:text-crimson border border-crimson/20 hover:border-crimson/40 px-2.5 py-1 rounded-lg transition-all whitespace-nowrap">
                                 Flag
                               </button>
                             )}
 
-                            {role === 'admin' && a.contentStatus === 'Needs Update' && (
+                            {canPublish && a.contentStatus === 'Needs Update' && (
                               <button onClick={() => changeStatus(a._id, 'Published')}
                                 className="font-sans text-[14px] uppercase tracking-[0.1em] text-gold-700 hover:text-gold-600 border border-gold-200 hover:border-gold-400 px-2.5 py-1 rounded-lg transition-all">
                                 Re-publish

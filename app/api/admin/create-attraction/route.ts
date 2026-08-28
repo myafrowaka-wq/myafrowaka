@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import { writeClient } from '@/sanity/lib/writeClient'
+import { atLeast } from '@/lib/roles'
+import type { UserRole } from '@/types/next-auth'
 
 export async function POST(req: NextRequest) {
   const session = await auth()
-  if (!session?.user || session.user.role !== 'admin') {
+  const role = (session?.user?.role ?? 'visitor') as UserRole
+  if (!session?.user || !atLeast(role, 'contributor')) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -13,7 +16,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid request.' }, { status: 400 })
   }
 
-  const { name, countryName, continentRegion, attractionType, editorialSummary, contentStatus } = body
+  const { name, countryName, continentRegion, attractionType, editorialSummary } = body
+  let { contentStatus } = body
+
+  // Contributors can only create as Draft — same restriction the PATCH
+  // route (app/api/admin/attractions/route.ts) enforces when moving an
+  // existing attraction through the pipeline, so a Contributor can't
+  // self-verify or self-publish through this route either.
+  if (role === 'contributor' && contentStatus && contentStatus !== 'Draft') {
+    contentStatus = 'Draft'
+  }
 
   if (!name?.trim()) {
     return NextResponse.json({ error: 'Name is required.' }, { status: 400 })

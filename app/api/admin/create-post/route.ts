@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import { writeClient } from '@/sanity/lib/writeClient'
+import { atLeast } from '@/lib/roles'
+import type { UserRole } from '@/types/next-auth'
 
 export async function POST(req: NextRequest) {
   const session = await auth()
-  if (!session?.user || session.user.role !== 'admin') {
+  const role = (session?.user?.role ?? 'visitor') as UserRole
+  // Author-Editor and up only — per lib/roles.ts, Contributor's remit is
+  // attractions and events (see create-attraction/route.ts), not articles.
+  if (!session?.user || !atLeast(role, 'author-editor')) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

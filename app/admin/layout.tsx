@@ -2,6 +2,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
+import { atLeast } from '@/lib/roles'
+import type { UserRole } from '@/types/next-auth'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -20,8 +22,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const session = await auth()
   if (!session) redirect('/login?next=/admin')
 
-  const role = session.user?.role
-  if (role !== 'admin' && role !== 'contributor') redirect('/')
+  const role = (session.user?.role ?? 'visitor') as UserRole
+  // Contributor and up: Contributor and Author-Editor both work the content
+  // pipeline (Attractions/SEO), Admin also gets Users. Moderator sits below
+  // Contributor in the role hierarchy and has no /admin access — there's no
+  // comment-moderation surface built yet for that role to use here.
+  if (!atLeast(role, 'contributor')) redirect('/')
 
   const user = session.user!
 

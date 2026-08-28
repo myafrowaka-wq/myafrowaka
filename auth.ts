@@ -2,6 +2,7 @@ import NextAuth from 'next-auth'
 import Google from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
 import type { UserRole } from '@/types/next-auth'
+import { consumeMagicLinkToken } from '@/lib/magicLink'
 
 const SANITY_PROJECT = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!
 const SANITY_DATASET = process.env.NEXT_PUBLIC_SANITY_DATASET!
@@ -27,7 +28,18 @@ const DEMO_ACCOUNTS: Record<string, { name: string; role: UserRole }> = {
 async function fetchRole(userId: string): Promise<string | null> {
   try {
     const query  = encodeURIComponent('*[_type=="userRole" && userId==$userId][0]{role}')
-    const params = encodeURIComponent(JSON.stringify({ userId }))
+    // Sanity's raw query API wants each $param value to be the JSON-encoded
+    // value itself (e.g. `$userId="abc"`), not that value wrapped in an
+    // object — `JSON.stringify({ userId })` here previously produced
+    // `$userId={"userId":"abc"}`, which never matches anything. That meant
+    // fetchRole() always returned null, so every sign-in — not just the
+    // first — went through createRole() and (a) minted a fresh duplicate
+    // userRole document, and (b) reset a real user's role back to whatever
+    // the fallback logic below computes, silently undoing any role an admin
+    // had assigned them through /admin/users the moment they signed out and
+    // back in. Found while building the magic-link feature, which copied
+    // this exact pattern and hit the same failure immediately.
+    const params = encodeURIComponent(JSON.stringify(userId))
     const res    = await fetch(`${sanityUrl}/query/${SANITY_DATASET}?query=${query}&$userId=${params}`, {
       headers: { Authorization: `Bearer ${SANITY_TOKEN}` },
       cache: 'no-store',
@@ -75,13 +87,31 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     ...(hasGoogle ? [Google] : []),
     Credentials({
       credentials: {
-        email:    { label: 'Email',    type: 'email'    },
-        password: { label: 'Password', type: 'password' },
+        email:      { label: 'Email',       type: 'email'    },
+        password:   { label: 'Password',    type: 'password' },
+        magicToken: { label: 'Magic Token', type: 'text'     },
       },
       async authorize(credentials) {
-        const email    = (credentials?.email    as string | undefined)?.toLowerCase() ?? ''
+        const email = (credentials?.email as string | undefined)?.toLowerCase() ?? ''
+        if (!email) return null
+
+        // Magic-link sign-in (app/api/auth/magic-link/route.ts issued the
+        // token; the token itself is a random 256-bit value, so validating
+        // it straight through this public authorize() path is safe — it
+        // can't be feasibly guessed, and consumeMagicLinkToken() makes it
+        // single-use regardless.
+        const magicToken = (credentials?.magicToken as string | undefined) ?? ''
+        if (magicToken) {
+          const valid = await consumeMagicLinkToken(email, magicToken)
+          if (!valid) return null
+          const demo = DEMO_ACCOUNTS[email]
+          return { id: demo ? `demo-${email}` : email, email, name: demo?.name ?? email.split('@')[0] }
+        }
+
+        // Demo accounts only — see DEMO_ACCOUNTS above. Real visitors sign
+        // in via Google or the magic-link email form, not a password.
         const password = (credentials?.password as string | undefined) ?? ''
-        if (!email || !password) return null
+        if (!password) return null
         const demo = DEMO_ACCOUNTS[email]
         if (!demo || password !== DEMO_PASSWORD) return null
         return { id: `demo-${email}`, email, name: demo.name }

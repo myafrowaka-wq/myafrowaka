@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { auth } from '@/auth'
+import { atLeast } from '@/lib/roles'
+import type { UserRole } from '@/types/next-auth'
 import { AdminNewPostForm } from '@/components/AdminNewPostForm'
 
 export const metadata: Metadata = {
@@ -12,7 +14,8 @@ export const metadata: Metadata = {
 export default async function NewPostPage() {
   const session = await auth()
   if (!session?.user) redirect('/login')
-  if (session.user.role !== 'admin') redirect('/user-dashboard')
+  // Author-Editor and up — see lib/roles.ts and app/api/admin/create-post/route.ts.
+  if (!atLeast((session.user.role ?? 'visitor') as UserRole, 'author-editor')) redirect('/user-dashboard')
 
   return (
     <div className="min-h-screen bg-cream dark-flip-bg">
