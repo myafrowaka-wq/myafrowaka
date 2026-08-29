@@ -19,6 +19,19 @@ import { defineField, defineType } from 'sanity'
 // clickCount is incremented server-side, by app/go/[slug]/route.ts alone,
 // on a real outbound click — never by anything client-side, so it can't be
 // inflated by a page view or a bot crawling the site's own HTML.
+//
+// Session 5.2b — this document type is stream #1 ("Hotel affiliates") and
+// #2 ("Ticket affiliates") of the plan's seven-stream revenue sequencing,
+// the two the plan marks realistic from day one. It has no field that
+// references, sets, or reads event.verificationStatus or
+// attraction.contentStatus, and nothing in this codebase lets one — see
+// the comment on event.ts's verificationStatus field for the full rule.
+// The five other streams (tour partnerships, premium trip planning,
+// featured events, sponsored destination pages, advertising) are
+// deliberately not built yet; the plan's own sequencing says each needs
+// something this site doesn't have yet (real traffic, tourism board
+// relationships from Session 5.3, or a proven free planner) before it's
+// realistic, not that they were forgotten.
 
 export const affiliateLink = defineType({
   name: 'affiliateLink',

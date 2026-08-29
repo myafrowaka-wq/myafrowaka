@@ -186,13 +186,28 @@ export const event = defineType({
     }),
 
     // ─── VERIFICATION ────────────────────────────────────────────────────────
+    // Session 5.2b — "One rule across all seven [revenue streams]: money
+    // never touches the verification status. A 'Verified by MyAfroWaka'
+    // badge that can be bought is worth nothing, and the moment anyone
+    // suspects it can be, the entire product loses its reason to exist."
+    // This field, and only the real editorial process that sets it
+    // (verifiedBy + verificationSourceUrl + verificationDate below), may
+    // ever move a value here. Nothing related to payment — an affiliate
+    // link, a "Featured Event" placement (5.2b's stream #5, deliberately
+    // not built yet — the plan is explicit it needs real calendar traffic
+    // first, not "build it now"), a sponsored destination campaign — is
+    // ever allowed to read, write, or influence this field, or to reorder
+    // a Verified event below/above an unverified one in any listing. If a
+    // future session adds paid placement, it gets its own separate field
+    // (e.g. `featuredUntil`) and its own clearly-labelled UI treatment,
+    // visually apart from this one, never a substitute for it.
     defineField({
       name: 'verificationStatus',
       title: 'Verification Status',
       type: 'string',
       group: 'verification',
       options: { list: verificationStatuses },
-      description: 'The heart of the product. An unverified date must never be displayed as if it were a fact.',
+      description: 'The heart of the product. An unverified date must never be displayed as if it were a fact. Money never touches this field — see the comment above.',
       initialValue: 'Date to be confirmed',
       validation: r => r.required(),
     }),

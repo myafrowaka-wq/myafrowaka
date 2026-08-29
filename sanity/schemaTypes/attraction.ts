@@ -413,6 +413,17 @@ export const attraction = defineType({
     }),
 
     // ─── OPS ─────────────────────────────────────────────────────────────────
+    // Session 5.2b — the same "money never touches verification" rule
+    // documented on event.ts's verificationStatus field applies here too.
+    // `contentStatus` moving to/through 'Verified', and `lastVerifiedDate`
+    // below, are the site's actual "Last updated: [date]" public trust
+    // signal on every attraction page (app/attractions/[slug]/page.tsx) —
+    // exactly the kind of freshness/trust signal a paid "Featured
+    // Attraction" placement could otherwise be tempted to fake by having
+    // payment bump this date without a real check. Nothing related to
+    // payment may ever set either field; only the real editorial process
+    // does. A future paid-placement feature gets its own separate field
+    // and its own visually-distinct treatment, never influence over these.
     defineField({
       name: 'contentStatus',
       title: 'Content Status (Col 34)',
@@ -427,7 +438,7 @@ export const attraction = defineType({
       title: 'Last Verified Date (Col 35)',
       type: 'date',
       group: 'ops',
-      description: 'ISO 8601: YYYY-MM-DD.',
+      description: 'ISO 8601: YYYY-MM-DD. Money never touches this field — see the comment above.',
     }),
     defineField({
       name: 'sourceFile',
