@@ -39,7 +39,10 @@ export async function generateMetadata(
   const description = city.overview ||
     `Explore the best attractions in ${city.name}${city.country ? `, ${city.country.name}` : ''}. Verified travel guides from MyAfroWaka.`
   return {
-    title: `${city.name} Attractions – MyAfroWaka`,
+    // Session 6.2 — see app/[locale]/login/page.tsx's comment: `absolute`
+    // stops the parent title.template from double-appending "– MyAfroWaka".
+    // openGraph's own title below is untouched — never templated.
+    title: { absolute: `${city.name} Attractions – MyAfroWaka` },
     description,
     alternates: { canonical: canonicalUrl, languages: hreflangAlternates(canonicalUrl) },
     openGraph: {

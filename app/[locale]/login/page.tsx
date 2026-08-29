@@ -8,7 +8,13 @@ import { safeRedirect } from '@/lib/safeRedirect'
 import { MagicLinkForm } from '@/components/MagicLinkForm'
 
 export const metadata: Metadata = {
-  title: 'Sign In – MyAfroWaka',
+  // Session 6.2 — the parent [locale]/layout.tsx sets a title.template of
+  // "%s – MyAfroWaka", so a plain string here would render doubled in the
+  // real <title> tag ("Sign In – MyAfroWaka – MyAfroWaka" — confirmed live
+  // during persona testing, and found to affect nearly every page on the
+  // site this same way). `absolute` opts this exact string out of that
+  // template rather than fighting it.
+  title: { absolute: 'Sign In – MyAfroWaka' },
   description: 'Sign in to MyAfroWaka to save attractions and plan your Africa trip.',
   robots: { index: false, follow: false },
 }

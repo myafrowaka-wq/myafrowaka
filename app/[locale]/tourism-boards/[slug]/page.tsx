@@ -44,7 +44,10 @@ export async function generateMetadata(
   const canonicalUrl = `https://myafrowaka.com/tourism-boards/${slug}`
   const description = board.coverage || `${board.name} — the official tourism authority for ${board.country?.name ?? 'this destination'}.`
   return {
-    title: `${board.name} – MyAfroWaka`,
+    // Session 6.2 — see app/[locale]/login/page.tsx's comment: `absolute`
+    // stops the parent title.template from double-appending "– MyAfroWaka".
+    // openGraph's own title below is untouched — never templated.
+    title: { absolute: `${board.name} – MyAfroWaka` },
     description,
     alternates: { canonical: canonicalUrl, languages: hreflangAlternates(canonicalUrl) },
     openGraph: { title: `${board.name} – MyAfroWaka`, description, type: 'website', url: canonicalUrl },

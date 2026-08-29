@@ -10,7 +10,7 @@ import { NewsletterUnsubscribeButton } from '@/components/NewsletterUnsubscribeB
 // the thing that unsubscribes someone who never clicked anything.
 
 export const metadata: Metadata = {
-  title: 'Unsubscribe – MyAfroWaka',
+  title: { absolute: 'Unsubscribe – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   robots: { index: false, follow: false },
 }
 

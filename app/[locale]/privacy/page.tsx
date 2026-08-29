@@ -3,7 +3,7 @@ import { Link } from '@/i18n/navigation'
 import { hreflangAlternates } from '@/lib/hreflang'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy – MyAfroWaka',
+  title: { absolute: 'Privacy Policy – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   description: 'How MyAfroWaka collects, uses, and protects your personal information.',
   alternates: { canonical: 'https://myafrowaka.com/privacy', languages: hreflangAlternates('https://myafrowaka.com/privacy') },
 }

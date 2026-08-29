@@ -6,7 +6,7 @@ import { stockImage } from '@/lib/stockImageCredits'
 import { hreflangAlternates } from '@/lib/hreflang'
 
 export const metadata: Metadata = {
-  title: 'About MyAfroWaka – Africa Explained by Africans',
+  title: { absolute: 'About MyAfroWaka – Africa Explained by Africans' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   description:
     'MyAfroWaka is a travel and destination discovery platform built from Abuja, Nigeria. We produce verified travel guides across Africa, written by people who actually live here.',
   alternates: { canonical: 'https://myafrowaka.com/about', languages: hreflangAlternates('https://myafrowaka.com/about') },

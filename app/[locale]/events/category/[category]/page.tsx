@@ -32,7 +32,10 @@ export async function generateMetadata(
   const title = `African ${category} Festivals – MyAfroWaka`
   const description = `Verified ${category.toLowerCase()} events across Africa — checked against an official source before they go live.`
   return {
-    title, description,
+    // Session 6.2 — see app/[locale]/login/page.tsx's comment: `absolute`
+    // stops the parent title.template from double-appending "– MyAfroWaka".
+    // openGraph's own title below is untouched — never templated.
+    title: { absolute: title }, description,
     alternates: { canonical: `https://myafrowaka.com/events/category/${categorySlug}`, languages: hreflangAlternates(`https://myafrowaka.com/events/category/${categorySlug}`) },
     openGraph: { title, description, url: `https://myafrowaka.com/events/category/${categorySlug}` },
   }

@@ -7,7 +7,7 @@ import { stockImage } from '@/lib/stockImageCredits'
 import { hreflangAlternates } from '@/lib/hreflang'
 
 export const metadata: Metadata = {
-  title: 'African Events & Festivals – MyAfroWaka',
+  title: { absolute: 'African Events & Festivals – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   description:
     'Festivals, cultural celebrations, and dated happenings across Africa, verified against an official source before they go live. Search by country, region, month, category, or travel style.',
   alternates: { canonical: 'https://myafrowaka.com/events', languages: hreflangAlternates('https://myafrowaka.com/events') },

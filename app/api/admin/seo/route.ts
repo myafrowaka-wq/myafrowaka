@@ -19,8 +19,14 @@ export async function GET() {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  // Session 6.2 — same bug class as app/[locale]/admin/attractions/page.tsx:
+  // a hardcoded cap sorted by contentStatus silently drops whatever sorts
+  // last once the earlier statuses alone exceed it. 599 hasn't bitten yet
+  // (557 attractions today) but the site audit already flags ~231 more
+  // finished articles waiting to be imported — this was going to break the
+  // moment that import ran. Removed the cap to match the sibling fix.
   const attractions = await readClient.fetch(`
-    *[_type == "attraction"] | order(contentStatus asc, name asc) [0..599] {
+    *[_type == "attraction"] | order(contentStatus asc, name asc) {
       _id,
       name,
       "slug": slug.current,

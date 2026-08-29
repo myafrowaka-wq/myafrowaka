@@ -13,7 +13,7 @@ import { hreflangAlternates } from '@/lib/hreflang'
 // keep.
 
 export const metadata: Metadata = {
-  title: 'Newsletter – MyAfroWaka',
+  title: { absolute: 'Newsletter – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   description: 'Real African travel guides, verified events, and hidden gems — sent when there is something worth sending, not on a fixed clock.',
   alternates: { canonical: 'https://myafrowaka.com/newsletter', languages: hreflangAlternates('https://myafrowaka.com/newsletter') },
 }

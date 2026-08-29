@@ -25,7 +25,7 @@ function isExpired(expiresAt: string): boolean {
 }
 
 export const metadata: Metadata = {
-  title: 'Join a Trip – MyAfroWaka',
+  title: { absolute: 'Join a Trip – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   robots: { index: false, follow: false },
 }
 

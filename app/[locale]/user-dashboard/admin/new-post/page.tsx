@@ -8,7 +8,7 @@ import type { UserRole } from '@/types/next-auth'
 import { AdminNewPostForm } from '@/components/AdminNewPostForm'
 
 export const metadata: Metadata = {
-  title: 'New Article – MyAfroWaka Admin',
+  title: { absolute: 'New Article – MyAfroWaka Admin' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   robots: { index: false, follow: false },
 }
 

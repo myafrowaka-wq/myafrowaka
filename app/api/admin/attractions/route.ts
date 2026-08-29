@@ -25,6 +25,14 @@ export async function GET() {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  // Session 6.2 — same bug as app/[locale]/admin/attractions/page.tsx had:
+  // capping at [0..499] and sorting Draft-first meant any consumer of this
+  // GET handler would silently never see a non-Draft attraction once Draft
+  // rows exceeded the cap (they already do, at ~509). This handler has no
+  // current caller (PipelineBoard only PATCHes here, its list comes from
+  // the page's own server-side fetch) but it's a real, exported endpoint —
+  // fixed for consistency rather than leaving a live duplicate of the same
+  // flaw sitting unused until something starts calling it.
   const attractions = await writeClient.fetch<{
     _id: string
     name: string
@@ -35,7 +43,7 @@ export async function GET() {
     country?: { name: string }
     type?: string[]
   }[]>(`
-    *[_type == "attraction"] | order(contentStatus asc, name asc) [0..499] {
+    *[_type == "attraction"] | order(contentStatus asc, name asc) {
       _id,
       name,
       "slug": slug.current,

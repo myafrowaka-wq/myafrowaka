@@ -11,7 +11,7 @@ import { NewsletterConfirmButton } from '@/components/NewsletterConfirmButton'
 // app/trips/join/[token]/page.tsx from Session 4.3.
 
 export const metadata: Metadata = {
-  title: 'Confirm Subscription – MyAfroWaka',
+  title: { absolute: 'Confirm Subscription – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   robots: { index: false, follow: false },
 }
 

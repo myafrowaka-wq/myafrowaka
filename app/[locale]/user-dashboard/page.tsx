@@ -27,7 +27,7 @@ interface FullProfile {
 }
 
 export const metadata: Metadata = {
-  title: 'My Dashboard – MyAfroWaka',
+  title: { absolute: 'My Dashboard – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   robots: { index: false, follow: false },
 }
 

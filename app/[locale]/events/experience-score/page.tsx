@@ -8,7 +8,7 @@ import { hreflangAlternates } from '@/lib/hreflang'
 // MyAfroWaka Experience Score, linked from every event page that shows one.
 
 export const metadata: Metadata = {
-  title: 'The MyAfroWaka Experience Score – How We Score Events',
+  title: { absolute: 'The MyAfroWaka Experience Score – How We Score Events' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   description: 'The published rubric behind the MyAfroWaka Experience Score — how we score African events across eight dimensions, and what each number actually means.',
   alternates: { canonical: 'https://myafrowaka.com/events/experience-score', languages: hreflangAlternates('https://myafrowaka.com/events/experience-score') },
 }

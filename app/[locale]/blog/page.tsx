@@ -12,7 +12,7 @@ const POSTS_PER_PAGE = 6
 // ── Metadata ──────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  title: 'The Journal – MyAfroWaka',
+  title: { absolute: 'The Journal – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   description: 'Perspectives, dispatches, and stories from across the continent. Written by people who have been there.',
   alternates: { canonical: 'https://myafrowaka.com/blog', languages: hreflangAlternates('https://myafrowaka.com/blog') },
   openGraph: {

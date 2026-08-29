@@ -22,8 +22,17 @@ export default async function AdminAttractionsPage() {
     redirect({ href: '/', locale: await getLocale() })
   }
 
+  // Session 6.2 — found live while testing the Editor persona: this used
+  // to slice to [0..499], and PipelineBoard's status tabs filter that same
+  // fetched array client-side rather than re-querying per tab. With 557
+  // total attractions and ~509 of them Draft, sorting Draft-first meant the
+  // capped 500 rows were ALL Draft — every other tab (Published, Verified,
+  // Needs Update, Archived) silently showed "No attractions match this
+  // filter" regardless of how many really existed, because none of them
+  // were ever fetched at all. Removed the cap: 557 lightweight rows (no
+  // article body) is a trivial fetch for an internal admin tool.
   const attractions = await readClient.fetch(`
-    *[_type == "attraction"] | order(contentStatus asc, name asc) [0..499] {
+    *[_type == "attraction"] | order(contentStatus asc, name asc) {
       _id,
       name,
       "slug": slug.current,

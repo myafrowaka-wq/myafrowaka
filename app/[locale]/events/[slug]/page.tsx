@@ -159,7 +159,10 @@ export async function generateMetadata(
     : stockImage('1531872036218-4e8a6828e339')
 
   return {
-    title, description,
+    // Session 6.2 — see app/[locale]/login/page.tsx's comment: `absolute`
+    // stops the parent title.template from double-appending "– MyAfroWaka".
+    // openGraph/twitter's own title below is untouched — never templated.
+    title: { absolute: title }, description,
     alternates: { canonical: canonicalUrl, languages: hreflangAlternates(canonicalUrl) },
     openGraph: { title, description, type: 'article', url: canonicalUrl, images: [ogImage] },
     twitter: { card: 'summary_large_image', title, description, images: [ogImage] },

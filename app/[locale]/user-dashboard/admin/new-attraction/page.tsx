@@ -8,7 +8,7 @@ import type { UserRole } from '@/types/next-auth'
 import { AdminNewAttractionForm } from '@/components/AdminNewAttractionForm'
 
 export const metadata: Metadata = {
-  title: 'Add Attraction – MyAfroWaka Admin',
+  title: { absolute: 'Add Attraction – MyAfroWaka Admin' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   robots: { index: false, follow: false },
 }
 

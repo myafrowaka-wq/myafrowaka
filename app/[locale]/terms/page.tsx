@@ -3,7 +3,7 @@ import { Link } from '@/i18n/navigation'
 import { hreflangAlternates } from '@/lib/hreflang'
 
 export const metadata: Metadata = {
-  title: 'Terms of Use – MyAfroWaka',
+  title: { absolute: 'Terms of Use – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   description: 'Terms and conditions for using the MyAfroWaka website.',
   alternates: { canonical: 'https://myafrowaka.com/terms', languages: hreflangAlternates('https://myafrowaka.com/terms') },
 }

@@ -12,7 +12,7 @@ import { stockImage, attractionStockImage } from '@/lib/stockImageCredits'
 import { hreflangAlternates } from '@/lib/hreflang'
 
 export const metadata: Metadata = {
-  title: 'Africa Travel Guides – MyAfroWaka',
+  title: { absolute: 'Africa Travel Guides – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   description: 'Verified travel guides to extraordinary destinations across Africa. Explore by country, type, or experience.',
   alternates: { canonical: 'https://myafrowaka.com/attractions', languages: hreflangAlternates('https://myafrowaka.com/attractions') },
   openGraph: {

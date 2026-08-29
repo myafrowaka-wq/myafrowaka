@@ -44,7 +44,10 @@ export async function generateMetadata(
   const title = collection.metaTitle || `${collection.title} – MyAfroWaka`
   const description = collection.metaDescription || collection.description || `A curated collection of African events from MyAfroWaka.`
   return {
-    title, description,
+    // Session 6.2 — see app/[locale]/login/page.tsx's comment: `absolute`
+    // stops the parent title.template from double-appending "– MyAfroWaka".
+    // openGraph's own title below is untouched — never templated.
+    title: { absolute: title }, description,
     alternates: { canonical: `https://myafrowaka.com/events/collections/${slug}`, languages: hreflangAlternates(`https://myafrowaka.com/events/collections/${slug}`) },
     openGraph: { title, description, url: `https://myafrowaka.com/events/collections/${slug}` },
   }

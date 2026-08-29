@@ -7,7 +7,7 @@ import { stockImage } from '@/lib/stockImageCredits'
 import { hreflangAlternates } from '@/lib/hreflang'
 
 export const metadata: Metadata = {
-  title: 'Contact MyAfroWaka – Get in Touch',
+  title: { absolute: 'Contact MyAfroWaka – Get in Touch' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   description:
     'Reach the MyAfroWaka team for attraction corrections, partnerships, press requests, or travel questions. We read every message.',
   alternates: { canonical: 'https://myafrowaka.com/contact', languages: hreflangAlternates('https://myafrowaka.com/contact') },

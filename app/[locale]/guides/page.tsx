@@ -18,7 +18,7 @@ interface Guide {
 // ── Metadata ──────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  title: 'Travel Guides – MyAfroWaka',
+  title: { absolute: 'Travel Guides – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   description: 'Curated best-of guides to attractions across Africa. Ranked lists built from verified field research.',
   alternates: { canonical: 'https://myafrowaka.com/guides', languages: hreflangAlternates('https://myafrowaka.com/guides') },
   openGraph: {

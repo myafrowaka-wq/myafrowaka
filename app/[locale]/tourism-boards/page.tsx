@@ -18,7 +18,7 @@ interface TourismBoard {
 }
 
 export const metadata: Metadata = {
-  title: 'Tourism Boards – MyAfroWaka',
+  title: { absolute: 'Tourism Boards – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
   description: 'Official tourism authorities across Africa, and the events on MyAfroWaka they have verified.',
   alternates: { canonical: 'https://myafrowaka.com/tourism-boards', languages: hreflangAlternates('https://myafrowaka.com/tourism-boards') },
   openGraph: {

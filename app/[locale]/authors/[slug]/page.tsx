@@ -57,7 +57,10 @@ export async function generateMetadata(
   const ogImage = author.photo ? builder.image(author.photo).width(1200).height(630).fit('crop').url() : undefined
 
   return {
-    title,
+    // Session 6.2 — see app/[locale]/login/page.tsx's comment: `absolute`
+    // stops the parent title.template from double-appending "– MyAfroWaka".
+    // openGraph's own `title` below is untouched — never templated.
+    title: { absolute: title },
     description,
     alternates: { canonical: canonicalUrl, languages: hreflangAlternates(canonicalUrl) },
     openGraph: {
