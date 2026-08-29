@@ -3,11 +3,14 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { auth } from '@/auth'
 import { client } from '@/sanity/lib/client'
+import { writeClient } from '@/sanity/lib/writeClient'
 import type { UserRole } from '@/types/next-auth'
 import { atLeast } from '@/lib/roles'
 import { DashGreeting } from '@/components/DashGreeting'
 import { DashTrips } from '@/components/DashTrips'
 import { DashProfile } from '@/components/DashProfile'
+import { TravelPassport } from '@/components/TravelPassport'
+import { MyContributions, type Contribution } from '@/components/MyContributions'
 import { getTranslations } from 'next-intl/server'
 import { attractionStockImage } from '@/lib/stockImageCredits'
 import imageUrlBuilder from '@sanity/image-url'
@@ -180,6 +183,20 @@ export default async function UserDashboardPage() {
   const articleCount = atLeast(role, 'author-editor')
     ? await client.fetch<number>(`count(*[_type == "post"])`).catch(() => 0)
     : 0
+
+  // Uses writeClient (no CDN), not the general client above — a
+  // Contributor checking whether their own submission was just published
+  // shouldn't have to wait out Sanity's CDN propagation to see it, the
+  // same reasoning app/admin/*/page.tsx already reads through writeClient
+  // for.
+  const myContributions = atLeast(role, 'contributor')
+    ? await writeClient.fetch<Contribution[]>(
+        `*[_type == "attraction" && submittedByUserId == $userId] | order(_createdAt desc) {
+          name, "slug": slug.current, contentStatus, "country": country->{ name }
+        }`,
+        { userId: user.id }
+      ).catch(() => [] as Contribution[])
+    : []
 
   const usersCount = atLeast(role, 'admin')
     ? await client.fetch<number>(`count(*[_type == "userRole"])`).catch(() => 0)
@@ -399,6 +416,12 @@ export default async function UserDashboardPage() {
           <DashTrips />
         </section>
 
+        {/* ── 4b. Travel Passport ──────────────────────────────────────── */}
+        <section id="passport" className="scroll-mt-8">
+          <SectionHead title="Travel Passport" icon={icons.map} />
+          <TravelPassport homeCountry={profile?.homeCountry} countriesVisited={profile?.countriesVisited ?? []} />
+        </section>
+
         {/* ── 5. My Profile ────────────────────────────────────────────── */}
         <section id="profile" className="scroll-mt-8">
           <SectionHead
@@ -503,6 +526,7 @@ export default async function UserDashboardPage() {
                 </div>
               )}
             </div>
+            <MyContributions contributions={myContributions} />
           </section>
         )}
 

@@ -87,6 +87,64 @@ export const savedTrip = defineType({
         },
       }],
     }),
+    // ─── SHARED TRIPS (Session 4.3) ─────────────────────────────────────────
+    // "Everyone on a trip can suggest additions. The person who created it
+    // approves them." The owner is whoever this document's userId already
+    // belongs to (unchanged) — members are people who joined via a real
+    // invite (see tripInvite.ts), not co-owners.
+    defineField({
+      name: 'members',
+      title: 'Members',
+      type: 'array',
+      description: 'Everyone who has joined this trip via invite. Does not include the owner.',
+      of: [{
+        type: 'object',
+        name: 'tripMember',
+        fields: [
+          defineField({ name: 'userId',   type: 'string',   title: 'User ID'   }),
+          defineField({ name: 'userEmail', type: 'string',  title: 'Email'     }),
+          defineField({ name: 'userName', type: 'string',   title: 'Name'      }),
+          defineField({ name: 'joinedAt', type: 'datetime', title: 'Joined At' }),
+        ],
+        preview: {
+          select: { title: 'userName', subtitle: 'userEmail' },
+        },
+      }],
+    }),
+    defineField({
+      name: 'suggestions',
+      title: 'Suggested Additions',
+      type: 'array',
+      description: 'Items a member proposed adding, awaiting the owner\'s approval or rejection.',
+      of: [{
+        type: 'object',
+        name: 'tripSuggestion',
+        fields: [
+          defineField({ name: 'suggestedByUserId', type: 'string', title: 'Suggested By (User ID)' }),
+          defineField({ name: 'suggestedByName',   type: 'string', title: 'Suggested By (Name)'    }),
+          defineField({ name: 'date', type: 'date', title: 'Day' }),
+          defineField({
+            name: 'item', title: 'Attraction or Event', type: 'reference',
+            to: [{ type: 'attraction' }, { type: 'event' }],
+            validation: r => r.required(),
+          }),
+          defineField({ name: 'note', type: 'string', title: 'Note' }),
+          defineField({
+            name: 'status', type: 'string', title: 'Status',
+            options: { list: ['pending', 'approved', 'rejected'] },
+            initialValue: 'pending',
+          }),
+          defineField({ name: 'suggestedAt', type: 'datetime', title: 'Suggested At' }),
+        ],
+        preview: {
+          select: { name: 'item.name', by: 'suggestedByName', status: 'status' },
+          prepare: ({ name, by, status }) => ({
+            title: name ?? 'Suggestion',
+            subtitle: `${by ?? 'Someone'} · ${status ?? 'pending'}`,
+          }),
+        },
+      }],
+    }),
     defineField({ name: 'createdAt', type: 'datetime', title: 'Created At' }),
     defineField({ name: 'updatedAt', type: 'datetime', title: 'Updated At' }),
   ],

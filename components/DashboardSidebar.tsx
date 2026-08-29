@@ -81,6 +81,12 @@ const icons = {
         d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
     </svg>
   ),
+  passport: (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+        d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9zM3.6 9h16.8M3.6 15h16.8M11.5 3a17 17 0 000 18M12.5 3a17 17 0 010 18"/>
+    </svg>
+  ),
   profile: (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
@@ -104,6 +110,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
     { id: 'overview',     label: 'Overview',          href: '/user-dashboard#overview',     minRole: null,            icon: icons.overview,     badge: undefined       },
     { id: 'saved',        label: 'Saved Attractions', href: '/user-dashboard#saved',        minRole: null,            icon: icons.saved,        badge: savedCount > 0 ? savedCount : undefined },
     { id: 'trips',        label: 'My Trips',          href: '/user-dashboard#trips',        minRole: null,            icon: icons.trips,        badge: undefined       },
+    { id: 'passport',     label: 'Travel Passport',   href: '/user-dashboard#passport',     minRole: null,            icon: icons.passport,     badge: undefined       },
     { id: 'profile',      label: 'My Profile',        href: '/user-dashboard#profile',      minRole: null,            icon: icons.profile,      badge: undefined       },
     { id: 'corrections',  label: 'Corrections',       href: '/user-dashboard#corrections',  minRole: 'moderator',     icon: icons.corrections,  badge: undefined       },
     { id: 'submit',       label: 'Submit',            href: '/user-dashboard#submit',       minRole: 'contributor',   icon: icons.submit,       badge: undefined       },

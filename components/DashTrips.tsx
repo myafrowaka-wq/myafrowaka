@@ -3,21 +3,32 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Flag } from '@/components/Flag'
+import { InviteFriendsForm } from '@/components/InviteFriendsForm'
+import { SuggestAdditionForm } from '@/components/SuggestAdditionForm'
 
 // Session 4.2 — rebuilt for the real day-by-day itinerary (see
-// sanity/schemaTypes/savedTrip.ts and app/api/user/trips/route.ts). The
-// old shape (destination string, travelers, budget, interests) is gone —
-// zero real savedTrip documents existed under it, confirmed directly
-// against the dataset before rebuilding, so there was nothing to migrate.
+// sanity/schemaTypes/savedTrip.ts and app/api/user/trips/route.ts).
+// Session 4.3 — extended for shared trips: invite friends, members, and
+// "everyone on a trip can suggest additions, the person who created it
+// approves them."
 
 interface TripItem { kind: 'attraction' | 'event'; name?: string; slug?: string; note?: string }
 interface TripDay { date?: string; items?: TripItem[] }
+interface TripMember { userId: string; userName?: string; userEmail?: string; joinedAt?: string }
+interface TripSuggestion {
+  _key: string; date?: string; note?: string
+  suggestedByUserId: string; suggestedByName?: string; suggestedAt?: string
+  itemKind?: string; itemName?: string; itemSlug?: string
+}
 interface Trip {
   _id: string
   name: string
+  isOwner: boolean
   country?: { name: string; slug: string; countryCode?: string } | null
   dates?: { from?: string; to?: string }
   days?: TripDay[]
+  members?: TripMember[]
+  suggestions?: TripSuggestion[]
   updatedAt?: string
 }
 
@@ -31,13 +42,18 @@ export function DashTrips() {
   const [loading, setLoading]   = useState(true)
   const [deleting, setDeleting] = useState<string | null>(null)
   const [expanded, setExpanded] = useState<string | null>(null)
+  const [invitingId, setInvitingId] = useState<string | null>(null)
+  const [suggestingId, setSuggestingId] = useState<string | null>(null)
+  const [decidingKey, setDecidingKey] = useState<string | null>(null)
 
-  useEffect(() => {
+  function refresh() {
     fetch('/api/user/trips')
       .then(r => r.json())
       .then(data => { setTrips(data.trips ?? []); setLoading(false) })
       .catch(() => setLoading(false))
-  }, [])
+  }
+
+  useEffect(() => { refresh() }, [])
 
   async function deleteTrip(id: string) {
     setDeleting(id)
@@ -48,6 +64,17 @@ export function DashTrips() {
     })
     if (res.ok) setTrips(prev => prev.filter(t => t._id !== id))
     setDeleting(null)
+  }
+
+  async function decideSuggestion(tripId: string, suggestionKey: string, action: 'approve' | 'reject') {
+    setDecidingKey(suggestionKey)
+    const res = await fetch(`/api/user/trips/${tripId}/suggest`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ suggestionKey, action }),
+    })
+    if (res.ok) refresh()
+    setDecidingKey(null)
   }
 
   if (loading) {
@@ -88,15 +115,19 @@ export function DashTrips() {
         const days = (trip.days ?? []).filter(d => (d.items?.length ?? 0) > 0)
         const totalItems = days.reduce((n, d) => n + (d.items?.length ?? 0), 0)
         const isOpen = expanded === trip._id
+        const members = trip.members ?? []
+        const pending = trip.suggestions ?? []
 
         return (
           <div key={trip._id}
-            className="bg-cream dark-flip-card border border-line dark-flip-border rounded-2xl overflow-hidden hover:border-gold-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all sm:col-span-1">
+            className="bg-cream dark-flip-card border border-line dark-flip-border rounded-2xl overflow-hidden hover:border-gold-300 hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all">
 
             <div className="bg-ink px-5 py-4 flex items-center gap-2.5">
               <Flag code={trip.country?.countryCode} />
-              <div className="min-w-0">
-                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-0.5">{trip.country?.name}</p>
+              <div className="min-w-0 flex-1">
+                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400/80 mb-0.5">
+                  {trip.country?.name}{!trip.isOwner && ' · Shared with you'}
+                </p>
                 <p className="font-display font-bold text-cream truncate"
                   style={{ fontSize: 'clamp(14px, 1.6vw, 17px)', letterSpacing: '-0.012em' }}>
                   {trip.name}
@@ -120,6 +151,7 @@ export function DashTrips() {
                 {totalItems > 0
                   ? `${totalItems} item${totalItems !== 1 ? 's' : ''} across ${days.length} day${days.length !== 1 ? 's' : ''}`
                   : 'No items added yet'}
+                {members.length > 0 && ` · ${members.length} member${members.length !== 1 ? 's' : ''}`}
               </p>
 
               {days.length > 0 && (
@@ -156,17 +188,84 @@ export function DashTrips() {
                 </div>
               )}
 
+              {/* Members */}
+              {members.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {members.map(m => (
+                    <span key={m.userId} className="font-sans text-[14px] text-charcoal/55 dark-flip-muted bg-charcoal/6 dark-flip-surf px-2 py-0.5 rounded-full">
+                      {m.userName ?? m.userEmail}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Owner: pending suggestions to approve/reject */}
+              {trip.isOwner && pending.length > 0 && (
+                <div className="pt-2 border-t border-line dark-flip-border mt-2 space-y-2">
+                  <p className="font-display font-semibold text-[14px] text-charcoal dark-flip-text">
+                    {pending.length} suggestion{pending.length !== 1 ? 's' : ''} to review
+                  </p>
+                  {pending.map(s => (
+                    <div key={s._key} className="bg-gold-50 dark:bg-gold-900/15 border border-gold-200 dark:border-gold-800/30 rounded-xl px-3.5 py-2.5">
+                      <p className="font-sans text-sm text-charcoal dark-flip-text">
+                        <span className="font-semibold">{s.suggestedByName}</span> suggested <span className="font-semibold">{s.itemName}</span> for {formatDate(s.date)}
+                      </p>
+                      {s.note && <p className="font-sans text-[14px] text-charcoal/55 dark-flip-muted italic mt-0.5">&ldquo;{s.note}&rdquo;</p>}
+                      <div className="flex items-center gap-3 mt-2">
+                        <button type="button" disabled={decidingKey === s._key}
+                          onClick={() => decideSuggestion(trip._id, s._key, 'approve')}
+                          className="font-sans text-[14px] uppercase tracking-[0.1em] text-moss-600 dark:text-moss-300 hover:text-moss-700 transition-colors disabled:opacity-50">
+                          Approve
+                        </button>
+                        <button type="button" disabled={decidingKey === s._key}
+                          onClick={() => decideSuggestion(trip._id, s._key, 'reject')}
+                          className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/45 dark-flip-muted hover:text-crimson transition-colors disabled:opacity-50">
+                          Decline
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Owner: invite friends */}
+              {trip.isOwner && (
+                invitingId === trip._id ? (
+                  <InviteFriendsForm tripId={trip._id} onClose={() => setInvitingId(null)} />
+                ) : (
+                  <button type="button" onClick={() => setInvitingId(trip._id)}
+                    className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
+                    Invite friends
+                  </button>
+                )
+              )}
+
+              {/* Member: suggest an addition — "everyone on a trip can
+                  suggest additions, the person who created it approves them." */}
+              {!trip.isOwner && (
+                suggestingId === trip._id ? (
+                  <SuggestAdditionForm tripId={trip._id} onClose={() => setSuggestingId(null)} onSuggested={refresh} />
+                ) : (
+                  <button type="button" onClick={() => setSuggestingId(trip._id)}
+                    className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
+                    Suggest an addition
+                  </button>
+                )
+              )}
+
               <div className="flex items-center justify-between pt-2 border-t border-line dark-flip-border mt-3">
                 <Link href={trip.country ? `/destinations/${trip.country.slug}` : '/search'}
                   className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">
                   Country guide &#8594;
                 </Link>
-                <button
-                  onClick={() => deleteTrip(trip._id)}
-                  disabled={deleting === trip._id}
-                  className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/55 hover:text-crimson transition-colors disabled:opacity-40">
-                  {deleting === trip._id ? 'Removing...' : 'Remove'}
-                </button>
+                {trip.isOwner && (
+                  <button
+                    onClick={() => deleteTrip(trip._id)}
+                    disabled={deleting === trip._id}
+                    className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/55 hover:text-crimson transition-colors disabled:opacity-40">
+                    {deleting === trip._id ? 'Removing...' : 'Remove'}
+                  </button>
+                )}
               </div>
             </div>
           </div>

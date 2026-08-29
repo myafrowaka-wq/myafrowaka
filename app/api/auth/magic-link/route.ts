@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
 import { createMagicLinkToken } from '@/lib/magicLink'
 import { safeRedirect } from '@/lib/safeRedirect'
+import { hasResend, sendEmail } from '@/lib/resend'
 
 // Session 4.1 — "Add email sign-in alongside Google, because plenty of your
 // audience does not use Google accounts." This issues the magic link;
@@ -13,13 +13,10 @@ import { safeRedirect } from '@/lib/safeRedirect'
 // console and — dev-only — returned straight in the response so the flow is
 // genuinely usable while testing. Once a real key is set, `devLink` stops
 // being included and a real email goes out instead.
-
-const resendKey  = process.env.RESEND_API_KEY ?? ''
-const resendFrom = process.env.RESEND_FROM_EMAIL ?? ''
-const hasResend  = Boolean(
-  resendKey && resendFrom &&
-  !resendKey.startsWith('REPLACE_WITH') && !resendFrom.startsWith('REPLACE_WITH')
-)
+//
+// Session 4.3 — the Resend send itself moved to lib/resend.ts, shared with
+// the trip-invite email, so the "is a real key configured" check can't
+// drift between the two.
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -41,19 +38,20 @@ export async function POST(req: NextRequest) {
   const link = `${origin}/api/auth/magic-link/verify?email=${encodeURIComponent(email)}&token=${rawToken}&next=${encodeURIComponent(next)}`
 
   if (hasResend) {
-    try {
-      const resend = new Resend(resendKey)
-      await resend.emails.send({
-        from: resendFrom,
-        to: email,
-        subject: 'Your MyAfroWaka sign-in link',
-        text: `Sign in to MyAfroWaka:\n\n${link}\n\nThis link expires in 15 minutes and only works once. If you didn't request this, ignore this email.`,
-        html: `<p>Sign in to MyAfroWaka:</p><p><a href="${link}">${link}</a></p><p>This link expires in 15 minutes and only works once. If you didn't request this, ignore this email.</p>`,
-      })
-    } catch (err) {
-      console.error('[Magic Link] Resend send failed:', err)
-      return NextResponse.json({ error: 'Could not send the email. Please try again.' }, { status: 500 })
-    }
+    // `link` is built from the request's Origin header, which a browser
+    // controls but a raw HTTP request doesn't have to — and anyone can
+    // request a magic link for any email address (that's the point of a
+    // passwordless flow), so the sender and recipient aren't necessarily
+    // the same person here. Escaping before it goes into HTML sent to
+    // someone else's inbox means a spoofed Origin can't inject markup.
+    const safeLink = link.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+    const result = await sendEmail({
+      to: email,
+      subject: 'Your MyAfroWaka sign-in link',
+      text: `Sign in to MyAfroWaka:\n\n${link}\n\nThis link expires in 15 minutes and only works once. If you didn't request this, ignore this email.`,
+      html: `<p>Sign in to MyAfroWaka:</p><p><a href="${safeLink}">${safeLink}</a></p><p>This link expires in 15 minutes and only works once. If you didn't request this, ignore this email.</p>`,
+    })
+    if (!result.ok) return NextResponse.json({ error: result.error }, { status: 500 })
     return NextResponse.json({ ok: true })
   }
 

@@ -18,15 +18,19 @@ const writeClient = createClient({
 interface TripItemIn { kind: 'attraction' | 'event'; slug: string }
 interface TripDayIn { date: string; items: TripItemIn[] }
 
-// GET — list the signed-in user's trips, itinerary resolved
+// GET — list trips the signed-in user owns *or* has joined via invite,
+// itinerary (and, for shared trips, members and pending suggestions)
+// resolved so DashTrips never has to make a second round trip.
 export async function GET() {
   const session = await auth()
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const trips = await writeClient.fetch(
-    `*[_type == "savedTrip" && userId == $uid] | order(updatedAt desc) {
+    `*[_type == "savedTrip" && (userId == $uid || $uid in members[].userId)] | order(updatedAt desc) {
       _id,
       name,
+      userId,
+      "isOwner": userId == $uid,
       "country": country->{ name, "slug": slug.current, countryCode },
       dates,
       "days": days[]{
@@ -37,6 +41,13 @@ export async function GET() {
           "name": item->name,
           "slug": item->slug.current
         }
+      },
+      "members": members[]{ userId, userName, userEmail, joinedAt },
+      "suggestions": suggestions[status == "pending"]{
+        _key, date, note, suggestedByUserId, suggestedByName, suggestedAt,
+        "itemKind": item->_type,
+        "itemName": item->name,
+        "itemSlug": item->slug.current
       },
       createdAt,
       updatedAt
@@ -138,6 +149,23 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
 
-  await writeClient.delete(doc._id)
+  // Session 4.3 — a tripInvite document references its trip (so the join
+  // page and accept flow can resolve one from the other), and Sanity
+  // enforces referential integrity by default: deleting a document another
+  // document still references is rejected outright. Found live — cleaning
+  // up test data after verifying the invite flow, the trip delete failed
+  // with a real "documentHasExistingReferencesError" the moment that trip
+  // had ever had an invite sent, which would have hit every real owner
+  // trying to remove a trip they'd shared. Every invite for this trip has
+  // to go first, whatever its status (pending, accepted, or expired).
+  const inviteIds = await writeClient.fetch<string[]>(
+    `*[_type == "tripInvite" && trip._ref == $id]._id`,
+    { id: doc._id }
+  )
+  const tx = writeClient.transaction()
+  for (const inviteId of inviteIds) tx.delete(inviteId)
+  tx.delete(doc._id)
+  await tx.commit()
+
   return NextResponse.json({ ok: true })
 }

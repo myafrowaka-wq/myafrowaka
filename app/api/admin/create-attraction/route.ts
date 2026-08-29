@@ -67,6 +67,10 @@ export async function POST(req: NextRequest) {
       type:            attractionType ? [attractionType] : [],
       editorialSummary: editorialSummary?.trim() ?? '',
       contentStatus:   contentStatus ?? 'Draft',
+      // Session 4.3 — real contributor credit needs to know who actually
+      // submitted this, which nothing recorded before now.
+      submittedByUserId: session.user.id,
+      submittedByName:   session.user.name ?? session.user.email ?? '',
       ...(countryRef ? { country: countryRef } : {}),
     })
 

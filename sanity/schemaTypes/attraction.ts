@@ -424,6 +424,27 @@ export const attraction = defineType({
       group: 'ops',
       description: 'Exact filename of source .docx document.',
     }),
+    // Session 4.3 — "contributor credit when someone's tip gets published"
+    // needed a way to know who actually submitted an attraction, which
+    // nothing tracked before this (create-attraction/route.ts never wrote
+    // it). A plain string snapshot, not a reference to userRole, matching
+    // how the rest of the app already records authorship (savedTrip.userId,
+    // savedAttraction.userId) rather than introducing a new pattern here.
+    defineField({
+      name: 'submittedByUserId',
+      title: 'Submitted By (User ID)',
+      type: 'string',
+      group: 'ops',
+      description: 'Set automatically when a Contributor creates this record. Blank for attractions added directly in Studio.',
+      readOnly: true,
+    }),
+    defineField({
+      name: 'submittedByName',
+      title: 'Submitted By (Name)',
+      type: 'string',
+      group: 'ops',
+      readOnly: true,
+    }),
 
     // ─── ARTICLE CONTENT ─────────────────────────────────────────────────────
     defineField({
