@@ -30,10 +30,11 @@ const GUIDES = [
 ]
 
 const COMPANY = [
-  { label: 'About Us',       href: '/about'   },
-  { label: 'Contact Us',     href: '/contact' },
-  { label: 'Privacy Policy', href: '/privacy' },
-  { label: 'Terms of Use',   href: '/terms'   },
+  { label: 'About Us',       href: '/about'      },
+  { label: 'Newsletter',     href: '/newsletter' },
+  { label: 'Contact Us',     href: '/contact'    },
+  { label: 'Privacy Policy', href: '/privacy'    },
+  { label: 'Terms of Use',   href: '/terms'      },
 ]
 
 const SOCIAL = [

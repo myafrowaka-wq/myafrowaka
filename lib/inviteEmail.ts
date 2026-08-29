@@ -45,6 +45,13 @@ export function buildInviteEmail(input: InviteEmailInput): { subject: string; te
   // stops mattering regardless of how trustworthy the source turns out to
   // be, the same way any other field in this email already is.
   const safeAcceptUrl = escapeHtml(input.acceptUrl)
+  // Session 5.1's second look-through — `origin` feeds the logo <img src>
+  // below and comes from the exact same Origin-header source as acceptUrl.
+  // It was overlooked when acceptUrl was escaped above: a spoofed Origin
+  // header could break out of the src attribute and inject arbitrary
+  // markup into an email sent to someone else's inbox, the same class of
+  // gap acceptUrl's own escaping exists to close.
+  const safeOrigin = escapeHtml(input.origin)
 
   const text = [
     `${input.inviterName} invited you to join a trip on MyAfroWaka: "${input.tripName}" in ${input.countryName}${dateRange ? ` (${dateRange})` : ''}.`,
@@ -60,7 +67,7 @@ export function buildInviteEmail(input: InviteEmailInput): { subject: string; te
     <table role="presentation" width="100%" style="max-width:520px;background-color:#ffffff;border-radius:16px;overflow:hidden;" cellpadding="0" cellspacing="0">
       <tr>
         <td style="background-color:${INK};padding:32px 40px;text-align:center;">
-          <img src="${input.origin}/logo-white.png" alt="MyAfroWaka" width="180" style="display:block;margin:0 auto;" />
+          <img src="${safeOrigin}/logo-white.png" alt="MyAfroWaka" width="180" style="display:block;margin:0 auto;" />
         </td>
       </tr>
       <tr>

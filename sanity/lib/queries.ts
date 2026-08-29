@@ -352,3 +352,12 @@ export const TRIP_PLANNER_COUNTRIES_QUERY = `
     name, "slug": slug.current, countryCode, continentRegion, overview, whenToGo, knownFor
   }
 `
+
+// ── Newsletter (Session 5.1) ─────────────────────────────────────────────
+// Needs _id (unlike ALL_COUNTRIES_QUERY above) since the signup form writes
+// a real reference to newsletterSubscriber.homeCountry, not just a slug.
+export const NEWSLETTER_COUNTRIES_QUERY = `
+  *[_type == "country"] | order(name asc){
+    _id, name, "slug": slug.current, countryCode
+  }
+`

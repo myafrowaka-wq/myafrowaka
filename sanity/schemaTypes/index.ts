@@ -13,5 +13,6 @@ import { event } from './event'
 import { eventCollection } from './eventCollection'
 import { magicLinkToken } from './magicLinkToken'
 import { tripInvite } from './tripInvite'
+import { newsletterSubscriber } from './newsletterSubscriber'
 
-export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, savedTrip, comment, userRole, post, sourcedImage, event, eventCollection, magicLinkToken, tripInvite]
+export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, savedTrip, comment, userRole, post, sourcedImage, event, eventCollection, magicLinkToken, tripInvite, newsletterSubscriber]
