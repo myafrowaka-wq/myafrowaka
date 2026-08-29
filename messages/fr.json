@@ -8,7 +8,17 @@
     "contact":      "Contact",
     "signIn":       "Connexion",
     "planATrip":    "Planifier",
-    "comingSoon":   "Bientôt"
+    "comingSoon":   "Bientôt",
+    "exploreAfrica":        "Explorer l'Afrique",
+    "site":                 "Site",
+    "latestGuides":         "Derniers Guides",
+    "travelGuides":         "Guides de Voyage",
+    "search":               "Rechercher",
+    "viewAllCountries":     "Voir tous les pays",
+    "browseAllGuides":      "Parcourir tous les guides",
+    "browseAllAttractions": "Parcourir toutes les attractions",
+    "more":                 "Plus",
+    "featured":             "À la une"
   },
   "common": {
     "browseAll":    "Tout Parcourir",
@@ -92,6 +102,10 @@
     "sectionDestinations": "Destinations",
     "sectionExperiences":  "Expériences",
     "sectionGuides":       "Meilleurs Guides",
-    "sectionCompany":      "Entreprise"
+    "sectionCompany":      "Entreprise",
+    "aboutUs":             "À Propos",
+    "newsletter":          "Bulletin",
+    "contactUs":           "Nous Contacter",
+    "longTagline":         "La destination pour découvrir les plus grandes attractions, la culture et les expériences de voyage de l'Afrique. Vérifié. Précis. Écrit depuis le continent."
   }
 }

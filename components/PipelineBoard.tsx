@@ -1,6 +1,6 @@
 'use client'
 import { useState, useMemo } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { atLeast } from '@/lib/roles'
 import type { UserRole } from '@/types/next-auth'
 

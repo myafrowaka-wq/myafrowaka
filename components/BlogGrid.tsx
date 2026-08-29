@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { CATEGORY_COLOR, CATEGORY_COLOR_FALLBACK } from '@/lib/regionColors'
 import { blogStockImage } from '@/lib/stockImageCredits'
 

@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useCallback, useMemo, useRef } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import { Link, useRouter } from '@/i18n/navigation'
 import { Flag } from '@/components/Flag'
 import { EventCard, type EventSummary } from '@/components/EventCard'
 import {

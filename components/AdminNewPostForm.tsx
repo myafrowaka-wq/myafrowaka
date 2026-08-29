@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 
 const CATEGORIES = ['Destinations', 'Culture & Heritage', 'Travel Planning', 'Food Tourism', 'Experiences']
 

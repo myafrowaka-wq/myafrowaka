@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 
 // Session 4.3 — "contributor credit when someone's tip gets published."
 // Needed sanity/schemaTypes/attraction.ts's new submittedByUserId field to

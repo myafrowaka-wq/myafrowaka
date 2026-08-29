@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/i18n/navigation'
 
 export function SaveButton({ slug }: { slug: string }) {
   const { data: session, status } = useSession()

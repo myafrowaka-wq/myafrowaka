@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
 
 const DESTINATIONS = [
@@ -29,12 +29,17 @@ const GUIDES = [
   { label: 'Serengeti Migration',  href: '/attractions/serengeti-national-park'           },
 ]
 
+// Session 5.3 — labels are translation keys (footer namespace) resolved at
+// render time, not literal strings, since this array is built at module
+// scope before the component's t() exists. privacy/terms reuse the same
+// keys the bottom bar already translates, rather than a second copy that
+// could drift out of sync in one language and not the other.
 const COMPANY = [
-  { label: 'About Us',       href: '/about'      },
-  { label: 'Newsletter',     href: '/newsletter' },
-  { label: 'Contact Us',     href: '/contact'    },
-  { label: 'Privacy Policy', href: '/privacy'    },
-  { label: 'Terms of Use',   href: '/terms'      },
+  { key: 'aboutUs',   href: '/about'      },
+  { key: 'newsletter',href: '/newsletter' },
+  { key: 'contactUs', href: '/contact'    },
+  { key: 'privacy',   href: '/privacy'    },
+  { key: 'terms',     href: '/terms'      },
 ]
 
 const SOCIAL = [
@@ -88,8 +93,7 @@ export default async function Footer() {
               />
             </Link>
             <p className="font-sans text-sm text-cream/45 leading-relaxed mb-6 md:max-w-[220px]">
-              The destination for discovering Africa greatest attractions, culture, and travel experiences.
-              Verified. Specific. Written from inside the continent.
+              {t('longTagline')}
             </p>
 
             {/* Social icons */}
@@ -152,7 +156,7 @@ export default async function Footer() {
             <ul className="space-y-2.5">
               {COMPANY.map(l => (
                 <li key={l.href}>
-                  <Link href={l.href} className="font-sans text-sm text-cream/45 hover:text-cream/80 transition-colors">{l.label}</Link>
+                  <Link href={l.href} className="font-sans text-sm text-cream/45 hover:text-cream/80 transition-colors">{t(l.key)}</Link>
                 </li>
               ))}
             </ul>

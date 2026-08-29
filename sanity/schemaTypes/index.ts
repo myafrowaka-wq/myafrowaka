@@ -15,5 +15,6 @@ import { magicLinkToken } from './magicLinkToken'
 import { tripInvite } from './tripInvite'
 import { newsletterSubscriber } from './newsletterSubscriber'
 import { affiliateLink } from './affiliateLink'
+import { tourismBoard } from './tourismBoard'
 
-export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, savedTrip, comment, userRole, post, sourcedImage, event, eventCollection, magicLinkToken, tripInvite, newsletterSubscriber, affiliateLink]
+export const schemaTypes = [attraction, country, city, editorialPillar, author, savedAttraction, savedTrip, comment, userRole, post, sourcedImage, event, eventCollection, magicLinkToken, tripInvite, newsletterSubscriber, affiliateLink, tourismBoard]

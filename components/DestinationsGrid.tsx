@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { COUNTRY_COLOR } from '@/lib/regionColors'
 import { Flag } from '@/components/Flag'
 import { stockImage } from '@/lib/stockImageCredits'

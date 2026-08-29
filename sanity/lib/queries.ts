@@ -421,6 +421,12 @@ export const DESTINATION_BY_SLUG_QUERY = `
     // attraction.
     "affiliateLinks": *[_type == "affiliateLink" && active != false && country._ref == ^._id]{
       label, partnerName, linkType, "slug": slug.current
+    },
+    // Session 5.3 — the real outreach hook the plan describes only works
+    // if the country page actually links to it; null (not an empty
+    // object) when no published profile exists for this country yet.
+    "tourismBoard": *[_type == "tourismBoard" && contentStatus == "Published" && country._ref == ^._id][0]{
+      name, "slug": slug.current
     }
   }
 `
@@ -439,6 +445,32 @@ export const TRIP_PLANNER_COUNTRIES_QUERY = `
     // "small at this scale" reasoning as the comment above this query.
     "affiliateLinks": *[_type == "affiliateLink" && active != false && country._ref == ^._id]{
       label, partnerName, linkType, "slug": slug.current
+    }
+  }
+`
+
+// ── Tourism boards (Session 5.3) ─────────────────────────────────────────
+// "A quiet feature with a loud payoff" — a profile page per real tourism
+// authority, and the real mechanism (verifiedEvents) behind "Verified by
+// MyAfroWaka." Published-only, same gate as every other content type.
+export const ALL_TOURISM_BOARD_SLUGS_QUERY = `
+  *[_type == "tourismBoard" && contentStatus == "Published"]{ "slug": slug.current }
+`
+
+export const ALL_TOURISM_BOARDS_QUERY = `
+  *[_type == "tourismBoard" && contentStatus == "Published"] | order(name asc){
+    name, "slug": slug.current, coverage,
+    "country": country->{ name, "slug": slug.current, countryCode }
+  }
+`
+
+export const TOURISM_BOARD_BY_SLUG_QUERY = `
+  *[_type == "tourismBoard" && slug.current == $slug && contentStatus == "Published"][0]{
+    name, coverage, officialUrl, officialEventsCalendarUrl,
+    pressContactName, pressContactEmail,
+    "country": country->{ name, "slug": slug.current, countryCode },
+    "verifiedEvents": verifiedEvents[]->{
+      name, "slug": slug.current, category, dateType, startDate, endDate, estimatedTiming, verificationStatus
     }
   }
 `

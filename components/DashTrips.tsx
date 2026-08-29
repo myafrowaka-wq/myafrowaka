@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Flag } from '@/components/Flag'
 import { InviteFriendsForm } from '@/components/InviteFriendsForm'
 import { SuggestAdditionForm } from '@/components/SuggestAdditionForm'

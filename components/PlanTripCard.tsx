@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/i18n/navigation'
 import { stockImage } from '@/lib/stockImageCredits'
 
 // Session 4.2 — this used to open an auth-gate modal ("Create a free

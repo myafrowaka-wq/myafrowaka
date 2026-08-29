@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import Link from 'next/link'
+import { Link, useRouter } from '@/i18n/navigation'
 import { Flag } from '@/components/Flag'
 import { eventDateDisplay } from '@/lib/eventDateDisplay'
 import { eventOverlapsRange } from '@/lib/eventFilters'

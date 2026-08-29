@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link, usePathname, useRouter } from '@/i18n/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { useSession } from 'next-auth/react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { REGION_COLOR } from '@/lib/regionColors'
 import { stockImage } from '@/lib/stockImageCredits'
 
@@ -129,6 +130,7 @@ function ThemeToggle() {
 
 function NavUserButton({ close }: { close: () => void }) {
   const { data: session, status } = useSession()
+  const t = useTranslations('nav')
 
   if (status === 'loading') return <div className="hidden lg:block w-8 h-8"/>
 
@@ -159,7 +161,7 @@ function NavUserButton({ close }: { close: () => void }) {
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
       </svg>
-      Sign In
+      {t('signIn')}
     </Link>
   )
 }
@@ -197,16 +199,26 @@ export default function Nav() {
   const [mobile, setMobile]       = useState(false)
   const [menuOpen, setMenuOpen]   = useState(false)
   const [mobileAcc, setMobileAcc] = useState<string | null>(null)
-  const [lang, setLang]           = useState('EN')
 
-  // Read locale from cookie on mount
-  useEffect(() => {
-    const match = document.cookie.match(/NEXT_LOCALE=([^;]+)/)
-    if (match) {
-      const code = match[1].toUpperCase()
-      if (['EN', 'FR', 'PT'].includes(code)) setLang(code)
-    }
-  }, [])
+  // Session 5.3 — the locale is now genuinely part of the URL, resolved by
+  // middleware.ts and handed down through the [locale] route segment, so
+  // this reads the real active locale directly instead of re-parsing a
+  // NEXT_LOCALE cookie that could silently drift from what's actually
+  // being rendered.
+  const activeLocale = useLocale()
+  const lang = activeLocale.toUpperCase()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
+  function switchLocale(code: string) {
+    if (!['EN', 'FR', 'PT'].includes(code)) return
+    const qs = searchParams.toString()
+    // router.replace's { locale } option actually changes the URL (and the
+    // real rendered content behind it) — not a cookie flip that needed a
+    // full page reload to take visible effect.
+    router.replace(`${pathname}${qs ? `?${qs}` : ''}`, { locale: code.toLowerCase() })
+  }
 
   const openTimer  = useRef<ReturnType<typeof setTimeout> | null>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -450,10 +462,8 @@ export default function Nav() {
                     <button key={l.code}
                       onClick={() => {
                         if (supported) {
-                          document.cookie = `NEXT_LOCALE=${l.code.toLowerCase()}; path=/; max-age=31536000; SameSite=Lax`
-                          setLang(l.code)
+                          switchLocale(l.code)
                           setLangOpen(false)
-                          window.location.reload()
                         }
                       }}
                       className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-sans transition-colors ${supported ? 'hover:bg-cream dark:hover:bg-white/5 cursor-pointer' : 'opacity-40 cursor-not-allowed'} ${lang === l.code ? 'text-ochre-600 font-semibold' : 'text-charcoal/70 dark:text-cream/65'}`}>
@@ -483,7 +493,7 @@ export default function Nav() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
 
             <div className="flex items-center justify-between mb-10">
-              <h2 className="font-display font-bold text-3xl text-cream">Explore Africa</h2>
+              <h2 className="font-display font-bold text-3xl text-cream">{t('exploreAfrica')}</h2>
               <button onClick={close} className="w-10 h-10 rounded-full border border-white/15 hover:border-white/35 flex items-center justify-center text-cream/50 hover:text-cream transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
@@ -495,7 +505,7 @@ export default function Nav() {
 
               {/* Column 1: Destinations */}
               <div>
-                <p className="font-display font-bold text-lg text-cream mb-6">Destinations</p>
+                <p className="font-display font-bold text-lg text-cream mb-6">{t('destinations')}</p>
                 <div className="space-y-5">
                   {REGIONS.map(r => (
                     <div key={r.region}>
@@ -516,20 +526,20 @@ export default function Nav() {
                 </div>
                 <Link href="/search" onClick={close}
                   className="mt-7 inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
-                  View all countries
+                  {t('viewAllCountries')}
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </Link>
               </div>
 
               {/* Column 2: Site */}
               <div>
-                <p className="font-display font-bold text-lg text-cream mb-6">Site</p>
+                <p className="font-display font-bold text-lg text-cream mb-6">{t('site')}</p>
                 <div className="space-y-2">
                   {[
-                    { label: 'About MyAfroWaka', href: '/about'   },
-                    { label: 'Contact Us',       href: '/contact' },
-                    { label: 'Travel Guides',    href: '/guides'  },
-                    { label: 'Search',           href: '/search'  },
+                    { label: t('about'),        href: '/about'   },
+                    { label: t('contact'),      href: '/contact' },
+                    { label: t('travelGuides'), href: '/guides'  },
+                    { label: t('search'),       href: '/search'  },
                   ].map(l => (
                     <Link key={l.href} href={l.href} onClick={close}
                       className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-cream/75 hover:text-cream hover:bg-white/5 transition-colors font-sans text-[14px]">
@@ -541,7 +551,7 @@ export default function Nav() {
                     <Link href="/login" onClick={close}
                       className="flex items-center gap-3 py-2.5 px-3 rounded-xl text-cream/75 hover:text-cream hover:bg-white/5 transition-colors font-sans text-[14px]">
                       <span className="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0 opacity-60"/>
-                      Sign In
+                      {t('signIn')}
                     </Link>
                   )}
                 </div>
@@ -549,7 +559,7 @@ export default function Nav() {
 
               {/* Column 3: Latest Guides */}
               <div>
-                <p className="font-display font-bold text-lg text-cream mb-6">Latest Guides</p>
+                <p className="font-display font-bold text-lg text-cream mb-6">{t('latestGuides')}</p>
                 <div className="space-y-4">
                   {FEATURED_ATTRACTIONS.map(a => (
                     <Link key={a.slug} href={`/attractions/${a.slug}`} onClick={close}
@@ -566,7 +576,7 @@ export default function Nav() {
                 </div>
                 <Link href="/search" onClick={close}
                   className="mt-5 inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.14em] text-ochre-400 hover:text-ochre-300 transition-colors">
-                  Browse all guides
+                  {t('browseAllGuides')}
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </Link>
               </div>
@@ -603,7 +613,7 @@ export default function Nav() {
                       ))}
                       <li>
                         <Link href={r.href} onClick={close} className="font-sans text-[14px] text-ochre-500 hover:text-ochre-600 transition-colors mt-0.5 inline-block">
-                          More &rarr;
+                          {t('more')} &rarr;
                         </Link>
                       </li>
                     </ul>
@@ -611,7 +621,7 @@ export default function Nav() {
                 ))}
               </div>
               <div className="col-span-3 border-l border-line dark:border-white/8 pl-8 flex flex-col">
-                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-4">Featured</p>
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-4">{t('featured')}</p>
                 <Link href="/destinations/egypt" onClick={close} className="group relative rounded-2xl overflow-hidden flex-1 min-h-[200px] block">
                   <Image src={stockImage('1640005438758-861043e64aa5')} alt="Egypt" fill className="object-cover group-hover:scale-105 transition-transform duration-500"/>
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent"/>
@@ -623,7 +633,7 @@ export default function Nav() {
                 </Link>
                 <Link href="/search" onClick={close}
                   className="mt-4 block text-center bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] px-4 py-3 rounded-xl transition-colors">
-                  Browse all attractions &rarr;
+                  {t('browseAllAttractions')} &rarr;
                 </Link>
               </div>
             </div>
@@ -883,20 +893,13 @@ export default function Nav() {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
                   </svg>
-                  Sign In
+                  {t('signIn')}
                 </Link>
               )}
               <div className="flex items-center gap-2">
                 <ThemeToggle/>
                 <select value={lang}
-                  onChange={e => {
-                    const code = e.target.value
-                    setLang(code)
-                    if (['EN', 'FR', 'PT'].includes(code)) {
-                      document.cookie = `NEXT_LOCALE=${code.toLowerCase()}; path=/; max-age=31536000; SameSite=Lax`
-                      window.location.reload()
-                    }
-                  }}
+                  onChange={e => switchLocale(e.target.value)}
                   className="bg-white/10 text-cream text-[14px] font-sans border border-white/15 rounded-full px-3 py-1.5 focus:outline-none">
                   {LANGUAGES.map(l => (
                     <option key={l.code} value={l.code} className="text-charcoal bg-white">{l.label}</option>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/i18n/navigation'
 import { useSession } from 'next-auth/react'
 
 // Session 4.3 — "Joining requires an account." Same shape as the trip

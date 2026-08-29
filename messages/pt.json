@@ -8,7 +8,17 @@
     "contact":      "Contacto",
     "signIn":       "Entrar",
     "planATrip":    "Planear",
-    "comingSoon":   "Brevemente"
+    "comingSoon":   "Brevemente",
+    "exploreAfrica":        "Explorar África",
+    "site":                 "Site",
+    "latestGuides":         "Últimos Guias",
+    "travelGuides":         "Guias de Viagem",
+    "search":               "Pesquisar",
+    "viewAllCountries":     "Ver todos os países",
+    "browseAllGuides":      "Ver todos os guias",
+    "browseAllAttractions": "Ver todas as atrações",
+    "more":                 "Mais",
+    "featured":             "Em Destaque"
   },
   "common": {
     "browseAll":    "Ver Tudo",
@@ -92,6 +102,10 @@
     "sectionDestinations": "Destinos",
     "sectionExperiences":  "Experiências",
     "sectionGuides":       "Melhores Guias",
-    "sectionCompany":      "Empresa"
+    "sectionCompany":      "Empresa",
+    "aboutUs":             "Sobre Nós",
+    "newsletter":          "Newsletter",
+    "contactUs":           "Contacte-nos",
+    "longTagline":         "O destino para descobrir as maiores atrações, cultura e experiências de viagem de África. Verificado. Específico. Escrito a partir do continente."
   }
 }

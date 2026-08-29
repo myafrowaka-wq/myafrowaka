@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Flag } from '@/components/Flag'
 
 // Session 4.3 — "a travel passport showing countries visited... Status,

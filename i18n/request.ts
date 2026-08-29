@@ -1,13 +1,17 @@
 import { getRequestConfig } from 'next-intl/server'
-import { cookies } from 'next/headers'
+import { hasLocale } from 'next-intl'
+import { routing } from './routing'
 
-const SUPPORTED = ['en', 'fr', 'pt'] as const
-type Locale = typeof SUPPORTED[number]
-
-export default getRequestConfig(async () => {
-  const cookieStore = await cookies()
-  const raw = cookieStore.get('NEXT_LOCALE')?.value ?? 'en'
-  const locale: Locale = (SUPPORTED as readonly string[]).includes(raw) ? (raw as Locale) : 'en'
+// Session 5.3 — replaces the old cookie-read (`NEXT_LOCALE`) with the real
+// thing: the locale is now part of the URL itself, resolved by
+// middleware.ts and handed to every server component via the [locale]
+// route segment. `requestLocale` is next-intl's async accessor for that
+// resolved value — falling back to the default locale for anything
+// outside the [locale] tree (api routes, or a locale segment somehow
+// missing/invalid), same as before.
+export default getRequestConfig(async ({ requestLocale }) => {
+  const requested = await requestLocale
+  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale
 
   const messagesModule =
     locale === 'fr' ? await import('../messages/fr.json') :

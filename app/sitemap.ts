@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { client } from '@/sanity/lib/client'
 import { EVENT_MONTHS, matchesMonth, toSlug } from '@/lib/eventFilters'
+import { hreflangAlternates } from '@/lib/hreflang'
 
 const BASE = 'https://myafrowaka.com'
 
@@ -9,16 +10,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // ── Static pages ─────────────────────────────────────────────────────────
   const statics: MetadataRoute.Sitemap = [
-    { url: BASE,               lastModified: now, changeFrequency: 'daily',   priority: 1.0 },
-    { url: `${BASE}/blog`,        lastModified: now, changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${BASE}/attractions`,  lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
-    { url: `${BASE}/events`,   lastModified: now, changeFrequency: 'daily',   priority: 0.9 },
-    { url: `${BASE}/events/experience-score`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE}/guides`,   lastModified: now, changeFrequency: 'weekly',  priority: 0.85 },
-    { url: `${BASE}/about`,    lastModified: now, changeFrequency: 'monthly', priority: 0.5  },
-    { url: `${BASE}/contact`,  lastModified: now, changeFrequency: 'monthly', priority: 0.4  },
-    { url: `${BASE}/privacy`,  lastModified: now, changeFrequency: 'yearly',  priority: 0.2  },
-    { url: `${BASE}/terms`,    lastModified: now, changeFrequency: 'yearly',  priority: 0.2  },
+    { url: BASE,               lastModified: now, changeFrequency: 'daily',   priority: 1.0, alternates: { languages: hreflangAlternates(BASE) } },
+    { url: `${BASE}/blog`,        lastModified: now, changeFrequency: 'daily',   priority: 0.9, alternates: { languages: hreflangAlternates(`${BASE}/blog`) } },
+    { url: `${BASE}/attractions`,  lastModified: now, changeFrequency: 'weekly',  priority: 0.9, alternates: { languages: hreflangAlternates(`${BASE}/attractions`) } },
+    { url: `${BASE}/events`,   lastModified: now, changeFrequency: 'daily',   priority: 0.9, alternates: { languages: hreflangAlternates(`${BASE}/events`) } },
+    { url: `${BASE}/events/experience-score`, lastModified: now, changeFrequency: 'monthly', priority: 0.5, alternates: { languages: hreflangAlternates(`${BASE}/events/experience-score`) } },
+    { url: `${BASE}/guides`,   lastModified: now, changeFrequency: 'weekly',  priority: 0.85, alternates: { languages: hreflangAlternates(`${BASE}/guides`) } },
+    { url: `${BASE}/about`,    lastModified: now, changeFrequency: 'monthly', priority: 0.5, alternates: { languages: hreflangAlternates(`${BASE}/about`) } },
+    { url: `${BASE}/contact`,  lastModified: now, changeFrequency: 'monthly', priority: 0.4, alternates: { languages: hreflangAlternates(`${BASE}/contact`) } },
+    { url: `${BASE}/privacy`,  lastModified: now, changeFrequency: 'yearly',  priority: 0.2, alternates: { languages: hreflangAlternates(`${BASE}/privacy`) } },
+    { url: `${BASE}/terms`,    lastModified: now, changeFrequency: 'yearly',  priority: 0.2, alternates: { languages: hreflangAlternates(`${BASE}/terms`) } },
   ]
 
   // ── Attractions ───────────────────────────────────────────────────────────
@@ -31,6 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: a.lastVerifiedDate ? new Date(a.lastVerifiedDate) : now,
     changeFrequency: 'monthly',
     priority: 0.8,
+    alternates: { languages: hreflangAlternates(`${BASE}/attractions/${a.slug}`) },
   }))
 
   // ── Blog posts ────────────────────────────────────────────────────────────
@@ -43,6 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: p.publishedAt ? new Date(p.publishedAt) : now,
     changeFrequency: 'monthly',
     priority: 0.7,
+    alternates: { languages: hreflangAlternates(`${BASE}/blog/${p.slug}`) },
   }))
 
   // ── Events (Session 3.3 built the page template; Session 3.4 the six
@@ -66,15 +69,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const eventCountryEntries: MetadataRoute.Sitemap = eventCountrySlugs.map(slug => ({
     url: `${BASE}/events/country/${slug}`, lastModified: now, changeFrequency: 'weekly', priority: 0.65,
+    alternates: { languages: hreflangAlternates(`${BASE}/events/country/${slug}`) },
   }))
   const eventRegionEntries: MetadataRoute.Sitemap = eventRegions.map(r => ({
     url: `${BASE}/events/region/${toSlug(r)}`, lastModified: now, changeFrequency: 'weekly', priority: 0.6,
+    alternates: { languages: hreflangAlternates(`${BASE}/events/region/${toSlug(r)}`) },
   }))
   const eventCategoryEntries: MetadataRoute.Sitemap = eventCategoriesUsed.map(c => ({
     url: `${BASE}/events/category/${toSlug(c)}`, lastModified: now, changeFrequency: 'weekly', priority: 0.6,
+    alternates: { languages: hreflangAlternates(`${BASE}/events/category/${toSlug(c)}`) },
   }))
   const eventMonthEntries: MetadataRoute.Sitemap = eventMonthsUsed.map(m => ({
     url: `${BASE}/events/month/${toSlug(m)}`, lastModified: now, changeFrequency: 'weekly', priority: 0.6,
+    alternates: { languages: hreflangAlternates(`${BASE}/events/month/${toSlug(m)}`) },
   }))
 
   const eventCollections = await client.fetch<{ slug: string }[]>(`
@@ -82,6 +89,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   `).catch(() => [])
   const eventCollectionEntries: MetadataRoute.Sitemap = eventCollections.map(c => ({
     url: `${BASE}/events/collections/${c.slug}`, lastModified: now, changeFrequency: 'monthly', priority: 0.6,
+    alternates: { languages: hreflangAlternates(`${BASE}/events/collections/${c.slug}`) },
   }))
 
   const eventEntries: MetadataRoute.Sitemap = events.map(e => ({
@@ -89,6 +97,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: e.verificationDate ? new Date(e.verificationDate) : now,
     changeFrequency: 'weekly',
     priority: 0.75,
+    alternates: { languages: hreflangAlternates(`${BASE}/events/${e.slug}`) },
   }))
 
   // ── Destination (country) pages ───────────────────────────────────────────
@@ -103,6 +112,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: now,
     changeFrequency: 'weekly',
     priority: 0.75,
+    alternates: { languages: hreflangAlternates(`${BASE}/destinations/${c.slug}`) },
   }))
 
   // ── City pages ────────────────────────────────────────────────────────────
@@ -116,6 +126,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: now,
     changeFrequency: 'weekly',
     priority: 0.6,
+    alternates: { languages: hreflangAlternates(`${BASE}/cities/${c.slug}`) },
   }))
 
   // ── Authors ───────────────────────────────────────────────────────────────
@@ -128,6 +139,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: now,
     changeFrequency: 'monthly',
     priority: 0.5,
+    alternates: { languages: hreflangAlternates(`${BASE}/authors/${a.slug}`) },
   }))
 
   // ── Guide (editorial pillar) pages ───────────────────────────────────────
@@ -140,6 +152,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: now,
     changeFrequency: 'monthly',
     priority: 0.75,
+    alternates: { languages: hreflangAlternates(`${BASE}/guides/${g.slug}`) },
   }))
 
   return [
