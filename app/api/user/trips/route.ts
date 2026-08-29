@@ -32,6 +32,14 @@ export async function GET() {
       userId,
       "isOwner": userId == $uid,
       "country": country->{ name, "slug": slug.current, countryCode },
+      // Session 5.2 — "in trip itineraries." Same country-match pattern
+      // used everywhere else this session; ^.country._ref still resolves
+      // against the raw source document even with the sibling "country"
+      // field above already expanded via -> (proven pattern, see
+      // ATTRACTION_BY_SLUG_QUERY's nearbyEvents).
+      "affiliateLinks": *[_type == "affiliateLink" && active != false && country._ref == ^.country._ref]{
+        label, partnerName, linkType, "slug": slug.current
+      },
       dates,
       "days": days[]{
         date,

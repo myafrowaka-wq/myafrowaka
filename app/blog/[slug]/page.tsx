@@ -35,6 +35,8 @@ interface Post {
   metaDescription?: string
   author?: { name: string; slug?: string; bio?: string; photo?: unknown }
   featuredCountry?: { name: string; slug: string }
+  relatedAttractions?: { name: string; slug: string; type?: string[]; editorialSummary?: string }[]
+  relatedEvents?: { name: string; slug: string; category?: string }[]
 }
 
 // ── Static params ─────────────────────────────────────────────────────────────
@@ -337,6 +339,37 @@ export default async function BlogPostPage(
                       {tag}
                     </span>
                   ))}
+                </div>
+              )}
+
+              {/* Attractions and events for this article's country — derived
+                  from featuredCountry, not hand-picked per article
+                  (Session 5.2). */}
+              {((post.relatedAttractions && post.relatedAttractions.length > 0) ||
+                (post.relatedEvents && post.relatedEvents.length > 0)) && post.featuredCountry && (
+                <div className="mt-12 border-t border-line dark-flip-border pt-10">
+                  <h2 className="font-display font-bold text-charcoal dark-flip-text mb-6"
+                    style={{ fontSize: 'clamp(16px, 2vw, 22px)', letterSpacing: '-0.015em' }}>
+                    Explore {post.featuredCountry.name}
+                  </h2>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {post.relatedAttractions?.map(a => (
+                      <Link key={a.slug} href={`/attractions/${a.slug}`}
+                        className="block bg-sand dark-flip-surf border border-line dark-flip-border hover:border-gold-300 rounded-xl p-4 transition-colors">
+                        <p className="font-display font-bold text-charcoal dark-flip-text text-[15px] mb-1">{a.name}</p>
+                        {a.editorialSummary && <p className="font-sans text-[14px] text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-2">{a.editorialSummary}</p>}
+                      </Link>
+                    ))}
+                    {post.relatedEvents?.map(ev => (
+                      <Link key={ev.slug} href={`/events/${ev.slug}`}
+                        className="flex items-center gap-3 bg-sand dark-flip-surf border border-line dark-flip-border hover:border-gold-300 rounded-xl p-4 transition-colors">
+                        <svg className="w-4 h-4 text-crimson shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <p className="font-display font-bold text-charcoal dark-flip-text text-[15px]">{ev.name}</p>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
 

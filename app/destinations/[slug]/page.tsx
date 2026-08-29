@@ -11,6 +11,7 @@ import { PopularPills } from '@/components/PopularPills'
 import { CountryOverview } from '@/components/CountryOverview'
 import { Flag } from '@/components/Flag'
 import { countryStockImage, attractionStockImage } from '@/lib/stockImageCredits'
+import { AffiliateLinkList, type AffiliateLinkData } from '@/components/AffiliateLinkList'
 
 interface AttractionSummary {
   name: string; slug: string; type?: string[]; editorialSummary?: string
@@ -26,6 +27,9 @@ interface Destination {
   startHereAttractions?: AttractionSummary[]
   attractions: AttractionSummary[]
   relatedCountries?: { name: string; slug: string; countryCode?: string }[]
+  upcomingEvents?: { name: string; slug: string; category?: string }[]
+  relatedArticles?: { title: string; slug: string; excerpt?: string; category?: string }[]
+  affiliateLinks?: AffiliateLinkData[]
 }
 
 const countryImageUrl = countryStockImage
@@ -289,6 +293,57 @@ export default async function DestinationPage({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
                   </svg>
                 </Link>
+              )}
+            </div>
+          )}
+
+          {/* Upcoming events, articles, and where to stay — derived from
+              the country reference every one of these documents already
+              carries, not hand-curated (Session 5.2). */}
+          {((dest.upcomingEvents && dest.upcomingEvents.length > 0) ||
+            (dest.relatedArticles && dest.relatedArticles.length > 0) ||
+            (dest.affiliateLinks && dest.affiliateLinks.length > 0)) && (
+            <div className="mt-16 pt-12 border-t border-line dark-flip-border grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {dest.upcomingEvents && dest.upcomingEvents.length > 0 && (
+                <div className="border border-line dark-flip-border rounded-3xl p-6">
+                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">Upcoming Events</p>
+                  <div className="space-y-2">
+                    {dest.upcomingEvents.map(ev => (
+                      <Link key={ev.slug} href={`/events/${ev.slug}`}
+                        className="flex items-start gap-2.5 group py-1">
+                        <svg className="w-3.5 h-3.5 text-crimson shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted group-hover:text-crimson transition-colors leading-snug">
+                          {ev.name}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {dest.relatedArticles && dest.relatedArticles.length > 0 && (
+                <div className="border border-line dark-flip-border rounded-3xl p-6">
+                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">From the Journal</p>
+                  <div className="space-y-2">
+                    {dest.relatedArticles.map(post => (
+                      <Link key={post.slug} href={`/blog/${post.slug}`}
+                        className="flex items-start gap-2.5 group py-1">
+                        <svg className="w-3.5 h-3.5 text-ochre-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                        <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted group-hover:text-crimson transition-colors leading-snug">
+                          {post.title}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {dest.affiliateLinks && dest.affiliateLinks.length > 0 && (
+                <AffiliateLinkList links={dest.affiliateLinks} title={`Where to Stay in ${dest.name}`} />
               )}
             </div>
           )}

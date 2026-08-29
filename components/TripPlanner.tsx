@@ -12,6 +12,7 @@ import {
   loadTripDraft, saveTripDraft, clearTripDraft, dateRange,
   EMPTY_DRAFT, type TripDraft, type TripDraftItem,
 } from '@/lib/tripStorage'
+import { AffiliateLinkList, type AffiliateLinkData } from '@/components/AffiliateLinkList'
 
 // Session 4.2 — the real trip planner. Fully usable while signed out: every
 // change is written straight to localStorage (lib/tripStorage.ts), so
@@ -23,6 +24,7 @@ import {
 export interface PlannerCountry {
   name: string; slug: string; countryCode?: string; continentRegion?: string
   overview?: string; whenToGo?: string; knownFor?: string
+  affiliateLinks?: AffiliateLinkData[]
 }
 export interface PlannerAttraction {
   name: string; slug: string; type?: string[]; editorialSummary?: string
@@ -348,7 +350,18 @@ export function TripPlanner({ countries, attractions, events }: Props) {
                 Full guide to {selectedCountry.name} &#8594;
               </Link>
             </div>
-          ) : (
+          ) : null}
+
+          {/* Where to stay — real affiliate links tagged to this country
+              (Session 5.2). Renders nothing until the owner actually adds
+              one in Studio; no placeholder "Book now" link. */}
+          {selectedCountry?.affiliateLinks && selectedCountry.affiliateLinks.length > 0 && (
+            <div className="mt-4">
+              <AffiliateLinkList links={selectedCountry.affiliateLinks} title={`Where to Stay in ${selectedCountry.name}`} />
+            </div>
+          )}
+
+          {!selectedCountry && (
             <div className="relative">
               <input
                 type="text" value={countryQuery} onChange={e => setCountryQuery(e.target.value)}

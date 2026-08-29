@@ -11,6 +11,7 @@ import { SaveButton } from '@/components/SaveButton'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
 import { Flag } from '@/components/Flag'
 import { attractionStockImage } from '@/lib/stockImageCredits'
+import { AffiliateLinkList, type AffiliateLinkData } from '@/components/AffiliateLinkList'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -54,6 +55,9 @@ interface Attraction {
   nearbyCities?: { name: string; slug: string }[]
   featuredIn?: { title: string; slug: string }[]
   countryAttractions?: { name: string; slug: string; type?: string[]; editorialSummary?: string }[]
+  affiliateLinks?: AffiliateLinkData[]
+  nearbyEvents?: { name: string; slug: string; category?: string; country?: { name: string; slug: string; countryCode?: string } }[]
+  relatedArticles?: { title: string; slug: string; excerpt?: string; category?: string }[]
 }
 
 type PortableBlock = {
@@ -986,6 +990,51 @@ export default async function AttractionPage(
                         </svg>
                         <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted group-hover:text-crimson transition-colors leading-snug">
                           {g.title}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Where to Stay — real affiliate links only (Session 5.2) */}
+              {a.affiliateLinks && a.affiliateLinks.length > 0 && (
+                <AffiliateLinkList links={a.affiliateLinks} title="Where to Stay" />
+              )}
+
+              {/* Events nearby — derived from country, not hand-curated (Session 5.2) */}
+              {a.nearbyEvents && a.nearbyEvents.length > 0 && (
+                <div className="border border-line dark-flip-border rounded-3xl p-6">
+                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">Events Nearby</p>
+                  <div className="space-y-2">
+                    {a.nearbyEvents.map(ev => (
+                      <Link key={ev.slug} href={`/events/${ev.slug}`}
+                        className="flex items-start gap-2.5 group py-1">
+                        <svg className="w-3.5 h-3.5 text-crimson shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted group-hover:text-crimson transition-colors leading-snug">
+                          {ev.name}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Related articles — matched by country, not hand-curated (Session 5.2) */}
+              {a.relatedArticles && a.relatedArticles.length > 0 && (
+                <div className="border border-line dark-flip-border rounded-3xl p-6">
+                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">From the Journal</p>
+                  <div className="space-y-2">
+                    {a.relatedArticles.map(post => (
+                      <Link key={post.slug} href={`/blog/${post.slug}`}
+                        className="flex items-start gap-2.5 group py-1">
+                        <svg className="w-3.5 h-3.5 text-ochre-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                        <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted group-hover:text-crimson transition-colors leading-snug">
+                          {post.title}
                         </span>
                       </Link>
                     ))}

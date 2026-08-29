@@ -15,6 +15,7 @@ import { overallExperienceScore, SCORE_DIMENSIONS } from '@/lib/experienceScore'
 import { EVENT_CATEGORY_COLOR, EVENT_CATEGORY_COLOR_FALLBACK } from '@/lib/regionColors'
 import { stockImage } from '@/lib/stockImageCredits'
 import { toSlug } from '@/lib/eventFilters'
+import { AffiliateLinkList, type AffiliateLinkData } from '@/components/AffiliateLinkList'
 
 const builder = imageUrlBuilder(client)
 type SanityImage = Parameters<typeof builder.image>[0]
@@ -84,6 +85,8 @@ interface Event {
   city?: { name: string; slug: string } | null
   nearbyAttractions?: NearbyAttraction[]
   nearbyEvents?: NearbyEvent[]
+  affiliateLinks?: AffiliateLinkData[]
+  relatedArticles?: { title: string; slug: string; excerpt?: string; category?: string }[]
 }
 
 // ── PortableText rendering ──────────────────────────────────────────────────
@@ -381,9 +384,14 @@ export default async function EventPage(
                 </Section>
               )}
 
-              {event.whereToStay && (
+              {(event.whereToStay || (event.affiliateLinks && event.affiliateLinks.length > 0)) && (
                 <Section title="Where to Stay">
-                  <p className="font-sans text-[15px] text-charcoal/75 dark-flip-muted leading-relaxed whitespace-pre-line">{event.whereToStay}</p>
+                  {event.whereToStay && (
+                    <p className="font-sans text-[15px] text-charcoal/75 dark-flip-muted leading-relaxed whitespace-pre-line mb-4">{event.whereToStay}</p>
+                  )}
+                  {event.affiliateLinks && event.affiliateLinks.length > 0 && (
+                    <AffiliateLinkList links={event.affiliateLinks} title="Book a Stay" />
+                  )}
                 </Section>
               )}
 
@@ -445,6 +453,21 @@ export default async function EventPage(
               {event.suggestedItinerary && event.suggestedItinerary.length > 0 && (
                 <Section title="A Suggested Itinerary">
                   <PortableText value={event.suggestedItinerary as never} components={ptComponents} />
+                </Section>
+              )}
+
+              {/* Related articles — matched by country, not hand-curated (Session 5.2) */}
+              {event.relatedArticles && event.relatedArticles.length > 0 && (
+                <Section title="From the Journal">
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {event.relatedArticles.map(post => (
+                      <Link key={post.slug} href={`/blog/${post.slug}`}
+                        className="block bg-white dark-flip-card border border-line dark-flip-border hover:border-gold-300 rounded-xl p-4 transition-colors">
+                        <p className="font-display font-bold text-charcoal dark-flip-text text-[15px] mb-1">{post.title}</p>
+                        {post.excerpt && <p className="font-sans text-[14px] text-charcoal/55 dark-flip-muted leading-relaxed line-clamp-2">{post.excerpt}</p>}
+                      </Link>
+                    ))}
+                  </div>
                 </Section>
               )}
             </div>

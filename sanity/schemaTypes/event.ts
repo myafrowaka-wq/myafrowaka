@@ -397,6 +397,17 @@ export const event = defineType({
       type: 'text',
       rows: 3,
       group: 'logistics',
+      description: 'Editorial narrative — which neighborhood, why. Pair with real booking links below rather than instead of them.',
+    }),
+    defineField({
+      // Session 5.2 — "on event pages under accommodation." Same
+      // affiliateLink reference pattern as attraction.ts.
+      name: 'affiliateLinks',
+      title: 'Where to Stay — Affiliate Links',
+      type: 'array',
+      group: 'logistics',
+      description: 'Real partner links only. Empty is the honest default until a real one exists.',
+      of: [{ type: 'reference', to: [{ type: 'affiliateLink' }] }],
     }),
     defineField({
       name: 'costEstimate',

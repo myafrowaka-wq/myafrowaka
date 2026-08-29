@@ -17,8 +17,10 @@ interface City {
   name: string
   slug: { current: string }
   overview?: string
-  country?: { name: string; slug: string }
+  country?: { name: string; slug: string; countryCode?: string }
   attractions: Attraction[]
+  upcomingEvents?: { name: string; slug: string; category?: string }[]
+  eventsScope?: 'city' | 'country'
 }
 
 export async function generateStaticParams() {
@@ -86,9 +88,10 @@ export default async function CityPage(
       <div className="bg-sand border-b border-line">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-12">
           {city.country && (
-            <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-ochre-600 mb-2">
+            <Link href={`/destinations/${city.country.slug}`}
+              className="inline-block font-sans text-[14px] uppercase tracking-[0.16em] text-ochre-600 hover:text-ochre-700 transition-colors mb-2">
               {city.country.name}
-            </p>
+            </Link>
           )}
 
           <h1 className="font-display text-4xl md:text-6xl text-charcoal mb-3 leading-tight">
@@ -155,6 +158,26 @@ export default async function CityPage(
                 </Link>
               )
             })}
+          </div>
+        )}
+
+        {/* Events — city-first, country fallback, not hand-curated (Session 5.2) */}
+        {city.upcomingEvents && city.upcomingEvents.length > 0 && (
+          <div className="mt-12 pt-10 border-t border-line">
+            <h2 className="font-display text-2xl text-charcoal mb-5">
+              Events {city.eventsScope === 'city' ? `in ${city.name}` : city.country ? `in ${city.country.name}` : 'Nearby'}
+            </h2>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {city.upcomingEvents.map(ev => (
+                <Link key={ev.slug} href={`/events/${ev.slug}`}
+                  className="flex items-center gap-3 bg-white border border-line hover:border-ochre-300 rounded-xl p-4 transition-colors">
+                  <svg className="w-4 h-4 text-crimson shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  <span className="font-sans text-sm text-charcoal group-hover:text-ochre-600">{ev.name}</span>
+                </Link>
+              ))}
+            </div>
           </div>
         )}
       </div>

@@ -314,6 +314,18 @@ export const attraction = defineType({
       group: 'logistics',
       description: 'Driving distance. Google Maps. Not straight-line.',
     }),
+    defineField({
+      // Session 5.2 — "Placed on attraction pages under 'where to stay'."
+      // References affiliateLink documents rather than duplicating a URL
+      // here — the same real partner link (e.g. a country-wide Booking.com
+      // link) can be attached to many attractions without re-pasting it.
+      name: 'affiliateLinks',
+      title: 'Where to Stay — Affiliate Links',
+      type: 'array',
+      group: 'logistics',
+      description: 'Real partner links only. Empty is the honest default until a real one exists — this never fabricates a "Book now" link.',
+      of: [{ type: 'reference', to: [{ type: 'affiliateLink' }] }],
+    }),
 
     // ─── TAXONOMY ────────────────────────────────────────────────────────────
     defineField({

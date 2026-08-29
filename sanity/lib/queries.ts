@@ -42,6 +42,28 @@ export const ATTRACTION_BY_SLUG_QUERY = `
     },
     "countryAttractions": *[_type == "attraction" && country._ref == ^.country._ref && contentStatus == "Published" && slug.current != $slug][0..3]{
       name, "slug": slug.current, type, editorialSummary
+    },
+    // Session 5.2 — real partner links only; an attraction with none
+    // simply renders no "Where to Stay" section (see affiliateLink.ts).
+    // NOTE: deliberately not "affiliateLinks[]->{...}[active != false]" —
+    // confirmed live that chaining a bracket filter directly after a
+    // dereferenced projection silently returns an array of null for every
+    // element rather than filtering anything. The _id-in-refs shape below
+    // is the correct GROQ idiom for "dereference an array of references,
+    // filtered by a field on the target document."
+    "affiliateLinks": *[_type == "affiliateLink" && active != false && _id in ^.affiliateLinks[]._ref]{
+      label, partnerName, linkType, "slug": slug.current
+    },
+    // Session 5.2 — "connect all backlinks... automatically based on the
+    // data." Same country-match pattern countryAttractions above already
+    // uses, extended to the two content types attraction pages had no link
+    // to at all before this session.
+    "nearbyEvents": *[_type == "event" && contentStatus == "Published" && references(^.country._ref)][0..2]{
+      name, "slug": slug.current, category, heroImage, dateType, startDate, endDate, estimatedTiming, verificationStatus,
+      "country": country->{ name, "slug": slug.current, countryCode }
+    },
+    "relatedArticles": *[_type == "post" && contentStatus == "Published" && featuredCountry._ref == ^.country._ref][0..2]{
+      title, "slug": slug.current, excerpt, coverImage, category
     }
   }
 `
@@ -72,11 +94,33 @@ export const CITY_BY_SLUG_QUERY = `
   *[_type == "city" && slug.current == $slug][0]{
     name,
     slug,
-    "country": country->{ name, "slug": slug.current },
+    "country": country->{ name, "slug": slug.current, countryCode },
     overview,
     "attractions": *[_type == "attraction" && references(^._id) && contentStatus == "Published"]{
       name, "slug": slug.current, type, continentRegion, editorialSummary
-    } | order(name asc)
+    } | order(name asc),
+    // Session 5.2 — "connect all backlinks... automatically based on the
+    // data." Same city-first-then-country-fallback shape the event
+    // template's own "nearbyAttractions" already uses (see
+    // EVENT_BY_SLUG_QUERY above) — a city page had no link to events at
+    // all before this session.
+    // A bare array can't say whether these events are actually in this
+    // city or just somewhere in the country — the page needs to know
+    // which, so "Events in Alexandria" doesn't get shown for an event that
+    // only matched the country-wide fallback.
+    "eventsScope": select(
+      count(*[_type == "event" && contentStatus == "Published" && references(^._id)]) > 0 => "city",
+      "country"
+    ),
+    "upcomingEvents": select(
+      count(*[_type == "event" && contentStatus == "Published" && references(^._id)]) > 0 =>
+        *[_type == "event" && contentStatus == "Published" && references(^._id)][0..3]{
+          name, "slug": slug.current, category
+        },
+      *[_type == "event" && contentStatus == "Published" && references(^.country._ref)][0..3]{
+        name, "slug": slug.current, category
+      }
+    )
   }
 `
 
@@ -111,7 +155,18 @@ export const POST_BY_SLUG_QUERY = `
     metaTitle,
     metaDescription,
     "author": author->{ name, "slug": slug.current, bio, photo },
-    "featuredCountry": featuredCountry->{ name, "slug": slug.current }
+    "featuredCountry": featuredCountry->{ name, "slug": slug.current },
+    // Session 5.2 — "connect all backlinks... automatically based on the
+    // data." A post had no link to specific attractions or events at all
+    // before this session — only to its one featuredCountry. Both derived
+    // from that same reference, same pattern as every other page this
+    // session, not hand-picked per article.
+    "relatedAttractions": *[_type == "attraction" && contentStatus == "Published" && references(^.featuredCountry._ref)][0..3]{
+      name, "slug": slug.current, type, editorialSummary
+    },
+    "relatedEvents": *[_type == "event" && contentStatus == "Published" && references(^.featuredCountry._ref)][0..3]{
+      name, "slug": slug.current, category
+    }
   }
 `
 
@@ -257,6 +312,17 @@ export const EVENT_BY_SLUG_QUERY = `
       name, "slug": slug.current, category, heroImage, dateType, startDate, endDate, estimatedTiming, verificationStatus,
       "country": country->{ name, "slug": slug.current, countryCode },
       "city": city->{ name }
+    },
+    // Session 5.2 — real partner links only (see affiliateLink.ts). See
+    // the attraction query's identical note above on why this is the
+    // _id-in-refs shape and not "affiliateLinks[]->{...}[active != false]".
+    "affiliateLinks": *[_type == "affiliateLink" && active != false && _id in ^.affiliateLinks[]._ref]{
+      label, partnerName, linkType, "slug": slug.current
+    },
+    // Session 5.2 — "connect all backlinks... automatically based on the
+    // data." Same country-match pattern as the attraction page.
+    "relatedArticles": *[_type == "post" && contentStatus == "Published" && featuredCountry._ref == ^.country._ref][0..2]{
+      title, "slug": slug.current, excerpt, category
     }
   }
 `
@@ -337,6 +403,24 @@ export const DESTINATION_BY_SLUG_QUERY = `
     } | order(name asc),
     "relatedCountries": *[_type == "country" && continentRegion == ^.continentRegion && slug.current != $slug][0..4]{
       name, "slug": slug.current, countryCode
+    },
+    // Session 5.2 — "connect all backlinks... automatically based on the
+    // data." A country page had no link to events or articles at all
+    // before this session, despite both already carrying a real country
+    // reference.
+    "upcomingEvents": *[_type == "event" && contentStatus == "Published" && references(^._id)][0..3]{
+      name, "slug": slug.current, category, heroImage, dateType, startDate, endDate, estimatedTiming, verificationStatus,
+      "country": country->{ name, "slug": slug.current, countryCode },
+      "city": city->{ name }
+    },
+    "relatedArticles": *[_type == "post" && contentStatus == "Published" && featuredCountry._ref == ^._id][0..3]{
+      title, "slug": slug.current, excerpt, category
+    },
+    // Real partner links tagged to this country (see affiliateLink.ts) —
+    // used for a general "Where to Stay" widget, not tied to one specific
+    // attraction.
+    "affiliateLinks": *[_type == "affiliateLink" && active != false && country._ref == ^._id]{
+      label, partnerName, linkType, "slug": slug.current
     }
   }
 `
@@ -349,7 +433,13 @@ export const DESTINATION_BY_SLUG_QUERY = `
 // fields (surprises, gettingAround, visaInfo, safetyInfo, quickFacts).
 export const TRIP_PLANNER_COUNTRIES_QUERY = `
   *[_type == "country"] | order(name asc){
-    name, "slug": slug.current, countryCode, continentRegion, overview, whenToGo, knownFor
+    name, "slug": slug.current, countryCode, continentRegion, overview, whenToGo, knownFor,
+    // Session 5.2 — "in trip itineraries." Fetched inline with the other
+    // 46 countries' worth of data the planner already pulls up front, same
+    // "small at this scale" reasoning as the comment above this query.
+    "affiliateLinks": *[_type == "affiliateLink" && active != false && country._ref == ^._id]{
+      label, partnerName, linkType, "slug": slug.current
+    }
   }
 `
 

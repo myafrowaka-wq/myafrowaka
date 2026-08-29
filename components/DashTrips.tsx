@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Flag } from '@/components/Flag'
 import { InviteFriendsForm } from '@/components/InviteFriendsForm'
 import { SuggestAdditionForm } from '@/components/SuggestAdditionForm'
+import { AffiliateLinkList, type AffiliateLinkData } from '@/components/AffiliateLinkList'
 
 // Session 4.2 — rebuilt for the real day-by-day itinerary (see
 // sanity/schemaTypes/savedTrip.ts and app/api/user/trips/route.ts).
@@ -25,6 +26,7 @@ interface Trip {
   name: string
   isOwner: boolean
   country?: { name: string; slug: string; countryCode?: string } | null
+  affiliateLinks?: AffiliateLinkData[]
   dates?: { from?: string; to?: string }
   days?: TripDay[]
   members?: TripMember[]
@@ -185,6 +187,11 @@ export function DashTrips() {
                       </ul>
                     </div>
                   ))}
+                  {/* Where to stay — real affiliate links tagged to this
+                      trip's country (Session 5.2). */}
+                  {trip.affiliateLinks && trip.affiliateLinks.length > 0 && (
+                    <AffiliateLinkList links={trip.affiliateLinks} title={`Where to Stay in ${trip.country?.name ?? 'this country'}`} />
+                  )}
                 </div>
               )}
 
