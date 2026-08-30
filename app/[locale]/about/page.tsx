@@ -164,7 +164,7 @@ export default function AboutPage() {
                   <div key={p.title}
                     className="group border border-line dark-flip-border rounded-2xl p-6 hover:border-gold-300 hover:shadow-[var(--shadow-soft)] transition-all">
                     <div className="flex items-start gap-4">
-                      <span className="font-sans text-[14px] text-charcoal/25 dark-flip-muted mt-1 shrink-0">0{i + 1}</span>
+                      <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted mt-1 shrink-0">0{i + 1}</span>
                       <div>
                         <h3 className="font-display font-bold text-base text-charcoal dark-flip-text mb-2 group-hover:text-crimson transition-colors">{p.title}</h3>
                         <p className="font-sans text-sm text-charcoal/60 dark-flip-muted leading-relaxed">{p.body}</p>
@@ -197,7 +197,7 @@ export default function AboutPage() {
                   },
                 ].map(a => (
                   <div key={a.title} className="bg-sand dark-flip-surf rounded-2xl p-6">
-                    <h4 className="font-display font-bold text-sm text-charcoal dark-flip-text mb-3">{a.title}</h4>
+                    <h3 className="font-display font-bold text-sm text-charcoal dark-flip-text mb-3">{a.title}</h3>
                     <p className="font-sans text-xs text-charcoal/60 dark-flip-muted leading-relaxed">{a.body}</p>
                   </div>
                 ))}
@@ -230,7 +230,7 @@ export default function AboutPage() {
 
             {/* Quick navigation */}
             <div className="bg-sand dark-flip-surf rounded-3xl p-7">
-              <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/40 dark-flip-muted mb-4">On This Page</p>
+              <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-4">On This Page</p>
               <nav className="space-y-1">
                 {QUICK_LINKS.map(l => (
                   <a key={l.label} href={l.href}
@@ -244,7 +244,7 @@ export default function AboutPage() {
 
             {/* What we believe */}
             <div className="border border-line dark-flip-border rounded-3xl p-7">
-              <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/40 dark-flip-muted mb-5">What We Believe</p>
+              <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-5">What We Believe</p>
               <ul className="space-y-4">
                 {[
                   'Africa is not a monolith. Dozens of countries, thousands of languages, and more variation than most people are taught to expect.',
@@ -263,10 +263,10 @@ export default function AboutPage() {
             <Link href="/search"
               className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
               <div>
-                <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted mb-1">Ready?</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/65 dark-flip-muted mb-1">Ready?</p>
                 <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">Browse All Attractions</p>
               </div>
-              <svg className="w-5 h-5 text-charcoal/30 group-hover:text-crimson transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-charcoal/65 group-hover:text-crimson transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
               </svg>
             </Link>

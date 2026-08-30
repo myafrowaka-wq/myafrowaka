@@ -50,7 +50,15 @@ export function AuthorAvatar({
       style={{ width: size, height: size }}
       aria-label={name}
     >
-      <span className="font-display font-bold text-crimson" style={{ fontSize: size * 0.36 }}>
+      {/* Session 6.3 — bg-crimson/20 is a translucent tint, so its actual
+          rendered color depends on what's behind it: a light card in light
+          mode, but the page's dark ink surface in dark mode, which darkens
+          the composited circle enough that full-strength text-crimson on it
+          fails WCAG AA (axe-core caught this on an author with no articles
+          yet, the only state that renders this fallback in practice).
+          dark:text-crimson-300 is the same dark-mode-safe step already used
+          for text-crimson elsewhere in the app. */}
+      <span className="font-display font-bold text-crimson dark:text-crimson-300" style={{ fontSize: size * 0.36 }}>
         {initials}
       </span>
     </div>

@@ -33,10 +33,10 @@ interface Health {
 const STATUS_STYLE: Record<string, string> = {
   Published:    'text-moss-400 border-moss-400/25 bg-moss-400/8',
   Verified:     'text-gold-400 border-gold-400/25 bg-gold-400/8',
-  Draft:        'text-cream/30 border-white/10 bg-white/3',
+  Draft:        'text-cream/55 border-white/10 bg-white/3',
   Incomplete:   'text-ochre-400 border-ochre-400/25 bg-ochre-400/8',
   'Needs Update': 'text-crimson border-crimson/25 bg-crimson/8',
-  Archived:     'text-cream/20 border-white/6 bg-white/2',
+  Archived:     'text-cream/55 border-white/6 bg-white/2',
 }
 
 // ── Health computation ────────────────────────────────────────────────────────
@@ -126,12 +126,12 @@ export default function AdminSeoPage() {
 
       {/* Header */}
       <div>
-        <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400/60 mb-1">Admin</p>
+        <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400/70 mb-1">Admin</p>
         <h1 className="font-display font-extrabold text-cream"
           style={{ fontSize: 'clamp(20px, 3vw, 34px)', letterSpacing: '-0.02em' }}>
           SEO Audit
         </h1>
-        <p className="font-sans text-[14px] text-cream/40 mt-1">
+        <p className="font-sans text-[14px] text-cream/55 mt-1">
           Check every attraction for publish-readiness before going live.
         </p>
       </div>
@@ -148,7 +148,7 @@ export default function AdminSeoPage() {
           ].map(s => (
             <div key={s.label} className="bg-white/5 border border-white/8 rounded-2xl p-4 text-center">
               <p className={`font-display font-extrabold text-2xl ${s.color}`}>{s.value}</p>
-              <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-cream/30 mt-1">{s.label}</p>
+              <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-cream/55 mt-1">{s.label}</p>
             </div>
           ))}
         </div>
@@ -156,18 +156,18 @@ export default function AdminSeoPage() {
 
       {/* Legend */}
       <div className="flex flex-wrap items-center gap-4">
-        <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-cream/30">Checks:</p>
+        <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-cream/55">Checks:</p>
         {[
           { label: 'Meta Title (≤65)',     color: 'text-cream/50' },
           { label: 'Meta Description (≤160)', color: 'text-cream/50' },
           { label: 'Focus Keyword',        color: 'text-cream/50' },
           { label: 'Article Body',         color: 'text-cream/50' },
           { label: 'Verified Date',        color: 'text-cream/50' },
-        ].map(l => <span key={l.label} className="font-sans text-[14px] text-cream/40">{l.label}</span>)}
+        ].map(l => <span key={l.label} className="font-sans text-[14px] text-cream/55">{l.label}</span>)}
         <div className="flex items-center gap-2 ml-auto">
-          <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-moss-400"/><span className="font-sans text-[14px] text-cream/35">OK</span></span>
-          <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-gold-400"/><span className="font-sans text-[14px] text-cream/35">Too long</span></span>
-          <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-crimson"/><span className="font-sans text-[14px] text-cream/35">Missing</span></span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-moss-400"/><span className="font-sans text-[14px] text-cream/55">OK</span></span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-gold-400"/><span className="font-sans text-[14px] text-cream/55">Too long</span></span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-2 h-2 rounded-full bg-crimson"/><span className="font-sans text-[14px] text-cream/55">Missing</span></span>
         </div>
       </div>
 
@@ -180,7 +180,7 @@ export default function AdminSeoPage() {
               className={`font-sans text-[14px] uppercase tracking-[0.1em] px-3 py-1.5 rounded-full border transition-all ${
                 tab === s
                   ? 'bg-gold-400 text-ink border-gold-400'
-                  : 'text-cream/40 border-white/12 hover:text-cream/70 hover:border-white/25'
+                  : 'text-cream/55 border-white/12 hover:text-cream/70 hover:border-white/25'
               }`}>
               {s} {tabCounts[s] > 0 && <span className="ml-1 opacity-60">{tabCounts[s]}</span>}
             </button>
@@ -197,6 +197,7 @@ export default function AdminSeoPage() {
             className="bg-white/6 border border-white/12 rounded-xl px-3 py-2 font-sans text-[14px] text-cream placeholder-cream/25 focus:outline-none focus:border-gold-400/40 w-52"
           />
           <select value={scoreFilter} onChange={e => setScoreFilter(e.target.value as typeof scoreFilter)}
+            aria-label="Filter by SEO score"
             className="bg-white/6 border border-white/12 rounded-xl px-3 py-2 font-sans text-[14px] uppercase tracking-[0.1em] text-cream/50 focus:outline-none">
             <option value="all">All scores</option>
             <option value="ready">SEO Ready (5/5)</option>
@@ -204,6 +205,7 @@ export default function AdminSeoPage() {
             <option value="needs">Needs work (0-2)</option>
           </select>
           <select value={sortBy} onChange={e => setSortBy(e.target.value as typeof sortBy)}
+            aria-label="Sort attractions"
             className="bg-white/6 border border-white/12 rounded-xl px-3 py-2 font-sans text-[14px] uppercase tracking-[0.1em] text-cream/50 focus:outline-none">
             <option value="score">Sort: Score (worst first)</option>
             <option value="name">Sort: Name A-Z</option>
@@ -216,29 +218,29 @@ export default function AdminSeoPage() {
       <div className="bg-white/5 border border-white/8 rounded-2xl overflow-hidden">
         {loading ? (
           <div className="py-20 flex items-center justify-center">
-            <svg className="w-5 h-5 animate-spin text-cream/25" fill="none" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 animate-spin text-cream/55" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
             </svg>
           </div>
         ) : filtered.length === 0 ? (
           <div className="py-16 text-center">
-            <p className="font-sans text-sm text-cream/30">No attractions match the current filters.</p>
+            <p className="font-sans text-sm text-cream/55">No attractions match the current filters.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-white/8">
-                  <th className="text-left px-5 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/25">Attraction</th>
-                  <th className="text-left px-4 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/25 hidden md:table-cell">Status</th>
-                  <th className="text-center px-4 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/25">Score</th>
-                  <th className="text-center px-3 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/25 hidden sm:table-cell">Title</th>
-                  <th className="text-center px-3 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/25 hidden sm:table-cell">Desc</th>
-                  <th className="text-center px-3 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/25 hidden lg:table-cell">KW</th>
-                  <th className="text-center px-3 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/25 hidden lg:table-cell">Body</th>
-                  <th className="text-center px-3 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/25 hidden lg:table-cell">Date</th>
-                  <th className="text-right px-5 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/25">Edit</th>
+                  <th className="text-left px-5 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55">Attraction</th>
+                  <th className="text-left px-4 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55 hidden md:table-cell">Status</th>
+                  <th className="text-center px-4 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55">Score</th>
+                  <th className="text-center px-3 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55 hidden sm:table-cell">Title</th>
+                  <th className="text-center px-3 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55 hidden sm:table-cell">Desc</th>
+                  <th className="text-center px-3 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55 hidden lg:table-cell">KW</th>
+                  <th className="text-center px-3 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55 hidden lg:table-cell">Body</th>
+                  <th className="text-center px-3 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55 hidden lg:table-cell">Date</th>
+                  <th className="text-right px-5 py-3.5 font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55">Edit</th>
                 </tr>
               </thead>
               <tbody>
@@ -250,11 +252,11 @@ export default function AdminSeoPage() {
                       <td className="px-5 py-3.5">
                         <p className="font-sans text-[14px] text-cream/75 leading-snug">{a.name}</p>
                         {a.country && (
-                          <p className="font-sans text-[14px] text-cream/25 mt-0.5 uppercase tracking-[0.1em]">{a.country.name}</p>
+                          <p className="font-sans text-[14px] text-cream/55 mt-0.5 uppercase tracking-[0.1em]">{a.country.name}</p>
                         )}
                       </td>
                       <td className="px-4 py-3.5 hidden md:table-cell">
-                        <span className={`font-sans text-[14px] uppercase tracking-[0.1em] px-2 py-0.5 rounded-full border ${STATUS_STYLE[a.contentStatus] ?? 'text-cream/30 border-white/10'}`}>
+                        <span className={`font-sans text-[14px] uppercase tracking-[0.1em] px-2 py-0.5 rounded-full border ${STATUS_STYLE[a.contentStatus] ?? 'text-cream/55 border-white/10'}`}>
                           {a.contentStatus}
                         </span>
                       </td>
@@ -279,7 +281,7 @@ export default function AdminSeoPage() {
                       <td className="px-5 py-3.5 text-right">
                         <a href={`/studio/structure/attraction;${a._id}`} target="_blank"
                           rel="noopener noreferrer"
-                          className="font-sans text-[14px] uppercase tracking-[0.1em] text-gold-400/60 hover:text-gold-400 border border-gold-400/20 hover:border-gold-400/40 px-2.5 py-1 rounded-lg transition-all inline-block">
+                          className="font-sans text-[14px] uppercase tracking-[0.1em] text-gold-400/70 hover:text-gold-400 border border-gold-400/20 hover:border-gold-400/40 px-2.5 py-1 rounded-lg transition-all inline-block">
                           Edit
                         </a>
                       </td>
@@ -290,7 +292,7 @@ export default function AdminSeoPage() {
             </table>
             {filtered.length === 250 && (
               <div className="px-5 py-3 border-t border-white/6 text-center">
-                <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-cream/20">Showing first 250 results. Use filters to narrow down.</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-cream/55">Showing first 250 results. Use filters to narrow down.</p>
               </div>
             )}
           </div>

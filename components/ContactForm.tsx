@@ -89,7 +89,7 @@ export function ContactForm() {
             name="name"
             required
             placeholder="Amara Okafor"
-            className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 focus:outline-none focus:border-gold-400 transition-colors"
+            className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/65 dark:placeholder:text-cream/55 focus:outline-none focus:border-gold-400 transition-colors"
           />
         </div>
         <div>
@@ -101,23 +101,24 @@ export function ContactForm() {
             name="email"
             required
             placeholder="you@example.com"
-            className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 focus:outline-none focus:border-gold-400 transition-colors"
+            className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/65 dark:placeholder:text-cream/55 focus:outline-none focus:border-gold-400 transition-colors"
           />
         </div>
       </div>
 
       <div>
-        <label className="font-display font-semibold text-[14px] text-charcoal/70 dark-flip-muted block mb-2">
+        <label htmlFor="contact-subject" className="font-display font-semibold text-[14px] text-charcoal/70 dark-flip-muted block mb-2">
           Reason for Contact
         </label>
         <div className="relative">
           <select
+            id="contact-subject"
             name="subject"
             className="w-full appearance-none border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text focus:outline-none focus:border-gold-400 transition-colors pr-10"
           >
             {REASONS.map(r => <option key={r} value={r}>{r}</option>)}
           </select>
-          <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/35 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/65 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
           </svg>
         </div>
@@ -132,7 +133,7 @@ export function ContactForm() {
           required
           rows={6}
           placeholder="Tell us what is on your mind. Specific is always better."
-          className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 resize-none transition-colors"
+          className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/65 focus:outline-none focus:border-gold-400 resize-none transition-colors"
         />
       </div>
 
@@ -159,7 +160,7 @@ export function ContactForm() {
         )}
       </button>
 
-      <p className="font-sans text-[14px] text-charcoal/35 dark-flip-muted">
+      <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">
         Your message goes directly to the editorial team. We do not use auto-replies.
       </p>
     </form>

@@ -20,7 +20,7 @@ const STATUS_STYLE: Record<string, string> = {
   Published:      'bg-moss-100 text-moss-700 dark:bg-moss-800/30 dark:text-moss-300',
   'Needs Update': 'bg-crimson/8 text-crimson',
   Incomplete:     'bg-ochre-50 text-ochre-700 dark:bg-ochre-900/20 dark:text-ochre-300',
-  Archived:       'bg-charcoal/5 text-charcoal/35',
+  Archived:       'bg-charcoal/5 text-charcoal/65',
 }
 
 export function MyContributions({ contributions }: { contributions: Contribution[] }) {
@@ -47,9 +47,9 @@ export function MyContributions({ contributions }: { contributions: Contribution
               ) : (
                 <span className="font-sans text-sm text-charcoal dark-flip-text truncate block">{c.name}</span>
               )}
-              {c.country?.name && <span className="font-sans text-[14px] text-charcoal/40 dark-flip-muted">{c.country.name}</span>}
+              {c.country?.name && <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">{c.country.name}</span>}
             </div>
-            <span className={`shrink-0 font-sans text-[14px] uppercase tracking-[0.1em] px-2.5 py-1 rounded-full ${STATUS_STYLE[c.contentStatus] ?? 'bg-charcoal/8 text-charcoal/40'}`}>
+            <span className={`shrink-0 font-sans text-[14px] uppercase tracking-[0.1em] px-2.5 py-1 rounded-full ${STATUS_STYLE[c.contentStatus] ?? 'bg-charcoal/8 text-charcoal/65'}`}>
               {c.contentStatus}
             </span>
           </div>

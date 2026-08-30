@@ -3,7 +3,7 @@ import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
-import { GUIDE_BY_SLUG_QUERY, ALL_GUIDE_SLUGS_QUERY } from '@/sanity/lib/queries'
+import { GUIDE_BY_SLUG_QUERY } from '@/sanity/lib/queries'
 import { REGION_COLOR, REGION_COLOR_FALLBACK } from '@/lib/regionColors'
 import { stockImage } from '@/lib/stockImageCredits'
 import { hreflangAlternates } from '@/lib/hreflang'
@@ -38,12 +38,26 @@ interface Guide {
 
 // ── Region accent colours ─────────────────────────────────────────────────────
 
-// ── Static params ─────────────────────────────────────────────────────────────
+// ── Rendering mode ────────────────────────────────────────────────────────────
 
-export async function generateStaticParams() {
-  const slugs = await client.fetch<{ slug: string }[]>(ALL_GUIDE_SLUGS_QUERY)
-  return slugs.map(s => ({ slug: s.slug }))
-}
+// Session 6.3 (WDOS gate run) — real bug, found live under `npm run build &&
+// npm run start` (never exercised by any prior session's dev-only testing):
+// this page used generateStaticParams to pre-render known guide slugs, which
+// makes Next.js fall back to on-demand rendering for any slug NOT in that
+// list (e.g. a guide published after the last build/deploy). On this Next.js
+// version (16.2.9) that on-demand fallback path itself is broken — it throws
+// `DYNAMIC_SERVER_USAGE` and returns HTTP 500 instead of running notFound(),
+// confirmed by reproducing the exact same crash on
+// events/collections/[collection]/page.tsx, the only other route in the app
+// using this same generateStaticParams+fallback pattern (every other content
+// route — attractions, events, blog, category/country/month/region — already
+// renders fully dynamically and was unaffected). Rather than patch around a
+// framework bug in one narrow rendering mode, this drops the static
+// pre-rendering optimization and renders every request live, which is what
+// the rest of the site's CMS-driven pages already do — consistent behavior,
+// and it guarantees a guide published after the last deploy actually loads
+// instead of silently 500ing until the next rebuild.
+export const dynamic = 'force-dynamic'
 
 // ── Metadata ──────────────────────────────────────────────────────────────────
 
@@ -148,7 +162,7 @@ export default async function GuidePage(
           </h1>
 
           {validItems.length > 0 && (
-            <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-cream/35 mt-4">
+            <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-cream/55 mt-4">
               {validItems.length} {validItems.length === 1 ? 'attraction' : 'attractions'} in this guide
             </p>
           )}
@@ -163,7 +177,7 @@ export default async function GuidePage(
             {/* ── Item list (2/3) ──────────────────────────────────── */}
             <div className="lg:col-span-2 space-y-5">
               {validItems.length === 0 ? (
-                <p className="font-sans text-sm text-charcoal/40 dark-flip-muted italic">
+                <p className="font-sans text-sm text-charcoal/65 dark-flip-muted italic">
                   Attractions for this guide are being added.
                 </p>
               ) : (
@@ -190,12 +204,12 @@ export default async function GuidePage(
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap gap-2 items-center mb-2">
                             {typeLabel && (
-                              <span className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/38 dark-flip-muted">
+                              <span className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark-flip-muted">
                                 {typeLabel}
                               </span>
                             )}
                             {a.country && (
-                              <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/28 dark-flip-muted">
+                              <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/65 dark-flip-muted">
                                 {a.city ? `${a.city.name}, ` : ''}{a.country.name}
                               </span>
                             )}
@@ -250,7 +264,7 @@ export default async function GuidePage(
                   </p>
                 )}
                 {!guide.focusKeyword && !guide.metaDescription && (
-                  <p className="font-sans text-[14px] text-cream/45 leading-relaxed">
+                  <p className="font-sans text-[14px] text-cream/55 leading-relaxed">
                     A curated selection of attractions verified by the MyAfroWaka editorial team.
                   </p>
                 )}
@@ -258,12 +272,12 @@ export default async function GuidePage(
 
               {/* Item count */}
               <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-3">In this guide</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-3">In this guide</p>
                 <p className="font-display font-bold text-charcoal dark-flip-text"
                   style={{ fontSize: 'clamp(28px, 3vw, 40px)', letterSpacing: '-0.02em' }}>
                   {validItems.length}
                 </p>
-                <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/30 dark-flip-muted mt-1">
+                <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark-flip-muted mt-1">
                   verified attractions
                 </p>
               </div>
@@ -272,12 +286,12 @@ export default async function GuidePage(
               <Link href="/guides"
                 className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
                 <div>
-                  <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-1">More</p>
+                  <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/65 dark-flip-muted mb-1">More</p>
                   <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                     All travel guides
                   </p>
                 </div>
-                <svg className="w-5 h-5 text-charcoal/25 group-hover:text-crimson transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-charcoal/65 group-hover:text-crimson transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
               </Link>
@@ -286,12 +300,12 @@ export default async function GuidePage(
               <Link href="/search"
                 className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
                 <div>
-                  <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-1">Explore</p>
+                  <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/65 dark-flip-muted mb-1">Explore</p>
                   <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                     Browse all attractions
                   </p>
                 </div>
-                <svg className="w-5 h-5 text-charcoal/25 group-hover:text-crimson transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-charcoal/65 group-hover:text-crimson transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
               </Link>

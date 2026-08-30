@@ -168,7 +168,7 @@ export default async function DestinationPage({
 
           {popularPills.length > 0 && (
             <div>
-              <p className="font-sans text-[14px] uppercase tracking-[0.15em] text-cream/30 mb-3">Popular in {dest.name}:</p>
+              <p className="font-sans text-[14px] uppercase tracking-[0.15em] text-cream/55 mb-3">Popular in {dest.name}:</p>
               <PopularPills attractions={popularPills} />
             </div>
           )}
@@ -212,10 +212,10 @@ export default async function DestinationPage({
 
           {pageItems.length === 0 ? (
             <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-16 text-center">
-              <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/35 dark-flip-muted mb-2">
+              <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/65 dark-flip-muted mb-2">
                 {q ? 'No results' : 'Coming soon'}
               </p>
-              <p className="font-sans text-sm text-charcoal/40 dark-flip-muted">
+              <p className="font-sans text-sm text-charcoal/65 dark-flip-muted">
                 {q
                   ? `No attractions in ${dest.name} matched that search.`
                   : `Attraction guides for ${dest.name} are being prepared.`}
@@ -236,9 +236,10 @@ export default async function DestinationPage({
                   <Link key={a.slug} href={`/attractions/${a.slug}`}
                     className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
                     <div className="relative h-48 overflow-hidden bg-sand">
+                      {/* Session 6.3 — image-redundant-alt: a.name is a visible heading in this same card below. */}
                       <Image
                         src={attractionImageUrl(a.slug)}
-                        alt={a.name} fill
+                        alt="" fill
                         sizes="(max-width:640px)100vw,(max-width:1024px)50vw,(max-width:1280px)33vw,25vw"
                         className="object-cover img-editorial img-inner"
                       />
@@ -365,7 +366,7 @@ export default async function DestinationPage({
                       {dest.tourismBoard.name}
                     </p>
                   </div>
-                  <svg className="w-5 h-5 text-charcoal/25 group-hover:text-crimson transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-charcoal/65 group-hover:text-crimson transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                   </svg>
                 </Link>
@@ -376,7 +377,7 @@ export default async function DestinationPage({
           {/* Also in region */}
           {dest.relatedCountries && dest.relatedCountries.length > 0 && (
             <div className="mt-16 pt-12 border-t border-line dark-flip-border">
-              <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-6">
+              <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-6">
                 Also in {dest.continentRegion}
               </p>
               <div className="flex flex-wrap gap-3">

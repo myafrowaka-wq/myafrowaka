@@ -364,10 +364,11 @@ export default async function UserDashboardPage() {
                   >
                     {/* Image area */}
                     <div className="relative h-40 overflow-hidden bg-sand dark-flip-surf">
+                      {/* Session 6.3 — image-redundant-alt: a.name is a visible heading in this same card below. */}
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={attractionImageUrl(a.slug)}
-                        alt={a.name}
+                        alt=""
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                       {typeLabel && (
@@ -458,7 +459,7 @@ export default async function UserDashboardPage() {
                 <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted">Queue</p>
               </div>
               <div className="p-10 text-center">
-                <div className="w-12 h-12 rounded-2xl bg-charcoal/6 dark-flip-surf flex items-center justify-center mx-auto mb-4 text-charcoal/25 dark-flip-muted">
+                <div className="w-12 h-12 rounded-2xl bg-charcoal/6 dark-flip-surf flex items-center justify-center mx-auto mb-4 text-charcoal/65 dark-flip-muted">
                   {icons.clip}
                 </div>
                 <p className="font-display font-semibold text-[14px] text-charcoal dark-flip-text mb-1.5">
@@ -509,14 +510,14 @@ export default async function UserDashboardPage() {
                 </Link>
               ) : (
                 <div className="bg-sand dark-flip-surf border border-dashed border-line dark-flip-border rounded-2xl p-6 flex flex-col gap-4">
-                  <div className="w-9 h-9 rounded-xl bg-charcoal/6 dark-flip-card flex items-center justify-center text-charcoal/25 dark-flip-muted">
+                  <div className="w-9 h-9 rounded-xl bg-charcoal/6 dark-flip-card flex items-center justify-center text-charcoal/65 dark-flip-muted">
                     {icons.plus}
                   </div>
                   <div>
-                    <p className="font-display font-semibold text-[14px] text-charcoal/40 dark-flip-muted mb-1">
+                    <p className="font-display font-semibold text-[14px] text-charcoal/65 dark-flip-muted mb-1">
                       Structured submission form
                     </p>
-                    <p className="font-sans text-[14px] text-charcoal/30 dark-flip-muted leading-relaxed">
+                    <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted leading-relaxed">
                       A guided form for detailed attraction data. Coming soon.
                     </p>
                   </div>
@@ -670,7 +671,7 @@ export default async function UserDashboardPage() {
 
               {allUsers.length === 0 ? (
                 <div className="p-8 text-center">
-                  <p className="font-sans text-[14px] text-charcoal/35 dark-flip-muted italic">No user records found.</p>
+                  <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted italic">No user records found.</p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">

@@ -138,7 +138,7 @@ export default async function LoginPage({
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-line dark-flip-border"/></div>
             <div className="relative flex justify-center">
-              <span className="bg-cream dark-flip-bg px-3 font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted">
+              <span className="bg-cream dark-flip-bg px-3 font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark-flip-muted">
                 {t('orWithEmail')}
               </span>
             </div>
@@ -152,7 +152,7 @@ export default async function LoginPage({
           {/* ── Demo accounts panel ────────────────────────────────────── */}
           <div className="mt-10 bg-sand dark-flip-surf border border-line dark-flip-border rounded-2xl overflow-hidden">
             <div className="px-5 py-3.5 border-b border-line dark-flip-border">
-              <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted">
+              <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/65 dark-flip-muted">
                 Demo Accounts
               </p>
               <p className="font-sans text-[14px] text-charcoal/55 dark-flip-muted mt-0.5">
@@ -167,7 +167,7 @@ export default async function LoginPage({
                 }}>
                   <button type="submit" className="w-full flex items-center justify-between px-5 py-3 hover:bg-white/50 dark:hover:bg-white/5 transition-colors text-left">
                     <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">{email}</p>
-                    <span className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/35 dark-flip-muted">
+                    <span className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/65 dark-flip-muted">
                       {role}
                     </span>
                   </button>
@@ -176,7 +176,7 @@ export default async function LoginPage({
             </div>
           </div>
 
-          <p className="font-display text-[14px] text-charcoal/25 dark-flip-muted text-center mt-8">
+          <p className="font-display text-[14px] text-charcoal/65 dark-flip-muted text-center mt-8">
             By continuing you agree to our{' '}
             <Link href="/terms" className="hover:text-charcoal/50 transition-colors">Terms</Link>{' '}and{' '}
             <Link href="/privacy" className="hover:text-charcoal/50 transition-colors">Privacy Policy</Link>.

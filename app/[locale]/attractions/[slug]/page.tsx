@@ -916,7 +916,7 @@ export default async function AttractionPage(
                   <div className="space-y-4">
                     {a.nearestAirportIATA && (
                       <div className="flex items-start gap-3">
-                        <svg className="w-4 h-4 text-charcoal/40 dark-flip-muted mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 text-charcoal/65 dark-flip-muted mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                         </svg>
                         <div>
@@ -933,7 +933,7 @@ export default async function AttractionPage(
                     )}
                     {a.addressDirections && (
                       <div className="flex items-start gap-3">
-                        <svg className="w-4 h-4 text-charcoal/40 dark-flip-muted mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 text-charcoal/65 dark-flip-muted mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                         </svg>
@@ -1059,7 +1059,7 @@ export default async function AttractionPage(
                       All attractions in {a.country.name}
                     </p>
                   </div>
-                  <svg className="w-5 h-5 text-charcoal/25 group-hover:text-crimson transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-charcoal/65 group-hover:text-crimson transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                   </svg>
                 </Link>
@@ -1123,9 +1123,10 @@ export default async function AttractionPage(
                   <Link key={rel.slug} href={`/attractions/${rel.slug}`}
                     className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
                     <div className="relative h-40 overflow-hidden bg-sand">
+                      {/* Session 6.3 — image-redundant-alt: rel.name is a visible heading in this same card below. */}
                       <Image
                         src={attractionImageUrl(rel.slug)}
-                        alt={rel.name} fill
+                        alt="" fill
                         sizes="(max-width:640px)100vw,(max-width:1024px)50vw,25vw"
                         className="object-cover img-editorial img-inner"
                       />

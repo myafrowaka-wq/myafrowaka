@@ -51,14 +51,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
                   <p className="font-display font-bold text-[15px] truncate" style={{ letterSpacing: '-0.01em' }}>
                     {user.name}
                   </p>
-                  <p className="font-sans text-[14px] uppercase tracking-[0.12em] text-cream/40 truncate mt-0.5">
+                  <p className="font-sans text-[14px] uppercase tracking-[0.12em] text-cream/55 truncate mt-0.5">
                     {user.email}
                   </p>
                 </div>
               </div>
               <form action="/api/auth/signout" method="POST">
                 <button type="submit"
-                  className="w-full font-sans text-[14px] uppercase tracking-[0.14em] text-cream/35 hover:text-cream/70 transition-colors py-2 border border-cream/10 hover:border-cream/25 rounded-xl">
+                  className="w-full font-sans text-[14px] uppercase tracking-[0.14em] text-cream/55 hover:text-cream/70 transition-colors py-2 border border-cream/10 hover:border-cream/25 rounded-xl">
                   Sign Out
                 </button>
               </form>
@@ -69,7 +69,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
               {NAV_ITEMS.map(item => (
                 <Link key={item.href} href={item.href}
                   className="flex items-center gap-3 px-4 py-3 rounded-2xl font-sans text-[14px] text-charcoal/65 dark-flip-muted hover:bg-sand dark-flip-surf hover:text-charcoal dark-flip-text transition-all group">
-                  <svg className="w-4 h-4 shrink-0 text-charcoal/30 group-hover:text-gold-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 shrink-0 text-charcoal/65 group-hover:text-gold-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon}/>
                   </svg>
                   {item.label}
@@ -79,7 +79,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
             {/* Back to site */}
             <Link href="/search"
-              className="flex items-center gap-2 justify-center font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/30 dark-flip-muted hover:text-charcoal/60 transition-colors py-3">
+              className="flex items-center gap-2 justify-center font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark-flip-muted hover:text-charcoal/60 transition-colors py-3">
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
               </svg>

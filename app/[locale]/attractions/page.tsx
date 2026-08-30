@@ -163,7 +163,7 @@ export default async function AttractionsPage({
 
           {pageItems.length === 0 ? (
             <div className="text-center py-24">
-              <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-3">No results</p>
+              <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/65 dark-flip-muted mb-3">No results</p>
               <p className="font-sans text-sm text-charcoal/45 dark-flip-muted">Try a different search term or filter.</p>
               <Link href="/attractions" className="mt-6 inline-flex font-sans text-[14px] uppercase tracking-[0.14em] text-crimson">Browse All Guides</Link>
             </div>
@@ -175,9 +175,10 @@ export default async function AttractionsPage({
                   <Link key={a.slug} href={`/attractions/${a.slug}`}
                     className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
                     <div className="relative h-48 overflow-hidden bg-sand">
+                      {/* Session 6.3 — image-redundant-alt: a.name is shown as a visible heading in this same card below, so the image is decorative alongside it. */}
                       <Image
                         src={attractionImageUrl(a.slug)}
-                        alt={a.name} fill
+                        alt="" fill
                         sizes="(max-width:640px)100vw,(max-width:1024px)50vw,(max-width:1280px)33vw,25vw"
                         className="object-cover img-editorial img-inner"
                       />
@@ -194,8 +195,8 @@ export default async function AttractionsPage({
                           <span className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson">{a.country.name}</span>
                           {a.city && (
                             <>
-                              <span className="text-charcoal/20 dark-flip-muted text-[14px]">&middot;</span>
-                              <span className="font-sans text-[14px] text-charcoal/35 dark-flip-muted">{a.city.name}</span>
+                              <span className="text-charcoal/65 dark-flip-muted text-[14px]">&middot;</span>
+                              <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">{a.city.name}</span>
                             </>
                           )}
                         </div>
@@ -225,9 +226,9 @@ export default async function AttractionsPage({
           {totalPages > 1 && (
             <div className="mt-14 flex items-center justify-center gap-2">
               {safePage > 1 && (
-                <Link href={buildUrl({ page: safePage - 1 })}
+                <Link href={buildUrl({ page: safePage - 1 })} aria-label="Previous page"
                   className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/45 dark-flip-muted hover:border-crimson hover:text-crimson transition-all">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
                   </svg>
                 </Link>
@@ -240,9 +241,9 @@ export default async function AttractionsPage({
                 </Link>
               ))}
               {safePage < totalPages && (
-                <Link href={buildUrl({ page: safePage + 1 })}
+                <Link href={buildUrl({ page: safePage + 1 })} aria-label="Next page"
                   className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/45 dark-flip-muted hover:border-crimson hover:text-crimson transition-all">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
                   </svg>
                 </Link>

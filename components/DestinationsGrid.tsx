@@ -42,7 +42,8 @@ function CountryCard({ d }: { d: Country }) {
       style={{ aspectRatio: '3/4', width: 'clamp(140px, 30vw, 220px)', scrollSnapAlign: 'start' }}
     >
       <div className="absolute inset-0" style={{ backgroundColor: d.color }}/>
-      <Image src={d.image} alt={d.name} fill
+      {/* Session 6.3 — image-redundant-alt: d.name is a visible heading in this same card below. */}
+      <Image src={d.image} alt="" fill
         sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 17vw"
         className="object-cover img-editorial mix-blend-multiply opacity-60 img-inner"
       />

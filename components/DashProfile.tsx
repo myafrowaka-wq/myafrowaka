@@ -245,7 +245,7 @@ export function DashProfile({
               {languages.map(lang => (
                 <span key={lang} className="inline-flex items-center gap-1.5 font-sans text-[14px] text-charcoal/70 dark-flip-muted bg-sand dark-flip-surf border border-line dark-flip-border px-2.5 py-1 rounded-full">
                   {lang}
-                  <button type="button" onClick={() => removeLanguage(lang)} aria-label={`Remove ${lang}`} className="text-charcoal/40 hover:text-crimson transition-colors">
+                  <button type="button" onClick={() => removeLanguage(lang)} aria-label={`Remove ${lang}`} className="text-charcoal/65 hover:text-crimson transition-colors">
                     <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12"/></svg>
                   </button>
                 </span>
@@ -267,7 +267,7 @@ export function DashProfile({
 
           <div>
             <p className="font-display font-semibold text-[14px] text-charcoal dark-flip-text mb-2">
-              Countries Visited <span className="font-normal text-charcoal/40 dark-flip-muted">({countriesVisited.length})</span>
+              Countries Visited <span className="font-normal text-charcoal/65 dark-flip-muted">({countriesVisited.length})</span>
             </p>
             <div className="max-h-40 overflow-y-auto border border-line dark-flip-border rounded-xl p-3 space-y-1">
               {allCountries.map(c => (

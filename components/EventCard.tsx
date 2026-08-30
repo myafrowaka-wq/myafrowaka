@@ -57,7 +57,9 @@ export function EventCard({ event }: { event: EventSummary }) {
       className="group block bg-white dark-flip-card border border-line dark-flip-border hover:border-gold-300 rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-[var(--shadow-soft)] hover:-translate-y-0.5">
       <div className="relative h-44 overflow-hidden bg-sand dark-flip-surf">
         {imgSrc ? (
-          <Image src={imgSrc} alt={event.heroImage?.alt ?? event.name} fill
+          // Session 6.3 — image-redundant-alt: event.name is a visible
+          // heading in this same card below (see that h2's own comment).
+          <Image src={imgSrc} alt="" fill
             sizes="(max-width:640px) 100vw, (max-width:1280px) 50vw, 33vw"
             className="object-cover group-hover:scale-[1.04] transition-transform duration-500" />
         ) : (
@@ -83,10 +85,16 @@ export function EventCard({ event }: { event: EventSummary }) {
             </span>
           </div>
         )}
-        <h3 className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-2"
+        {/* Session 6.3 (WDOS gate run) — was h3. Every real consumer of this
+            shared card (checked: /events, and all 5 discovery routes) puts
+            it directly after the page's own h1 with no h2 in between, so h3
+            here was a genuine skipped-level violation (axe: heading-order)
+            on every one of those pages, not just one. h2 is correct for
+            all of them. */}
+        <h2 className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-2"
           style={{ letterSpacing: '-0.012em' }}>
           {event.name}
-        </h3>
+        </h2>
         <p className={`font-sans text-[14px] mb-3 ${isConfirmedFact ? 'text-charcoal/70 dark-flip-muted' : 'text-charcoal/45 dark-flip-muted italic'}`}>
           {dateText}
         </p>

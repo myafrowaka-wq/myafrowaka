@@ -24,7 +24,7 @@ export default async function NewAttractionPage() {
       <div className="max-w-3xl mx-auto px-5 sm:px-8 py-8">
 
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 mb-8 font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/35 dark-flip-muted">
+        <div className="flex items-center gap-2 mb-8 font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/65 dark-flip-muted">
           <Link href="/user-dashboard" className="hover:text-charcoal/60 dark-flip-text transition-colors">Dashboard</Link>
           <span>/</span>
           <span className="text-charcoal/60 dark-flip-text">Add Attraction</span>
@@ -49,7 +49,7 @@ export default async function NewAttractionPage() {
 
         <div className="mt-6 flex items-center gap-4">
           <a href="/studio" target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted hover:text-charcoal/60 dark-flip-text transition-colors">
+            className="inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark-flip-muted hover:text-charcoal/60 dark-flip-text transition-colors">
             Open Sanity Studio
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
           </a>
@@ -58,7 +58,7 @@ export default async function NewAttractionPage() {
               a Contributor straight back to /user-dashboard. */}
           {atLeast((session!.user.role ?? 'visitor') as UserRole, 'author-editor') && (
             <Link href="/user-dashboard/admin/new-post"
-              className="inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted hover:text-charcoal/60 dark-flip-text transition-colors">
+              className="inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark-flip-muted hover:text-charcoal/60 dark-flip-text transition-colors">
               Write article instead
             </Link>
           )}

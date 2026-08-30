@@ -37,10 +37,10 @@ const STATUS_DOT: Record<string, string> = {
 const STATUS_TEXT: Record<string, string> = {
   Published:      'text-gold-400',
   Verified:       'text-moss-400',
-  Draft:          'text-cream/40',
+  Draft:          'text-cream/55',
   Incomplete:     'text-ochre-400',
   'Needs Update': 'text-crimson/80',
-  Archived:       'text-cream/20',
+  Archived:       'text-cream/55',
 }
 
 export default async function AdminPage() {
@@ -119,7 +119,7 @@ export default async function AdminPage() {
       {/* ── Header + Quick Actions ──────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400/60 mb-1">MyAfroWaka</p>
+          <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400/70 mb-1">MyAfroWaka</p>
           <h1 className="font-display font-extrabold text-cream"
             style={{ fontSize: 'clamp(22px, 3vw, 36px)', letterSpacing: '-0.02em' }}>
             Admin Overview
@@ -153,11 +153,11 @@ export default async function AdminPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {/* Published % — big visual */}
         <div className="bg-gradient-to-br from-gold-400/12 to-gold-400/4 border border-gold-400/20 rounded-2xl p-5 relative overflow-hidden">
-          <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-gold-400/60 mb-1">Published</p>
+          <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-gold-400/70 mb-1">Published</p>
           <p className="font-display font-bold text-gold-400 mb-0.5" style={{ fontSize: 'clamp(28px,3vw,42px)', letterSpacing: '-0.02em' }}>
             {pubPct}%
           </p>
-          <p className="font-sans text-[14px] text-cream/30">{published} of {total} live</p>
+          <p className="font-sans text-[14px] text-cream/55">{published} of {total} live</p>
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/5">
             <div className="h-full bg-gold-400/60 rounded-r-full" style={{ width: `${pubPct}%` }}/>
           </div>
@@ -169,7 +169,7 @@ export default async function AdminPage() {
           <p className="font-display font-bold text-moss-400 mb-0.5" style={{ fontSize: 'clamp(28px,3vw,42px)', letterSpacing: '-0.02em' }}>
             {verified}
           </p>
-          <p className="font-sans text-[14px] text-cream/30">Verified guides</p>
+          <p className="font-sans text-[14px] text-cream/55">Verified guides</p>
           <Link href="/admin/attractions?status=Verified" className="absolute inset-0"/>
         </div>
 
@@ -179,7 +179,7 @@ export default async function AdminPage() {
           <p className="font-display font-bold text-cream mb-0.5" style={{ fontSize: 'clamp(28px,3vw,42px)', letterSpacing: '-0.02em' }}>
             {seoScore}%
           </p>
-          <p className="font-sans text-[14px] text-cream/30">{seoStats.withMeta}/{seoStats.published} with meta</p>
+          <p className="font-sans text-[14px] text-cream/55">{seoStats.withMeta}/{seoStats.published} with meta</p>
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/5">
             <div className="h-full bg-crimson/60 rounded-r-full" style={{ width: `${seoScore}%` }}/>
           </div>
@@ -187,12 +187,12 @@ export default async function AdminPage() {
 
         {/* Needs attention */}
         <div className={`border rounded-2xl p-5 relative overflow-hidden ${needsUpd > 0 ? 'bg-gradient-to-br from-crimson/15 to-crimson/5 border-crimson/30' : 'bg-white/5 border-white/8'}`}>
-          <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-cream/40 mb-1">Needs Update</p>
-          <p className={`font-display font-bold mb-0.5 ${needsUpd > 0 ? 'text-crimson' : 'text-cream/30'}`}
+          <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-cream/55 mb-1">Needs Update</p>
+          <p className={`font-display font-bold mb-0.5 ${needsUpd > 0 ? 'text-crimson' : 'text-cream/55'}`}
             style={{ fontSize: 'clamp(28px,3vw,42px)', letterSpacing: '-0.02em' }}>
             {needsUpd}
           </p>
-          <p className="font-sans text-[14px] text-cream/30">Flagged for review</p>
+          <p className="font-sans text-[14px] text-cream/55">Flagged for review</p>
           {needsUpd > 0 && <Link href="/admin/attractions?status=Needs+Update" className="absolute inset-0"/>}
         </div>
       </div>
@@ -208,14 +208,14 @@ export default async function AdminPage() {
               <p className="font-display font-semibold text-cream text-[14px]">Publishing Queue</p>
             </div>
             <Link href="/admin/attractions"
-              className="font-sans text-[14px] uppercase tracking-[0.12em] text-gold-400/60 hover:text-gold-400 transition-colors">
+              className="font-sans text-[14px] uppercase tracking-[0.12em] text-gold-400/70 hover:text-gold-400 transition-colors">
               View all
             </Link>
           </div>
           {publishingQueue.length === 0 ? (
             <div className="px-5 py-8 text-center">
-              <p className="font-sans text-[14px] text-cream/30">No verified attractions waiting.</p>
-              <p className="font-sans text-[14px] text-cream/20 mt-1">Verify a draft to see it here.</p>
+              <p className="font-sans text-[14px] text-cream/55">No verified attractions waiting.</p>
+              <p className="font-sans text-[14px] text-cream/55 mt-1">Verify a draft to see it here.</p>
             </div>
           ) : (
             <div className="divide-y divide-white/5">
@@ -227,11 +227,11 @@ export default async function AdminPage() {
                       {a.name}
                     </p>
                     {a.country && (
-                      <p className="font-sans text-[14px] text-cream/30 mt-0.5">{a.country.name}</p>
+                      <p className="font-sans text-[14px] text-cream/55 mt-0.5">{a.country.name}</p>
                     )}
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="font-sans text-[14px] text-cream/25">{timeAgo(a._updatedAt)}</span>
+                    <span className="font-sans text-[14px] text-cream/55">{timeAgo(a._updatedAt)}</span>
                     <Link href={`/attractions/${a.slug}`} target="_blank"
                       className="font-sans text-[14px] uppercase tracking-[0.1em] bg-moss-400/15 hover:bg-moss-400/25 text-moss-400 border border-moss-400/25 px-2.5 py-1 rounded-full transition-colors">
                       Preview
@@ -247,7 +247,7 @@ export default async function AdminPage() {
         <div className="bg-white/5 border border-white/8 rounded-2xl overflow-hidden">
           <div className="flex items-center justify-between px-5 py-4 border-b border-white/8">
             <div>
-              <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/35 mb-0.5">Latest Changes</p>
+              <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55 mb-0.5">Latest Changes</p>
               <p className="font-display font-semibold text-cream text-[14px]">Recent Activity</p>
             </div>
           </div>
@@ -257,11 +257,11 @@ export default async function AdminPage() {
                 <div className={`w-1.5 h-1.5 rounded-full shrink-0 mt-0.5 ${STATUS_DOT[a.contentStatus] ?? 'bg-white/15'}`}/>
                 <div className="flex-1 min-w-0">
                   <p className="font-sans text-[14px] text-cream/75 truncate">{a.name}</p>
-                  <p className="font-sans text-[14px] text-cream/25 mt-0.5">
-                    {a.country?.name ?? ''}{a.country ? ' · ' : ''}<span className={STATUS_TEXT[a.contentStatus] ?? 'text-cream/20'}>{a.contentStatus}</span>
+                  <p className="font-sans text-[14px] text-cream/55 mt-0.5">
+                    {a.country?.name ?? ''}{a.country ? ' · ' : ''}<span className={STATUS_TEXT[a.contentStatus] ?? 'text-cream/55'}>{a.contentStatus}</span>
                   </p>
                 </div>
-                <span className="font-sans text-[14px] text-cream/20 shrink-0">{timeAgo(a._updatedAt)}</span>
+                <span className="font-sans text-[14px] text-cream/55 shrink-0">{timeAgo(a._updatedAt)}</span>
               </div>
             ))}
           </div>
@@ -273,14 +273,14 @@ export default async function AdminPage() {
 
         {/* Geographic coverage */}
         <div className="bg-white/5 border border-white/8 rounded-2xl p-6">
-          <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/35 mb-5">Geographic Coverage</p>
+          <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55 mb-5">Geographic Coverage</p>
           <div className="space-y-4">
             {geoRows.map(row => (
               <div key={row.region}>
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="font-sans text-[14px] text-cream/65">{row.region}</span>
                   <div className="flex items-center gap-2">
-                    <span className="font-sans text-[14px] text-cream/35">{row.pub}/{row.total}</span>
+                    <span className="font-sans text-[14px] text-cream/55">{row.pub}/{row.total}</span>
                     <span className="font-sans text-[14px] text-gold-400/80 w-8 text-right">{row.pct}%</span>
                   </div>
                 </div>
@@ -297,7 +297,7 @@ export default async function AdminPage() {
 
         {/* Status breakdown */}
         <div className="bg-white/5 border border-white/8 rounded-2xl p-6">
-          <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/35 mb-5">Status Breakdown</p>
+          <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55 mb-5">Status Breakdown</p>
           <div className="space-y-3">
             {[
               { status: 'Published',    cnt: published  },
@@ -308,7 +308,7 @@ export default async function AdminPage() {
             ].sort((a, b) => b.cnt - a.cnt).map(s => (
               <div key={s.status} className="flex items-center gap-3">
                 <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${STATUS_DOT[s.status] ?? 'bg-white/15'}`}/>
-                <span className="font-sans text-[14px] uppercase tracking-[0.1em] text-cream/40 w-28 shrink-0">{s.status}</span>
+                <span className="font-sans text-[14px] uppercase tracking-[0.1em] text-cream/55 w-28 shrink-0">{s.status}</span>
                 <div className="flex-1 h-1.5 bg-white/8 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-gold-400/60 rounded-full"
@@ -324,13 +324,13 @@ export default async function AdminPage() {
           <div className="mt-6 pt-5 border-t border-white/8 grid grid-cols-2 gap-2">
             <Link href="/admin/attractions"
               className="bg-white/5 hover:bg-white/10 border border-white/8 rounded-xl p-3 group transition-all">
-              <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-gold-400/50 mb-1">Pipeline</p>
+              <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-gold-400/70 mb-1">Pipeline</p>
               <p className="font-display font-semibold text-cream text-[14px] group-hover:text-gold-300 transition-colors">Manage Attractions</p>
             </Link>
             {session!.user?.role === 'admin' && (
               <Link href="/admin/users"
                 className="bg-white/5 hover:bg-white/10 border border-white/8 rounded-xl p-3 group transition-all">
-                <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-gold-400/50 mb-1">Team</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-gold-400/70 mb-1">Team</p>
                 <p className="font-display font-semibold text-cream text-[14px] group-hover:text-gold-300 transition-colors">Manage Users</p>
               </Link>
             )}
@@ -342,9 +342,9 @@ export default async function AdminPage() {
       {recentUsers.length > 0 && (
         <div className="bg-white/5 border border-white/8 rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
-            <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/35">Recent Sign-ins</p>
+            <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55">Recent Sign-ins</p>
             {session!.user?.role === 'admin' && (
-              <Link href="/admin/users" className="font-sans text-[14px] uppercase tracking-[0.12em] text-gold-400/60 hover:text-gold-400 transition-colors">
+              <Link href="/admin/users" className="font-sans text-[14px] uppercase tracking-[0.12em] text-gold-400/70 hover:text-gold-400 transition-colors">
                 View all
               </Link>
             )}
@@ -363,8 +363,8 @@ export default async function AdminPage() {
                     u.role === 'admin'         ? 'text-gold-400' :
                     u.role === 'author-editor' ? 'text-ochre-300' :
                     u.role === 'contributor'   ? 'text-moss-400' :
-                    u.role === 'moderator'     ? 'text-cream/40' :
-                    'text-cream/25'
+                    u.role === 'moderator'     ? 'text-cream/55' :
+                    'text-cream/55'
                   }`}>
                     {u.role}
                   </span>

@@ -350,7 +350,7 @@ export default async function EventPage(
                   <div className="flex items-center gap-4 mb-5">
                     <div className="flex items-baseline gap-1 shrink-0">
                       <span className="font-display font-extrabold text-crimson" style={{ fontSize: '44px', lineHeight: 1 }}>{overallScore}</span>
-                      <span className="font-sans text-charcoal/40 dark-flip-muted text-lg">/5</span>
+                      <span className="font-sans text-charcoal/65 dark-flip-muted text-lg">/5</span>
                     </div>
                     <div>
                       <p className="font-display font-bold text-charcoal dark-flip-text text-[15px]">MyAfroWaka Experience Score</p>
@@ -363,7 +363,8 @@ export default async function EventPage(
                     {SCORE_DIMENSIONS.map(d => (
                       <div key={d.key} className="bg-white dark-flip-card border border-line dark-flip-border rounded-xl px-3 py-2.5">
                         <p className="font-sans text-[14px] text-charcoal/50 dark-flip-muted uppercase tracking-[0.06em] mb-0.5 leading-tight">{d.label}</p>
-                        <p className="font-display font-bold text-charcoal dark-flip-text">{event[d.key]}<span className="text-charcoal/30 font-normal text-[14px]">/5</span></p>
+                        {/* Session 6.3 — image-redundant-alt sweep's sibling bug: this "/5" span had no dark-flip-muted while its own parent did, so it stayed literal charcoal on the dark-flipped card — axe caught all 8 score-dimension cards. */}
+                        <p className="font-display font-bold text-charcoal dark-flip-text">{event[d.key]}<span className="text-charcoal/65 dark-flip-muted font-normal text-[14px]">/5</span></p>
                       </div>
                     ))}
                   </div>

@@ -159,7 +159,7 @@ export function NewsletterPopup() {
             </button>
           </form>
         )}
-        <p className="font-sans text-[14px] text-charcoal/30 text-center mt-3">
+        <p className="font-sans text-[14px] text-charcoal/65 text-center mt-3">
           Confirm by email first. Unsubscribe any time.
         </p>
       </div>

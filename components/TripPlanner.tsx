@@ -332,7 +332,7 @@ export function TripPlanner({ countries, attractions, events }: Props) {
                   if (totalItems > 0 && !window.confirm('Changing country will clear the items you\'ve already added to this trip. Continue?')) return
                   setDraft(prev => ({ ...prev, countrySlug: null, days: [] }))
                 }}
-                  className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors">
+                  className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/65 dark-flip-muted hover:text-crimson transition-colors">
                   Change
                 </button>
               </div>
@@ -370,13 +370,13 @@ export function TripPlanner({ countries, attractions, events }: Props) {
               />
               <div className="mt-2 max-h-72 overflow-y-auto border border-line dark-flip-border rounded-xl divide-y divide-line dark-flip-border">
                 {filteredCountries.length === 0 ? (
-                  <p className="font-sans text-sm text-charcoal/40 dark-flip-muted px-4 py-4">No countries match &ldquo;{countryQuery}&rdquo;.</p>
+                  <p className="font-sans text-sm text-charcoal/65 dark-flip-muted px-4 py-4">No countries match &ldquo;{countryQuery}&rdquo;.</p>
                 ) : filteredCountries.map(c => (
                   <button key={c.slug} type="button" onClick={() => selectCountry(c.slug)}
                     className="w-full flex items-center gap-2.5 px-4 py-3 text-left hover:bg-sand dark-flip-surf transition-colors">
                     <Flag code={c.countryCode} />
                     <span className="font-sans text-sm text-charcoal dark-flip-text">{c.name}</span>
-                    <span className="font-sans text-[14px] text-charcoal/35 dark-flip-muted ml-auto">{c.continentRegion}</span>
+                    <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted ml-auto">{c.continentRegion}</span>
                   </button>
                 ))}
               </div>
@@ -498,14 +498,14 @@ export function TripPlanner({ countries, attractions, events }: Props) {
                             </div>
                             <div className="max-h-64 overflow-y-auto">
                               {pickerResults.length === 0 ? (
-                                <p className="font-sans text-sm text-charcoal/40 dark-flip-muted px-4 py-6 text-center">
+                                <p className="font-sans text-sm text-charcoal/65 dark-flip-muted px-4 py-6 text-center">
                                   Nothing published for {selectedCountry.name} matches yet.
                                 </p>
                               ) : pickerResults.map(r => (
                                 <button key={`${r.kind}-${r.slug}`} type="button" onClick={() => addItem(date, r.kind, r.slug)}
                                   className="w-full text-left px-4 py-2.5 hover:bg-sand dark-flip-surf transition-colors flex items-center justify-between gap-2">
                                   <span className="font-sans text-sm text-charcoal dark-flip-text truncate">{r.name}</span>
-                                  {r.sub && <span className="font-sans text-[14px] text-charcoal/35 dark-flip-muted shrink-0">{r.sub}</span>}
+                                  {r.sub && <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted shrink-0">{r.sub}</span>}
                                 </button>
                               ))}
                             </div>
@@ -515,7 +515,7 @@ export function TripPlanner({ countries, attractions, events }: Props) {
                     </div>
                     <div className="p-5">
                       {items.length === 0 ? (
-                        <p className="font-sans text-[14px] text-charcoal/35 dark-flip-muted">Nothing added yet.</p>
+                        <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">Nothing added yet.</p>
                       ) : (
                         <ul className="space-y-2">
                           {items.map(item => {
@@ -525,13 +525,13 @@ export function TripPlanner({ countries, attractions, events }: Props) {
                               <li key={item.key} className="flex items-center justify-between gap-3 bg-sand dark-flip-surf border border-line dark-flip-border rounded-xl px-3.5 py-2.5">
                                 <div className="min-w-0">
                                   <p className="font-sans text-sm text-charcoal dark-flip-text truncate">{display.name}</p>
-                                  <p className="font-sans text-[14px] uppercase tracking-[0.08em] text-charcoal/40 dark-flip-muted">
+                                  <p className="font-sans text-[14px] uppercase tracking-[0.08em] text-charcoal/65 dark-flip-muted">
                                     {item.kind === 'event' ? 'Event' : (display.sub ?? 'Attraction')}
                                   </p>
                                 </div>
                                 <button type="button" onClick={() => removeItem(date, item.key)}
                                   aria-label={`Remove ${display.name}`}
-                                  className="shrink-0 text-charcoal/30 dark-flip-muted hover:text-crimson transition-colors">
+                                  className="shrink-0 text-charcoal/65 dark-flip-muted hover:text-crimson transition-colors">
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
                                 </button>
                               </li>
@@ -567,7 +567,7 @@ export function TripPlanner({ countries, attractions, events }: Props) {
               {saving ? 'Saving...' : status === 'authenticated' ? 'Save this trip' : 'Sign in to save this trip'}
             </button>
             {status !== 'authenticated' && (
-              <p className="font-sans text-[14px] text-cream/45 text-center mt-3 leading-relaxed">
+              <p className="font-sans text-[14px] text-cream/55 text-center mt-3 leading-relaxed">
                 Nothing is lost — your trip stays right here in this browser. We only ask you to sign in the moment you want to save it.
               </p>
             )}

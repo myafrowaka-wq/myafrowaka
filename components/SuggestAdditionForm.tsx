@@ -81,6 +81,7 @@ export function SuggestAdditionForm({ tripId, onClose, onSuggested }: { tripId: 
         <p className="font-sans text-sm text-charcoal/45 dark-flip-muted">This trip doesn&rsquo;t have dates set yet.</p>
       ) : (
         <select value={date} onChange={e => setDate(e.target.value)}
+          aria-label="Day to add this suggestion to"
           className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text font-sans text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-gold-400">
           {days.map(d => <option key={d} value={d}>{formatDay(d)}</option>)}
         </select>
@@ -89,7 +90,7 @@ export function SuggestAdditionForm({ tripId, onClose, onSuggested }: { tripId: 
       {selected ? (
         <div className="flex items-center justify-between bg-white dark-flip-card border border-line dark-flip-border rounded-lg px-3 py-2.5">
           <span className="font-sans text-sm text-charcoal dark-flip-text">{selected.name}</span>
-          <button type="button" onClick={() => setSelected(null)} className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/40 dark-flip-muted hover:text-crimson transition-colors">Change</button>
+          <button type="button" onClick={() => setSelected(null)} className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/65 dark-flip-muted hover:text-crimson transition-colors">Change</button>
         </div>
       ) : (
         <>
@@ -97,7 +98,7 @@ export function SuggestAdditionForm({ tripId, onClose, onSuggested }: { tripId: 
             className="w-full border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder-charcoal/30 font-sans text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-gold-400"/>
           <div className="max-h-40 overflow-y-auto border border-line dark-flip-border rounded-lg divide-y divide-line dark-flip-border">
             {filtered.length === 0 ? (
-              <p className="font-sans text-sm text-charcoal/40 dark-flip-muted px-3 py-4 text-center">Nothing published matches yet.</p>
+              <p className="font-sans text-sm text-charcoal/65 dark-flip-muted px-3 py-4 text-center">Nothing published matches yet.</p>
             ) : filtered.map(i => (
               <button key={`${i.kind}-${i.slug}`} type="button" onClick={() => setSelected(i)}
                 className="w-full text-left px-3 py-2 hover:bg-white dark-flip-card transition-colors font-sans text-sm text-charcoal dark-flip-text">

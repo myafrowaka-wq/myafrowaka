@@ -89,21 +89,21 @@ export default async function CityPage(
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Hero band */}
-      <div className="bg-sand border-b border-line">
+      <div className="bg-sand dark-flip-surf border-b border-line dark-flip-border">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-12">
           {city.country && (
             <Link href={`/destinations/${city.country.slug}`}
-              className="inline-block font-sans text-[14px] uppercase tracking-[0.16em] text-ochre-600 hover:text-ochre-700 transition-colors mb-2">
+              className="inline-block font-sans text-[14px] uppercase tracking-[0.16em] text-ochre-600 dark:text-ochre-400 hover:text-ochre-700 dark:hover:text-ochre-300 transition-colors mb-2">
               {city.country.name}
             </Link>
           )}
 
-          <h1 className="font-display text-4xl md:text-6xl text-charcoal mb-3 leading-tight">
+          <h1 className="font-display text-4xl md:text-6xl text-charcoal dark-flip-text mb-3 leading-tight">
             {city.name}
           </h1>
 
           {city.overview && (
-            <p className="font-sans text-lg text-charcoal/65 leading-relaxed max-w-2xl">
+            <p className="font-sans text-lg text-charcoal/65 dark-flip-muted leading-relaxed max-w-2xl">
               {city.overview}
             </p>
           )}
@@ -113,19 +113,19 @@ export default async function CityPage(
       {/* Attractions */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         <div className="flex items-baseline justify-between mb-7">
-          <h2 className="font-display text-2xl md:text-3xl text-charcoal">
+          <h2 className="font-display text-2xl md:text-3xl text-charcoal dark-flip-text">
             Attractions near {city.name}
           </h2>
           {city.attractions.length > 0 && (
-            <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/35">
+            <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/65 dark-flip-muted">
               {city.attractions.length} published
             </span>
           )}
         </div>
 
         {city.attractions.length === 0 ? (
-          <div className="bg-sand rounded-2xl p-12 text-center border border-line">
-            <p className="font-sans text-[14px] text-charcoal/40 uppercase tracking-[0.14em]">
+          <div className="bg-sand dark-flip-surf rounded-2xl p-12 text-center border border-line dark-flip-border">
+            <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted uppercase tracking-[0.14em]">
               Attraction guides coming soon
             </p>
           </div>
@@ -138,24 +138,24 @@ export default async function CityPage(
                 <Link
                   key={attraction.slug}
                   href={`/attractions/${attraction.slug}`}
-                  className="group block bg-white border border-line hover:border-ochre-300 rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-[var(--shadow-soft)]"
+                  className="group block bg-white dark-flip-card border border-line dark-flip-border hover:border-ochre-300 rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-[var(--shadow-soft)]"
                 >
                   <div className="h-[3px]" style={{ backgroundColor: borderColor }} />
                   <div className="p-5">
                     {typeLabel && (
-                      <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-ochre-600 block mb-2">
+                      <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-ochre-600 dark:text-ochre-400 block mb-2">
                         {typeLabel}
                       </span>
                     )}
-                    <h3 className="font-display text-xl text-charcoal group-hover:text-ochre-600 transition-colors mb-2">
+                    <h3 className="font-display text-xl text-charcoal dark-flip-text group-hover:text-ochre-600 dark:group-hover:text-ochre-400 transition-colors mb-2">
                       {attraction.name}
                     </h3>
                     {attraction.editorialSummary && (
-                      <p className="text-sm text-charcoal/60 leading-relaxed line-clamp-2">
+                      <p className="text-sm text-charcoal/60 dark-flip-muted leading-relaxed line-clamp-2">
                         {attraction.editorialSummary}
                       </p>
                     )}
-                    <p className="mt-3 font-sans text-[14px] uppercase tracking-[0.12em] text-ochre-600 group-hover:text-ochre-700 transition-colors">
+                    <p className="mt-3 font-sans text-[14px] uppercase tracking-[0.12em] text-ochre-600 dark:text-ochre-400 group-hover:text-ochre-700 dark:group-hover:text-ochre-300 transition-colors">
                       Read guide &rarr;
                     </p>
                   </div>
@@ -167,18 +167,18 @@ export default async function CityPage(
 
         {/* Events — city-first, country fallback, not hand-curated (Session 5.2) */}
         {city.upcomingEvents && city.upcomingEvents.length > 0 && (
-          <div className="mt-12 pt-10 border-t border-line">
-            <h2 className="font-display text-2xl text-charcoal mb-5">
+          <div className="mt-12 pt-10 border-t border-line dark-flip-border">
+            <h2 className="font-display text-2xl text-charcoal dark-flip-text mb-5">
               Events {city.eventsScope === 'city' ? `in ${city.name}` : city.country ? `in ${city.country.name}` : 'Nearby'}
             </h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {city.upcomingEvents.map(ev => (
                 <Link key={ev.slug} href={`/events/${ev.slug}`}
-                  className="flex items-center gap-3 bg-white border border-line hover:border-ochre-300 rounded-xl p-4 transition-colors">
+                  className="flex items-center gap-3 bg-white dark-flip-card border border-line dark-flip-border hover:border-ochre-300 rounded-xl p-4 transition-colors">
                   <svg className="w-4 h-4 text-crimson shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                   </svg>
-                  <span className="font-sans text-sm text-charcoal group-hover:text-ochre-600">{ev.name}</span>
+                  <span className="font-sans text-sm text-charcoal dark-flip-text group-hover:text-ochre-600 dark:group-hover:text-ochre-400">{ev.name}</span>
                 </Link>
               ))}
             </div>

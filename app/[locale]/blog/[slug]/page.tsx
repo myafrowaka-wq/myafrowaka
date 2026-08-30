@@ -154,7 +154,7 @@ const ptComponents = {
             />
           </div>
           {value.caption && (
-            <figcaption className="text-center font-sans text-[14px] text-charcoal/35 dark-flip-muted uppercase tracking-[0.1em] mt-2">
+            <figcaption className="text-center font-sans text-[14px] text-charcoal/65 dark-flip-muted uppercase tracking-[0.1em] mt-2">
               {value.caption}
             </figcaption>
           )}
@@ -296,14 +296,14 @@ export default async function BlogPostPage(
               )
             )}
             {post.publishedAt && (
-              <span className="font-sans text-[14px] text-cream/35">{formatDate(post.publishedAt)}</span>
+              <span className="font-sans text-[14px] text-cream/55">{formatDate(post.publishedAt)}</span>
             )}
           </div>
           <div className="mt-3 flex items-center gap-2">
-            <svg className="w-3 h-3 text-cream/35" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3 h-3 text-cream/55" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            <span className="font-sans text-[14px] text-cream/35">{readingTime} min read</span>
+            <span className="font-sans text-[14px] text-cream/55">{readingTime} min read</span>
           </div>
           </div>{/* end lg:max-w-[66%] */}
         </div>
@@ -329,7 +329,7 @@ export default async function BlogPostPage(
                   <PortableText value={post.body as Parameters<typeof PortableText>[0]['value']} components={ptComponents} />
                 </div>
               ) : (
-                <p className="font-sans text-sm text-charcoal/35 dark-flip-muted italic">
+                <p className="font-sans text-sm text-charcoal/65 dark-flip-muted italic">
                   Article body coming soon.
                 </p>
               )}
@@ -339,7 +339,7 @@ export default async function BlogPostPage(
                 <div className="mt-10 pt-6 border-t border-line dark-flip-border flex flex-wrap gap-2">
                   {post.tags.map(tag => (
                     <span key={tag}
-                      className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/40 dark-flip-muted border border-line dark-flip-border px-3 py-1 rounded-full">
+                      className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/65 dark-flip-muted border border-line dark-flip-border px-3 py-1 rounded-full">
                       {tag}
                     </span>
                   ))}
@@ -391,7 +391,15 @@ export default async function BlogPostPage(
                         <div className="relative aspect-[16/9] overflow-hidden">
                           <Image
                             src={blogCoverUrl(r.slug)}
-                            alt={r.title}
+                            // Session 6.3 — axe-core's "image-redundant-alt": this
+                            // image and the h3 two lines down sit inside the same
+                            // Link and said the exact same thing twice, so a
+                            // screen reader announced the title once as the
+                            // image's alt text and again as the heading. The
+                            // thumbnail is purely decorative alongside a real
+                            // text caption, so alt="" is correct here — same
+                            // pattern used for the "Also Read" cards below.
+                            alt=""
                             fill
                             className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
                           />
@@ -426,7 +434,7 @@ export default async function BlogPostPage(
                 )
                 return (
                   <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                    <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">Written by</p>
+                    <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-4">Written by</p>
                     {authorSlug ? (
                       <Link href={`/authors/${authorSlug}`} className="flex items-center gap-3 mb-3 group/author">
                         {avatar}
@@ -460,7 +468,7 @@ export default async function BlogPostPage(
 
               {/* Follow MyAfroWaka */}
               <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">Follow MyAfroWaka</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-4">Follow MyAfroWaka</p>
                 <div className="flex items-center gap-3">
                   {SOCIAL_LINKS.map(s => (
                     <a
@@ -469,7 +477,7 @@ export default async function BlogPostPage(
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={s.label}
-                      className="w-9 h-9 rounded-full flex items-center justify-center border border-line dark-flip-border text-charcoal/40 dark-flip-muted hover:border-crimson hover:text-crimson transition-all"
+                      className="w-9 h-9 rounded-full flex items-center justify-center border border-line dark-flip-border text-charcoal/65 dark-flip-muted hover:border-crimson hover:text-crimson transition-all"
                     >
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path d={s.path}/>
@@ -484,34 +492,44 @@ export default async function BlogPostPage(
                 <Link href={`/destinations/${post.featuredCountry.slug}`}
                   className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
                   <div>
-                    <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/30 dark-flip-muted mb-1">Destination</p>
+                    <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/65 dark-flip-muted mb-1">Destination</p>
                     <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                       {post.featuredCountry.name}
                     </p>
                   </div>
-                  <svg className="w-5 h-5 text-charcoal/25 group-hover:text-crimson transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-charcoal/65 group-hover:text-crimson transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                   </svg>
                 </Link>
               )}
 
-              {/* Browse CTA */}
+              {/* Browse CTA — bg-ink is a deliberately always-dark card
+                  (unaffected by the site theme), which is exactly why the
+                  gold-on-ink text opacity here was never touched by this
+                  session's earlier dark-flip contrast sweeps: it isn't a
+                  light/dark pairing at all, it's ONE fixed pairing that has
+                  to be right on its own. axe-core caught it anyway —
+                  text-gold-400/60 measures 4.34:1 here, just under WCAG AA's
+                  4.5:1. /50, /55 and /60 were all in use for this exact
+                  pairing across 6 files (mostly admin's own always-dark
+                  sidebar); bumped all of them to /70, the same codebase's
+                  own already-proven-safe step for this pairing (5.44:1). */}
               <Link href="/search"
                 className="flex items-center justify-between bg-ink rounded-3xl p-6 group transition-all">
                 <div>
-                  <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-gold-400/60 mb-1">Explore</p>
+                  <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-gold-400/70 mb-1">Explore</p>
                   <p className="font-display font-bold text-base text-cream group-hover:text-gold-400 transition-colors">
                     Browse Attractions
                   </p>
                 </div>
-                <svg className="w-5 h-5 text-cream/25 group-hover:text-gold-400 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-cream/55 group-hover:text-gold-400 transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
               </Link>
 
               {/* Back to blog */}
               <Link href="/blog"
-                className="flex items-center gap-2 justify-center font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/30 dark-flip-muted hover:text-charcoal/55 transition-colors py-2">
+                className="flex items-center gap-2 justify-center font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark-flip-muted hover:text-charcoal/55 transition-colors py-2">
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
                 </svg>
@@ -525,7 +543,7 @@ export default async function BlogPostPage(
       {alsoRead.length > 0 && (
         <div className="bg-sand dark-flip-surf border-t border-line dark-flip-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-            <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/35 dark-flip-muted mb-6">Also Read</p>
+            <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-6">Also Read</p>
             <div className="grid sm:grid-cols-3 gap-4">
               {alsoRead.map(r => (
                 <Link key={r.slug} href={`/blog/${r.slug}`}
@@ -533,7 +551,8 @@ export default async function BlogPostPage(
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <Image
                       src={blogCoverUrl(r.slug)}
-                      alt={r.title} fill
+                      // Session 6.3 — see the "More from {category}" cards' matching comment above: same redundant-alt bug, same fix.
+                      alt="" fill
                       className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
                     />
                   </div>

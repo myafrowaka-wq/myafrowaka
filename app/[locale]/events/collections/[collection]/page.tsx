@@ -2,7 +2,7 @@ import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
-import { EVENT_COLLECTION_BY_SLUG_QUERY, ALL_EVENT_COLLECTION_SLUGS_QUERY } from '@/sanity/lib/queries'
+import { EVENT_COLLECTION_BY_SLUG_QUERY } from '@/sanity/lib/queries'
 import { EVENT_CATEGORY_COLOR, EVENT_CATEGORY_COLOR_FALLBACK } from '@/lib/regionColors'
 import { eventDateDisplay } from '@/lib/eventDateDisplay'
 import { VerificationBadge, type EventSummary } from '@/components/EventCard'
@@ -29,10 +29,24 @@ interface Collection {
   items: CollectionItem[]
 }
 
-export async function generateStaticParams() {
-  const slugs = await client.fetch<{ slug: string }[]>(ALL_EVENT_COLLECTION_SLUGS_QUERY).catch(() => [])
-  return slugs
-}
+// Session 6.3 (WDOS gate run) — this page used to have a generateStaticParams
+// here (and it had a real bug of its own: it returned `{ slug }` objects,
+// but Next.js only pre-renders a param whose KEY matches the dynamic
+// segment's folder name, `[collection]` — every returned entry was silently
+// ignored). Fixing that key mismatch wasn't the actual fix though: with it
+// corrected, any slug NOT in the pre-generated list (which, with 0 real
+// eventCollection docs today, means every single real visit) still falls
+// onto Next's on-demand-fallback render path — and on this Next.js version
+// (16.2.9) that path is broken, throwing `DYNAMIC_SERVER_USAGE` and
+// returning HTTP 500 instead of running notFound(). Reproduced the identical
+// crash on guides/[slug]/page.tsx, the only other route in the app using
+// this same generateStaticParams+fallback pattern; every other CMS-driven
+// route (attractions, events, blog, category/country/month/region) already
+// renders fully dynamically and is unaffected. Dropping the static
+// pre-rendering here (see guides/[slug]/page.tsx's matching comment) brings
+// this route in line with the rest of the site instead of patching around a
+// framework bug in one narrow rendering mode.
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(
   { params }: { params: Promise<{ collection: string }> }
@@ -85,7 +99,7 @@ export default async function EventCollectionPage(
         )}
 
         {validItems.length === 0 ? (
-          <p className="font-sans text-sm text-charcoal/40 dark-flip-muted italic">Events for this collection are being added.</p>
+          <p className="font-sans text-sm text-charcoal/65 dark-flip-muted italic">Events for this collection are being added.</p>
         ) : (
           <div className="space-y-5">
             {validItems.map((item, i) => {
@@ -105,10 +119,10 @@ export default async function EventCollectionPage(
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap gap-2 items-center mb-2">
                         {e.category && (
-                          <span className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/38 dark-flip-muted">{e.category}</span>
+                          <span className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark-flip-muted">{e.category}</span>
                         )}
                         {e.country && (
-                          <span className="inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/28 dark-flip-muted">
+                          <span className="inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/65 dark-flip-muted">
                             <Flag code={e.country.countryCode} />
                             {e.city?.name ? `${e.city.name}, ` : ''}{e.country.name}
                           </span>
@@ -119,7 +133,7 @@ export default async function EventCollectionPage(
                         style={{ fontSize: 'clamp(17px, 2vw, 22px)', letterSpacing: '-0.015em', lineHeight: '1.15' }}>
                         {e.name}
                       </h2>
-                      <p className={`font-sans text-[14px] mb-3 ${isConfirmedFact ? 'text-charcoal/60 dark-flip-muted' : 'text-charcoal/40 dark-flip-muted italic'}`}>{dateText}</p>
+                      <p className={`font-sans text-[14px] mb-3 ${isConfirmedFact ? 'text-charcoal/60 dark-flip-muted' : 'text-charcoal/65 dark-flip-muted italic'}`}>{dateText}</p>
                       {item.framingText && (
                         <p className="font-sans text-[14px] text-charcoal/60 dark-flip-muted leading-relaxed mb-4">{item.framingText}</p>
                       )}

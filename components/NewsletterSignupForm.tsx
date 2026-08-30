@@ -77,7 +77,7 @@ export function NewsletterSignupForm({ countries, source = 'newsletter-page' }: 
           If {email} isn&rsquo;t already confirmed, check your inbox for a confirmation link — nothing goes out until you click it.
         </p>
         {devLink && (
-          <p className="font-sans text-[14px] text-charcoal/40 dark-flip-muted mt-4 border-t border-line dark-flip-border pt-4">
+          <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted mt-4 border-t border-line dark-flip-border pt-4">
             No email provider configured yet — confirm directly:{' '}
             <a href={devLink} className="text-crimson hover:text-crimson/70 underline break-all">{devLink}</a>
           </p>
@@ -106,7 +106,7 @@ export function NewsletterSignupForm({ countries, source = 'newsletter-page' }: 
       {countries.length > 0 && (
         <div>
           <label htmlFor="nwl-country" className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted block mb-2">
-            Home country <span className="normal-case text-charcoal/35">(optional)</span>
+            Home country <span className="normal-case text-charcoal/65 dark-flip-muted">(optional)</span>
           </label>
           <select
             id="nwl-country"
@@ -122,7 +122,7 @@ export function NewsletterSignupForm({ countries, source = 'newsletter-page' }: 
 
       <div>
         <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/55 dark-flip-muted mb-2">
-          What are you into? <span className="normal-case text-charcoal/35">(optional, pick any)</span>
+          What are you into? <span className="normal-case text-charcoal/65 dark-flip-muted">(optional, pick any)</span>
         </p>
         <div className="flex flex-wrap gap-2">
           {INTERESTS.map(v => (
@@ -152,7 +152,7 @@ export function NewsletterSignupForm({ countries, source = 'newsletter-page' }: 
       >
         {state === 'loading' ? 'Sending confirmation...' : 'Subscribe'}
       </button>
-      <p className="font-sans text-[14px] text-charcoal/40 dark-flip-muted text-center">
+      <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted text-center">
         We&rsquo;ll email you a confirmation link. Unsubscribe any time from the link in every email.
       </p>
     </form>

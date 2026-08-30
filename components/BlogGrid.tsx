@@ -74,7 +74,7 @@ export function BlogGrid({ posts, initialCategory }: { posts: BlogPost[]; initia
 
       {filtered.length === 0 ? (
         <div className="py-20 text-center">
-          <p className="font-sans text-sm text-charcoal/35 dark-flip-muted italic">
+          <p className="font-sans text-sm text-charcoal/65 dark-flip-muted italic">
             No articles in this category yet. More coming soon.
           </p>
         </div>
@@ -120,9 +120,10 @@ function FeaturedPost({ post }: { post: BlogPost }) {
 
         {/* Image */}
         <div className="relative aspect-[3/2] lg:aspect-auto lg:min-h-[340px] overflow-hidden">
+          {/* Session 6.3 — image-redundant-alt: post.title is a visible heading in this same card below. */}
           <Image
             src={blogCoverUrl(post.slug)}
-            alt={post.title}
+            alt=""
             fill
             className="object-cover group-hover:scale-[1.03] transition-transform duration-700"
           />
@@ -190,9 +191,10 @@ function PostCard({ post }: { post: BlogPost }) {
     >
       {/* Cover image */}
       <div className="relative aspect-[16/9] overflow-hidden">
+        {/* Session 6.3 — image-redundant-alt: post.title is a visible heading in this same card below. */}
         <Image
           src={blogCoverUrl(post.slug)}
-          alt={post.title}
+          alt=""
           fill
           className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
         />

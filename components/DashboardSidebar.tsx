@@ -173,7 +173,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
                 href={item.href}
                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl group hover:bg-white/8 text-cream/55 hover:text-cream transition-all"
               >
-                <span className="w-4 h-4 text-cream/35 group-hover:text-gold-400 transition-colors shrink-0">
+                <span className="w-4 h-4 text-cream/55 group-hover:text-gold-400 transition-colors shrink-0">
                   {item.icon}
                 </span>
                 <span className="font-sans text-[14px] flex-1">{item.label}</span>
@@ -198,7 +198,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
               <Link
                 key={link.href}
                 href={link.href}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl group hover:bg-white/8 text-cream/40 hover:text-cream/70 transition-all"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl group hover:bg-white/8 text-cream/55 hover:text-cream/70 transition-all"
               >
                 <span className="font-sans text-[14px]">{link.label}</span>
               </Link>
@@ -218,7 +218,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl group hover:bg-crimson/10 text-cream/40 hover:text-crimson/80 transition-all"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl group hover:bg-crimson/10 text-cream/55 hover:text-crimson/80 transition-all"
                   >
                     <span className="font-sans text-[14px]">{link.label}</span>
                   </Link>
@@ -251,7 +251,7 @@ export function DashboardSidebar({ role, userName, userEmail, initials, savedCou
             {/* Sign out */}
             <form action={signOutAction}>
               <button type="submit"
-                className="w-full flex items-center gap-2 text-cream/35 hover:text-cream/70 transition-colors group py-1">
+                className="w-full flex items-center gap-2 text-cream/55 hover:text-cream/70 transition-colors group py-1">
                 <span className="w-4 h-4 group-hover:text-crimson transition-colors">{icons.signout}</span>
                 <span className="font-sans text-[14px] uppercase tracking-[0.12em]">Sign Out</span>
               </button>

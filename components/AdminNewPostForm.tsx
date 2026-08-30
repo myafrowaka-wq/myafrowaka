@@ -89,13 +89,13 @@ export function AdminNewPostForm() {
       <div>
         <label className="font-display font-semibold text-[14px] uppercase tracking-[0.1em] text-charcoal/50 dark-flip-muted block mb-2">Title *</label>
         <input name="title" required placeholder="The Complete Guide to Victoria Falls"
-          className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors"/>
+          className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/65 focus:outline-none focus:border-gold-400 transition-colors"/>
       </div>
 
       <div>
         <label className="font-display font-semibold text-[14px] uppercase tracking-[0.1em] text-charcoal/50 dark-flip-muted block mb-2">Excerpt (shown in article listing)</label>
         <textarea name="excerpt" rows={3} placeholder="One or two sentences. Max 280 characters."
-          className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 resize-none transition-colors"/>
+          className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/65 focus:outline-none focus:border-gold-400 resize-none transition-colors"/>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">
@@ -106,7 +106,7 @@ export function AdminNewPostForm() {
               className="w-full appearance-none border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text focus:outline-none focus:border-gold-400 transition-colors pr-10">
               {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
-            <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/35 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+            <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/65 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
           </div>
         </div>
         <div>
@@ -117,7 +117,7 @@ export function AdminNewPostForm() {
               <option value="Draft">Draft (not visible to public)</option>
               <option value="Published">Published (live on /blog)</option>
             </select>
-            <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/35 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+            <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/65 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
           </div>
         </div>
       </div>
@@ -125,10 +125,10 @@ export function AdminNewPostForm() {
       <div>
         <label className="font-display font-semibold text-[14px] uppercase tracking-[0.1em] text-charcoal/50 dark-flip-muted block mb-2">
           Article Body
-          <span className="font-sans text-[14px] normal-case tracking-normal text-charcoal/35 dark-flip-muted ml-2">Separate paragraphs with a blank line. You can add rich formatting later in Sanity Studio.</span>
+          <span className="font-sans text-[14px] normal-case tracking-normal text-charcoal/65 dark-flip-muted ml-2">Separate paragraphs with a blank line. You can add rich formatting later in Sanity Studio.</span>
         </label>
         <textarea name="bodyText" rows={14} placeholder={"Write your first paragraph here.\n\nLeave a blank line between each paragraph.\n\nYou can add images, headings, and links later in Sanity Studio."}
-          className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 resize-y transition-colors leading-relaxed"/>
+          className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/65 focus:outline-none focus:border-gold-400 resize-y transition-colors leading-relaxed"/>
       </div>
 
       <div className="flex items-center gap-4 pt-2">
@@ -149,7 +149,7 @@ export function AdminNewPostForm() {
             </>
           )}
         </button>
-        <p className="font-sans text-[14px] text-charcoal/30 dark-flip-muted">Saved as Draft by default. Publish from Sanity Studio.</p>
+        <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">Saved as Draft by default. Publish from Sanity Studio.</p>
       </div>
     </form>
   )

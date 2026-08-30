@@ -122,7 +122,7 @@ export function EditorialSlider() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
                 </svg>
               </button>
-              <span className="font-sans text-[14px] text-cream/22 tabular-nums ml-1">
+              <span className="font-sans text-[14px] text-cream/55 tabular-nums ml-1">
                 {String(current + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
               </span>
             </div>

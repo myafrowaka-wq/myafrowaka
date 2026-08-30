@@ -52,7 +52,7 @@ function SourcedField({ label, value }: { label: string; value?: string }) {
       <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-crimson mb-2">{label}</p>
       <p className="font-sans text-[15px] text-charcoal/75 dark-flip-muted leading-relaxed">{body}</p>
       {citation && (
-        <p className="font-sans text-[14px] text-charcoal/40 dark-flip-muted mt-2 italic">
+        <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted mt-2 italic">
           Source: {citation}. Rules change — confirm with the official source before you travel.
         </p>
       )}
@@ -112,9 +112,10 @@ export function CountryOverview({
                 <Link key={a.slug} href={`/attractions/${a.slug}`}
                   className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
                   <div className="relative h-40 overflow-hidden bg-cream">
+                    {/* Session 6.3 — image-redundant-alt: a.name is a visible heading in this same card below. */}
                     <Image
                       src={attractionImageUrl(a.slug)}
-                      alt={a.name} fill
+                      alt="" fill
                       sizes="(max-width:640px)100vw,(max-width:1024px)50vw,33vw"
                       className="object-cover img-editorial img-inner"
                     />

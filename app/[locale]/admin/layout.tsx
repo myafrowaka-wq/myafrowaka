@@ -44,7 +44,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             {/* Brand bar */}
             <div className="flex items-center gap-2.5 px-2 mb-6">
               <Image src="/logo-white.png" alt="MyAfroWaka" width={200} height={52} className="h-6 w-auto opacity-70"/>
-              <span className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/30 border border-cream/15 px-2 py-0.5 rounded-full">
+              <span className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55 border border-cream/15 px-2 py-0.5 rounded-full">
                 Admin
               </span>
             </div>
@@ -67,14 +67,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
             <div className="border-t border-white/8 pt-3 mt-3 space-y-0.5">
               <Link href="/studio" target="_blank"
-                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-sans text-[14px] text-cream/35 hover:text-cream/70 hover:bg-white/5 transition-all">
+                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-sans text-[14px] text-cream/55 hover:text-cream/70 hover:bg-white/5 transition-all">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                 </svg>
                 Sanity Studio
               </Link>
               <Link href="/dashboard"
-                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-sans text-[14px] text-cream/35 hover:text-cream/70 hover:bg-white/5 transition-all">
+                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-sans text-[14px] text-cream/55 hover:text-cream/70 hover:bg-white/5 transition-all">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7"/>
                 </svg>

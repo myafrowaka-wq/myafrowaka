@@ -93,7 +93,7 @@ export function InviteFriendsForm({ tripId, onClose }: { tripId: string; onClose
             className="flex-1 border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder-charcoal/30 font-sans text-sm rounded-lg px-3 py-2.5 focus:outline-none focus:border-gold-400 transition-colors"/>
           {emails.length > 1 && (
             <button type="button" onClick={() => removeEmailField(i)} aria-label="Remove email"
-              className="shrink-0 text-charcoal/30 dark-flip-muted hover:text-crimson transition-colors px-1">
+              className="shrink-0 text-charcoal/65 dark-flip-muted hover:text-crimson transition-colors px-1">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
           )}

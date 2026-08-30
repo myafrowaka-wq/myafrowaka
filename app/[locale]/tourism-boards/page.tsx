@@ -51,7 +51,7 @@ export default async function TourismBoardsPage() {
             style={{ fontSize: 'clamp(30px, 5.5vw, 56px)', lineHeight: '0.95', letterSpacing: '-0.03em' }}>
             Tourism Boards
           </h1>
-          <p className="font-sans text-cream/45 mt-4 max-w-xl leading-relaxed"
+          <p className="font-sans text-cream/55 mt-4 max-w-xl leading-relaxed"
             style={{ fontSize: 'clamp(13px, 1.3vw, 16px)' }}>
             The real authorities behind Africa&rsquo;s official travel information — and where a board has actually confirmed an event on MyAfroWaka, that verification is here, not just a badge we award ourselves.
           </p>
@@ -63,7 +63,7 @@ export default async function TourismBoardsPage() {
           {boards.length === 0 ? (
             <div className="text-center py-20">
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-sand dark-flip-surf border border-line dark-flip-border mb-6">
-                <svg className="w-6 h-6 text-charcoal/25 dark-flip-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-charcoal/65 dark-flip-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
               </div>

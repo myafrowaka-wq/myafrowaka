@@ -83,6 +83,17 @@ const googleSecret = process.env.AUTH_GOOGLE_SECRET ?? ''
 const hasGoogle    = Boolean(googleId && googleSecret && !googleId.startsWith('REPLACE_WITH') && !googleSecret.startsWith('REPLACE_WITH'))
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  // Session 6.3 (WDOS gate run) — found live, and it's a real one: every
+  // sign-in worked throughout the whole build because `npm run dev` trusts
+  // localhost by default. The first genuine production build (`npm run
+  // build && npm run start`) failed every single auth call with "There was
+  // a problem with the server configuration" — Auth.js v5's production-mode
+  // check refusing to trust the request's Host header without being told
+  // to, exactly the kind of thing a dev server never exercises. Vercel may
+  // set this implicitly, but relying on an undocumented-to-us platform
+  // behaviour for whether sign-in works at all isn't a bet worth making —
+  // trustHost is Auth.js's own documented, explicit fix for this.
+  trustHost: true,
   providers: [
     ...(hasGoogle ? [Google] : []),
     Credentials({

@@ -67,7 +67,7 @@ function AccordionSection({
       >
         <span className="font-display font-semibold text-[14px] text-charcoal dark-flip-text">{title}</span>
         <svg
-          className={`w-4 h-4 text-charcoal/35 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-charcoal/65 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
           fill="none" stroke="currentColor" viewBox="0 0 24 24"
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
@@ -143,7 +143,7 @@ function SearchInner() {
           </h1>
 
           <div className="relative max-w-2xl">
-            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/35 pointer-events-none"
+            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/65 pointer-events-none"
               fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
@@ -157,7 +157,7 @@ function SearchInner() {
                 debounceRef.current = setTimeout(() => setParam('q', v), 300)
               }}
               placeholder={ts('placeholder')}
-              className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl pl-10 pr-4 py-3.5 text-sm font-sans text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors"
+              className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl pl-10 pr-4 py-3.5 text-sm font-sans text-charcoal dark-flip-text placeholder:text-charcoal/65 focus:outline-none focus:border-gold-400 transition-colors"
             />
           </div>
 
@@ -262,8 +262,8 @@ function SearchInner() {
               </div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-20">
-                <p className="font-display font-bold text-3xl text-charcoal/20 dark-flip-muted mb-3">{ts('noResults')}</p>
-                <p className="font-sans text-sm text-charcoal/35 dark-flip-muted mb-6">{ts('tryDifferent')}</p>
+                <p className="font-display font-bold text-3xl text-charcoal/65 dark-flip-muted mb-3">{ts('noResults')}</p>
+                <p className="font-sans text-sm text-charcoal/65 dark-flip-muted mb-6">{ts('tryDifferent')}</p>
                 <button onClick={clearAll}
                   className="inline-flex items-center gap-2 border border-line dark-flip-border text-charcoal/50 dark-flip-muted hover:text-crimson hover:border-crimson font-sans text-[14px] uppercase tracking-[0.12em] px-6 py-3 rounded-full transition-colors">
                   {ts('clearAllFilters')}
@@ -278,9 +278,10 @@ function SearchInner() {
                     <Link key={a.slug} href={`/attractions/${a.slug}`}
                       className="group block bg-white dark-flip-card border border-line dark-flip-border hover:border-gold-300 rounded-2xl overflow-hidden transition-all duration-200 hover:shadow-[var(--shadow-soft)] hover:-translate-y-0.5">
                       <div className="relative h-44 overflow-hidden bg-sand">
+                        {/* Session 6.3 — image-redundant-alt: a.name is a visible heading in this same card below. */}
                         <Image
                           src={attractionImageUrl(a.slug)}
-                          alt={a.name}
+                          alt=""
                           fill
                           sizes="(max-width:640px) 100vw, (max-width:1280px) 50vw, 33vw"
                           className="object-cover group-hover:scale-[1.04] transition-transform duration-500"

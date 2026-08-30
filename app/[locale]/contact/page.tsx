@@ -83,7 +83,7 @@ export default function ContactPage() {
 
               {/* Response time */}
               <div className="bg-sand dark-flip-surf rounded-3xl p-7 border border-line dark-flip-border">
-                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/40 dark-flip-muted mb-4">What to Expect</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-4">What to Expect</p>
                 <ul className="space-y-5">
                   <li className="flex items-start gap-4">
                     <div className="w-8 h-8 rounded-xl bg-cream dark-flip-card border border-line dark-flip-border flex items-center justify-center shrink-0">
@@ -124,7 +124,7 @@ export default function ContactPage() {
 
               {/* What to include */}
               <div className="border border-line dark-flip-border rounded-3xl p-7">
-                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/40 dark-flip-muted mb-5">For Faster Replies</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-5">For Faster Replies</p>
                 <ul className="space-y-3">
                   {[
                     'Attraction corrections: include the attraction name, country, and the specific field that needs updating.',
@@ -142,7 +142,7 @@ export default function ContactPage() {
 
               {/* Social links */}
               <div className="bg-cream dark-flip-card border border-line dark-flip-border rounded-3xl p-6">
-                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/40 dark-flip-muted mb-4">Find Us</p>
+                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-4">Find Us</p>
                 <div className="space-y-2">
                   {[
                     { label: 'Instagram',  handle: '@myafrowaka_',     href: 'https://instagram.com/myafrowaka_' },
@@ -151,7 +151,7 @@ export default function ContactPage() {
                     <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
                       className="flex items-center justify-between py-2 group">
                       <span className="font-sans text-[14px] text-charcoal/60 dark-flip-muted group-hover:text-crimson transition-colors">{s.label}</span>
-                      <span className="font-sans text-[14px] text-charcoal/35 dark-flip-muted group-hover:text-crimson transition-colors">{s.handle}</span>
+                      <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted group-hover:text-crimson transition-colors">{s.handle}</span>
                     </a>
                   ))}
                 </div>
@@ -160,10 +160,10 @@ export default function ContactPage() {
               <Link href="/about"
                 className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
                 <div>
-                  <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/35 dark-flip-muted mb-1">Who we are</p>
+                  <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/65 dark-flip-muted mb-1">Who we are</p>
                   <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">About MyAfroWaka</p>
                 </div>
-                <svg className="w-5 h-5 text-charcoal/30 group-hover:text-crimson transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-charcoal/65 group-hover:text-crimson transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
               </Link>

@@ -182,7 +182,7 @@ export default async function HomePage() {
               {/* Search */}
               <form action="/search" method="GET" className="relative max-w-lg mb-6">
                 <div className="flex bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden shadow-[0_8px_60px_rgba(0,0,0,0.55)]">
-                  <div className="flex items-center pl-5 pr-3 text-charcoal/35 shrink-0">
+                  <div className="flex items-center pl-5 pr-3 text-charcoal/65 shrink-0">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
@@ -261,7 +261,8 @@ export default async function HomePage() {
             {/* Card 1: Tall photo-first */}
             <Link href={`/attractions/${displayGuides[0].slug}`}
               className="card-zoom group relative rounded-3xl overflow-hidden lg:row-span-2 min-h-[400px] lg:min-h-[580px] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500 flex flex-col">
-              <Image src={displayGuides[0].image} alt={displayGuides[0].name} fill
+              {/* Session 6.3 — image-redundant-alt: the guide's name is a visible heading in this same card below. */}
+              <Image src={displayGuides[0].image} alt="" fill
                 sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw"
                 className="object-cover img-editorial img-inner"/>
               <div className="absolute inset-0 bg-gradient-to-t from-ink/97 via-ink/50 to-transparent"/>
@@ -288,7 +289,8 @@ export default async function HomePage() {
               <Link key={g.slug} href={`/attractions/${g.slug}`}
                 className="card-zoom group bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300 flex flex-col">
                 <div className="relative h-48 shrink-0 overflow-hidden">
-                  <Image src={g.image} alt={g.name} fill sizes="(max-width:640px) 100vw,50vw"
+                  {/* Session 6.3 — image-redundant-alt: g.name is a visible heading in this same card below. */}
+                  <Image src={g.image} alt="" fill sizes="(max-width:640px) 100vw,50vw"
                     className="object-cover img-editorial img-inner"/>
                   <div className="absolute top-3 left-3">
                     <span className="bg-white/92 backdrop-blur font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 px-2.5 py-1 rounded-full">
@@ -321,7 +323,8 @@ export default async function HomePage() {
             <Link href={`/attractions/${displayGuides[3].slug}`}
               className="card-zoom group bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300 lg:col-span-2 flex flex-col sm:flex-row">
               <div className="relative h-52 sm:h-auto sm:w-72 lg:w-96 shrink-0 overflow-hidden">
-                <Image src={displayGuides[3].image} alt={displayGuides[3].name} fill sizes="(max-width:640px) 100vw,384px"
+                {/* Session 6.3 — image-redundant-alt: the guide's name is a visible heading in this same card below. */}
+                <Image src={displayGuides[3].image} alt="" fill sizes="(max-width:640px) 100vw,384px"
                   className="object-cover img-editorial img-inner"/>
                 <div className="absolute top-3 left-3">
                   <span className="bg-white/92 backdrop-blur font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 px-2.5 py-1 rounded-full">
@@ -397,9 +400,10 @@ export default async function HomePage() {
               {(featured as AttrItem[]).slice(0, 8).map((a) => (
                 <Link key={a.slug} href={`/attractions/${a.slug}`}
                   className="card-zoom group relative rounded-2xl overflow-hidden aspect-[4/5] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500">
+                  {/* Session 6.3 — image-redundant-alt: a.name is a visible heading in this same card below. */}
                   <Image
                     src={attractionImageUrl(a.slug)}
-                    alt={a.name} fill
+                    alt="" fill
                     sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,25vw"
                     className="object-cover img-editorial img-inner"
                   />
@@ -423,7 +427,7 @@ export default async function HomePage() {
 
             <div className="mt-12 flex items-center justify-center gap-2">
               <button disabled aria-label="Previous page"
-                className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/30 disabled:opacity-40">
+                className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/65 disabled:opacity-40">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
               </button>
               {[1, 2, 3, 4, 5].map(n => (
@@ -433,7 +437,7 @@ export default async function HomePage() {
                   {n}
                 </Link>
               ))}
-              <span className="font-sans text-[14px] text-charcoal/30 px-1">...</span>
+              <span className="font-sans text-[14px] text-charcoal/65 px-1">...</span>
               <Link href="/search?page=9"
                 className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center font-display font-semibold text-[14px] text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson transition-all">
                 9
@@ -467,9 +471,10 @@ export default async function HomePage() {
                 <Link key={post.slug} href={`/blog/${post.slug}`}
                   className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
                   <div className="relative h-52 overflow-hidden bg-sand">
+                    {/* Session 6.3 — image-redundant-alt: post.title is a visible heading in this same card below. */}
                     <Image
                       src={coverSrc}
-                      alt={post.title} fill
+                      alt="" fill
                       sizes="(max-width:640px)100vw,(max-width:1024px)50vw,33vw"
                       className="object-cover img-editorial img-inner"
                     />
@@ -484,7 +489,7 @@ export default async function HomePage() {
                       {post.tags?.[0] && (
                         <>
                           <span className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson">{post.tags[0]}</span>
-                          <span className="text-charcoal/20 dark-flip-muted">·</span>
+                          <span className="text-charcoal/65 dark-flip-muted">·</span>
                         </>
                       )}
                       <span className="font-sans text-[14px] text-charcoal/55 dark-flip-muted">

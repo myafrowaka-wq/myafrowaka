@@ -26,7 +26,7 @@ export default function NotFound() {
             Search Attractions
           </Link>
         </div>
-        <p className="font-sans text-[14px] text-charcoal/25 uppercase tracking-[0.14em] mt-12">
+        <p className="font-sans text-[14px] text-charcoal/65 uppercase tracking-[0.14em] mt-12">
           africa explained by africans.
         </p>
       </div>

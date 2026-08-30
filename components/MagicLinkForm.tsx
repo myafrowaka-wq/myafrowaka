@@ -75,7 +75,7 @@ export function MagicLinkForm({ next }: { next?: string }) {
         <input
           type="email" required value={email} placeholder="your@email.com"
           onChange={e => setEmail(e.target.value)}
-          className="flex-1 border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder:text-charcoal/30 dark:placeholder:text-cream/25 font-sans text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-gold-400 transition-colors"
+          className="flex-1 border border-line dark-flip-border bg-white dark-flip-card text-charcoal dark-flip-text placeholder:text-charcoal/65 dark:placeholder:text-cream/55 font-sans text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-gold-400 transition-colors"
         />
         <button type="submit" disabled={status === 'loading'}
           className="shrink-0 bg-ink hover:bg-charcoal disabled:opacity-60 disabled:cursor-not-allowed text-cream font-display font-bold text-[14px] uppercase tracking-[0.1em] px-6 py-3.5 rounded-xl transition-all whitespace-nowrap">
@@ -85,7 +85,7 @@ export function MagicLinkForm({ next }: { next?: string }) {
       {status === 'error' && (
         <p className="font-sans text-[14px] text-crimson mt-2.5">{errMsg}</p>
       )}
-      <p className="font-sans text-[14px] text-charcoal/40 dark-flip-muted mt-2.5 leading-relaxed">
+      <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted mt-2.5 leading-relaxed">
         No password to remember. We&rsquo;ll email you a link that signs you in — first time or returning.
       </p>
     </form>

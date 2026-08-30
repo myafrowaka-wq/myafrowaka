@@ -233,6 +233,21 @@ body {
 .dark .dark-flip-muted { color: rgba(247,242,233,0.65) !important; }
 .dark .dark-flip-border { border-color: rgba(255,255,255,0.08) !important; }
 
+/* Session 6.3 (WDOS gate run) — real, measured WCAG failure: text-crimson
+   (#A22E29) was designed against the light-mode bg-white cards it normally
+   sits on (7.1:1, comfortably passes) and nobody re-checked it once
+   dark-flip-card/-bg/-surf flip that same card to a near-black surface in
+   dark mode — axe-core caught the result at 2.34:1, badly failing WCAG
+   2.2 AA's 4.5:1 floor (X-01). Scoped to only fire where crimson text is
+   actually a descendant of a flipped-dark surface, so light-mode and any
+   permanently-dark section (which was never the broken case) are
+   untouched. crimson-200 verified at 6.93:1 against ink-card. */
+.dark .dark-flip-bg .text-crimson,
+.dark .dark-flip-card .text-crimson,
+.dark .dark-flip-surf .text-crimson {
+  color: var(--color-crimson-200) !important;
+}
+
 /* ── Selection ───────────────────────────────────────────────── */
 ::selection {
   background: var(--color-gold);

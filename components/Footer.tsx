@@ -92,7 +92,7 @@ export default async function Footer() {
                 className="h-9 w-auto opacity-90"
               />
             </Link>
-            <p className="font-sans text-sm text-cream/45 leading-relaxed mb-6 md:max-w-[220px]">
+            <p className="font-sans text-sm text-cream/55 leading-relaxed mb-6 md:max-w-[220px]">
               {t('longTagline')}
             </p>
 
@@ -100,7 +100,7 @@ export default async function Footer() {
             <div className="flex flex-wrap gap-2">
               {SOCIAL.map(s => (
                 <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
-                  className="w-9 h-9 bg-white/6 hover:bg-white/12 rounded-full flex items-center justify-center text-cream/40 hover:text-cream transition-colors">
+                  className="w-9 h-9 bg-white/6 hover:bg-white/12 rounded-full flex items-center justify-center text-cream/55 hover:text-cream transition-colors">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d={s.path}/></svg>
                 </a>
               ))}
@@ -108,7 +108,7 @@ export default async function Footer() {
 
             <div className="mt-6 pt-5 border-t border-white/6">
               <a href="mailto:info@myafrowaka.com"
-                className="font-sans text-[14px] text-cream/35 hover:text-gold-400 transition-colors">
+                className="font-sans text-[14px] text-cream/55 hover:text-gold-400 transition-colors">
                 info@myafrowaka.com
               </a>
             </div>
@@ -116,11 +116,11 @@ export default async function Footer() {
 
           {/* Destinations */}
           <div>
-            <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-cream/25 mb-4">{t('sectionDestinations')}</p>
+            <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-cream/55 mb-4">{t('sectionDestinations')}</p>
             <ul className="space-y-2.5">
               {DESTINATIONS.map(l => (
                 <li key={l.href}>
-                  <Link href={l.href} className="font-sans text-sm text-cream/45 hover:text-cream/80 transition-colors">{l.label}</Link>
+                  <Link href={l.href} className="font-sans text-sm text-cream/55 hover:text-cream/80 transition-colors">{l.label}</Link>
                 </li>
               ))}
             </ul>
@@ -128,11 +128,11 @@ export default async function Footer() {
 
           {/* Experiences */}
           <div>
-            <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-cream/25 mb-4">{t('sectionExperiences')}</p>
+            <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-cream/55 mb-4">{t('sectionExperiences')}</p>
             <ul className="space-y-2.5">
               {EXPERIENCES.map(l => (
                 <li key={l.href}>
-                  <Link href={l.href} className="font-sans text-sm text-cream/45 hover:text-cream/80 transition-colors">{l.label}</Link>
+                  <Link href={l.href} className="font-sans text-sm text-cream/55 hover:text-cream/80 transition-colors">{l.label}</Link>
                 </li>
               ))}
             </ul>
@@ -140,11 +140,11 @@ export default async function Footer() {
 
           {/* Guides */}
           <div>
-            <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-cream/25 mb-4">{t('sectionGuides')}</p>
+            <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-cream/55 mb-4">{t('sectionGuides')}</p>
             <ul className="space-y-2.5">
               {GUIDES.map(l => (
                 <li key={l.href}>
-                  <Link href={l.href} className="font-sans text-sm text-cream/45 hover:text-cream/80 transition-colors">{l.label}</Link>
+                  <Link href={l.href} className="font-sans text-sm text-cream/55 hover:text-cream/80 transition-colors">{l.label}</Link>
                 </li>
               ))}
             </ul>
@@ -152,11 +152,11 @@ export default async function Footer() {
 
           {/* Company */}
           <div>
-            <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-cream/25 mb-4">{t('sectionCompany')}</p>
+            <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-cream/55 mb-4">{t('sectionCompany')}</p>
             <ul className="space-y-2.5">
               {COMPANY.map(l => (
                 <li key={l.href}>
-                  <Link href={l.href} className="font-sans text-sm text-cream/45 hover:text-cream/80 transition-colors">{t(l.key)}</Link>
+                  <Link href={l.href} className="font-sans text-sm text-cream/55 hover:text-cream/80 transition-colors">{t(l.key)}</Link>
                 </li>
               ))}
             </ul>
@@ -168,12 +168,12 @@ export default async function Footer() {
       <div className="border-t border-white/6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="font-sans text-[14px] text-cream/20 uppercase tracking-[0.1em]">
+            <p className="font-sans text-[14px] text-cream/55 uppercase tracking-[0.1em]">
               &copy; {new Date().getFullYear()} MyAfroWaka. {t('rights')}
             </p>
             <div className="flex items-center gap-4">
-              <Link href="/privacy" className="font-sans text-[14px] text-cream/20 hover:text-cream/45 transition-colors uppercase tracking-[0.1em]">{t('privacy')}</Link>
-              <Link href="/terms"   className="font-sans text-[14px] text-cream/20 hover:text-cream/45 transition-colors uppercase tracking-[0.1em]">{t('terms')}</Link>
+              <Link href="/privacy" className="font-sans text-[14px] text-cream/55 hover:text-cream/55 transition-colors uppercase tracking-[0.1em]">{t('privacy')}</Link>
+              <Link href="/terms"   className="font-sans text-[14px] text-cream/55 hover:text-cream/55 transition-colors uppercase tracking-[0.1em]">{t('terms')}</Link>
             </div>
           </div>
         </div>

@@ -47,7 +47,7 @@ function AccordionSection({
         className="w-full flex items-center justify-between py-4 text-left"
       >
         <span className="font-display font-semibold text-[14px] text-charcoal dark-flip-text">{title}</span>
-        <svg className={`w-4 h-4 text-charcoal/35 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+        <svg className={`w-4 h-4 text-charcoal/65 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
           fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
         </svg>
@@ -111,7 +111,7 @@ function FilterAccordions({ category, status, region, country, month, style, cou
       <AccordionSection title="Country">
         <div className="space-y-1 max-h-56 overflow-y-auto">
           {countriesWithEvents.length === 0 ? (
-            <p className="font-sans text-[14px] text-charcoal/35 dark-flip-muted italic py-1">No events published yet.</p>
+            <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted italic py-1">No events published yet.</p>
           ) : countriesWithEvents.map(c => (
             <FilterOption key={c.slug} active={country === c.slug} onClick={() => setParam('country', country === c.slug ? '' : c.slug)}>
               <span className="inline-flex items-center gap-1.5"><Flag code={c.countryCode} />{c.name}</span>
@@ -236,7 +236,7 @@ export function EventsExplorer({ events, countries }: { events: EventSummary[]; 
           </p>
 
           <div className="relative max-w-2xl">
-            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/35 pointer-events-none"
+            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/65 pointer-events-none"
               fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
@@ -245,7 +245,7 @@ export function EventsExplorer({ events, countries }: { events: EventSummary[]; 
               value={inputVal}
               onChange={e => setSearchInput(e.target.value)}
               placeholder="Search by name, country, city, or category..."
-              className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl pl-10 pr-4 py-3.5 text-sm font-sans text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors"
+              className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl pl-10 pr-4 py-3.5 text-sm font-sans text-charcoal dark-flip-text placeholder:text-charcoal/65 focus:outline-none focus:border-gold-400 transition-colors"
             />
           </div>
 
@@ -321,15 +321,15 @@ export function EventsExplorer({ events, countries }: { events: EventSummary[]; 
               // with placeholder cards - a wrong date sent to a real
               // traveller costs more trust than an empty page ever would.
               <div className="text-center py-24">
-                <p className="font-display font-bold text-2xl text-charcoal/25 dark-flip-muted mb-3">No events published yet</p>
+                <p className="font-display font-bold text-2xl text-charcoal/65 dark-flip-muted mb-3">No events published yet</p>
                 <p className="font-sans text-sm text-charcoal/45 dark-flip-muted max-w-md mx-auto leading-relaxed">
                   We verify every date against an official source before it goes live, so this starts empty on purpose. The first events are on their way.
                 </p>
               </div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-20">
-                <p className="font-display font-bold text-3xl text-charcoal/20 dark-flip-muted mb-3">No matches</p>
-                <p className="font-sans text-sm text-charcoal/35 dark-flip-muted mb-6">Try a different search term or clear a filter.</p>
+                <p className="font-display font-bold text-3xl text-charcoal/65 dark-flip-muted mb-3">No matches</p>
+                <p className="font-sans text-sm text-charcoal/65 dark-flip-muted mb-6">Try a different search term or clear a filter.</p>
                 <button onClick={clearAll}
                   className="inline-flex items-center gap-2 border border-line dark-flip-border text-charcoal/50 dark-flip-muted hover:text-crimson hover:border-crimson font-sans text-[14px] uppercase tracking-[0.12em] px-6 py-3 rounded-full transition-colors">
                   Clear all filters

@@ -57,7 +57,7 @@ export default async function GuidesPage() {
           >
             Travel Guides
           </h1>
-          <p className="font-sans text-cream/45 mt-4 max-w-xl leading-relaxed"
+          <p className="font-sans text-cream/55 mt-4 max-w-xl leading-relaxed"
             style={{ fontSize: 'clamp(13px, 1.3vw, 16px)' }}>
             Curated ranked lists built from verified field research. Each guide links to full attraction profiles with practical information.
           </p>
@@ -90,7 +90,7 @@ function GuideCard({ guide, index }: { guide: Guide; index: number }) {
     <Link href={`/guides/${guide.slug}`}
       className="group relative block bg-cream dark-flip-card border border-line dark-flip-border hover:border-gold-300 rounded-2xl p-6 hover:shadow-[var(--shadow-soft)] transition-all overflow-hidden">
       <span
-        className="absolute top-4 right-5 font-sans font-bold text-[38px] leading-none text-charcoal/5 dark-flip-muted select-none"
+        className="absolute top-4 right-5 font-sans font-bold text-[38px] leading-none text-charcoal/65 dark-flip-muted select-none"
         aria-hidden>
         {num}
       </span>
@@ -107,7 +107,7 @@ function GuideCard({ guide, index }: { guide: Guide; index: number }) {
         </p>
       )}
       <div className="flex items-center justify-between">
-        <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/28 dark-flip-muted">
+        <span className="font-sans text-[14px] uppercase tracking-[0.12em] text-charcoal/65 dark-flip-muted">
           {guide.itemCount} {guide.itemCount === 1 ? 'attraction' : 'attractions'}
         </span>
         <p className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson group-hover:text-crimson/70 transition-colors">
@@ -122,7 +122,7 @@ function EmptyState() {
   return (
     <div className="text-center py-20">
       <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-sand dark-flip-surf border border-line dark-flip-border mb-6">
-        <svg className="w-6 h-6 text-charcoal/25 dark-flip-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-6 h-6 text-charcoal/65 dark-flip-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>

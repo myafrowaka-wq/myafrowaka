@@ -105,9 +105,9 @@ export default async function BlogPage(
           {totalPages > 1 && (
             <div className="mt-16 flex items-center justify-center gap-2 flex-wrap">
               {safePage > 1 && (
-                <Link href={`/blog?page=${safePage - 1}`}
+                <Link href={`/blog?page=${safePage - 1}`} aria-label="Previous page"
                   className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson transition-all">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
                   </svg>
                 </Link>
@@ -122,9 +122,9 @@ export default async function BlogPage(
                 </Link>
               ))}
               {safePage < totalPages && (
-                <Link href={`/blog?page=${safePage + 1}`}
+                <Link href={`/blog?page=${safePage + 1}`} aria-label="Next page"
                   className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson transition-all">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
                   </svg>
                 </Link>

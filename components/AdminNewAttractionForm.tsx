@@ -85,7 +85,7 @@ export function AdminNewAttractionForm({ canPublish }: Props) {
           </button>
         </div>
         {attrSlug && (
-          <p className="font-sans text-[14px] text-charcoal/30 dark-flip-muted mt-4">
+          <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted mt-4">
             Slug: /attractions/{attrSlug}
           </p>
         )}
@@ -106,12 +106,12 @@ export function AdminNewAttractionForm({ canPublish }: Props) {
         <div>
           <label className="font-display font-semibold text-[14px] uppercase tracking-[0.1em] text-charcoal/50 dark-flip-muted block mb-2">Attraction Name *</label>
           <input name="name" required placeholder="Victoria Falls"
-            className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors"/>
+            className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/65 focus:outline-none focus:border-gold-400 transition-colors"/>
         </div>
         <div>
           <label className="font-display font-semibold text-[14px] uppercase tracking-[0.1em] text-charcoal/50 dark-flip-muted block mb-2">Country</label>
           <input name="countryName" placeholder="Zimbabwe"
-            className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors"/>
+            className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/65 focus:outline-none focus:border-gold-400 transition-colors"/>
         </div>
       </div>
 
@@ -123,7 +123,7 @@ export function AdminNewAttractionForm({ canPublish }: Props) {
               className="w-full appearance-none border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text focus:outline-none focus:border-gold-400 transition-colors pr-10">
               {REGIONS.map(r => <option key={r} value={r}>{r}</option>)}
             </select>
-            <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/35 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+            <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/65 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
           </div>
         </div>
         <div>
@@ -133,7 +133,7 @@ export function AdminNewAttractionForm({ canPublish }: Props) {
               className="w-full appearance-none border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text focus:outline-none focus:border-gold-400 transition-colors pr-10">
               {TYPES.map(tp => <option key={tp} value={tp}>{tp}</option>)}
             </select>
-            <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/35 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+            <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/65 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
           </div>
         </div>
       </div>
@@ -141,7 +141,7 @@ export function AdminNewAttractionForm({ canPublish }: Props) {
       <div>
         <label className="font-display font-semibold text-[14px] uppercase tracking-[0.1em] text-charcoal/50 dark-flip-muted block mb-2">Editorial Summary</label>
         <textarea name="editorialSummary" rows={4} placeholder="One or two sentences that capture what makes this place significant."
-          className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 resize-none transition-colors"/>
+          className="w-full border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3.5 font-sans text-sm text-charcoal dark-flip-text placeholder:text-charcoal/65 focus:outline-none focus:border-gold-400 resize-none transition-colors"/>
       </div>
 
       {canPublish ? (
@@ -153,7 +153,7 @@ export function AdminNewAttractionForm({ canPublish }: Props) {
               <option value="Draft">Draft (not visible to public)</option>
               <option value="Published">Published (live on site)</option>
             </select>
-            <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/35 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+            <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal/65 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
           </div>
         </div>
       ) : (
@@ -178,7 +178,7 @@ export function AdminNewAttractionForm({ canPublish }: Props) {
             </>
           )}
         </button>
-        <p className="font-sans text-[14px] text-charcoal/30 dark-flip-muted">Add article body and images in Sanity Studio after saving.</p>
+        <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">Add article body and images in Sanity Studio after saving.</p>
       </div>
     </form>
   )

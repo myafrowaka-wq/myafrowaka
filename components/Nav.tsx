@@ -466,9 +466,9 @@ export default function Nav() {
                           setLangOpen(false)
                         }
                       }}
-                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-sans transition-colors ${supported ? 'hover:bg-cream dark:hover:bg-white/5 cursor-pointer' : 'opacity-40 cursor-not-allowed'} ${lang === l.code ? 'text-ochre-600 font-semibold' : 'text-charcoal/70 dark:text-cream/65'}`}>
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm font-sans transition-colors ${supported ? 'hover:bg-cream dark:hover:bg-white/5 cursor-pointer' : 'opacity-40 cursor-not-allowed'} ${lang === l.code ? 'text-ochre-600 dark:text-ochre-400 font-semibold' : 'text-charcoal/70 dark:text-cream/65'}`}>
                       <span>{l.label}</span>
-                      {!supported && <span className="ml-auto font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/30 dark:text-cream/25">Soon</span>}
+                      {!supported && <span className="ml-auto font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/65 dark:text-cream/55">Soon</span>}
                       {lang === l.code && supported && <svg className="w-3.5 h-3.5 ml-auto text-ochre-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>}
                     </button>
                   )
@@ -516,7 +516,7 @@ export default function Nav() {
                       <div className="flex flex-wrap gap-x-3 gap-y-0.5 pl-5">
                         {r.countries.slice(0, 3).map(c => (
                           <Link key={c} href={`/destinations/${c.toLowerCase().replace(/\s+/g, '-')}`} onClick={close}
-                            className="font-sans text-[14px] text-cream/45 hover:text-cream/80 transition-colors">
+                            className="font-sans text-[14px] text-cream/55 hover:text-cream/80 transition-colors">
                             {c}
                           </Link>
                         ))}
@@ -565,7 +565,8 @@ export default function Nav() {
                     <Link key={a.slug} href={`/attractions/${a.slug}`} onClick={close}
                       className="group flex gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors">
                       <div className="relative w-20 h-14 rounded-xl overflow-hidden shrink-0">
-                        <Image src={a.img} alt={a.title} fill className="object-cover"/>
+                        {/* Session 6.3 — image-redundant-alt: a.title is a visible caption right next to this thumbnail. */}
+                        <Image src={a.img} alt="" fill className="object-cover"/>
                       </div>
                       <div>
                         <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-ochre-400 mb-1">{a.tag}</p>
@@ -600,7 +601,7 @@ export default function Nav() {
                   <div key={r.region}>
                     <Link href={r.href} onClick={close} className="group flex items-center gap-2 mb-3">
                       <span className="w-2 h-2 rounded-full" style={{ backgroundColor: r.color }}/>
-                      <span className="font-display font-bold text-[14px] uppercase tracking-[0.12em] text-charcoal/50 dark:text-cream/40 group-hover:text-ochre-600 transition-colors">{r.region}</span>
+                      <span className="font-display font-bold text-[14px] uppercase tracking-[0.12em] text-charcoal/50 dark:text-cream/55 group-hover:text-ochre-600 transition-colors">{r.region}</span>
                     </Link>
                     <ul className="space-y-2">
                       {r.countries.map(c => (
@@ -612,7 +613,12 @@ export default function Nav() {
                         </li>
                       ))}
                       <li>
-                        <Link href={r.href} onClick={close} className="font-sans text-[14px] text-ochre-500 hover:text-ochre-600 transition-colors mt-0.5 inline-block">
+                        {/* Session 6.3 — dark:text-ochre-400: plain ochre-500 measures
+                            3.98:1 against this mega-panel's dark:bg-nav-dropdown,
+                            failing WCAG AA's 4.5:1 for normal text; ochre-400 is the
+                            project's existing dark-mode-safe ochre step (see Nav's own
+                            dark:hover:text-ochre-400 a few lines up) and clears 5.2:1 here. */}
+                        <Link href={r.href} onClick={close} className="font-sans text-[14px] text-ochre-500 dark:text-ochre-400 hover:text-ochre-600 dark:hover:text-ochre-300 transition-colors mt-0.5 inline-block">
                           {t('more')} &rarr;
                         </Link>
                       </li>
@@ -621,7 +627,7 @@ export default function Nav() {
                 ))}
               </div>
               <div className="col-span-3 border-l border-line dark:border-white/8 pl-8 flex flex-col">
-                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-4">{t('featured')}</p>
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark:text-cream/55 mb-4">{t('featured')}</p>
                 <Link href="/destinations/egypt" onClick={close} className="group relative rounded-2xl overflow-hidden flex-1 min-h-[200px] block">
                   <Image src={stockImage('1640005438758-861043e64aa5')} alt="Egypt" fill className="object-cover group-hover:scale-105 transition-transform duration-500"/>
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent"/>
@@ -654,7 +660,7 @@ export default function Nav() {
 
               {/* Col 1: Browse by type */}
               <div className="col-span-3">
-                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Type</p>
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark:text-cream/55 mb-5">Browse by Type</p>
                 <ul className="space-y-2">
                   {ATTRACTION_TYPES.map(item => (
                     <li key={item.exp}>
@@ -670,7 +676,7 @@ export default function Nav() {
 
               {/* Col 2: Browse by region */}
               <div className="col-span-3 border-l border-line dark:border-white/8 pl-8">
-                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Region</p>
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark:text-cream/55 mb-5">Browse by Region</p>
                 <ul className="space-y-2">
                   {REGIONS.map(r => (
                     <li key={r.region}>
@@ -686,25 +692,34 @@ export default function Nav() {
 
               {/* Col 3+4: Featured guides */}
               <div className="col-span-6 border-l border-line dark:border-white/8 pl-8">
-                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Featured Guides</p>
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark:text-cream/55 mb-5">Featured Guides</p>
                 <div className="space-y-3">
                   {FEATURED_ATTRACTIONS.map(a => (
                     <Link key={a.slug} href={`/attractions/${a.slug}`} onClick={close}
                       className="group flex items-center gap-4 p-3 rounded-xl hover:bg-sand dark:hover:bg-white/5 transition-colors">
                       <div className="relative w-20 h-14 rounded-xl overflow-hidden shrink-0">
-                        <Image src={a.img} alt={a.title} fill className="object-cover"/>
+                        {/* Session 6.3 — image-redundant-alt: a.title is a visible caption right next to this thumbnail. */}
+                        <Image src={a.img} alt="" fill className="object-cover"/>
                       </div>
                       <div>
-                        <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-crimson mb-1">{a.tag}</p>
+                        {/* Session 6.3 — dark:text-crimson-300 matches this exact
+                            mega-panel's own hover:dark:text-crimson-300 convention
+                            a few lines up; plain text-crimson measures 2.57:1
+                            against this panel's dark:bg-nav-dropdown (#181510),
+                            badly failing WCAG AA, and isn't reached by globals.css's
+                            .dark-flip-* crimson override since this panel uses its
+                            own bg-nav-dropdown rather than that convention. */}
+                        <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-crimson dark:text-crimson-300 mb-1">{a.tag}</p>
                         <p className="font-display font-semibold text-[14px] text-charcoal/80 dark:text-cream/75 group-hover:text-crimson transition-colors leading-snug">{a.title}</p>
                       </div>
                     </Link>
                   ))}
                 </div>
                 <div className="mt-5 pt-4 border-t border-line dark:border-white/8 flex items-center justify-between">
-                  <p className="font-sans text-[14px] text-charcoal/40 dark:text-cream/35">Destination guides, written from inside Africa.</p>
+                  <p className="font-sans text-[14px] text-charcoal/65 dark:text-cream/55">Destination guides, written from inside Africa.</p>
+                  {/* Session 6.3 — see the region-list "more" link's matching comment above: same bug, same fix. */}
                   <Link href="/search" onClick={close}
-                    className="inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.12em] text-ochre-500 hover:text-ochre-600 transition-colors">
+                    className="inline-flex items-center gap-1.5 font-sans text-[14px] uppercase tracking-[0.12em] text-ochre-500 dark:text-ochre-400 hover:text-ochre-600 dark:hover:text-ochre-300 transition-colors">
                     Browse all
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                   </Link>
@@ -728,7 +743,7 @@ export default function Nav() {
 
               {/* Col 1: Categories */}
               <div className="col-span-4">
-                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Browse by Category</p>
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark:text-cream/55 mb-5">Browse by Category</p>
                 <ul className="space-y-2">
                   {STORY_CATEGORIES.map(c => (
                     <li key={c.href}>
@@ -745,23 +760,25 @@ export default function Nav() {
 
               {/* Col 2+3: Featured stories */}
               <div className="col-span-8 border-l border-line dark:border-white/8 pl-8">
-                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark:text-cream/30 mb-5">Latest From the Journal</p>
+                <p className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark:text-cream/55 mb-5">Latest From the Journal</p>
                 <div className="grid grid-cols-2 gap-3">
                   {FEATURED_STORIES.map(s => (
                     <Link key={s.slug} href={`/blog/${s.slug}`} onClick={close}
                       className="group flex items-center gap-4 p-3 rounded-xl hover:bg-sand dark:hover:bg-white/5 transition-colors">
                       <div className="relative w-20 h-14 rounded-xl overflow-hidden shrink-0">
-                        <Image src={s.img} alt={s.title} fill className="object-cover"/>
+                        {/* Session 6.3 — image-redundant-alt: s.title is a visible caption right next to this thumbnail. */}
+                        <Image src={s.img} alt="" fill className="object-cover"/>
                       </div>
                       <div>
-                        <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-crimson mb-1">{s.tag}</p>
+                        {/* Session 6.3 — see the Attractions mega-panel's matching comment above: same bug, same fix. */}
+                        <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-crimson dark:text-crimson-300 mb-1">{s.tag}</p>
                         <p className="font-display font-semibold text-[14px] text-charcoal/80 dark:text-cream/75 group-hover:text-crimson transition-colors leading-snug">{s.title}</p>
                       </div>
                     </Link>
                   ))}
                 </div>
                 <div className="mt-5 pt-4 border-t border-line dark:border-white/8">
-                  <p className="font-sans text-[14px] text-charcoal/40 dark:text-cream/35">Perspectives, dispatches, and stories from across the continent.</p>
+                  <p className="font-sans text-[14px] text-charcoal/65 dark:text-cream/55">Perspectives, dispatches, and stories from across the continent.</p>
                 </div>
               </div>
             </div>
@@ -884,7 +901,7 @@ export default function Nav() {
                     <p className="font-display font-semibold text-[14px] text-cream group-hover:text-gold-300 transition-colors">
                       {session.user.name?.split(' ')[0] ?? 'Account'}
                     </p>
-                    <p className="font-sans text-[14px] uppercase tracking-[0.08em] text-cream/40">My Dashboard</p>
+                    <p className="font-sans text-[14px] uppercase tracking-[0.08em] text-cream/55">My Dashboard</p>
                   </div>
                 </Link>
               ) : (
@@ -900,6 +917,7 @@ export default function Nav() {
                 <ThemeToggle/>
                 <select value={lang}
                   onChange={e => switchLocale(e.target.value)}
+                  aria-label="Choose language"
                   className="bg-white/10 text-cream text-[14px] font-sans border border-white/15 rounded-full px-3 py-1.5 focus:outline-none">
                   {LANGUAGES.map(l => (
                     <option key={l.code} value={l.code} className="text-charcoal bg-white">{l.label}</option>

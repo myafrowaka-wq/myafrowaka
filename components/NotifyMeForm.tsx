@@ -40,7 +40,7 @@ export function NotifyMeForm({ eventName, eventSlug }: { eventName: string; even
           value={email}
           onChange={e => setEmail(e.target.value)}
           placeholder="your@email.com"
-          className="flex-1 border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3 text-sm font-sans text-charcoal dark-flip-text placeholder:text-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors"
+          className="flex-1 border border-line dark-flip-border bg-white dark-flip-card rounded-xl px-4 py-3 text-sm font-sans text-charcoal dark-flip-text placeholder:text-charcoal/65 focus:outline-none focus:border-gold-400 transition-colors"
         />
         <button
           type="submit"

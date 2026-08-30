@@ -142,7 +142,7 @@ export default async function AuthorPage(
                 {author.name}
               </h1>
               {author.country && (
-                <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/45 mt-3">
+                <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-cream/55 mt-3">
                   Based in {author.country}
                 </p>
               )}
@@ -172,7 +172,7 @@ export default async function AuthorPage(
             {/* ── Bio sidebar ──────────────────────────────────────── */}
             <div className="lg:sticky lg:top-24 space-y-6">
               <div>
-                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-4">
+                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-4">
                   About
                 </p>
                 <p className="font-sans text-[15px] text-charcoal/70 dark-flip-muted leading-[1.8]">
@@ -183,7 +183,7 @@ export default async function AuthorPage(
               {/* Back link */}
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/35 dark-flip-muted hover:text-crimson transition-colors"
+                className="inline-flex items-center gap-2 font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 dark-flip-muted hover:text-crimson transition-colors"
               >
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18"/>
@@ -194,12 +194,12 @@ export default async function AuthorPage(
 
             {/* ── Articles ─────────────────────────────────────────── */}
             <div>
-              <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/30 dark-flip-muted mb-6">
+              <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-6">
                 Articles
               </p>
 
               {posts.length === 0 ? (
-                <p className="font-sans text-sm text-charcoal/35 dark-flip-muted italic">
+                <p className="font-sans text-sm text-charcoal/65 dark-flip-muted italic">
                   Articles coming soon.
                 </p>
               ) : (
@@ -215,9 +215,10 @@ export default async function AuthorPage(
                         <div className="flex gap-0 flex-col sm:flex-row">
                           {/* Cover */}
                           <div className="relative sm:w-52 h-40 sm:h-auto shrink-0 overflow-hidden">
+                            {/* Session 6.3 — image-redundant-alt: post.title is a visible heading in this same card below. */}
                             <Image
                               src={blogCoverUrl(post.slug)}
-                              alt={post.title}
+                              alt=""
                               fill
                               className="object-cover group-hover:scale-[1.04] transition-transform duration-500"
                             />
@@ -248,7 +249,7 @@ export default async function AuthorPage(
                             </div>
                             <div className="flex items-center justify-between gap-2">
                               {post.publishedAt && (
-                                <span className="font-sans text-[14px] text-charcoal/30 dark-flip-muted">
+                                <span className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">
                                   {formatDate(post.publishedAt)}
                                 </span>
                               )}
