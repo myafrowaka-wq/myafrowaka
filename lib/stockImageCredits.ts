@@ -98,6 +98,27 @@ export function stockImage(id: string): string {
   return `/images/stock/${id}.jpg`
 }
 
+// Homepage hero background video — same self-hosting rule as every image
+// above, and the same honesty bar: real, verified license, real credit.
+// Sourced from Pexels (elephants walking through savanna grassland, by
+// Roman Odintsov), confirmed free-to-use via the video's own published
+// schema.org VideoObject metadata (isAccessibleForFree: true, license:
+// pexels.com/license) before downloading. The Pexels License permits
+// self-hosting for commercial use without attribution, but this project
+// records real sourcing regardless of what's legally required, same as
+// every photo credit above. Original was a 25s 4K clip; downloaded once,
+// trimmed to the requested 10s and re-encoded at 1920px/~1.5Mbps (ffmpeg,
+// H.264, muted, no re-hosting of the full original) — 1.9MB, reasonable
+// for a homepage hero rather than serving a multi-tens-of-MB 4K file to
+// every visitor.
+export const HERO_VIDEO_CREDIT = {
+  file: '/video/hero-savanna.mp4',
+  sourceUrl: 'https://www.pexels.com/video/african-elephants-walking-in-a-grass-field-11760783/',
+  license: 'Pexels License' as const,
+  photographer: 'Roman Odintsov',
+  note: 'Downloaded once, trimmed to 10s and re-encoded for web delivery — see comment above.',
+}
+
 // ── Shared per-slug lookup maps ─────────────────────────────────────────────
 // Before this session, both of these maps were copy-pasted independently into
 // 8+ files (app/page.tsx, app/attractions/page.tsx, app/attractions/[slug],

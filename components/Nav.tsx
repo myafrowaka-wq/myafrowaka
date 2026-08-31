@@ -18,32 +18,32 @@ import { stockImage } from '@/lib/stockImageCredits'
 
 const REGIONS = [
   {
-    region: 'East Africa', color: REGION_COLOR['East Africa'], href: '/search?region=East+Africa',
+    region: 'East Africa', color: REGION_COLOR['East Africa'], href: '/destinations/regions/east-africa',
     countries: ['Kenya', 'Tanzania', 'Ethiopia', 'Uganda', 'Rwanda', 'Mozambique'],
     image: stockImage('1531872036218-4e8a6828e339'),
   },
   {
-    region: 'West Africa', color: REGION_COLOR['West Africa'], href: '/search?region=West+Africa',
+    region: 'West Africa', color: REGION_COLOR['West Africa'], href: '/destinations/regions/west-africa',
     countries: ['Nigeria', 'Ghana', 'Senegal', 'Ivory Coast', 'Mali', 'Benin'],
     image: stockImage('1727023663928-1772e2c7e679'),
   },
   {
-    region: 'North Africa', color: REGION_COLOR['North Africa'], href: '/search?region=North+Africa',
+    region: 'North Africa', color: REGION_COLOR['North Africa'], href: '/destinations/regions/north-africa',
     countries: ['Egypt', 'Morocco', 'Tunisia', 'Algeria', 'Libya'],
     image: stockImage('1760681554227-d7aad73cd57f'),
   },
   {
-    region: 'Southern Africa', color: REGION_COLOR['Southern Africa'], href: '/search?region=Southern+Africa',
+    region: 'Southern Africa', color: REGION_COLOR['Southern Africa'], href: '/destinations/regions/southern-africa',
     countries: ['South Africa', 'Zimbabwe', 'Zambia', 'Botswana', 'Namibia'],
     image: stockImage('1744604030401-b24c5975a574'),
   },
   {
-    region: 'Central Africa', color: 'var(--color-gold-600)', href: '/search?region=Central+Africa',
+    region: 'Central Africa', color: 'var(--color-gold-600)', href: '/destinations/regions/central-africa',
     countries: ['DR Congo', 'Cameroon', 'Gabon', 'Republic of Congo'],
     image: stockImage('1673624522244-8de0d50b8492'),
   },
   {
-    region: 'Indian Ocean Islands', color: REGION_COLOR['Indian Ocean Islands'], href: '/search?region=Indian+Ocean+Islands',
+    region: 'Indian Ocean Islands', color: REGION_COLOR['Indian Ocean Islands'], href: '/destinations/regions/indian-ocean-islands',
     countries: ['Madagascar', 'Mauritius', 'Seychelles', 'Comoros', 'Zanzibar'],
     image: stockImage('1513415277900-a62401e19be4'),
   },
@@ -285,7 +285,7 @@ export default function Nav() {
     if (panelRef.current) trapFocus(panelRef.current, e)
   }
 
-  const ni = 'flex items-center gap-1 px-3 py-2 text-[15px] font-display font-semibold text-cream/80 hover:text-cream transition-colors rounded-lg hover:bg-white/8 whitespace-nowrap cursor-pointer'
+  const ni = 'flex items-center gap-1 px-3 py-2 text-[18px] font-display font-semibold text-cream hover:text-cream transition-colors rounded-lg hover:bg-white/8 whitespace-nowrap cursor-pointer'
 
   const chevron = (active: boolean) => (
     <svg className={`w-3 h-3 mt-0.5 transition-transform duration-150 ${active ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -808,7 +808,7 @@ export default function Nav() {
             <div className="border-b border-white/10">
               <button onClick={() => setMobileAcc(mobileAcc === 'destinations' ? null : 'destinations')}
                 aria-expanded={mobileAcc === 'destinations'}
-                className="w-full flex items-center justify-between px-2 py-4 text-[15px] font-display font-semibold text-cream/85">
+                className="w-full flex items-center justify-between px-2 py-4 text-[18px] font-display font-semibold text-cream">
                 {t('destinations')} {chevron(mobileAcc === 'destinations')}
               </button>
               {mobileAcc === 'destinations' && (
@@ -827,7 +827,7 @@ export default function Nav() {
             <div className="border-b border-white/10">
               <button onClick={() => setMobileAcc(mobileAcc === 'attractions' ? null : 'attractions')}
                 aria-expanded={mobileAcc === 'attractions'}
-                className="w-full flex items-center justify-between px-2 py-4 text-[15px] font-display font-semibold text-cream/85">
+                className="w-full flex items-center justify-between px-2 py-4 text-[18px] font-display font-semibold text-cream">
                 {t('attractions')} {chevron(mobileAcc === 'attractions')}
               </button>
               {mobileAcc === 'attractions' && (
@@ -844,7 +844,7 @@ export default function Nav() {
 
             {/* Events — plain link, real discovery tool since Session 3.2 */}
             <Link href="/events" onClick={close}
-              className="flex items-center justify-between px-2 py-4 text-[15px] font-display font-semibold text-cream/85 border-b border-white/10">
+              className="flex items-center justify-between px-2 py-4 text-[18px] font-display font-semibold text-cream border-b border-white/10">
               {t('events')}
             </Link>
 
@@ -852,7 +852,7 @@ export default function Nav() {
             <div className="border-b border-white/10">
               <button onClick={() => setMobileAcc(mobileAcc === 'stories' ? null : 'stories')}
                 aria-expanded={mobileAcc === 'stories'}
-                className="w-full flex items-center justify-between px-2 py-4 text-[15px] font-display font-semibold text-cream/85">
+                className="w-full flex items-center justify-between px-2 py-4 text-[18px] font-display font-semibold text-cream">
                 {t('stories')} {chevron(mobileAcc === 'stories')}
               </button>
               {mobileAcc === 'stories' && (

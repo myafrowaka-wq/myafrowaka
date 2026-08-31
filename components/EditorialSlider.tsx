@@ -40,8 +40,22 @@ const SLIDES = [
   },
 ]
 
+// Which slide opens first changes once a week, not on every page load — a
+// timer-driven auto-advance is exactly what WDOS M-09 bans (see
+// DestinationsGrid.tsx's matching comment), and re-randomizing on every
+// visit isn't "spins every 7 days," it's just noise. Deriving the index from
+// the real calendar date instead means every visitor sees the same featured
+// pick for a given week, and it moves on to the next one on its own after
+// 7 days — with the existing prev/next controls untouched for anyone who
+// wants to browse the other three regardless.
+function weeklyStartIndex(length: number) {
+  const daysSinceEpoch = Math.floor(Date.now() / 86_400_000)
+  const weeksSinceEpoch = Math.floor(daysSinceEpoch / 7)
+  return weeksSinceEpoch % length
+}
+
 export function EditorialSlider() {
-  const [current, setCurrent] = useState(0)
+  const [current, setCurrent] = useState(() => weeklyStartIndex(SLIDES.length))
 
   const next = useCallback(() => {
     setCurrent(c => (c + 1) % SLIDES.length)

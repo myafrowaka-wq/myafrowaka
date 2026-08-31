@@ -51,7 +51,6 @@ function CountryCard({ d }: { d: Country }) {
       <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
         <p className="font-sans text-[14px] lg:text-[14px] uppercase tracking-[0.12em] text-cream/55 mb-1 flex items-center gap-1.5">
           <Flag code={d.code} />
-          {d.region}
         </p>
         <h3
           className="font-display font-bold text-cream group-hover:text-gold-300 transition-colors leading-tight text-sm lg:text-[14px]"

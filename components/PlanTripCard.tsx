@@ -4,6 +4,8 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
 import { stockImage } from '@/lib/stockImageCredits'
+import { SearchTypeahead } from '@/components/SearchTypeahead'
+import type { Suggestion } from '@/lib/searchIndex'
 
 // Session 4.2 — this used to open an auth-gate modal ("Create a free
 // account...") the moment someone typed a destination, before they'd seen
@@ -24,19 +26,21 @@ export function PlanTripCard() {
 
   return (
     <div className="bg-white/96 backdrop-blur-sm rounded-3xl p-7 shadow-[0_20px_80px_rgba(0,0,0,0.5)]">
-      <p className="font-display font-bold text-[16px] text-charcoal/85 mb-5" style={{ letterSpacing: '-0.012em' }}>
+      <p className="font-display font-bold text-[26px] text-charcoal/85 mb-5" style={{ letterSpacing: '-0.012em' }}>
         Plan Your Trip
       </p>
 
       <form onSubmit={handleFind} className="space-y-0">
-        <div className="mb-5">
-          <label className="font-sans text-[14px] font-semibold text-charcoal/65 block mb-1.5">Where to?</label>
-          <input
-            type="text"
+        <div className="mb-5 relative">
+          <label htmlFor="plan-trip-dest" className="font-sans text-[14px] font-semibold text-charcoal/65 block mb-1.5">Where to?</label>
+          <SearchTypeahead
+            id="plan-trip-dest"
             value={dest}
-            onChange={e => setDest(e.target.value)}
+            onChange={setDest}
             placeholder="Egypt, Kenya, Morocco..."
             className="w-full border border-line rounded-xl px-4 py-3 text-sm font-sans text-charcoal placeholder-charcoal/30 focus:outline-none focus:border-gold-400 transition-colors bg-cream/40"
+            kinds={['country']}
+            resolveHref={(s: Suggestion) => `/plan-a-trip?country=${encodeURIComponent(s.name)}`}
           />
         </div>
 

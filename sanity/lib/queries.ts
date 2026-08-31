@@ -379,6 +379,26 @@ export const ALL_COUNTRIES_QUERY = `
   }
 `
 
+// ── Region category pages ───────────────────────────────────────────────────
+// "Region" isn't a Sanity document type of its own (see the fixed 6-value
+// list in lib/regionColors.ts's REGION_COLOR) — these read the same
+// country/post documents everything else does, filtered by the country's
+// own continentRegion field.
+
+export const COUNTRIES_BY_REGION_QUERY = `
+  *[_type == "country" && continentRegion == $region] | order(name asc){
+    name, "slug": slug.current, countryCode, continentRegion, overview
+  }
+`
+
+export const POSTS_BY_REGION_QUERY = `
+  *[_type == "post" && contentStatus == "Published" && featuredCountry->continentRegion == $region]
+    | order(publishedAt desc){
+    title, "slug": slug.current, publishedAt, excerpt, category, coverImage,
+    "countryName": featuredCountry->name
+  }
+`
+
 export const DESTINATION_BY_SLUG_QUERY = `
   *[_type == "country" && slug.current == $slug][0]{
     name,

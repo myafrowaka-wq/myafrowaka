@@ -4,11 +4,13 @@ import { client } from '@/sanity/lib/client'
 import { EditorialSlider } from '@/components/EditorialSlider'
 import { TypewriterHero } from '@/components/TypewriterHero'
 import { PlanTripCard } from '@/components/PlanTripCard'
+import { HeroSearchBar } from '@/components/HeroSearchBar'
+import { HeroBackgroundMedia } from '@/components/HeroBackgroundMedia'
 import { DestinationsGrid } from '@/components/DestinationsGrid'
 import { PopularPills } from '@/components/PopularPills'
 import { ExperiencesCarousel } from '@/components/ExperiencesCarousel'
 import { FALLBACK_POSTS } from '@/lib/fallbackPosts'
-import { stockImage, attractionStockImage, blogStockImage } from '@/lib/stockImageCredits'
+import { stockImage, attractionStockImage, blogStockImage, HERO_VIDEO_CREDIT } from '@/lib/stockImageCredits'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { hreflangAlternates } from '@/lib/hreflang'
@@ -143,25 +145,36 @@ export default async function HomePage() {
 
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
       <section className="relative min-h-[94vh] flex items-center overflow-hidden">
-        <Image
-          src={stockImage('1746310783422-16df7622e7c9')}
-          alt="Pyramids of Giza at golden hour"
-          fill priority
-          className="object-cover object-center"
-          sizes="100vw"
-          quality={85}
+        {/* The fallback/poster image now matches the video's own subject
+            (savanna elephants) rather than the previous pyramids photo —
+            keeping the old mismatched image would mean a jarring cut the
+            moment the video mounts client-side, and it's also what
+            permanently shows for prefers-reduced-motion visitors. See
+            HeroBackgroundMedia.tsx and lib/stockImageCredits.ts's
+            HERO_VIDEO_CREDIT for the video's own sourcing/licensing. */}
+        <HeroBackgroundMedia
+          imageSrc={stockImage('1531872036218-4e8a6828e339')}
+          imageAlt="African elephants walking through savanna grassland"
+          videoSrc={HERO_VIDEO_CREDIT.file}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-scrim-1/96 via-scrim-2/88 to-scrim-3/55"/>
         <div className="absolute inset-0 bg-gradient-to-t from-scrim-1/60 via-transparent to-scrim-1/15"/>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-20 lg:py-28">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-14 lg:py-20">
           <div className="grid lg:grid-cols-7 gap-10 lg:gap-16 items-center">
 
             <div className="lg:col-span-4">
               {/* Headline — 2 lines on desktop AND mobile */}
               <h1
                 className="font-display font-extrabold text-cream mb-7 tracking-hero"
-                style={{ fontSize: 'clamp(46px, 4.2vw, 64px)', lineHeight: '0.94' }}
+                // "2x bigger" per the owner's request — but a flat 2x on
+                // every clamp() value (previously 46/4.2vw/64) also doubled
+                // the MOBILE floor to 92px, which broke small screens (a
+                // single word barely fit). Keeping the mobile-safe floor
+                // and only scaling the vw term + desktop ceiling gets the
+                // requested ~2x at desktop widths this was asked about
+                // without breaking 375px — confirmed in both sizes below.
+                style={{ fontSize: 'clamp(40px, 9vw, 128px)', lineHeight: '0.94' }}
               >
                 <TypewriterHero
                   speed={32}
@@ -180,21 +193,7 @@ export default async function HomePage() {
               </p>
 
               {/* Search */}
-              <form action="/search" method="GET" className="relative max-w-lg mb-6">
-                <div className="flex bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden shadow-[0_8px_60px_rgba(0,0,0,0.55)]">
-                  <div className="flex items-center pl-5 pr-3 text-charcoal/65 shrink-0">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                  </div>
-                  <input name="q" type="search" placeholder="Egypt, safari, Zanzibar..."
-                    className="flex-1 py-4 pr-4 text-sm font-sans text-charcoal placeholder-charcoal/35 bg-transparent focus:outline-none"/>
-                  <button type="submit"
-                    className="m-1.5 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] px-5 py-3 rounded-xl transition-all">
-                    Search
-                  </button>
-                </div>
-              </form>
+              <HeroSearchBar />
 
               <div>
                 <p className="font-sans text-[14px] uppercase tracking-[0.15em] text-cream/55 mb-3">{t('popularSearches')}</p>
@@ -216,10 +215,10 @@ export default async function HomePage() {
       </section>
 
       {/* ══ DESTINATIONS — 6 random countries, 1 row desktop, 2 col mobile ════ */}
-      <section className="py-24 lg:py-32 bg-cream dark-flip-bg">
+      <section className="py-14 lg:py-20 bg-cream dark-flip-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-          <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial mb-12"
+          <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial mb-9"
             style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
             {t('whereNext')}
           </h2>
@@ -241,10 +240,10 @@ export default async function HomePage() {
       <EditorialSlider />
 
       {/* ══ FEATURED ATTRACTIONS (was: Latest Travel Guides) ══════════════════ */}
-      <section className="py-24 lg:py-32 bg-sand dark-flip-surf" id="guides">
+      <section className="py-14 lg:py-20 bg-sand dark-flip-surf" id="guides">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-          <div className="flex items-end justify-between mb-12">
+          <div className="flex items-end justify-between mb-9">
             <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
               style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
               {t('featuredAttractions')}
@@ -292,11 +291,6 @@ export default async function HomePage() {
                   {/* Session 6.3 — image-redundant-alt: g.name is a visible heading in this same card below. */}
                   <Image src={g.image} alt="" fill sizes="(max-width:640px) 100vw,50vw"
                     className="object-cover img-editorial img-inner"/>
-                  <div className="absolute top-3 left-3">
-                    <span className="bg-white/92 backdrop-blur font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 px-2.5 py-1 rounded-full">
-                      {g.continentRegion}
-                    </span>
-                  </div>
                 </div>
                 <div className="p-6 flex flex-col flex-1">
                   <div className="flex items-center gap-2.5 mb-3">
@@ -326,11 +320,6 @@ export default async function HomePage() {
                 {/* Session 6.3 — image-redundant-alt: the guide's name is a visible heading in this same card below. */}
                 <Image src={displayGuides[3].image} alt="" fill sizes="(max-width:640px) 100vw,384px"
                   className="object-cover img-editorial img-inner"/>
-                <div className="absolute top-3 left-3">
-                  <span className="bg-white/92 backdrop-blur font-sans text-[14px] uppercase tracking-[0.14em] text-charcoal/65 px-2.5 py-1 rounded-full">
-                    {displayGuides[3].continentRegion}
-                  </span>
-                </div>
               </div>
               <div className="p-7 lg:p-8 flex flex-col justify-center flex-1">
                 <div className="flex items-center gap-2.5 mb-3">
@@ -365,10 +354,10 @@ export default async function HomePage() {
       </section>
 
       {/* ══ EXPLORE BY EXPERIENCE — 1 row 6 cols desktop, 2 col mobile ════════ */}
-      <section className="py-24 lg:py-32 bg-cream dark-flip-bg" id="experiences">
+      <section className="py-14 lg:py-20 bg-cream dark-flip-bg" id="experiences">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-          <div className="flex items-end justify-between mb-12">
+          <div className="flex items-end justify-between mb-9">
             <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
               style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
               {t('exploreByExperience')}
@@ -381,10 +370,10 @@ export default async function HomePage() {
 
       {/* ══ LATEST TRAVEL ATTRACTIONS (was: Featured Attractions) ════════════════ */}
       {(featured as AttrItem[]).length > 0 && (
-        <section className="py-24 lg:py-32 bg-sand dark-flip-surf">
+        <section className="py-14 lg:py-20 bg-sand dark-flip-surf">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-            <div className="flex items-end justify-between mb-12">
+            <div className="flex items-end justify-between mb-9">
               <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
                 style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
                 {t('latestAttractions')}
@@ -409,7 +398,6 @@ export default async function HomePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/97 via-ink/35 to-transparent"/>
                   <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-gold-400 mb-1">{a.continentRegion}</p>
                     <h3 className="font-display font-bold text-base text-cream group-hover:text-gold-300 transition-colors leading-tight mb-1"
                       style={{ letterSpacing: '-0.015em' }}>
                       {a.name}
@@ -452,9 +440,9 @@ export default async function HomePage() {
       )}
 
       {/* ══ FROM THE JOURNAL ════════════════════════════════════════════════════ */}
-      <section className="py-24 lg:py-32 bg-sand dark-flip-surf border-t border-line dark-flip-border">
+      <section className="py-14 lg:py-20 bg-sand dark-flip-surf border-t border-line dark-flip-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-end justify-between mb-12">
+          <div className="flex items-end justify-between mb-9">
             <div>
               <p className="font-sans text-[14px] uppercase tracking-[0.22em] text-crimson mb-2">The Journal</p>
               <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
