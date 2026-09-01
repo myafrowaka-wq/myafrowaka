@@ -50,16 +50,37 @@ export function TypewriterHero({
   }
 
   return (
-    <span className={className}>
-      {renderedLines.map((l, i) => (
-        <span key={i}>
-          {l.cls ? <span className={l.cls}>{l.text}</span> : l.text}
-          {i < renderedLines.length - 1 && !l.noBreakAfter && l.text.length === l.full.length && <br />}
-        </span>
-      ))}
-      {!done && (
-        <span className="inline-block w-[3px] h-[0.85em] bg-gold-400 ml-1 align-middle animate-pulse" />
-      )}
+    // Session 6.3 (WDOS Performance gate) — real, measured bug, not the
+    // "minor cosmetic settling" it looked like on a visual pass: Lighthouse
+    // found this component responsible for 0.75 of the homepage's 0.757
+    // total CLS (X-26 requires < 0.1). The per-character reveal changes how
+    // many lines the text wraps across as it grows, shifting the search
+    // bar and everything else below it down the page while it types.
+    // Fixed with the standard grid-stacking technique: an invisible copy of
+    // the FULL final text (same tags/lines/breaks) reserves the real,
+    // final height up front via `grid-area: 1 / 1`; the animated reveal
+    // stacks in the same cell on top of it, so its own growth never
+    // affects the outer box the browser has already laid out.
+    <span className={`grid ${className}`}>
+      <span aria-hidden="true" className="invisible" style={{ gridArea: '1 / 1' }}>
+        {lines.map((l, i) => (
+          <span key={i}>
+            {l.className ? <span className={l.className}>{l.text}</span> : l.text}
+            {i < lines.length - 1 && !l.noBreakAfter && <br />}
+          </span>
+        ))}
+      </span>
+      <span style={{ gridArea: '1 / 1' }}>
+        {renderedLines.map((l, i) => (
+          <span key={i}>
+            {l.cls ? <span className={l.cls}>{l.text}</span> : l.text}
+            {i < renderedLines.length - 1 && !l.noBreakAfter && l.text.length === l.full.length && <br />}
+          </span>
+        ))}
+        {!done && (
+          <span className="inline-block w-[3px] h-[0.85em] bg-gold-400 ml-1 align-middle animate-pulse" />
+        )}
+      </span>
     </span>
   )
 }

@@ -25,8 +25,18 @@ export function HeroBackgroundMedia({
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setShowVideo(!mq.matches)
+    // Session 6.3 (WDOS Performance gate) — real, measured finding: this
+    // 1.9MB video was ~58% of the homepage's total payload and the single
+    // largest contributor to main-thread cost on mobile (Lighthouse:
+    // Total Blocking Time 3,250ms, LCP 4.7s — both badly failing X-24/X-25
+    // on mobile specifically, despite passing comfortably on desktop).
+    // Skipping it below the same breakpoint the hero's own layout already
+    // treats as "mobile" (lg, 1024px) is the standard pattern for exactly
+    // this trade-off — phones are also where CPU/battery/data constraints
+    // bite hardest, and the video is a nicety, not the content.
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const widthQuery = window.matchMedia('(min-width: 1024px)')
+    setShowVideo(!motionQuery.matches && widthQuery.matches)
   }, [])
 
   // A <video autoPlay> element inserted into the DOM after initial mount

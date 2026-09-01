@@ -119,6 +119,18 @@ export const HERO_VIDEO_CREDIT = {
   note: 'Downloaded once, trimmed to 10s and re-encoded for web delivery — see comment above.',
 }
 
+// Session 6.3 (WDOS Performance gate) — a real frame extracted from the
+// video above (ffmpeg, 00:00:02), used as its poster and, separately, to
+// replace the 9 places across the site that were using ID
+// '1531872036218-4e8a6828e339' — a graphic lion-kill photo — as a generic
+// "represents Kenya / East Africa" image (that ID's actually-correct use,
+// Maasai Mara National Reserve's own attraction page and a wildebeest-
+// migration article, is left alone; predation is real, documented content
+// for those two, not a mismatch). Same source video, same Pexels License,
+// same photographer credit as HERO_VIDEO_CREDIT above — this is a still
+// from that clip, not a separately-sourced asset.
+export const HERO_SAVANNA_POSTER = 'hero-savanna-poster'
+
 // ── Shared per-slug lookup maps ─────────────────────────────────────────────
 // Before this session, both of these maps were copy-pasted independently into
 // 8+ files (app/page.tsx, app/attractions/page.tsx, app/attractions/[slug],
@@ -169,7 +181,16 @@ export function blogStockImage(slug: string): string {
 
 export const COUNTRY_IMAGE_IDS: Record<string, string> = {
   'egypt':         '1640005438758-861043e64aa5',
-  'kenya':         '1531872036218-4e8a6828e339',
+  // Session 6.3 (WDOS Performance gate) — real bug, caught by actually
+  // looking at the rendered page: this ID is a lioness feeding on a
+  // wildebeest carcass, not a generic Kenya tourism scene — graphic and
+  // mismatched as this country's representative image (used on Kenya's
+  // own destination page, region-page country cards, DestinationsGrid,
+  // and Nav's East Africa thumbnail). Swapped for a real, verified,
+  // accurately-described elephant-family photo — see
+  // public/images/stock/hero-savanna-poster.jpg and HERO_VIDEO_CREDIT
+  // above (same source, same license, a real extracted frame).
+  'kenya':         'hero-savanna-poster',
   'south-africa':  '1744604030401-b24c5975a574',
   'tanzania':      '1635865897833-38bc0f8aee44',
   'morocco':       '1760681554227-d7aad73cd57f',
@@ -190,7 +211,11 @@ export const COUNTRY_IMAGE_IDS: Record<string, string> = {
   'mauritius':     '1513415277900-a62401e19be4',
 }
 
-/** Local, self-hosted cover image for a country slug (legacy placeholder pending real photography). */
+/** Local, self-hosted cover image for a country slug (legacy placeholder pending real photography).
+ *  Session 6.3 (WDOS Performance gate) — the fallback used to be a graphic
+ *  lion-kill photo, meaning EVERY country not in the map above (most of
+ *  them) silently got that as its representative image. Swapped for the
+ *  real, verified elephant-family frame. */
 export function countryStockImage(slug: string): string {
-  return stockImage(COUNTRY_IMAGE_IDS[slug] ?? '1531872036218-4e8a6828e339')
+  return stockImage(COUNTRY_IMAGE_IDS[slug] ?? 'hero-savanna-poster')
 }

@@ -15,7 +15,10 @@ export const metadata: Metadata = {
     title: 'African Events & Festivals – MyAfroWaka',
     description: 'Verified African events, not a guessed calendar.',
     url: 'https://myafrowaka.com/events',
-    images: [stockImage('1531872036218-4e8a6828e339')],
+    // Session 6.3 (WDOS Performance gate) — see lib/stockImageCredits.ts's
+    // comment on COUNTRY_IMAGE_IDS.kenya: the old ID was a graphic
+    // lion-kill photo, wrong for a generic OG/share image.
+    images: [stockImage('hero-savanna-poster')],
   },
 }
 

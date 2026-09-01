@@ -20,7 +20,10 @@ export const metadata: Metadata = {
     description: 'Stories and perspectives from across the African continent.',
     type: 'website',
     url: 'https://myafrowaka.com/blog',
-    images: [stockImage('1531872036218-4e8a6828e339')],
+    // Session 6.3 (WDOS Performance gate) — see lib/stockImageCredits.ts's
+    // comment on COUNTRY_IMAGE_IDS.kenya: the old ID was a graphic
+    // lion-kill photo, wrong for a generic OG/share image.
+    images: [stockImage('hero-savanna-poster')],
   },
 }
 
@@ -54,9 +57,13 @@ export default async function BlogPage(
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[420px] md:min-h-[500px] flex items-end">
+        {/* Session 6.3 (WDOS Performance gate) — see lib/stockImageCredits.ts's
+            comment on COUNTRY_IMAGE_IDS.kenya: the old ID was a graphic
+            lion-kill photo, mismatched with this alt text and visible as
+            the page's own hero banner. */}
         <Image
-          src={stockImage('1531872036218-4e8a6828e339')}
-          alt="The MyAfroWaka Journal"
+          src={stockImage('hero-savanna-poster')}
+          alt="African elephants walking through savanna grassland"
           fill priority
           className="object-cover object-center"
         />

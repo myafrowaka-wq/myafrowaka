@@ -20,7 +20,10 @@ const REGIONS = [
   {
     region: 'East Africa', color: REGION_COLOR['East Africa'], href: '/destinations/regions/east-africa',
     countries: ['Kenya', 'Tanzania', 'Ethiopia', 'Uganda', 'Rwanda', 'Mozambique'],
-    image: stockImage('1531872036218-4e8a6828e339'),
+    // Session 6.3 (WDOS Performance gate) — see lib/stockImageCredits.ts's
+    // matching comment on COUNTRY_IMAGE_IDS.kenya: the old ID here was a
+    // graphic lion-kill photo, not an East Africa tourism scene.
+    image: stockImage('hero-savanna-poster'),
   },
   {
     region: 'West Africa', color: REGION_COLOR['West Africa'], href: '/destinations/regions/west-africa',

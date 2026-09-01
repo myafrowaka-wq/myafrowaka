@@ -13,7 +13,10 @@ type Country = {
 
 const ALL_COUNTRIES: Country[] = [
   { name: 'Egypt',        slug: 'egypt',        region: 'North Africa',         code: 'eg', color: COUNTRY_COLOR['Egypt'], image: stockImage('1640005438758-861043e64aa5')  },
-  { name: 'Kenya',        slug: 'kenya',        region: 'East Africa',          code: 'ke', color: COUNTRY_COLOR['Kenya'], image: stockImage('1531872036218-4e8a6828e339')  },
+  // Session 6.3 (WDOS Performance gate) — see lib/stockImageCredits.ts's
+  // matching comment on COUNTRY_IMAGE_IDS.kenya: the old ID here was a
+  // graphic lion-kill photo, not a Kenya tourism scene.
+  { name: 'Kenya',        slug: 'kenya',        region: 'East Africa',          code: 'ke', color: COUNTRY_COLOR['Kenya'], image: stockImage('hero-savanna-poster')  },
   { name: 'South Africa', slug: 'south-africa', region: 'Southern Africa',      code: 'za', color: COUNTRY_COLOR['South Africa'], image: stockImage('1744604030401-b24c5975a574')  },
   { name: 'Tanzania',     slug: 'tanzania',     region: 'East Africa',          code: 'tz', color: COUNTRY_COLOR['Tanzania'], image: stockImage('1635865897833-38bc0f8aee44')  },
   { name: 'Morocco',      slug: 'morocco',      region: 'North Africa',         code: 'ma', color: COUNTRY_COLOR['Morocco'], image: stockImage('1760681554227-d7aad73cd57f')  },

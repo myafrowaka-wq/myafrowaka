@@ -156,7 +156,10 @@ export async function generateMetadata(
   const canonicalUrl = `https://myafrowaka.com/events/${slug}`
   const ogImage = event.heroImage?.image
     ? builder.image(event.heroImage.image).width(1200).height(630).fit('crop').url()
-    : stockImage('1531872036218-4e8a6828e339')
+    // Session 6.3 (WDOS Performance gate) — see lib/stockImageCredits.ts's
+    // comment on COUNTRY_IMAGE_IDS.kenya: the old ID was a graphic
+    // lion-kill photo, wrong as a generic no-photo-yet OG fallback.
+    : stockImage('hero-savanna-poster')
 
   return {
     // Session 6.2 — see app/[locale]/login/page.tsx's comment: `absolute`

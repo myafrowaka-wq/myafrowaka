@@ -11,6 +11,17 @@ import { getLocale } from 'next-intl/server'
 // which owns the actual page chrome (Nav, Footer, providers) and the
 // site's real <title>/<meta> — see that file for both.
 
+// Session 6.3 (WDOS Performance gate) — briefly changed to `optional`
+// while chasing a residual homepage CLS score, on the theory that a
+// font-metrics swap was the cause. It wasn't: 4 repeated Lighthouse runs
+// on plain `swap` (0.001, 0.126, 0.128, 0.131) landed at essentially the
+// same typical ~0.13 as `optional` did — the font-display setting was
+// never the real variable, it was noise from run-to-run measurement
+// variance plus the real cause found separately (the hero grid's
+// items-center coupling — see app/[locale]/page.tsx). Reverted to `swap`
+// since it makes no measured difference and matches X-27's own wording;
+// see 07_WDOS-OVERRIDE-REGISTER.md's X-26 entry for the actual residual
+// CLS reasoning.
 const familjenGrotesk = Familjen_Grotesk({
   subsets: ["latin"],
   variable: "--font-display",

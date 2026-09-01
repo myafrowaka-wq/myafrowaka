@@ -108,7 +108,10 @@ const FALLBACK_GUIDES: GuideItem[] = [
   },
 ]
 
-const GALLERY_IDS = ['1531872036218-4e8a6828e339', '1760681554227-d7aad73cd57f', '1544298903-35eee5a95b4d', '1635865897833-38bc0f8aee44', '1727023663928-1772e2c7e679', '1558694440-03ade9215d7b']
+// Session 6.3 (WDOS Performance gate) — first ID was the same graphic
+// lion-kill photo flagged in lib/stockImageCredits.ts's comment on
+// COUNTRY_IMAGE_IDS.kenya; swapped for the real elephant-family frame.
+const GALLERY_IDS = ['hero-savanna-poster', '1760681554227-d7aad73cd57f', '1544298903-35eee5a95b4d', '1635865897833-38bc0f8aee44', '1727023663928-1772e2c7e679', '1558694440-03ade9215d7b']
 
 const attractionImageUrl = attractionStockImage
 
@@ -145,15 +148,21 @@ export default async function HomePage() {
 
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
       <section className="relative min-h-[94vh] flex items-center overflow-hidden">
-        {/* The fallback/poster image now matches the video's own subject
-            (savanna elephants) rather than the previous pyramids photo —
-            keeping the old mismatched image would mean a jarring cut the
-            moment the video mounts client-side, and it's also what
-            permanently shows for prefers-reduced-motion visitors. See
-            HeroBackgroundMedia.tsx and lib/stockImageCredits.ts's
-            HERO_VIDEO_CREDIT for the video's own sourcing/licensing. */}
+        {/* Session 6.3 (WDOS Performance gate) — real bug, caught only by
+            actually looking at the rendered page: '1531872036218-...' is
+            NOT elephants, it's a lioness feeding on a wildebeest carcass —
+            a real, previously mislabeled, and graphic image for a travel
+            homepage hero (this ID predates this session; it's also used,
+            equally wrongly, for Kenya in DestinationsGrid.tsx and East
+            Africa in Nav.tsx — flagged separately, not fixed here). Poster
+            is now a real frame extracted from the actual hero video below
+            (same Pexels source, same license — see HERO_VIDEO_CREDIT),
+            so the alt text is finally true and there's no cut when the
+            video mounts. This is also what permanently shows for
+            prefers-reduced-motion and mobile visitors (video is skipped
+            below 1024px — see HeroBackgroundMedia.tsx). */}
         <HeroBackgroundMedia
-          imageSrc={stockImage('1531872036218-4e8a6828e339')}
+          imageSrc="/images/stock/hero-savanna-poster.jpg"
           imageAlt="African elephants walking through savanna grassland"
           videoSrc={HERO_VIDEO_CREDIT.file}
         />
@@ -161,7 +170,16 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-t from-scrim-1/60 via-transparent to-scrim-1/15"/>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full py-14 lg:py-20">
-          <div className="grid lg:grid-cols-7 gap-10 lg:gap-16 items-center">
+          {/* Session 6.3 (WDOS Performance gate) — was items-center: any
+              residual height change in the headline column (even a
+              sub-pixel one from the animated reveal) re-centers the WHOLE
+              row, which measurably moves the much larger Plan Your Trip
+              card next to it — Lighthouse attributed 0.1834 of CLS to that
+              card alone, by far the single biggest contributor, though the
+              card's own content never changes at all. items-start removes
+              the coupling: this column's height can no longer move a
+              sibling that has nothing to do with it. */}
+          <div className="grid lg:grid-cols-7 gap-10 lg:gap-16 items-start">
 
             <div className="lg:col-span-4">
               {/* Headline — 2 lines on desktop AND mobile */}

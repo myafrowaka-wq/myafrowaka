@@ -24,7 +24,11 @@ const REGIONS = ['North Africa', 'West Africa', 'East Africa', 'Central Africa',
 // reused rather than picking new, unvetted images for a hero nobody's
 // checked the licensing on.
 const REGION_HERO_IMAGE: Record<string, string> = {
-  'East Africa':          stockImage('1531872036218-4e8a6828e339'),
+  // Session 6.3 (WDOS Performance gate) — see lib/stockImageCredits.ts's
+  // comment on COUNTRY_IMAGE_IDS.kenya: this ID was a graphic lion-kill
+  // photo copied here from Nav.tsx's own (also wrong, also now fixed)
+  // REGIONS constant, mismatched as this page's own hero banner.
+  'East Africa':          stockImage('hero-savanna-poster'),
   'West Africa':          stockImage('1727023663928-1772e2c7e679'),
   'North Africa':         stockImage('1760681554227-d7aad73cd57f'),
   'Southern Africa':      stockImage('1744604030401-b24c5975a574'),
