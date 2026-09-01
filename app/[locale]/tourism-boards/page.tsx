@@ -4,6 +4,7 @@ import { client } from '@/sanity/lib/client'
 import { ALL_TOURISM_BOARDS_QUERY } from '@/sanity/lib/queries'
 import { Flag } from '@/components/Flag'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 // Session 5.3 — "A quiet feature with a loud payoff." Real, sourced
 // profiles only — an authority with no profile here yet just doesn't
@@ -27,6 +28,12 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://myafrowaka.com/tourism-boards',
   },
+  // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+  // Twitter cards silently fell back to the layout's generic default.
+  twitter: twitterCard({
+    title: 'Tourism Boards – MyAfroWaka',
+    description: 'Official tourism authorities across Africa, and the events they have verified.',
+  }),
 }
 
 export default async function TourismBoardsPage() {

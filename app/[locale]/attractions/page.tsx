@@ -10,6 +10,7 @@ import { TypewriterHero } from '@/components/TypewriterHero'
 import { Flag } from '@/components/Flag'
 import { stockImage, attractionStockImage } from '@/lib/stockImageCredits'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 export const metadata: Metadata = {
   title: { absolute: 'Africa Travel Guides – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
@@ -21,6 +22,13 @@ export const metadata: Metadata = {
     url: 'https://myafrowaka.com/attractions',
     images: [`https://myafrowaka.com${stockImage('1577948000111-9c970dfe3743')}`],
   },
+  // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+  // Twitter cards silently fell back to the layout's generic default.
+  twitter: twitterCard({
+    title: 'Africa Travel Guides – MyAfroWaka',
+    description: 'Verified travel guides to extraordinary destinations across Africa.',
+    images: [`https://myafrowaka.com${stockImage('1577948000111-9c970dfe3743')}`],
+  }),
 }
 
 interface AttractionSummary {

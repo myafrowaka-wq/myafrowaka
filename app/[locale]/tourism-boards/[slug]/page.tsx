@@ -6,6 +6,7 @@ import { ALL_TOURISM_BOARD_SLUGS_QUERY, TOURISM_BOARD_BY_SLUG_QUERY } from '@/sa
 import { Flag } from '@/components/Flag'
 import { VerificationBadge } from '@/components/EventCard'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 // Session 5.3 — the actual profile page the plan describes as the real
 // outreach opener: "we have built you a profile page, will you verify
@@ -51,6 +52,9 @@ export async function generateMetadata(
     description,
     alternates: { canonical: canonicalUrl, languages: hreflangAlternates(canonicalUrl) },
     openGraph: { title: `${board.name} – MyAfroWaka`, description, type: 'website', url: canonicalUrl },
+    // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+    // Twitter cards silently fell back to the layout's generic default.
+    twitter: twitterCard({ title: `${board.name} – MyAfroWaka`, description }),
   }
 }
 

@@ -8,6 +8,7 @@ import { REGION_COLOR } from '@/lib/regionColors'
 import { Flag } from '@/components/Flag'
 import { stockImage, countryStockImage, blogStockImage } from '@/lib/stockImageCredits'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 // "Region" isn't a Sanity document type — see lib/regionColors.ts's
 // REGION_COLOR for the fixed 6-value taxonomy this whole site already
@@ -89,6 +90,9 @@ export async function generateMetadata(
     title: { absolute: title }, description,
     alternates: { canonical: canonicalUrl, languages: hreflangAlternates(canonicalUrl) },
     openGraph: { title, description, type: 'website', url: canonicalUrl },
+    // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+    // Twitter cards silently fell back to the layout's generic default.
+    twitter: twitterCard({ title, description }),
   }
 }
 

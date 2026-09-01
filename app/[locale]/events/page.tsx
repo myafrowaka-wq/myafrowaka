@@ -5,6 +5,7 @@ import { ALL_EVENTS_QUERY, ALL_COUNTRIES_QUERY } from '@/sanity/lib/queries'
 import { EventsExplorer, type EventSummary, type CountryOption } from '@/components/EventsExplorer'
 import { stockImage } from '@/lib/stockImageCredits'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 export const metadata: Metadata = {
   title: { absolute: 'African Events & Festivals – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
@@ -20,6 +21,13 @@ export const metadata: Metadata = {
     // lion-kill photo, wrong for a generic OG/share image.
     images: [stockImage('hero-savanna-poster')],
   },
+  // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+  // Twitter cards silently fell back to the layout's generic default.
+  twitter: twitterCard({
+    title: 'African Events & Festivals – MyAfroWaka',
+    description: 'Verified African events, not a guessed calendar.',
+    images: [stockImage('hero-savanna-poster')],
+  }),
 }
 
 const JSON_LD = {

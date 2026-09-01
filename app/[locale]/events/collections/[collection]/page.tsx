@@ -8,6 +8,7 @@ import { eventDateDisplay } from '@/lib/eventDateDisplay'
 import { VerificationBadge, type EventSummary } from '@/components/EventCard'
 import { Flag } from '@/components/Flag'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 // Session 3.4 — "editorial picks," the one discovery door that isn't a
 // filter. Mirrors app/guides/[slug]/page.tsx's numbered-list-with-framing
@@ -64,6 +65,9 @@ export async function generateMetadata(
     title: { absolute: title }, description,
     alternates: { canonical: `https://myafrowaka.com/events/collections/${slug}`, languages: hreflangAlternates(`https://myafrowaka.com/events/collections/${slug}`) },
     openGraph: { title, description, url: `https://myafrowaka.com/events/collections/${slug}` },
+    // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+    // Twitter cards silently fell back to the layout's generic default.
+    twitter: twitterCard({ title, description }),
   }
 }
 

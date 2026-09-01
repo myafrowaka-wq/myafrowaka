@@ -5,6 +5,7 @@ import { TypewriterHero } from '@/components/TypewriterHero'
 import { ContactForm } from '@/components/ContactForm'
 import { stockImage } from '@/lib/stockImageCredits'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 export const metadata: Metadata = {
   title: { absolute: 'Contact MyAfroWaka – Get in Touch' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
@@ -17,6 +18,12 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://myafrowaka.com/contact',
   },
+  // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+  // Twitter cards silently fell back to the layout's generic default.
+  twitter: twitterCard({
+    title: 'Contact MyAfroWaka – Get in Touch',
+    description: 'Reach the MyAfroWaka team for corrections, partnerships, or travel questions.',
+  }),
 }
 
 export default function ContactPage() {

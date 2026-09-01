@@ -6,6 +6,7 @@ import { ALL_EVENTS_QUERY } from '@/sanity/lib/queries'
 import { EventCard, type EventSummary } from '@/components/EventCard'
 import { EVENT_MONTHS, matchesMonth, toSlug, fromSlug } from '@/lib/eventFilters'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 // Session 3.4 — "African Festivals in December," one of the six discovery
 // doors. matchesMonth (lib/eventFilters.ts) is the exact same function the
@@ -41,6 +42,9 @@ export async function generateMetadata(
     title: { absolute: title }, description,
     alternates: { canonical: `https://myafrowaka.com/events/month/${monthSlug}`, languages: hreflangAlternates(`https://myafrowaka.com/events/month/${monthSlug}`) },
     openGraph: { title, description, url: `https://myafrowaka.com/events/month/${monthSlug}` },
+    // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+    // Twitter cards silently fell back to the layout's generic default.
+    twitter: twitterCard({ title, description }),
   }
 }
 

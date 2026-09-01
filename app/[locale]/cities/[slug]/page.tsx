@@ -5,6 +5,7 @@ import { client } from '@/sanity/lib/client'
 import { CITY_BY_SLUG_QUERY, ALL_CITY_SLUGS_QUERY } from '@/sanity/lib/queries'
 import { REGION_COLOR, REGION_COLOR_FALLBACK } from '@/lib/regionColors'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 interface Attraction {
   name: string
@@ -51,6 +52,12 @@ export async function generateMetadata(
       type: 'website',
       url: canonicalUrl,
     },
+    // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+    // Twitter cards silently fell back to the layout's generic default.
+    twitter: twitterCard({
+      title: `${city.name} Attractions – MyAfroWaka`,
+      description,
+    }),
   }
 }
 

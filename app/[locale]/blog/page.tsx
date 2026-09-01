@@ -6,6 +6,7 @@ import { ALL_POSTS_QUERY } from '@/sanity/lib/queries'
 import { BlogGrid, type BlogPost } from '@/components/BlogGrid'
 import { stockImage } from '@/lib/stockImageCredits'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 const POSTS_PER_PAGE = 6
 
@@ -25,6 +26,13 @@ export const metadata: Metadata = {
     // lion-kill photo, wrong for a generic OG/share image.
     images: [stockImage('hero-savanna-poster')],
   },
+  // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+  // Twitter cards silently fell back to the layout's generic default.
+  twitter: twitterCard({
+    title: 'The MyAfroWaka Journal',
+    description: 'Stories and perspectives from across the African continent.',
+    images: [stockImage('hero-savanna-poster')],
+  }),
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────

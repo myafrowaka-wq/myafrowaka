@@ -6,6 +6,7 @@ import { ALL_EVENTS_QUERY } from '@/sanity/lib/queries'
 import { EventCard, type EventSummary } from '@/components/EventCard'
 import { EVENT_CATEGORIES, matchesCategory, toSlug, fromSlug } from '@/lib/eventFilters'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 // Session 3.4 — "African Music Festivals," one of the six discovery doors.
 
@@ -38,6 +39,9 @@ export async function generateMetadata(
     title: { absolute: title }, description,
     alternates: { canonical: `https://myafrowaka.com/events/category/${categorySlug}`, languages: hreflangAlternates(`https://myafrowaka.com/events/category/${categorySlug}`) },
     openGraph: { title, description, url: `https://myafrowaka.com/events/category/${categorySlug}` },
+    // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+    // Twitter cards silently fell back to the layout's generic default.
+    twitter: twitterCard({ title, description }),
   }
 }
 

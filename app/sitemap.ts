@@ -1,9 +1,16 @@
 import type { MetadataRoute } from 'next'
 import { client } from '@/sanity/lib/client'
 import { EVENT_MONTHS, matchesMonth, toSlug } from '@/lib/eventFilters'
+import { ALL_TOURISM_BOARD_SLUGS_QUERY } from '@/sanity/lib/queries'
 import { hreflangAlternates } from '@/lib/hreflang'
 
 const BASE = 'https://myafrowaka.com'
+
+// Session 6.3 (WDOS SEO gate) — same fixed 6-value taxonomy the region
+// pages themselves use (see lib/regionColors.ts's REGION_COLOR / that
+// route's own toSlug). Real bug: these pages existed and were linked from
+// Nav's own mega-menu, but were never in the sitemap at all.
+const REGION_SLUGS = ['north-africa', 'west-africa', 'east-africa', 'central-africa', 'southern-africa', 'indian-ocean-islands']
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
@@ -155,9 +162,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     alternates: { languages: hreflangAlternates(`${BASE}/guides/${g.slug}`) },
   }))
 
+  // ── Destination region pages (Session 6.3's owner feature batch) ────────
+  const regionEntries: MetadataRoute.Sitemap = REGION_SLUGS.map(slug => ({
+    url: `${BASE}/destinations/regions/${slug}`,
+    lastModified: now,
+    changeFrequency: 'weekly',
+    priority: 0.7,
+    alternates: { languages: hreflangAlternates(`${BASE}/destinations/regions/${slug}`) },
+  }))
+
+  // ── Tourism boards ────────────────────────────────────────────────────────
+  const tourismBoards = await client.fetch<{ slug: string }[]>(ALL_TOURISM_BOARD_SLUGS_QUERY).catch(() => [])
+  const tourismBoardEntries: MetadataRoute.Sitemap = [
+    { url: `${BASE}/tourism-boards`, lastModified: now, changeFrequency: 'monthly', priority: 0.6, alternates: { languages: hreflangAlternates(`${BASE}/tourism-boards`) } },
+    ...tourismBoards.map(b => ({
+      url: `${BASE}/tourism-boards/${b.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.55,
+      alternates: { languages: hreflangAlternates(`${BASE}/tourism-boards/${b.slug}`) },
+    })),
+  ]
+
   return [
     ...statics, ...attractionEntries, ...eventEntries,
     ...eventCountryEntries, ...eventRegionEntries, ...eventCategoryEntries, ...eventMonthEntries, ...eventCollectionEntries,
     ...postEntries, ...authorEntries, ...guideEntries, ...countryEntries, ...cityEntries,
+    ...regionEntries, ...tourismBoardEntries,
   ]
 }

@@ -4,6 +4,7 @@ import { client } from '@/sanity/lib/client'
 import { ALL_GUIDES_QUERY } from '@/sanity/lib/queries'
 import { stockImage } from '@/lib/stockImageCredits'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -28,6 +29,13 @@ export const metadata: Metadata = {
     url: 'https://myafrowaka.com/guides',
     images: [stockImage('1542729841-c5af4aed2152')],
   },
+  // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+  // Twitter cards silently fell back to the layout's generic default.
+  twitter: twitterCard({
+    title: 'Travel Guides – MyAfroWaka',
+    description: 'Curated best-of guides to attractions across Africa.',
+    images: [stockImage('1542729841-c5af4aed2152')],
+  }),
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────

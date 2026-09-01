@@ -13,6 +13,7 @@ import { Flag } from '@/components/Flag'
 import { countryStockImage, attractionStockImage } from '@/lib/stockImageCredits'
 import { AffiliateLinkList, type AffiliateLinkData } from '@/components/AffiliateLinkList'
 import { hreflangAlternates } from '@/lib/hreflang'
+import { twitterCard } from '@/lib/twitterCard'
 
 interface AttractionSummary {
   name: string; slug: string; type?: string[]; editorialSummary?: string
@@ -64,6 +65,11 @@ export async function generateMetadata(
       url: canonicalUrl,
       images: [countryImageUrl(slug)],
     },
+    // Session 6.3 (WDOS SEO gate) — see lib/twitterCard.ts: without this,
+    // Twitter cards silently fell back to the layout's generic default
+    // (found live on this exact page — /destinations/kenya's og:title was
+    // correct, twitter:title was the homepage's).
+    twitter: twitterCard({ title, description, images: [countryImageUrl(slug)] }),
   }
 }
 
