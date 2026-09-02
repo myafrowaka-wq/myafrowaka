@@ -22,9 +22,15 @@ export function Button({
   type = 'button',
 }: ButtonProps) {
   const base = 'inline-flex items-center justify-center gap-2 font-sans font-semibold text-sm px-6 py-3 rounded-[14px] transition-colors duration-200 cursor-pointer disabled:opacity-55 disabled:cursor-not-allowed'
+  // Session 6.3 (WDOS Design Integrity gate, X-09 — all six interactive
+  // states) — primary already gets a real :active press state from the
+  // global `.bg-action:active` rule in globals.css; secondary had no
+  // equivalent, so a click never looked pressed. active:brightness-90
+  // matches that same darken-on-press treatment locally instead of
+  // adding a second global selector for one variant.
   const styles = {
     primary: 'bg-action text-cream hover:bg-action-hover shadow-soft',
-    secondary: 'border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-cream',
+    secondary: 'border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-cream active:brightness-90',
   }
 
   const cls = `${base} ${styles[variant]} ${className}`
