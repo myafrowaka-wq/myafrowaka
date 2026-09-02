@@ -21,7 +21,6 @@ const ALL_COUNTRIES: Country[] = [
   { name: 'Tanzania',     slug: 'tanzania',     region: 'East Africa',          code: 'tz', color: COUNTRY_COLOR['Tanzania'], image: stockImage('1635865897833-38bc0f8aee44')  },
   { name: 'Morocco',      slug: 'morocco',      region: 'North Africa',         code: 'ma', color: COUNTRY_COLOR['Morocco'], image: stockImage('1760681554227-d7aad73cd57f')  },
   { name: 'Ghana',        slug: 'ghana',        region: 'West Africa',          code: 'gh', color: COUNTRY_COLOR['Ghana'], image: stockImage('1727023663928-1772e2c7e679')  },
-  { name: 'Nigeria',      slug: 'nigeria',      region: 'West Africa',          code: 'ng', color: COUNTRY_COLOR['Nigeria'], image: stockImage('1618828665011-0abd973f7bb8')  },
   { name: 'Rwanda',       slug: 'rwanda',       region: 'East Africa',          code: 'rw', color: COUNTRY_COLOR['Rwanda'], image: stockImage('1682773083896-95176d8aecf8')  },
   { name: 'Ethiopia',     slug: 'ethiopia',     region: 'East Africa',          code: 'et', color: COUNTRY_COLOR['Ethiopia'], image: stockImage('1782283849015-df78517d4765')  },
   { name: 'Uganda',       slug: 'uganda',       region: 'East Africa',          code: 'ug', color: COUNTRY_COLOR['Uganda'], image: stockImage('1614528767034-70de9fe166e0')  },
@@ -29,13 +28,17 @@ const ALL_COUNTRIES: Country[] = [
   { name: 'Zimbabwe',     slug: 'zimbabwe',     region: 'Southern Africa',      code: 'zw', color: COUNTRY_COLOR['Zimbabwe'], image: stockImage('1618811308896-d279d72fdf4d')  },
   { name: 'Namibia',      slug: 'namibia',      region: 'Southern Africa',      code: 'na', color: COUNTRY_COLOR['Namibia'], image: stockImage('1563985336376-568060942b80')  },
   { name: 'Botswana',     slug: 'botswana',     region: 'Southern Africa',      code: 'bw', color: COUNTRY_COLOR['Botswana'], image: stockImage('1531208853003-c1ec1b8a81d7')  },
-  { name: 'Madagascar',   slug: 'madagascar',   region: 'Indian Ocean Islands', code: 'mg', color: COUNTRY_COLOR['Madagascar'], image: stockImage('1558694440-03ade9215d7b')  },
-  { name: 'Tunisia',      slug: 'tunisia',      region: 'North Africa',         code: 'tn', color: COUNTRY_COLOR['Tunisia'], image: stockImage('1737276812695-a930ae18aec2')  },
-  { name: 'Ivory Coast',  slug: 'ivory-coast',  region: 'West Africa',          code: 'ci', color: COUNTRY_COLOR['Ivory Coast'], image: stockImage('1690975719788-c0cf5b5692de')  },
-  { name: 'Mozambique',   slug: 'mozambique',   region: 'East Africa',          code: 'mz', color: COUNTRY_COLOR['Mozambique'], image: stockImage('1544298903-35eee5a95b4d')  },
-  { name: 'Zambia',       slug: 'zambia',       region: 'Southern Africa',      code: 'zm', color: COUNTRY_COLOR['Zambia'], image: stockImage('1678714001094-ba90abd57fec')  },
-  { name: 'Mauritius',    slug: 'mauritius',    region: 'Indian Ocean Islands', code: 'mu', color: COUNTRY_COLOR['Mauritius'], image: stockImage('1513415277900-a62401e19be4')  },
 ]
+
+// Session 6.3 (WDOS Content Integrity gate, X-32 — every link resolves) —
+// real bug, found by actually crawling every link this component renders:
+// Madagascar, Tunisia, Ivory Coast, Mozambique, Zambia, Mauritius, and
+// Nigeria were all in this list with zero published attractions and no
+// country overview written yet, so /destinations/[slug]'s own honest gate
+// (`if (dest.attractions.length === 0 && !dest.overview) notFound()`)
+// 404s every one of them — confirmed against the live Sanity dataset, not
+// assumed. Removed rather than linked-and-broken; add each back the moment
+// it has a real overview or a published attraction.
 
 function CountryCard({ d }: { d: Country }) {
   return (

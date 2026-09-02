@@ -1,6 +1,19 @@
 import { Button } from '@/components/Button'
 import { Badge } from '@/components/Badge'
 import { Card } from '@/components/Card'
+import type { Metadata } from 'next'
+
+// Session 6.3 (WDOS Content Integrity gate, X-17) — this is an internal
+// design-system reference, not real site content: the component examples
+// below use placeholder href="#" links on purpose (they're demonstrating
+// what a Button/Card looks like, not linking anywhere real). Nothing on
+// the site links here, but it had no robots exclusion at all until now
+// (see app/robots.ts's matching disallow entry), so it was technically
+// crawlable and indexable.
+export const metadata: Metadata = {
+  title: 'Style Guide',
+  robots: { index: false, follow: false },
+}
 
 // `hex` here is documentation text only (what this page displays as the
 // value), never used for styling: every swatch below renders from the

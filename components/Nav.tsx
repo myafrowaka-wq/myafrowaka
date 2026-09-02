@@ -16,6 +16,33 @@ import { stockImage } from '@/lib/stockImageCredits'
 // preserved as-is rather than unified, to avoid changing Nav's actual
 // rendered colour as a side effect of a token cleanup.
 
+// Session 6.3 (WDOS Content Integrity gate, X-32 — every link resolves) —
+// real bug, and a wide-reaching one: this mega-menu renders on every page.
+// REGIONS.countries below is just a display list of every country in each
+// region, several of which have no published attractions and no overview
+// yet, so /destinations/[slug] 404s for them (same honest gate as every
+// other fix in this session) — and "Zanzibar" isn't a country document at
+// all (it's part of Tanzania). Rather than re-order six lists by hand
+// again the next time a country's content status changes, this filters
+// against a real, verified-live snapshot of which countries actually
+// resolve, so only working links ever render. Re-check trigger: whenever
+// a new country gets a real overview or its first published attraction,
+// add its slug here.
+const READY_COUNTRY_SLUGS = new Set([
+  'kenya', 'tanzania', 'ethiopia', 'uganda', 'rwanda',
+  'ghana', 'senegal', 'mali',
+  'egypt', 'morocco',
+  'south-africa', 'zimbabwe', 'botswana', 'namibia',
+  'drc',
+  'seychelles',
+])
+// Display names that don't slugify to their real Sanity slug via simple
+// lowercase-and-hyphenate (checked against the live dataset, not guessed).
+const COUNTRY_SLUG_OVERRIDES: Record<string, string> = { 'DR Congo': 'drc' }
+function countrySlug(name: string) {
+  return COUNTRY_SLUG_OVERRIDES[name] ?? name.toLowerCase().replace(/\s+/g, '-')
+}
+
 const REGIONS = [
   {
     region: 'East Africa', color: REGION_COLOR['East Africa'], href: '/destinations/regions/east-africa',
@@ -47,7 +74,9 @@ const REGIONS = [
   },
   {
     region: 'Indian Ocean Islands', color: REGION_COLOR['Indian Ocean Islands'], href: '/destinations/regions/indian-ocean-islands',
-    countries: ['Madagascar', 'Mauritius', 'Seychelles', 'Comoros', 'Zanzibar'],
+    // "Zanzibar" was removed from this list — it's part of Tanzania, not
+    // its own country document, so it never belonged in a country list.
+    countries: ['Madagascar', 'Mauritius', 'Seychelles', 'Comoros'],
     image: stockImage('1513415277900-a62401e19be4'),
   },
 ]
@@ -63,10 +92,16 @@ const ATTRACTION_TYPES = [
   { label: 'UNESCO Heritage Sites',  exp: 'UNESCO'            },
 ]
 
+// Session 6.3 (WDOS Content Integrity gate, X-32 — every link resolves) —
+// real bug, found the same way as app/[locale]/page.tsx's matching
+// FALLBACK_GUIDES fix: all 3 slugs were stale and 404'd, which matters
+// more here than almost anywhere else on the site since this dropdown
+// renders on every single page. Corrected against the live dataset (every
+// real attraction slug carries a "-{country}" suffix).
 const FEATURED_ATTRACTIONS = [
-  { title: 'Pyramids of Giza: The Complete Guide',     tag: 'Egypt',        slug: 'pyramids-of-giza',                 img: stockImage('1736443830251-dda3cb6df76c') },
-  { title: 'Bwindi: Mountain Gorilla Trekking Guide',  tag: 'Uganda',       slug: 'bwindi-impenetrable-national-park', img: stockImage('1673624522244-8de0d50b8492') },
-  { title: 'Serengeti: The Great Migration Guide',     tag: 'Tanzania',     slug: 'serengeti-national-park',           img: stockImage('1542729841-c5af4aed2152') },
+  { title: 'Pyramids of Giza: The Complete Guide',     tag: 'Egypt',        slug: 'pyramids-of-giza-egypt',              img: stockImage('1736443830251-dda3cb6df76c') },
+  { title: 'Bwindi: Mountain Gorilla Trekking Guide',  tag: 'Uganda',       slug: 'bwindi-impenetrable-forest-uganda',   img: stockImage('1673624522244-8de0d50b8492') },
+  { title: 'Serengeti: The Great Migration Guide',     tag: 'Tanzania',     slug: 'serengeti-national-park-tanzania',    img: stockImage('1542729841-c5af4aed2152') },
 ]
 
 const STORY_CATEGORIES = [
@@ -516,14 +551,16 @@ export default function Nav() {
                         <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: r.color }}/>
                         <span className="font-display font-semibold text-[15px] text-cream/90 group-hover:text-gold-300 transition-colors">{r.region}</span>
                       </Link>
-                      <div className="flex flex-wrap gap-x-3 gap-y-0.5 pl-5">
-                        {r.countries.slice(0, 3).map(c => (
-                          <Link key={c} href={`/destinations/${c.toLowerCase().replace(/\s+/g, '-')}`} onClick={close}
-                            className="font-sans text-[14px] text-cream/55 hover:text-cream/80 transition-colors">
-                            {c}
-                          </Link>
-                        ))}
-                      </div>
+                      {r.countries.filter(c => READY_COUNTRY_SLUGS.has(countrySlug(c))).length > 0 && (
+                        <div className="flex flex-wrap gap-x-3 gap-y-0.5 pl-5">
+                          {r.countries.filter(c => READY_COUNTRY_SLUGS.has(countrySlug(c))).slice(0, 3).map(c => (
+                            <Link key={c} href={`/destinations/${countrySlug(c)}`} onClick={close}
+                              className="font-sans text-[14px] text-cream/55 hover:text-cream/80 transition-colors">
+                              {c}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -607,9 +644,9 @@ export default function Nav() {
                       <span className="font-display font-bold text-[14px] uppercase tracking-[0.12em] text-charcoal/50 dark:text-cream/55 group-hover:text-ochre-600 transition-colors">{r.region}</span>
                     </Link>
                     <ul className="space-y-2">
-                      {r.countries.map(c => (
+                      {r.countries.filter(c => READY_COUNTRY_SLUGS.has(countrySlug(c))).map(c => (
                         <li key={c}>
-                          <Link href={`/destinations/${c.toLowerCase().replace(/\s+/g, '-')}`} onClick={close}
+                          <Link href={`/destinations/${countrySlug(c)}`} onClick={close}
                             className="font-sans text-[14px] text-charcoal/70 dark:text-cream/65 hover:text-ochre-600 dark:hover:text-ochre-400 transition-colors">
                             {c}
                           </Link>

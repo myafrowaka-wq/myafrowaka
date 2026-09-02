@@ -140,19 +140,27 @@ export const HERO_SAVANNA_POSTER = 'hero-savanna-poster'
 // others. Consolidated here as the single source of truth; every file below
 // now imports from this module instead of keeping its own copy.
 
+// Session 6.3 (WDOS Content Integrity gate, X-32) — same stale-slug bug as
+// FALLBACK_GUIDES/FEATURED_ATTRACTIONS/QUICK_OVERVIEWS elsewhere: every
+// key here predates the "-{country}" slug convention, so attractionStockImage()
+// silently fell through to the generic default photo below for every one
+// of these landmarks on their real, live pages. Renamed 8 keys to their
+// real Published slug. Djemaa el-Fna, Volcanoes National Park, Cape Point,
+// and Maasai Mara National Reserve stay under their working-title key —
+// each is Draft-only in Sanity, so there's no live slug yet to rename to.
 export const ATTRACTION_IMAGE_IDS: Record<string, string> = {
-  'pyramids-of-giza':                  '1736443830251-dda3cb6df76c',
-  'serengeti-national-park':           '1542729841-c5af4aed2152',
-  'victoria-falls':                    '1674573606969-0b0403e6fce1',
-  'bwindi-impenetrable-national-park': '1673624522244-8de0d50b8492',
+  'pyramids-of-giza-egypt':                  '1736443830251-dda3cb6df76c',
+  'serengeti-national-park-tanzania':        '1542729841-c5af4aed2152',
+  'victoria-falls-zimbabwe':                 '1674573606969-0b0403e6fce1',
+  'bwindi-impenetrable-forest-uganda':       '1673624522244-8de0d50b8492',
   'djemaa-el-fna-marrakech':           '1597212618440-806262de4f6b',
-  'sossusvlei-namib-desert':           '1666837147745-1c9dea9908a4',
+  'sossusvlei-and-deadvlei-namibia':         '1666837147745-1c9dea9908a4',
   'volcanoes-national-park-rwanda':    '1682773083896-95176d8aecf8',
   'cape-point-south-africa':           '1746876269545-c23ecff55722',
-  'lalibela-rock-hewn-churches':       '1782283849015-df78517d4765',
+  'lalibela-rock-hewn-churches-ethiopia-att-0103': '1782283849015-df78517d4765',
   'maasai-mara-national-reserve':      '1531872036218-4e8a6828e339',
-  'stone-town-zanzibar':               '1678042955980-c173f0460d0a',
-  'ngorongoro-conservation-area':      '1635865897833-38bc0f8aee44',
+  'stone-town-zanzibar-tanzania':            '1678042955980-c173f0460d0a',
+  'ngorongoro-crater-tanzania':               '1635865897833-38bc0f8aee44',
 }
 
 /** Local, self-hosted cover image for an attraction slug (legacy placeholder pending real photography). */

@@ -370,38 +370,52 @@ function generateOverview(a: Attraction): { p1: string; p2: string; p3?: string 
 }
 
 // ── Fallback country attractions (used when Sanity returns empty) ─────────────
-
+//
+// Session 6.3 (WDOS Content Integrity gate, X-32 — every link resolves) —
+// same real bug as app/[locale]/attractions/page.tsx's matching
+// FALLBACK_ATTRACTIONS: every slug below was stale, so every one of these
+// cards 404'd. Fixed the same way: 8 entries corrected to their real
+// Published slug; Djemaa el-Fna, Volcanoes National Park, Cape Point, and
+// Maasai Mara National Reserve removed outright rather than left pointing
+// at a slug — each exists in Sanity only as Draft.
 const FALLBACK_COUNTRY_ATTRACTIONS = [
-  { name: 'Serengeti National Park',           slug: 'serengeti-national-park',           type: ['National Park'],              editorialSummary: 'The annual wildebeest migration through the Serengeti is the largest mammal movement on earth.' },
-  { name: 'Victoria Falls',                    slug: 'victoria-falls',                    type: ['Natural Wonder'],             editorialSummary: 'One of the largest curtains of falling water on earth, audible from two kilometres away.' },
-  { name: 'Djemaa el-Fna',                    slug: 'djemaa-el-fna-marrakech',           type: ['Cultural Site'],              editorialSummary: 'A square that transforms from morning market to night festival.' },
-  { name: 'Lalibela Rock-Hewn Churches',       slug: 'lalibela-rock-hewn-churches',       type: ['UNESCO World Heritage Site'], editorialSummary: 'Eleven monolithic churches carved directly from the rock in the twelfth century.' },
-  { name: 'Ngorongoro Crater',                 slug: 'ngorongoro-conservation-area',      type: ['UNESCO World Heritage Site'], editorialSummary: "The world's largest intact volcanic caldera." },
-  { name: 'Volcanoes National Park',           slug: 'volcanoes-national-park-rwanda',    type: ['National Park'],              editorialSummary: "Trekking to mountain gorilla families in the Virunga Mountains." },
-  { name: 'Bwindi Impenetrable National Park', slug: 'bwindi-impenetrable-national-park', type: ['National Park'],              editorialSummary: "Home to roughly half the world's remaining mountain gorilla population." },
-  { name: 'Cape Point',                        slug: 'cape-point-south-africa',           type: ['Nature Reserve'],             editorialSummary: 'Where the Atlantic and the cliffs of the Cape Peninsula meet at the southwestern tip.' },
-  { name: 'Stone Town',                        slug: 'stone-town-zanzibar',               type: ['UNESCO World Heritage Site'], editorialSummary: 'Six centuries of Swahili, Arab, Indian, and British influence compressed into one navigable old town.' },
-  { name: 'Maasai Mara National Reserve',      slug: 'maasai-mara-national-reserve',      type: ['National Reserve'],           editorialSummary: 'The Kenyan portion of the Serengeti ecosystem and site of the annual Mara River crossing.' },
-  { name: 'Sossusvlei Dunes',                  slug: 'sossusvlei-namib-desert',           type: ['Natural Wonder'],             editorialSummary: 'The tallest dunes in the world change colour at dawn and dusk.' },
-  { name: 'Pyramids of Giza',                  slug: 'pyramids-of-giza',                  type: ['UNESCO World Heritage Site'], editorialSummary: 'The last surviving Wonder of the Ancient World, standing on the Giza Plateau outside Cairo.' },
+  { name: 'Serengeti National Park',           slug: 'serengeti-national-park-tanzania',              type: ['National Park'],              editorialSummary: 'The annual wildebeest migration through the Serengeti is the largest mammal movement on earth.' },
+  { name: 'Victoria Falls',                    slug: 'victoria-falls-zimbabwe',                       type: ['Natural Wonder'],             editorialSummary: 'One of the largest curtains of falling water on earth, audible from two kilometres away.' },
+  { name: 'Lalibela Rock-Hewn Churches',       slug: 'lalibela-rock-hewn-churches-ethiopia-att-0103', type: ['UNESCO World Heritage Site'], editorialSummary: 'Eleven monolithic churches carved directly from the rock in the twelfth century.' },
+  { name: 'Ngorongoro Crater',                 slug: 'ngorongoro-crater-tanzania',                    type: ['UNESCO World Heritage Site'], editorialSummary: "The world's largest intact volcanic caldera." },
+  { name: 'Bwindi Impenetrable Forest',        slug: 'bwindi-impenetrable-forest-uganda',             type: ['National Park'],              editorialSummary: "Home to roughly half the world's remaining mountain gorilla population." },
+  { name: 'Stone Town Zanzibar',               slug: 'stone-town-zanzibar-tanzania',                  type: ['UNESCO World Heritage Site'], editorialSummary: 'Six centuries of Swahili, Arab, Indian, and British influence compressed into one navigable old town.' },
+  { name: 'Sossusvlei and Deadvlei',           slug: 'sossusvlei-and-deadvlei-namibia',               type: ['Natural Wonder'],             editorialSummary: 'The tallest dunes in the world change colour at dawn and dusk.' },
+  { name: 'Pyramids of Giza',                  slug: 'pyramids-of-giza-egypt',                        type: ['UNESCO World Heritage Site'], editorialSummary: 'The last surviving Wonder of the Ancient World, standing on the Giza Plateau outside Cairo.' },
 ]
 
 // ── Quick Overview static content (condensed 1–2 para summaries) ─────────────
+//
+// Session 6.3 (WDOS Content Integrity gate, X-32) — real bug: every key
+// below was keyed to the same stale slugs as FALLBACK_COUNTRY_ATTRACTIONS,
+// so QUICK_OVERVIEWS[slug] could never match a real attraction page's
+// actual slug — this hand-written editorial content has never displayed
+// on a live page. Renamed 8 keys to their real, Published slug (confirmed
+// against the live dataset). The remaining 4 — Djemaa el-Fna, Volcanoes
+// National Park, Cape Point, and Maasai Mara National Reserve — exist in
+// Sanity only as Draft, so there's no live slug yet to attach them to;
+// left in place under their original working-title keys rather than
+// deleted, ready to rename the moment each one publishes.
 
 const QUICK_OVERVIEWS: Record<string, string[]> = {
-  'pyramids-of-giza': [
+  'pyramids-of-giza-egypt': [
     'The Pyramids of Giza are the last surviving Wonder of the Ancient World, built on the Giza Plateau on the outskirts of Cairo, Egypt. The complex includes the Great Pyramid of Khufu, the Pyramid of Khafre, the Pyramid of Menkaure, and the Great Sphinx, constructed during the Old Kingdom period of ancient Egyptian civilisation beginning around 2560 BCE. The site holds UNESCO World Heritage status alongside the entire Memphis necropolis and is one of the most studied archaeological sites on earth.',
     'Visitors approach from the northern entrance, with guided tours of the interior burial chambers available by separate permit. The plateau is accessible year-round, with cooler temperatures between October and March making exploration more comfortable. Cairo International Airport (CAI) is the nearest major gateway, with the Giza Plateau located approximately 20 km southwest of central Cairo by road.',
   ],
-  'serengeti-national-park': [
+  'serengeti-national-park-tanzania': [
     'Serengeti National Park in northern Tanzania protects one of the oldest and most intact savannah ecosystems on earth, covering open grassland, river corridors, acacia woodland, and kopje rock formations. The park is most associated with the annual wildebeest migration, in which vast herds of wildebeest, zebra, and gazelle move in a continuous circuit between the Serengeti and Kenya\'s Maasai Mara, following rainfall patterns rather than a fixed calendar. The park holds UNESCO World Heritage status and is a core reference point in African conservation science.',
     'Game drives are the standard method of exploring the Serengeti, typically departing at dawn from permanent lodges or tented camps positioned across different ecosystem zones. The dry season from June to October concentrates wildlife around water sources and produces optimal viewing conditions, while the green season offers calving events and exceptional bird diversity. Kilimanjaro International (JRO) and Julius Nyerere International (DAR) are the primary arrival airports, with charter flights connecting to airstrips within the park.',
   ],
-  'victoria-falls': [
+  'victoria-falls-zimbabwe': [
     'Victoria Falls, known locally as Mosi-oa-Tunya, meaning The Smoke That Thunders, sits on the Zambezi River at the border between Zimbabwe and Zambia. The falls stretch over a kilometre across a basalt gorge and produce a mist cloud visible from a considerable distance, creating one of the most powerful natural spectacles on the African continent. UNESCO designates the site as a World Heritage Property, and it is accessible from both the Zimbabwean town of Victoria Falls and the Zambian town of Livingstone, each offering different vantage points along the gorge rim.',
     'Peak water flow occurs between February and May when the Zambezi is at its highest, though mist can obscure close-up views. The dry season from September to December offers clearer sightlines across the curtain of water and lower-risk access to some viewpoints. Adjacent to the falls, both sides of the border support accommodation, adventure activities including whitewater rafting and gorge walking, and access to major wildlife areas in Hwange National Park on the Zimbabwean side.',
   ],
-  'bwindi-impenetrable-national-park': [
+  'bwindi-impenetrable-forest-uganda': [
     'Bwindi Impenetrable National Park in southwestern Uganda is home to roughly half the remaining global population of mountain gorillas, making it one of the most critical conservation sites on the African continent. The park covers over 300 square kilometres of ancient montane rainforest, one of Africa\'s oldest and most biodiverse ecosystems, and holds UNESCO World Heritage status as part of the Bwindi-Sarambwe transboundary conservation landscape. Gorilla trekking permits are required and must be booked in advance through the Uganda Wildlife Authority.',
     'The park is divided into four sectors, Buhoma, Ruhija, Rushaga, and Nkuringo, each with separately allocated gorilla families for trekking. Trek durations vary considerably depending on where the gorilla group has moved on the day, ranging from under two hours to a full day of walking through dense terrain. Entebbe International Airport (EBB) is the nearest international gateway, with the park located approximately 480 km from Kampala by road; domestic charter flights to Kihihi or Kisoro airstrips reduce the overland transfer significantly.',
   ],
@@ -409,7 +423,7 @@ const QUICK_OVERVIEWS: Record<string, string[]> = {
     'Djemaa el-Fna is the main public square at the heart of the medina of Marrakech, Morocco, and one of the most continuously active social spaces in North Africa. During daylight hours the square functions as an open market for food vendors, henna artists, musicians, and acrobats. After sunset it transforms into a dense open-air gathering of food stalls, storytellers, and performers that draws both residents and visitors in equal measure. UNESCO recognises Djemaa el-Fna as a Masterpiece of the Oral and Intangible Heritage of Humanity, placing its cultural significance in the living traditions rather than any single structure.',
     'The square is positioned at the entrance to the medina\'s souk network, which extends northward through narrow lanes toward the Ben Youssef Mosque. Most riads and guesthouses within the medina are within walking distance. Marrakech Menara Airport (RAK) is approximately 6 km from the medina centre. Entry to the square itself is free, with visitor costs arising from food, optional services, and accommodation in the surrounding neighbourhood.',
   ],
-  'sossusvlei-namib-desert': [
+  'sossusvlei-and-deadvlei-namibia': [
     'Sossusvlei is a salt and clay pan in the southern Namib Desert, located within Namibia\'s Namib-Naukluft National Park. The surrounding star dunes are among the tallest in the world and are composed of wind-redistributed quartz sand coated in iron oxide, which gives them a deep red and orange coloration that intensifies at dawn and late afternoon. Deadvlei, a white clay pan immediately adjacent, contains ancient dead camel thorn trees that have remained standing for centuries in the desiccated environment without decomposing. The contrast between the pale pan floor and the surrounding dune faces is one of the most photographed natural scenes on the continent.',
     'Access to Sossusvlei requires entry through the Sesriem gate, the only entry point, from which a road leads through the park toward the final parking area. A four-wheel drive vehicle or the park\'s shuttle service is required for the final stretch to reach Deadvlei and Sossusvlei. The nearest settlement is Sesriem, with accommodation ranging from a basic campsite to high-end desert lodges along the rim. Hosea Kutako International Airport (WDH) in Windhoek is the nearest major international arrival point.',
   ],
@@ -421,7 +435,7 @@ const QUICK_OVERVIEWS: Record<string, string[]> = {
     'Cape Point is the southeastern headland of the Cape Peninsula in the Western Cape of South Africa, falling within the Table Mountain National Park. The site sits at the meeting of Atlantic and Indian Ocean currents, a geographic boundary that shapes the remarkable plant and animal life of the peninsula. The Cape Floral Region, of which the Cape Peninsula forms a significant part, holds UNESCO World Heritage status for the extraordinary concentration and variety of plant species found across its fynbos biome. Visitors typically combine Cape Point with the Cape of Good Hope, located a short distance to the southwest along the peninsula.',
     'The site is accessible by road from Cape Town, approximately 70 km from the city centre via Chapman\'s Peak or the M65. A funicular connects the lower visitor area to the historic lighthouse at the headland\'s peak, with walking as an alternative. Wildlife on the peninsula includes Cape baboons, bontebok, and ostriches that roam freely throughout the reserve. Cape Town International Airport (CPT) is the nearest major airport.',
   ],
-  'lalibela-rock-hewn-churches': [
+  'lalibela-rock-hewn-churches-ethiopia-att-0103': [
     'The rock-hewn churches of Lalibela in the Amhara region of northern Ethiopia are eleven monolithic places of Christian worship carved directly from the surrounding bedrock, believed to have been commissioned primarily during the reign of King Lalibela in the twelfth and thirteenth centuries. The king reportedly intended the site to function as a New Jerusalem for Ethiopian Orthodox pilgrims who could not reach the original city. UNESCO designates the complex as a World Heritage Site and regards it as one of the outstanding architectural achievements of African civilisation.',
     'The churches are divided into two main clusters connected by tunnels and ceremonial trenches, with the famous free-standing Bete Giyorgis church standing apart to the southwest. All eleven churches remain active places of worship, hosting major religious ceremonies including Ethiopian Christmas in January and Epiphany in January. Lalibela Airport (LLI) receives regular flights from Addis Ababa Bole International Airport. A thorough visit to both church clusters typically requires one to two full days.',
   ],
@@ -429,11 +443,11 @@ const QUICK_OVERVIEWS: Record<string, string[]> = {
     'Maasai Mara National Reserve in southwestern Kenya forms the northern section of the Serengeti-Mara ecosystem, administered by the Narok County Council in partnership with the surrounding Maasai communities. The reserve holds one of Africa\'s highest permanent concentrations of large predators alongside a substantial resident population of elephant, buffalo, giraffe, and hippo. It is most associated internationally with the annual wildebeest river crossing at the Mara River, when large herds move from Tanzania\'s Serengeti into the Mara\'s northern grasslands. Crossing activity is most concentrated between July and October, though the timing and location of crossings cannot be guaranteed.',
     'Game drives operate from tented camps and lodges across the reserve and the adjacent private conservancies, including Olare Motorogi, Naboisho, and Mara North, which permit off-road driving and walking safaris not available inside the national reserve itself. Charter flights from Wilson Airport in Nairobi (WIL) connect to airstrips throughout the Mara. The reserve is a viable year-round destination, with the green season between November and June offering different but equally compelling wildlife encounters.',
   ],
-  'stone-town-zanzibar': [
+  'stone-town-zanzibar-tanzania': [
     'Stone Town is the historic urban core of Zanzibar City, located on the western coast of Unguja island in the Tanzanian archipelago. The town developed from the ninth century onward as a Swahili coastal trading settlement and was subsequently shaped by centuries of Persian, Arab, Indian, and British influence, producing a dense built fabric of coral stone buildings, carved wooden doors, and narrow pedestrian lanes that UNESCO designated as a World Heritage Site in 2000. Stone Town served as the seat of the Omani Sultanate\'s East African empire, a hub of the Indian Ocean trade network, and the birthplace of the musician Freddie Mercury. It remains a living and inhabited city today.',
     'Key points of interest include Forodhani Gardens along the seafront, the House of Wonders, the Arab Fort, and the Anglican Cathedral built on the site of the former slave market. Day excursions to spice farms in the island\'s interior are widely available from Stone Town. Abeid Amani Karume International Airport (ZNZ) is the main arrival point, receiving flights from mainland Tanzania and select regional routes. Stone Town serves as the standard base for visitors to Zanzibar who also intend to reach the island\'s northern beaches.',
   ],
-  'ngorongoro-conservation-area': [
+  'ngorongoro-crater-tanzania': [
     'The Ngorongoro Conservation Area in northern Tanzania encompasses the world\'s largest intact volcanic caldera, a circular depression formed when a massive volcanic cone collapsed inward an estimated two to three million years ago. The caldera floor supports a large permanent population of plains wildlife, including a dense concentration of predators among the highest recorded in any ecosystem on earth. The site holds both UNESCO World Heritage Site and Biosphere Reserve status and forms part of the Northern Tanzania safari circuit alongside the Serengeti, Tarangire, and Lake Manyara National Parks. Unlike most protected areas in Tanzania, the Conservation Area permits Maasai pastoralists to continue using portions of the landscape alongside wildlife.',
     'Game drives descend from the crater rim into the enclosed floor, where the contained terrain allows extended and close encounters with wildlife. All vehicles entering the caldera require four-wheel drive capability. Accommodation is concentrated along the eastern and western rim, with lodges oriented toward the caldera view. Kilimanjaro International Airport (JRO) is the primary gateway, with the crater approximately 180 km by road from Arusha. Day trips from Arusha are possible; staying overnight at the rim allows earlier access before tour vehicle traffic peaks on the descent road.',
   ],

@@ -81,28 +81,35 @@ const EXPERIENCES = [
   { label: 'Food',      slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: stockImage('1664992960082-0ea299a9c53e')  },
 ]
 
+// Session 6.3 (WDOS Content Integrity gate, X-32 — every link resolves) —
+// real bug, found by crawling the homepage's own rendered links: all 4
+// slugs below were stale/guessed and didn't match any real attraction
+// document, so every one of these cards 404'd whenever this fallback
+// rendered (i.e. whenever GUIDES_QUERY returns fewer than 4 results).
+// Every real attraction slug in Sanity carries a "-{country}" suffix
+// (confirmed against the live dataset, not assumed) — corrected below.
 const FALLBACK_GUIDES: GuideItem[] = [
   {
     name: 'Pyramids of Giza: The Complete Travel Guide',
-    slug: 'pyramids-of-giza', continentRegion: 'North Africa', country: 'Egypt',
+    slug: 'pyramids-of-giza-egypt', continentRegion: 'North Africa', country: 'Egypt',
     editorialSummary: 'The last surviving Wonder of the Ancient World, standing on the Giza Plateau outside Cairo. Everything you need to know before you visit.',
     image: stockImage('1736443830251-dda3cb6df76c'),
   },
   {
     name: 'Bwindi Impenetrable Forest: Mountain Gorilla Encounter',
-    slug: 'bwindi-impenetrable-national-park', continentRegion: 'East Africa', country: 'Uganda',
+    slug: 'bwindi-impenetrable-forest-uganda', continentRegion: 'East Africa', country: 'Uganda',
     editorialSummary: 'Home to half the world mountain gorilla population, Bwindi covers 321 square kilometres of southwestern Uganda.',
     image: stockImage('1673624522244-8de0d50b8492'),
   },
   {
     name: 'Table Mountain: Everything You Need to Know',
-    slug: 'table-mountain', continentRegion: 'Southern Africa', country: 'South Africa',
+    slug: 'table-mountain-south-africa', continentRegion: 'Southern Africa', country: 'South Africa',
     editorialSummary: 'Cape Town iconic flat-topped summit rises 1,085 metres above sea level and harbours more plant species than the entire United Kingdom.',
     image: stockImage('1746876269545-c23ecff55722'),
   },
   {
     name: 'Serengeti National Park: The Migration Guide',
-    slug: 'serengeti-national-park', continentRegion: 'East Africa', country: 'Tanzania',
+    slug: 'serengeti-national-park-tanzania', continentRegion: 'East Africa', country: 'Tanzania',
     editorialSummary: 'The Great Migration moves 1.5 million wildebeest and 250,000 zebras in a continuous annual circuit across Tanzania and Kenya.',
     image: stockImage('1542729841-c5af4aed2152'),
   },

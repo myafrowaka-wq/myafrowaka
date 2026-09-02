@@ -13,6 +13,13 @@ const DISALLOWED_PATHS = [
   '/admin',
   '/studio',
   '/search',
+  // Session 6.3 (WDOS Content Integrity gate, X-17) — an internal
+  // design-system reference page, not real user content: its component
+  // examples use placeholder href="#" links on purpose (they're showing
+  // what a Button/Card looks like, not linking anywhere real). Nothing
+  // in the site links to it, but it had no robots exclusion at all
+  // before this, so it was technically crawlable/indexable.
+  '/style-guide',
 ]
 
 export default function robots(): MetadataRoute.Robots {

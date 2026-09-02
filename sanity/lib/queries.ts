@@ -385,8 +385,17 @@ export const ALL_COUNTRIES_QUERY = `
 // country/post documents everything else does, filtered by the country's
 // own continentRegion field.
 
+// Session 6.3 (WDOS Content Integrity gate, X-32 — every link resolves) —
+// same real bug and same fix as DESTINATION_BY_SLUG_QUERY's
+// relatedCountries below: without a readiness filter, this region-listing
+// page renders a card for every country in the region and links every one
+// of them to /destinations/[slug], which 404s for any country with no
+// overview and no published attractions.
 export const COUNTRIES_BY_REGION_QUERY = `
-  *[_type == "country" && continentRegion == $region] | order(name asc){
+  *[
+    _type == "country" && continentRegion == $region &&
+    (defined(overview) || count(*[_type == "attraction" && references(^._id) && contentStatus == "Published"]) > 0)
+  ] | order(name asc){
     name, "slug": slug.current, countryCode, continentRegion, overview
   }
 `
@@ -421,7 +430,19 @@ export const DESTINATION_BY_SLUG_QUERY = `
       name, "slug": slug.current, type, continentRegion, editorialSummary, lastVerifiedDate,
       "city": city->{ name }
     } | order(name asc),
-    "relatedCountries": *[_type == "country" && continentRegion == ^.continentRegion && slug.current != $slug][0..4]{
+    // Session 6.3 (WDOS Content Integrity gate, X-32 — every link resolves)
+    // — real bug, found by crawling every link a live destination page
+    // rendered: this had no readiness filter at all, so "Also in {region}"
+    // could (and did — /destinations/egypt linked to Algeria/Libya/Sudan,
+    // /destinations/kenya to Comoros/Eritrea) point at countries with zero
+    // published attractions and no overview, which this same page's own
+    // notFound() gate (attractions.length === 0 && !overview) then 404s.
+    // Matches that exact condition here instead of reproducing a
+    // separate, driftable copy of the rule.
+    "relatedCountries": *[
+      _type == "country" && continentRegion == ^.continentRegion && slug.current != $slug &&
+      (defined(overview) || count(*[_type == "attraction" && references(^._id) && contentStatus == "Published"]) > 0)
+    ][0..4]{
       name, "slug": slug.current, countryCode
     },
     // Session 5.2 — "connect all backlinks... automatically based on the

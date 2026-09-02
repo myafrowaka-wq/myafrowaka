@@ -21,12 +21,17 @@ const EXPERIENCES = [
   { label: 'Food and Drink',       href: '/search?q=food'     },
 ]
 
+// Session 6.3 (WDOS Content Integrity gate, X-32 — every link resolves) —
+// real bug, and the widest-reaching instance of it: this is the footer,
+// rendered on every single page, and all 4 slugs below were stale, so
+// every page on the site carried 4 dead links. Corrected against the
+// live dataset — see app/[locale]/page.tsx's matching FALLBACK_GUIDES fix.
 const GUIDES = [
   { label: 'Latest Guides',        href: '/search'                                        },
-  { label: 'Pyramids of Giza',     href: '/attractions/pyramids-of-giza'                 },
-  { label: 'Bwindi Forest',        href: '/attractions/bwindi-impenetrable-national-park' },
-  { label: 'Table Mountain',       href: '/attractions/table-mountain'                    },
-  { label: 'Serengeti Migration',  href: '/attractions/serengeti-national-park'           },
+  { label: 'Pyramids of Giza',     href: '/attractions/pyramids-of-giza-egypt'            },
+  { label: 'Bwindi Forest',        href: '/attractions/bwindi-impenetrable-forest-uganda' },
+  { label: 'Table Mountain',       href: '/attractions/table-mountain-south-africa'       },
+  { label: 'Serengeti Migration',  href: '/attractions/serengeti-national-park-tanzania'  },
 ]
 
 // Session 5.3 — labels are translation keys (footer namespace) resolved at

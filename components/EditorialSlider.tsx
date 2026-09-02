@@ -9,6 +9,13 @@ const SLIDES = [
   {
     tag:      'Nigeria',
     tagSlug:  'nigeria',
+    // Session 6.3 (WDOS Content Integrity gate, X-32 — every link
+    // resolves) — real bug: /destinations/nigeria 404s (zero published
+    // attractions, no country overview yet — confirmed live), so
+    // "Explore Nigeria" below would have 404'd on every rotation this
+    // slide comes up. Points at the West Africa region page instead:
+    // real, working, and still genuinely relevant to a Lagos story.
+    destinationHref: '/destinations/regions/west-africa',
     headline: 'What Lagos Rush Hour Teaches You About African City Life.',
     body:     'Five million journeys a day. The danfo, the okada, the man selling credit through your car window. Lagos traffic is not dysfunction. It is an improvised system that works.',
     slug:     'lagos-rush-hour-city-life',
@@ -122,7 +129,7 @@ export function EditorialSlider() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
               </Link>
-              <Link href={`/destinations/${slide.tagSlug}`}
+              <Link href={slide.destinationHref ?? `/destinations/${slide.tagSlug}`}
                 className="inline-flex items-center border border-white/20 hover:border-white/40 text-cream/70 hover:text-cream font-sans text-[14px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-colors">
                 Explore {slide.tag}
               </Link>
