@@ -24,7 +24,7 @@ import { TripPlanner, type PlannerCountry, type PlannerAttraction, type PlannerE
 
 export const metadata: Metadata = {
   title: { absolute: 'Plan Your Trip – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
-  description: 'Build a real day-by-day Africa itinerary — pick a country, see what events are happening while you\'re there, add attractions, save it.',
+  description: 'Build a real day-by-day Africa itinerary: pick a country, see what events are happening while you\'re there, add attractions, save it.',
 }
 
 export default async function PlanATripPage() {

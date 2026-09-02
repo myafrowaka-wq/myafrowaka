@@ -74,11 +74,11 @@ export function NewsletterSignupForm({ countries, source = 'newsletter-page' }: 
               form can't be used to probe which emails are already
               subscribed), so this copy can't claim "we just sent an
               email" without risking a lie in the second case. */}
-          If {email} isn&rsquo;t already confirmed, check your inbox for a confirmation link — nothing goes out until you click it.
+          If {email} isn&rsquo;t already confirmed, check your inbox for a confirmation link. Nothing goes out until you click it.
         </p>
         {devLink && (
           <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted mt-4 border-t border-line dark-flip-border pt-4">
-            No email provider configured yet — confirm directly:{' '}
+            No email provider configured yet, confirm directly:{' '}
             <a href={devLink} className="text-crimson hover:text-crimson/70 underline break-all">{devLink}</a>
           </p>
         )}

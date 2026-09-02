@@ -66,11 +66,11 @@ export function InviteFriendsForm({ tripId, onClose }: { tripId: string; onClose
               <span className="font-semibold">{r.email}</span>
               {r.devLink ? (
                 <>
-                  {' — no email service configured yet, use this link directly: '}
+                  {', no email service configured yet, use this link directly: '}
                   <a href={r.devLink} className="text-crimson underline break-all">{r.devLink}</a>
                 </>
               ) : (
-                ' — sent'
+                ', sent'
               )}
             </li>
           ))}

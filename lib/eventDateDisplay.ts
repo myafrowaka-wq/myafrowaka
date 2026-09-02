@@ -54,7 +54,7 @@ export function eventDateDisplay(event: EventDateFields): { text: string; isConf
   }
 
   if (event.verificationStatus === 'Annual, dates vary') {
-    return { text: 'Annual — dates vary each year', isConfirmedFact: false }
+    return { text: 'Annual, dates vary each year', isConfirmedFact: false }
   }
 
   return { text: 'Date to be confirmed', isConfirmedFact: false }

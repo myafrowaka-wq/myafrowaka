@@ -54,7 +54,7 @@ export function MagicLinkForm({ next }: { next?: string }) {
         {devLink && (
           <div className="mt-3 pt-3 border-t border-moss-200">
             <p className="font-sans text-[14px] uppercase tracking-[0.12em] text-moss-700/60 mb-1.5">
-              No email service configured yet — use this link directly:
+              No email service configured yet, use this link directly:
             </p>
             <a href={devLink} className="font-sans text-[14px] text-moss-700 underline break-all hover:text-moss-600">
               {devLink}
@@ -86,7 +86,7 @@ export function MagicLinkForm({ next }: { next?: string }) {
         <p className="font-sans text-[14px] text-crimson mt-2.5">{errMsg}</p>
       )}
       <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted mt-2.5 leading-relaxed">
-        No password to remember. We&rsquo;ll email you a link that signs you in — first time or returning.
+        No password to remember. We&rsquo;ll email you a link that signs you in, first time or returning.
       </p>
     </form>
   )

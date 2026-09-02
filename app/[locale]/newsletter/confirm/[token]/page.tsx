@@ -57,7 +57,7 @@ export default async function NewsletterConfirmPage({ params }: { params: Promis
         </p>
         <div className="bg-ink rounded-2xl p-6">
           {subscriber.status === 'confirmed' ? (
-            <p className="font-sans text-sm text-cream/70 text-center">You&rsquo;re already confirmed — nothing else to do.</p>
+            <p className="font-sans text-sm text-cream/70 text-center">You&rsquo;re already confirmed. Nothing else to do.</p>
           ) : subscriber.status === 'unsubscribed' ? (
             <div className="text-center">
               <p className="font-sans text-sm text-cream/70 mb-4">This old confirmation link can&rsquo;t reactivate a cancelled subscription.</p>

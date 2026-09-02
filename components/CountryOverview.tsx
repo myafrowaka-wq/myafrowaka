@@ -53,7 +53,7 @@ function SourcedField({ label, value }: { label: string; value?: string }) {
       <p className="font-sans text-[15px] text-charcoal/75 dark-flip-muted leading-relaxed">{body}</p>
       {citation && (
         <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted mt-2 italic">
-          Source: {citation}. Rules change — confirm with the official source before you travel.
+          Source: {citation}. Rules change, confirm with the official source before you travel.
         </p>
       )}
     </div>

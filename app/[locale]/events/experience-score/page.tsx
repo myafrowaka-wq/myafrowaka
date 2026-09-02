@@ -9,7 +9,7 @@ import { hreflangAlternates } from '@/lib/hreflang'
 
 export const metadata: Metadata = {
   title: { absolute: 'The MyAfroWaka Experience Score – How We Score Events' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
-  description: 'The published rubric behind the MyAfroWaka Experience Score — how we score African events across eight dimensions, and what each number actually means.',
+  description: 'The published rubric behind the MyAfroWaka Experience Score: how we score African events across eight dimensions, and what each number actually means.',
   alternates: { canonical: 'https://myafrowaka.com/events/experience-score', languages: hreflangAlternates('https://myafrowaka.com/events/experience-score') },
 }
 
@@ -22,11 +22,11 @@ interface Dimension {
 const DIMENSIONS: Dimension[] = [
   {
     name: 'Cultural Depth',
-    question: 'How much does this event actually reveal about local tradition, belief, or history — versus being a spectacle staged for an audience?',
+    question: 'How much does this event actually reveal about local tradition, belief, or history, versus being a spectacle staged for an audience?',
     anchors: [
       { score: '1', text: 'A commercial event with little connection to a specific local tradition.' },
       { score: '3', text: 'A real cultural event, but one a visitor can understand and appreciate without much prior context.' },
-      { score: '5', text: 'A living tradition, often centuries old, where the meaning runs deeper the more you learn — the kind of thing a short write-up can only gesture at.' },
+      { score: '5', text: 'A living tradition, often centuries old, where the meaning runs deeper the more you learn: the kind of thing a short write-up can only gesture at.' },
     ],
   },
   {
@@ -44,7 +44,7 @@ const DIMENSIONS: Dimension[] = [
     anchors: [
       { score: '1', text: 'Music is absent or incidental.' },
       { score: '3', text: 'Real, good live music is part of the event, but not its centre of gravity.' },
-      { score: '5', text: 'Music is the event — a reason on its own to attend, performed by musicians worth travelling for.' },
+      { score: '5', text: 'Music is the event: a reason on its own to attend, performed by musicians worth travelling for.' },
     ],
   },
   {
@@ -53,21 +53,21 @@ const DIMENSIONS: Dimension[] = [
     anchors: [
       { score: '1', text: 'Little or no food culture on offer, or only generic vendor fare.' },
       { score: '3', text: 'Real regional food is available and worth seeking out at the event.' },
-      { score: '5', text: 'Food is a defining part of the event itself — dishes, traditions, or a market that alone justify going.' },
+      { score: '5', text: 'Food is a defining part of the event itself: dishes, traditions, or a market that alone justify going.' },
     ],
   },
   {
     name: 'Family Suitability',
     question: 'How appropriate, safe, and enjoyable is this event for travelling with children?',
     anchors: [
-      { score: '1', text: 'Not suitable for children — crowding, sacred/restricted content, or safety concerns rule it out.' },
+      { score: '1', text: 'Not suitable for children: crowding, sacred/restricted content, or safety concerns rule it out.' },
       { score: '3', text: 'Workable for families with some planning around crowd size, heat, or timing.' },
       { score: '5', text: 'Genuinely built for a family day out, with space, pace, and content that welcomes children.' },
     ],
   },
   {
     name: 'Accessibility',
-    question: 'How easy is this to actually get to, move around at, and navigate for someone unfamiliar with the area — including mobility considerations?',
+    question: 'How easy is this to actually get to, move around at, and navigate for someone unfamiliar with the area, including mobility considerations?',
     anchors: [
       { score: '1', text: 'Remote, physically demanding to reach or move around at, or requires significant local knowledge to attend safely.' },
       { score: '3', text: 'Reachable with ordinary trip planning; some walking, crowding, or uneven terrain to expect.' },
@@ -78,9 +78,9 @@ const DIMENSIONS: Dimension[] = [
     name: 'Photography',
     question: 'How visually rewarding is this event, and how permissive is it of photography?',
     anchors: [
-      { score: '1', text: 'Visually unremarkable, or photography is restricted for cultural/religious reasons (see that event’s Cultural Etiquette section — a low score here is never a reason to override those rules).' },
+      { score: '1', text: 'Visually unremarkable, or photography is restricted for cultural/religious reasons (see that event’s Cultural Etiquette section; a low score here is never a reason to override those rules).' },
       { score: '3', text: 'Good, real photo opportunities with the usual crowd/lighting challenges.' },
-      { score: '5', text: 'Exceptional, distinctive visuals — the kind of event a photographer would plan a trip around on its own.' },
+      { score: '5', text: 'Exceptional, distinctive visuals: the kind of event a photographer would plan a trip around on its own.' },
     ],
   },
   {
@@ -89,7 +89,7 @@ const DIMENSIONS: Dimension[] = [
     anchors: [
       { score: '1', text: 'Limited accommodation and transport options nearby; getting there and staying takes real effort.' },
       { score: '3', text: 'Adequate infrastructure for an independent traveller with some advance booking.' },
-      { score: '5', text: 'Well-developed infrastructure — this is a place used to hosting visitors.' },
+      { score: '5', text: 'Well-developed infrastructure: this is a place used to hosting visitors.' },
     ],
   },
 ]
@@ -112,13 +112,13 @@ export default function ExperienceScorePage() {
           The MyAfroWaka Experience Score
         </h1>
         <p className="font-sans text-[16px] text-charcoal/70 dark-flip-muted leading-relaxed mb-6">
-          Ranking festivals against each other is meaningless — a national independence day and a five-day music
+          Ranking festivals against each other is meaningless: a national independence day and a five-day music
           festival aren&rsquo;t competing for the same trip. Instead, every event we cover is scored on its own
           terms, 1 to 5, across eight dimensions. Those eight scores average into a single number: the MyAfroWaka
           Experience Score.
         </p>
         <p className="font-sans text-[16px] text-charcoal/70 dark-flip-muted leading-relaxed mb-12">
-          This is editorial judgement, not a fact pulled from an official page — which is exactly why it&rsquo;s
+          This is editorial judgement, not a fact pulled from an official page, which is exactly why it&rsquo;s
           written down here. If you disagree with a score on a specific event, the reasoning behind it (where we&rsquo;ve
           recorded one) is visible on that event&rsquo;s own page.
         </p>
@@ -151,7 +151,7 @@ export default function ExperienceScorePage() {
           <h2 className="font-display font-bold text-charcoal dark-flip-text text-lg mb-3">A score is never a reason to skip Cultural Etiquette</h2>
           <p className="font-sans text-[15px] text-charcoal/65 dark-flip-muted leading-relaxed mb-6">
             The Experience Score describes what to expect. It is separate from, and never overrides, an event&rsquo;s
-            Cultural Etiquette section — the rules on photography, dress, and access that exist because many of
+            Cultural Etiquette section: the rules on photography, dress, and access that exist because many of
             these events are religious or sacred. Every event page carries that section, whether or not it has a
             score yet.
           </p>

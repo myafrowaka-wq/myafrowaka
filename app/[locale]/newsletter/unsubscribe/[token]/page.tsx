@@ -49,7 +49,7 @@ export default async function NewsletterUnsubscribePage({ params }: { params: Pr
         </p>
         <div className="bg-ink rounded-2xl p-6">
           {subscriber.status === 'unsubscribed' ? (
-            <p className="font-sans text-sm text-cream/70 text-center">Nothing else to do — you can sign up again any time at <Link href="/newsletter" className="text-gold-400 hover:text-gold-300 transition-colors">/newsletter</Link>.</p>
+            <p className="font-sans text-sm text-cream/70 text-center">Nothing else to do. You can sign up again any time at <Link href="/newsletter" className="text-gold-400 hover:text-gold-300 transition-colors">/newsletter</Link>.</p>
           ) : (
             <NewsletterUnsubscribeButton token={token} />
           )}

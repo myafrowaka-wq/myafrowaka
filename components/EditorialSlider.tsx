@@ -88,7 +88,19 @@ export function EditorialSlider() {
         <div className="grid lg:grid-cols-2 gap-0 min-h-[580px]">
           <div className="py-20 lg:py-28 pr-0 lg:pr-20 flex flex-col justify-center">
 
-            <p className="font-sans text-[14px] uppercase tracking-[0.24em] text-gold-400/70 mb-5">{slide.tag}</p>
+            {/* Session 6.3 (WDOS Human Pass, X-46 — Tier 0, eyebrow count
+                ≤2 per page, no informal override) — this was styled
+                identically to the site's own eyebrow convention (uppercase,
+                wide tracking, small, positioned right above the H2), which
+                pushed the homepage to 3 eyebrows total (this + "The
+                Journal" + "@myafrowaka_"). Restyled as a badge/pill: it's
+                functionally a country tag, not a section title, so this is
+                honest as well as compliant. */}
+            {/* self-start: without it this stretches full-width, since it's
+                a direct child of the flex-col column above (flex items
+                stretch on the cross axis by default) — confirmed live via
+                getBoundingClientRect before adding this. */}
+            <span className="self-start inline-block font-sans text-[14px] font-semibold text-gold-400 bg-gold-400/10 border border-gold-400/25 rounded-full px-3 py-1 mb-5">{slide.tag}</span>
 
             <h2
               key={`title-${current}`}

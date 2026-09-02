@@ -59,7 +59,7 @@ export function JoinTripButton({ token }: { token: string }) {
       </button>
       {error && <p className="font-sans text-[14px] text-crimson mt-3">{error}</p>}
       <p className="font-sans text-[14px] text-cream/55 text-center mt-3 leading-relaxed">
-        You&rsquo;ll be asked to sign in first if you haven&rsquo;t already — it&rsquo;s free and takes a moment.
+        You&rsquo;ll be asked to sign in first if you haven&rsquo;t already. It&rsquo;s free and takes a moment.
       </p>
     </div>
   )

@@ -43,7 +43,7 @@ export const ROLE_DESCRIPTIONS: Record<UserRole, string> = {
   moderator: 'Can review and moderate user-submitted comments and content.',
   contributor: 'Can create draft attractions and events and submit them for editorial review.',
   'author-editor': 'Can write, edit, and publish articles and events. The site\'s real editorial authority.',
-  admin: 'Full access — publish content, manage users and roles, access every admin tool.',
+  admin: 'Full access: publish content, manage users and roles, access every admin tool.',
 }
 
 /** Roles an admin can actively assign through the user-management UI —

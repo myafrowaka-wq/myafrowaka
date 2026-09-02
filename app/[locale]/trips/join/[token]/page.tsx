@@ -74,8 +74,13 @@ export default async function JoinTripPage({ params }: { params: Promise<{ token
           </p>
         )}
 
+        {/* Session 6.3 (WDOS Human Pass, K-01) — was a coloured 3-4px
+            left-border strip, the literal banned pattern ("the em-dash of
+            web design"). Session 1.4 already swept this pattern sitewide;
+            this page was built later (Session 4.3) and missed that pass.
+            Full border instead of a colour-accented left stripe. */}
         {invite.note && (
-          <div className="bg-gold-50 dark:bg-gold-900/15 border-l-4 border-gold-400 rounded-xl px-5 py-4 mb-8">
+          <div className="bg-gold-50 dark:bg-gold-900/15 border border-gold-200 dark:border-gold-800/40 rounded-xl px-5 py-4 mb-8">
             <p className="font-sans text-sm italic text-charcoal dark-flip-text">&ldquo;{invite.note}&rdquo;</p>
           </div>
         )}

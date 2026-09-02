@@ -1,9 +1,7 @@
 'use client'
 
-import Image from 'next/image'
 import { useState } from 'react'
 import { useRouter } from '@/i18n/navigation'
-import { stockImage } from '@/lib/stockImageCredits'
 import { SearchTypeahead } from '@/components/SearchTypeahead'
 import type { Suggestion } from '@/lib/searchIndex'
 
@@ -52,25 +50,19 @@ export function PlanTripCard() {
         </button>
       </form>
 
-      {/* Traveller social proof — larger avatars, bolder count */}
-      <div className="mt-5 pt-4 border-t border-line flex items-center gap-3">
-        <div className="flex -space-x-2.5">
-          {[
-            stockImage('1518882570151-157128e78fa1'),
-            stockImage('1573497019418-b400bb3ab074'),
-            stockImage('1713845784497-fe3d7ed176d8'),
-            stockImage('1593351799227-75df2026356b'),
-          ].map((src, i) => (
-            <div key={i} className="w-9 h-9 rounded-full border-2 border-white overflow-hidden bg-sand shadow-sm">
-              <Image src={src} alt="" width={36} height={36} className="object-cover"/>
-            </div>
-          ))}
-        </div>
-        <p className="font-sans text-[14px] text-charcoal/55 leading-snug">
-          <strong className="font-bold text-charcoal/80 text-[14px]">4.6k+</strong>
-          <span className="block text-[14px]">travellers exploring Africa with intention</span>
-        </p>
-      </div>
+      {/* Session 6.3 (WDOS Human Pass, X-30/X-31 — the two gates with no
+          override, ever) — this used to be "4.6k+ travellers exploring
+          Africa with intention" next to 4 stock photos of unrelated
+          people, implying real social proof neither of which existed: no
+          analytics or user-count tracking runs anywhere on this site (see
+          the WDOS Performance/SEO gate notes on that), and the photos
+          were generic stock images, not real MyAfroWaka travellers.
+          Flagged back in Session 2.4 as a known gap and never fixed until
+          now. Replaced with something honest: what's actually true about
+          using the planner, not a number nobody can back up. */}
+      <p className="mt-5 pt-4 border-t border-line font-sans text-[14px] text-charcoal/65 leading-snug">
+        Free to plan. No account needed to start.
+      </p>
     </div>
   )
 }

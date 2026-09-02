@@ -337,7 +337,7 @@ export default async function EventPage(
                     Verified{event.verifiedBy ? ` by ${event.verifiedBy}` : ''}
                     {event.verificationDate ? ` on ${new Date(event.verificationDate + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}` : ''}
                     {event.verificationSourceUrl && (
-                      <> — <a href={event.verificationSourceUrl} target="_blank" rel="noopener noreferrer" className="text-crimson underline underline-offset-2 hover:text-crimson/70">official source</a></>
+                      <>, <a href={event.verificationSourceUrl} target="_blank" rel="noopener noreferrer" className="text-crimson underline underline-offset-2 hover:text-crimson/70">official source</a></>
                     )}
                   </p>
                 )}
@@ -516,7 +516,7 @@ export default async function EventPage(
                     ) : (
                       <>
                         <p className="font-display font-bold text-charcoal dark-flip-text text-[15px] mb-1">Notify Me When Dates Are Announced</p>
-                        <p className="font-sans text-[14px] text-charcoal/55 dark-flip-muted mb-3">We only email you once — the day we&rsquo;ve verified a real date.</p>
+                        <p className="font-sans text-[14px] text-charcoal/55 dark-flip-muted mb-3">We only email you once: the day we&rsquo;ve verified a real date.</p>
                         <NotifyMeForm eventName={event.name} eventSlug={slug} />
                       </>
                     )}

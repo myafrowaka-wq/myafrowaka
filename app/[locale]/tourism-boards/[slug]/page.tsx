@@ -43,7 +43,7 @@ export async function generateMetadata(
   const board = await client.fetch<TourismBoard | null>(TOURISM_BOARD_BY_SLUG_QUERY, { slug })
   if (!board) return {}
   const canonicalUrl = `https://myafrowaka.com/tourism-boards/${slug}`
-  const description = board.coverage || `${board.name} — the official tourism authority for ${board.country?.name ?? 'this destination'}.`
+  const description = board.coverage || `${board.name}: the official tourism authority for ${board.country?.name ?? 'this destination'}.`
   return {
     // Session 6.2 — see app/[locale]/login/page.tsx's comment: `absolute`
     // stops the parent title.template from double-appending "– MyAfroWaka".
@@ -119,7 +119,7 @@ export default async function TourismBoardPage({ params }: { params: Promise<{ s
               )}
               {board.pressContactEmail && (
                 <p className="font-sans text-sm text-charcoal/65 dark-flip-muted">
-                  Press contact: {board.pressContactName ? `${board.pressContactName} — ` : ''}
+                  Press contact: {board.pressContactName ? `${board.pressContactName}, ` : ''}
                   <a href={`mailto:${board.pressContactEmail}`} className="text-crimson hover:text-crimson/70 transition-colors">
                     {board.pressContactEmail}
                   </a>
@@ -147,7 +147,7 @@ export default async function TourismBoardPage({ params }: { params: Promise<{ s
               </div>
             ) : (
               <p className="font-sans text-sm text-charcoal/45 dark-flip-muted italic">
-                {board.name}{' '}hasn&rsquo;t verified any events on MyAfroWaka yet — this is exactly the relationship a real profile page exists to start.
+                {board.name}{' '}hasn&rsquo;t verified any events on MyAfroWaka yet. This is exactly the relationship a real profile page exists to start.
               </p>
             )}
           </div>

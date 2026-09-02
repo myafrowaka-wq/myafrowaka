@@ -60,7 +60,7 @@ export default async function TourismBoardsPage() {
           </h1>
           <p className="font-sans text-cream/55 mt-4 max-w-xl leading-relaxed"
             style={{ fontSize: 'clamp(13px, 1.3vw, 16px)' }}>
-            The real authorities behind Africa&rsquo;s official travel information — and where a board has actually confirmed an event on MyAfroWaka, that verification is here, not just a badge we award ourselves.
+            The real authorities behind Africa&rsquo;s official travel information. Where a board has actually confirmed an event on MyAfroWaka, that verification is here, not just a badge we award ourselves.
           </p>
         </div>
       </div>
@@ -79,7 +79,7 @@ export default async function TourismBoardsPage() {
                 No published tourism board profiles yet
               </h2>
               <p className="font-sans text-sm text-charcoal/45 dark-flip-muted max-w-sm mx-auto leading-relaxed">
-                Real, sourced profiles only — nothing here is invented ahead of an actual relationship with the authority it names.
+                Real, sourced profiles only: nothing here is invented ahead of an actual relationship with the authority it names.
               </p>
             </div>
           ) : (

@@ -15,7 +15,7 @@ import { join } from 'path'
 // from anywhere.
 
 export const runtime = 'nodejs'
-export const alt = 'MyAfroWaka — Africa Explained by Africans'
+export const alt = 'MyAfroWaka: Africa Explained by Africans'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 

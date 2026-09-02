@@ -163,7 +163,7 @@ export function PipelineBoard({ attractions, role }: Props) {
                     </td>
 
                     <td className="px-4 py-3.5 hidden md:table-cell">
-                      <p className="font-sans text-[14px] text-charcoal/60 dark-flip-muted">{a.country?.name ?? '—'}</p>
+                      <p className="font-sans text-[14px] text-charcoal/60 dark-flip-muted">{a.country?.name ?? 'None'}</p>
                     </td>
 
                     <td className="px-4 py-3.5">
@@ -172,7 +172,7 @@ export function PipelineBoard({ attractions, role }: Props) {
 
                     <td className="px-4 py-3.5 hidden lg:table-cell">
                       <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">
-                        {a.lastVerifiedDate ?? '—'}
+                        {a.lastVerifiedDate ?? 'None'}
                       </p>
                     </td>
 

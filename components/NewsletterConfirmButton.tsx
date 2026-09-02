@@ -36,7 +36,7 @@ export function NewsletterConfirmButton({ token }: { token: string }) {
     return (
       <div className="text-center">
         <p className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-1.5">You&rsquo;re confirmed.</p>
-        <p className="font-sans text-sm text-charcoal/60 dark-flip-muted">Welcome — real guides and verified events, nothing else.</p>
+        <p className="font-sans text-sm text-charcoal/60 dark-flip-muted">Welcome: real guides and verified events, nothing else.</p>
       </div>
     )
   }

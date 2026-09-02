@@ -31,7 +31,7 @@ export async function generateMetadata(
   if (!region || matching.length === 0) return {}
 
   const title = `${regionAdjective(region)} Festivals – MyAfroWaka`
-  const description = `Verified festivals and dated events across ${region} — checked against an official source before they go live.`
+  const description = `Verified festivals and dated events across ${region}, checked against an official source before they go live.`
   return {
     // Session 6.2 — see app/[locale]/login/page.tsx's comment: `absolute`
     // stops the parent title.template from double-appending "– MyAfroWaka".

@@ -225,11 +225,6 @@ export default async function HomePage() {
             </div>
           </div>
         </div>
-
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
-          <span className="font-sans text-[14px] uppercase tracking-[0.2em] text-cream">Scroll</span>
-          <div className="w-px h-8 bg-gradient-to-b from-cream to-transparent"/>
-        </div>
       </section>
 
       {/* ══ DESTINATIONS — 6 random countries, 1 row desktop, 2 col mobile ════ */}

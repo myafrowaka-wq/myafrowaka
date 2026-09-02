@@ -14,7 +14,7 @@ import { hreflangAlternates } from '@/lib/hreflang'
 
 export const metadata: Metadata = {
   title: { absolute: 'Newsletter – MyAfroWaka' }, // Session 6.2 — see app/[locale]/login/page.tsx's comment: opts out of the parent title.template so this doesn't render doubled.
-  description: 'Real African travel guides, verified events, and hidden gems — sent when there is something worth sending, not on a fixed clock.',
+  description: 'Real African travel guides, verified events, and hidden gems, sent when there is something worth sending, not on a fixed clock.',
   alternates: { canonical: 'https://myafrowaka.com/newsletter', languages: hreflangAlternates('https://myafrowaka.com/newsletter') },
 }
 
@@ -30,10 +30,10 @@ export default async function NewsletterPage() {
           <p className="font-sans text-[14px] uppercase tracking-[0.22em] text-crimson mb-3">Newsletter</p>
           <h1 className="font-display font-extrabold text-charcoal dark-flip-text mb-5"
             style={{ fontSize: 'clamp(30px, 5vw, 46px)', letterSpacing: '-0.02em', lineHeight: '1.08' }}>
-            Africa, in your inbox — honestly
+            Africa, in your inbox, honestly
           </h1>
           <p className="font-sans text-charcoal/65 dark-flip-muted text-[17px] leading-relaxed mb-4">
-            No five-second popup lying to you, no fake &ldquo;you&rsquo;re in.&rdquo; This is a real subscription: you confirm by email, and you can leave from a working link in every message we send — not a promise, an actual mechanism.
+            No five-second popup lying to you, no fake &ldquo;you&rsquo;re in.&rdquo; This is a real subscription: you confirm by email, and you can leave from a working link in every message we send. Not a promise: an actual mechanism.
           </p>
         </div>
 
@@ -42,8 +42,8 @@ export default async function NewsletterPage() {
             <h2 className="font-display font-bold text-[17px] text-charcoal dark-flip-text mb-4">What actually goes out</h2>
             <ul className="space-y-4 mb-8">
               {[
-                { t: 'Verified events', d: 'A festival or gathering whose dates we’ve actually confirmed against an official source — never a guess dressed up as a fact.' },
-                { t: 'Real country guides', d: 'The overviews, safety notes, and “when to go” detail from our 47 country pages — not a rehash of the same ten cities every other list runs.' },
+                { t: 'Verified events', d: 'A festival or gathering whose dates we’ve actually confirmed against an official source, never a guess dressed up as a fact.' },
+                { t: 'Real country guides', d: 'The overviews, safety notes, and “when to go” detail from our 47 country pages, not a rehash of the same ten cities every other list runs.' },
                 { t: 'Hidden gems', d: 'Attractions worth knowing about that don’t already have a thousand identical blog posts.' },
               ].map(item => (
                 <li key={item.t} className="flex gap-3">
@@ -58,12 +58,12 @@ export default async function NewsletterPage() {
 
             <h2 className="font-display font-bold text-[17px] text-charcoal dark-flip-text mb-3">How often</h2>
             <p className="font-sans text-[14px] text-charcoal/60 dark-flip-muted leading-relaxed mb-8">
-              Realistically, a few times a month — never more than weekly, and never just to fill a schedule. If there&rsquo;s nothing worth your inbox, we don&rsquo;t send anything that week. Tell us your home country and interests below and we&rsquo;ll send you less, not more — just what&rsquo;s relevant.
+              Realistically, a few times a month: never more than weekly, and never just to fill a schedule. If there&rsquo;s nothing worth your inbox, we don&rsquo;t send anything that week. Tell us your home country and interests below and we&rsquo;ll send you less, not more, just what&rsquo;s relevant.
             </p>
 
             <h2 className="font-display font-bold text-[17px] text-charcoal dark-flip-text mb-3">The mechanics, plainly</h2>
             <ul className="space-y-2 font-sans text-[14px] text-charcoal/60 dark-flip-muted leading-relaxed">
-              <li>You confirm by clicking a real link in a real email — double opt-in, not a checkbox nobody reads.</li>
+              <li>You confirm by clicking a real link in a real email: double opt-in, not a checkbox nobody reads.</li>
               <li>Every email carries a working unsubscribe link. One click, no login, no &ldquo;are you sure&rdquo; maze.</li>
               <li>We don&rsquo;t sell or share your address. See the <Link href="/privacy" className="text-crimson hover:text-crimson/70 transition-colors underline">privacy policy</Link>.</li>
             </ul>

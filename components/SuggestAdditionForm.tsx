@@ -63,7 +63,7 @@ export function SuggestAdditionForm({ tripId, onClose, onSuggested }: { tripId: 
   if (sent) {
     return (
       <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-2xl p-5 mt-3">
-        <p className="font-sans text-sm text-moss-600 dark:text-moss-300 mb-3">Suggestion sent — the trip owner will see it for approval.</p>
+        <p className="font-sans text-sm text-moss-600 dark:text-moss-300 mb-3">Suggestion sent: the trip owner will see it for approval.</p>
         <button type="button" onClick={onClose} className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson hover:text-crimson/70 transition-colors">Done</button>
       </div>
     )

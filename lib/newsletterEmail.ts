@@ -45,7 +45,7 @@ export function buildConfirmEmail(input: ConfirmEmailInput): { subject: string; 
   const text = [
     'One more step: confirm you want Africa travel guides, verified events, and hidden gems in your inbox.',
     `\nConfirm your subscription: ${input.confirmUrl}`,
-    '\nThis link expires in 48 hours. If you did not request this, you can ignore this email — you will not be subscribed unless you click the link.',
+    '\nThis link expires in 48 hours. If you did not request this, you can ignore this email: you will not be subscribed unless you click the link.',
     `\nDidn't ask for this, or changed your mind already? Unsubscribe: ${input.unsubscribeUrl}`,
   ].join('\n')
 
@@ -77,7 +77,7 @@ export function buildConfirmEmail(input: ConfirmEmailInput): { subject: string; 
             </td></tr>
           </table>
           <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:#9a9284;">
-            This link expires in 48 hours. If you didn't request this, just ignore it — you won't be subscribed unless you click the button above.
+            This link expires in 48 hours. If you didn't request this, just ignore it: you won't be subscribed unless you click the button above.
           </p>
         </td>
       </tr>

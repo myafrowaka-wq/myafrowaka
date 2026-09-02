@@ -54,7 +54,7 @@ export default function PrivacyPage() {
 
           <h2>How We Use Your Information</h2>
           <ul>
-            <li>To send newsletters and travel guides you have subscribed to. Newsletter signup uses double opt-in: after you sign up, we send one confirmation email, and no newsletter content goes out unless you click the link in it. Every newsletter email — including that first confirmation one — carries a working unsubscribe link, no login required</li>
+            <li>To send newsletters and travel guides you have subscribed to. Newsletter signup uses double opt-in: after you sign up, we send one confirmation email, and no newsletter content goes out unless you click the link in it. Every newsletter email, including that first confirmation one, carries a working unsubscribe link, no login required</li>
             <li>To respond to your enquiries</li>
             <li>To improve our website and content</li>
             <li>We do not sell your personal data to third parties</li>

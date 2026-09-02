@@ -278,7 +278,7 @@ export function TripPlanner({ countries, attractions, events }: Props) {
           Build your Africa itinerary
         </h1>
         <p className="font-sans text-charcoal/55 dark-flip-muted leading-relaxed mb-6" style={{ fontSize: '15px' }}>
-          Pick a country, choose your dates, and we&rsquo;ll show you what&rsquo;s really happening there while you visit. Everything here stays in your browser until you save it — sign in only when you&rsquo;re ready to keep it.
+          Pick a country, choose your dates, and we&rsquo;ll show you what&rsquo;s really happening there while you visit. Everything here stays in your browser until you save it: sign in only when you&rsquo;re ready to keep it.
         </p>
 
         {/* Arrived from an event page's "Plan a Trip Around This Event" —
@@ -568,7 +568,7 @@ export function TripPlanner({ countries, attractions, events }: Props) {
             </button>
             {status !== 'authenticated' && (
               <p className="font-sans text-[14px] text-cream/55 text-center mt-3 leading-relaxed">
-                Nothing is lost — your trip stays right here in this browser. We only ask you to sign in the moment you want to save it.
+                Nothing is lost: your trip stays right here in this browser. We only ask you to sign in the moment you want to save it.
               </p>
             )}
           </section>

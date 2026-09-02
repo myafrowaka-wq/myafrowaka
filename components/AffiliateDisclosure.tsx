@@ -7,7 +7,7 @@
 export function AffiliateDisclosure() {
   return (
     <p className="font-sans text-[14px] text-charcoal/45 dark-flip-muted leading-relaxed">
-      We may earn a commission on bookings made through the links below, at no extra cost to you. This never affects what we verify or recommend — a listing&rsquo;s <span className="whitespace-nowrap">Verified</span> status can&rsquo;t be bought.
+      We may earn a commission on bookings made through the links below, at no extra cost to you. This never affects what we verify or recommend: a listing&rsquo;s <span className="whitespace-nowrap">Verified</span> status can&rsquo;t be bought.
     </p>
   )
 }

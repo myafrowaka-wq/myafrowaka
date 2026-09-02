@@ -34,7 +34,7 @@ export async function generateMetadata(
   if (!month || matching.length === 0) return {}
 
   const title = `African Festivals in ${month} – MyAfroWaka`
-  const description = `Verified African festivals and dated events happening in ${month} — checked against an official source before they go live.`
+  const description = `Verified African festivals and dated events happening in ${month}, checked against an official source before they go live.`
   return {
     // Session 6.2 — see app/[locale]/login/page.tsx's comment: `absolute`
     // stops the parent title.template from double-appending "– MyAfroWaka".

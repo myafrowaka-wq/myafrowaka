@@ -107,7 +107,7 @@ export default async function LoginPage({
           {hasError && (
             <div className="mb-5 bg-crimson/8 border border-crimson/25 rounded-xl px-4 py-3">
               <p className="font-sans text-[14px] text-crimson">
-                That sign-in link has expired or was already used — request a new one below. (If you were using a demo account button, try again.)
+                That sign-in link has expired or was already used. Request a new one below. (If you were using a demo account button, try again.)
               </p>
             </div>
           )}

@@ -33,7 +33,7 @@ export function MyContributions({ contributions }: { contributions: Contribution
       <p className="font-display font-semibold text-[14px] text-charcoal dark-flip-text mb-3">
         Your submissions
         {publishedCount > 0 && (
-          <span className="font-normal text-charcoal/45 dark-flip-muted"> &middot; {publishedCount} published — thank you</span>
+          <span className="font-normal text-charcoal/45 dark-flip-muted"> &middot; {publishedCount} published, thank you</span>
         )}
       </p>
       <div className="space-y-2">

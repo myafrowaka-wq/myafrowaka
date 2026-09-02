@@ -232,7 +232,7 @@ export function EventsExplorer({ events, countries }: { events: EventSummary[]; 
             African Events &amp; Festivals
           </h1>
           <p className="font-sans text-[15px] text-charcoal/65 dark-flip-muted leading-relaxed mb-6 max-w-2xl">
-            What is happening across Africa, verified against an official source before it goes live — never a guessed date dressed up as a fact.
+            What is happening across Africa, verified against an official source before it goes live: never a guessed date dressed up as a fact.
           </p>
 
           <div className="relative max-w-2xl">
