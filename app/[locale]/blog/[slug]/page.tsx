@@ -434,7 +434,15 @@ export default async function BlogPostPage(
                 )
                 return (
                   <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                    <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-4">Written by</p>
+                    {/* Session 6.3 (WDOS T-11, eyebrow cap) — this page had
+                        5 eyebrow-styled sidebar-card labels with no
+                        separate heading to belong to (Written by, Follow
+                        MyAfroWaka, Destination, Explore, plus the closing
+                        Also Read section) — over the 2-per-page cap with
+                        room to spare. Rather than arbitrarily pick 2 to
+                        keep among 5 near-identical small utility cards,
+                        all 5 are now real headings; see Override #3. */}
+                    <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4">Written by</h3>
                     {authorSlug ? (
                       <Link href={`/authors/${authorSlug}`} className="flex items-center gap-3 mb-3 group/author">
                         {avatar}
@@ -468,7 +476,7 @@ export default async function BlogPostPage(
 
               {/* Follow MyAfroWaka */}
               <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-4">Follow MyAfroWaka</p>
+                <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4">Follow MyAfroWaka</h3>
                 <div className="flex items-center gap-3">
                   {SOCIAL_LINKS.map(s => (
                     <a
@@ -492,7 +500,7 @@ export default async function BlogPostPage(
                 <Link href={`/destinations/${post.featuredCountry.slug}`}
                   className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
                   <div>
-                    <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/65 dark-flip-muted mb-1">Destination</p>
+                    <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-1">Destination</h3>
                     <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                       {post.featuredCountry.name}
                     </p>
@@ -517,7 +525,7 @@ export default async function BlogPostPage(
               <Link href="/search"
                 className="flex items-center justify-between bg-ink rounded-3xl p-6 group transition-all">
                 <div>
-                  <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-gold-400/70 mb-1">Explore</p>
+                  <h3 className="font-display font-bold text-[15px] text-gold-400 mb-1">Explore</h3>
                   <p className="font-display font-bold text-base text-cream group-hover:text-gold-400 transition-colors">
                     Browse Attractions
                   </p>
@@ -543,7 +551,10 @@ export default async function BlogPostPage(
       {alsoRead.length > 0 && (
         <div className="bg-sand dark-flip-surf border-t border-line dark-flip-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-            <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-6">Also Read</p>
+            <h2 className="font-display font-bold text-charcoal dark-flip-text mb-6"
+              style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', letterSpacing: '-0.018em' }}>
+              Also Read
+            </h2>
             <div className="grid sm:grid-cols-3 gap-4">
               {alsoRead.map(r => (
                 <Link key={r.slug} href={`/blog/${r.slug}`}

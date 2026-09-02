@@ -559,7 +559,18 @@ export default async function AttractionPage(
 
               {/* Mobile-only At a Glance */}
               <div className="lg:hidden bg-ink rounded-3xl p-6 text-cream mb-8">
-                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400 mb-5">At a Glance</p>
+                {/* Session 6.3 (WDOS Design Integrity gate, T-11 — eyebrow
+                    cap, max 2 per page) — this and its desktop-sidebar
+                    twin below were 2 of ~10 eyebrow-styled labels on this
+                    template with no separate heading to "belong" to; per
+                    the gate's own fix guidance ("if the heading needs an
+                    eyebrow to make sense, rewrite the heading") this is
+                    now a real heading in its own right, not a small caption
+                    decorating one. See Override #3 for the full count and
+                    which 2 labels on this page stayed eyebrows
+                    ("Common Questions", "Keep Exploring" — the only two
+                    that actually sit above a separate <h2>). */}
+                <h3 className="font-display font-bold text-[15px] text-cream mb-5">At a Glance</h3>
                 <div className="space-y-0">
                   {a.country && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
@@ -783,7 +794,7 @@ export default async function AttractionPage(
               {/* Experience tags */}
               {a.experienceTags && a.experienceTags.length > 0 && (
                 <div className="mt-10 pt-6 border-t border-line dark-flip-border">
-                  <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted mb-4">Tagged</p>
+                  <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4">Tagged</h3>
                   <div className="flex flex-wrap gap-2">
                     {a.experienceTags.map(tag => (
                       <span
@@ -809,7 +820,8 @@ export default async function AttractionPage(
 
               {/* At a Glance - desktop only (mobile version appears above article body) */}
               <div className="hidden lg:block bg-ink rounded-3xl p-6 text-cream">
-                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-gold-400 mb-5">At a Glance</p>
+                {/* Session 6.3 (WDOS T-11) — see the mobile twin above. */}
+                <h3 className="font-display font-bold text-[15px] text-cream mb-5">At a Glance</h3>
                 <div className="space-y-0">
                   {a.country && (
                     <div className="flex items-start justify-between gap-3 py-3 border-b border-cream/10">
@@ -902,10 +914,10 @@ export default async function AttractionPage(
               {/* About the country — short summary, links through to the full overview */}
               {a.country?.overview && (
                 <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4 flex items-center gap-2">
+                  <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4 flex items-center gap-2">
                     <Flag code={a.country.countryCode} />
                     About {a.country.name}
-                  </p>
+                  </h3>
                   <p className="font-sans text-[14px] text-charcoal/70 dark-flip-muted leading-relaxed mb-2">
                     {a.country.overview}
                   </p>
@@ -926,7 +938,7 @@ export default async function AttractionPage(
               {/* Getting There */}
               {(a.nearestAirportIATA || a.addressDirections || a.googleMapsPlaceId) && (
                 <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-5">Getting There</p>
+                  <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-5">Getting There</h3>
                   <div className="space-y-4">
                     {a.nearestAirportIATA && (
                       <div className="flex items-start gap-3">
@@ -975,7 +987,7 @@ export default async function AttractionPage(
 
               {/* Save to Trip */}
               <div className="border border-line dark-flip-border rounded-3xl p-6">
-                <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-3">Plan Your Visit</p>
+                <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-3">Plan Your Visit</h3>
                 <p className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-5" style={{ letterSpacing: '-0.012em' }}>
                   Save this attraction to your trip planner.
                 </p>
@@ -985,7 +997,7 @@ export default async function AttractionPage(
               {/* Suitable For */}
               {a.suitableFor && a.suitableFor.length > 0 && (
                 <div className="border border-line dark-flip-border rounded-3xl p-6">
-                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">Suitable For</p>
+                  <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4">Suitable For</h3>
                   <div className="flex flex-wrap gap-2">
                     {a.suitableFor.map(s => (
                       <span key={s} className="bg-sand dark-flip-surf text-charcoal/65 dark-flip-muted font-sans text-[14px] px-3.5 py-1.5 rounded-full border border-line dark-flip-border">
@@ -999,7 +1011,7 @@ export default async function AttractionPage(
               {/* Featured In */}
               {a.featuredIn && a.featuredIn.length > 0 && (
                 <div className="border border-line dark-flip-border rounded-3xl p-6">
-                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">Featured In</p>
+                  <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4">Featured In</h3>
                   <div className="space-y-2">
                     {a.featuredIn.map(g => (
                       <Link key={g.slug} href={`/guides/${g.slug}`}
@@ -1024,7 +1036,7 @@ export default async function AttractionPage(
               {/* Events nearby — derived from country, not hand-curated (Session 5.2) */}
               {a.nearbyEvents && a.nearbyEvents.length > 0 && (
                 <div className="border border-line dark-flip-border rounded-3xl p-6">
-                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">Events Nearby</p>
+                  <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4">Events Nearby</h3>
                   <div className="space-y-2">
                     {a.nearbyEvents.map(ev => (
                       <Link key={ev.slug} href={`/events/${ev.slug}`}
@@ -1044,7 +1056,7 @@ export default async function AttractionPage(
               {/* Related articles — matched by country, not hand-curated (Session 5.2) */}
               {a.relatedArticles && a.relatedArticles.length > 0 && (
                 <div className="border border-line dark-flip-border rounded-3xl p-6">
-                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">From the Journal</p>
+                  <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4">From the Journal</h3>
                   <div className="space-y-2">
                     {a.relatedArticles.map(post => (
                       <Link key={post.slug} href={`/blog/${post.slug}`}
@@ -1068,7 +1080,12 @@ export default async function AttractionPage(
                   className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all"
                 >
                   <div>
-                    <p className="font-sans text-[14px] uppercase tracking-[0.18em] text-charcoal/55 dark-flip-muted mb-1">Explore more</p>
+                    {/* Session 6.3 (WDOS T-11) — "Explore more" was a 10th
+                        eyebrow-styled label; deleted rather than rewritten
+                        since the card's own bold text already reads fine
+                        as a complete link on its own, matching the gate's
+                        other stated option ("keep the two that carry the
+                        most real categorisation; delete the rest"). */}
                     <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                       All attractions in {a.country.name}
                     </p>

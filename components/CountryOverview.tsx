@@ -104,9 +104,13 @@ export function CountryOverview({
 
         {hasStartHere && (
           <div className="pt-10 border-t border-line dark-flip-border">
-            <p className="font-sans text-[14px] uppercase tracking-[0.16em] text-crimson mb-6">
+            {/* Session 6.3 (WDOS T-11, eyebrow cap) — this was eyebrow-
+                styled with no heading of its own (unlike the field grid
+                above, which is a real definition-list under the section's
+                own "Before You Go" <h2>, not a set of separate eyebrows). */}
+            <h3 className="font-display font-bold text-[17px] text-charcoal dark-flip-text mb-6">
               Start Here
-            </p>
+            </h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {startHereAttractions.map(a => (
                 <Link key={a.slug} href={`/attractions/${a.slug}`}

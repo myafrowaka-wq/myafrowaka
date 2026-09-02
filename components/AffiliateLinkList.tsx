@@ -47,7 +47,12 @@ export function AffiliateLinkList({ links, title = 'Where to Stay' }: { links: A
 
   return (
     <div className="border border-line dark-flip-border rounded-3xl p-6">
-      <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">{title}</p>
+      {/* Session 6.3 (WDOS T-11, eyebrow cap) — this was eyebrow-styled
+          with no separate heading to belong to, on every page that uses
+          this shared component (attractions/[slug], destinations/[slug],
+          events/[slug], the trip planner). A real heading now, matching
+          the same fix applied to that same sidebar's other cards. */}
+      <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4">{title}</h3>
       <div className="space-y-2 mb-5">
         {links.map(link => (
           <a

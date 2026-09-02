@@ -174,7 +174,14 @@ export default async function DestinationPage({
 
           {popularPills.length > 0 && (
             <div>
-              <p className="font-sans text-[14px] uppercase tracking-[0.15em] text-cream/55 mb-3">Popular in {dest.name}:</p>
+              {/* Session 6.3 (WDOS T-11, eyebrow cap) — de-styled from the
+                  eyebrow treatment (uppercase, wide tracking): it's an
+                  inline caption for the pill list right below it, not a
+                  section of its own, so it doesn't need to compete for
+                  this page's 2-eyebrow budget (kept for the hero's region
+                  kicker above and "Also in {region}" further down — see
+                  Override #3). */}
+              <p className="font-sans text-[14px] text-cream/55 mb-3">Popular in {dest.name}:</p>
               <PopularPills attractions={popularPills} />
             </div>
           )}
@@ -319,7 +326,7 @@ export default async function DestinationPage({
             <div className="mt-16 pt-12 border-t border-line dark-flip-border grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {dest.upcomingEvents && dest.upcomingEvents.length > 0 && (
                 <div className="border border-line dark-flip-border rounded-3xl p-6">
-                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">Upcoming Events</p>
+                  <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4">Upcoming Events</h3>
                   <div className="space-y-2">
                     {dest.upcomingEvents.map(ev => (
                       <Link key={ev.slug} href={`/events/${ev.slug}`}
@@ -338,7 +345,7 @@ export default async function DestinationPage({
 
               {dest.relatedArticles && dest.relatedArticles.length > 0 && (
                 <div className="border border-line dark-flip-border rounded-3xl p-6">
-                  <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-4">From the Journal</p>
+                  <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4">From the Journal</h3>
                   <div className="space-y-2">
                     {dest.relatedArticles.map(post => (
                       <Link key={post.slug} href={`/blog/${post.slug}`}
@@ -367,7 +374,7 @@ export default async function DestinationPage({
                 <Link href={`/tourism-boards/${dest.tourismBoard.slug}`}
                   className="flex items-center justify-between bg-white dark-flip-card border border-line dark-flip-border hover:border-gold-300 rounded-3xl p-6 group transition-all">
                   <div>
-                    <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/55 dark-flip-muted mb-2">Official Tourism Board</p>
+                    <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-2">Official Tourism Board</h3>
                     <p className="font-display font-bold text-charcoal dark-flip-text text-[15px] group-hover:text-crimson transition-colors">
                       {dest.tourismBoard.name}
                     </p>
@@ -380,7 +387,12 @@ export default async function DestinationPage({
             </div>
           )}
 
-          {/* Also in region */}
+          {/* Also in region — Session 6.3 (WDOS T-11): one of this page's
+              2 kept eyebrows (with the hero's region kicker above), per
+              Override #3. Everything else that used to carry this same
+              treatment on this page (Upcoming Events, From the Journal,
+              Where to Stay, Official Tourism Board) is now a real heading
+              instead. */}
           {dest.relatedCountries && dest.relatedCountries.length > 0 && (
             <div className="mt-16 pt-12 border-t border-line dark-flip-border">
               <p className="font-sans text-[14px] uppercase tracking-[0.2em] text-charcoal/65 dark-flip-muted mb-6">
