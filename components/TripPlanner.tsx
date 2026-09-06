@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Link, useRouter } from '@/i18n/navigation'
@@ -8,11 +9,17 @@ import { Flag } from '@/components/Flag'
 import { eventDateDisplay } from '@/lib/eventDateDisplay'
 import { eventOverlapsRange } from '@/lib/eventFilters'
 import { EVENT_CATEGORY_COLOR, EVENT_CATEGORY_COLOR_FALLBACK } from '@/lib/regionColors'
+import type { MapPin } from '@/components/ItineraryMap'
+
+// Batch 4 — Leaflet touches `window` on load, so it can never render on
+// the server; ssr:false is required here, not just a performance choice.
+const ItineraryMap = dynamic(() => import('@/components/ItineraryMap').then(m => m.ItineraryMap), { ssr: false })
 import {
   loadTripDraft, saveTripDraft, clearTripDraft, dateRange,
   EMPTY_DRAFT, type TripDraft, type TripDraftItem,
 } from '@/lib/tripStorage'
 import { AffiliateLinkList, type AffiliateLinkData } from '@/components/AffiliateLinkList'
+import { FlightPriceChip } from '@/components/FlightPriceChip'
 
 // Session 4.2 — the real trip planner. Fully usable while signed out: every
 // change is written straight to localStorage (lib/tripStorage.ts), so
@@ -25,9 +32,11 @@ export interface PlannerCountry {
   name: string; slug: string; countryCode?: string; continentRegion?: string
   overview?: string; whenToGo?: string; knownFor?: string
   affiliateLinks?: AffiliateLinkData[]
+  nearestAirportIATA?: string
 }
 export interface PlannerAttraction {
   name: string; slug: string; type?: string[]; editorialSummary?: string
+  latitude?: number; longitude?: number
   country?: { name: string; slug: string; countryCode?: string } | null
   city?: { name: string } | null
 }
@@ -60,6 +69,11 @@ export function TripPlanner({ countries, attractions, events }: Props) {
   const [addingToDate, setAddingToDate] = useState<string | null>(null)
   const [pickerQuery, setPickerQuery] = useState('')
   const [pickerKind, setPickerKind] = useState<'all' | 'attraction' | 'event'>('all')
+  // Batch 4 (itinerary reordering) — the dragged item's origin, so a drop
+  // anywhere else in the itinerary knows what it's moving. Plain up/down
+  // and "move to day" controls exist alongside this for keyboard users
+  // and for anyone whose browser/input device doesn't do drag-and-drop.
+  const [dragItem, setDragItem] = useState<{ date: string; key: string } | null>(null)
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState('')
   const pickerRef = useRef<HTMLDivElement>(null)
@@ -150,6 +164,23 @@ export function TripPlanner({ countries, attractions, events }: Props) {
     return map
   }, [draft.days])
 
+  // Batch 4 (map view) — only attractions carry coordinates today (events
+  // don't yet), so this only ever pins what it can actually place
+  // correctly rather than guessing. `days` gives the 1-indexed day number
+  // that colours the route on the map.
+  const mapPins = useMemo<MapPin[]>(() => {
+    const pins: MapPin[] = []
+    days.forEach((date, i) => {
+      for (const item of itemsByDate.get(date) ?? []) {
+        if (item.kind !== 'attraction') continue
+        const a = attractions.find(x => x.slug === item.slug)
+        if (a?.latitude == null || a?.longitude == null) continue
+        pins.push({ key: item.key, name: a.name, lat: a.latitude, lng: a.longitude, day: i + 1 })
+      }
+    })
+    return pins
+  }, [days, itemsByDate, attractions])
+
   const countryAttractions = useMemo(
     () => draft.countrySlug ? attractions.filter(a => a.country?.slug === draft.countrySlug) : [],
     [attractions, draft.countrySlug]
@@ -201,6 +232,36 @@ export function TripPlanner({ countries, attractions, events }: Props) {
       ...prev,
       days: prev.days.map(d => d.date === date ? { ...d, items: d.items.filter(i => i.key !== key) } : d),
     }))
+  }
+
+  // Batch 4 — moves one item to a specific position on any day, within
+  // the same day or across days. Used by drag-and-drop, the up/down
+  // buttons, and the "move to day" select — one function, three inputs,
+  // so the three interactions can never drift out of sync with each other.
+  // `toIndex` is the target position as seen in the CURRENT (pre-removal)
+  // list for `toDate` — when the move is within the same day and the item
+  // started earlier in the list, removing it first shifts everything
+  // after it left by one, so that's corrected for here rather than at
+  // every call site.
+  function moveItem(fromDate: string, key: string, toDate: string, toIndex: number) {
+    setDraft(prev => {
+      const fromDay = prev.days.find(d => d.date === fromDate)
+      const sourceIdx = fromDay?.items.findIndex(i => i.key === key) ?? -1
+      if (sourceIdx === -1) return prev
+      const moved = fromDay!.items[sourceIdx]
+
+      let days = prev.days.map(d => d.date === fromDate ? { ...d, items: d.items.filter(i => i.key !== key) } : d)
+      if (!days.some(d => d.date === toDate)) days = [...days, { date: toDate, items: [] }]
+
+      const adjustedIndex = fromDate === toDate && sourceIdx < toIndex ? toIndex - 1 : toIndex
+      days = days.map(d => {
+        if (d.date !== toDate) return d
+        const items = [...d.items]
+        items.splice(Math.max(0, Math.min(adjustedIndex, items.length)), 0, moved)
+        return { ...d, items }
+      })
+      return { ...prev, days }
+    })
   }
 
   function itemDisplay(item: TripDraftItem): { name: string; sub?: string } | null {
@@ -361,6 +422,16 @@ export function TripPlanner({ countries, attractions, events }: Props) {
             </div>
           )}
 
+          {/* Batch 3 — "suggested airlines and the cheapest rate" from the
+              owner's own Lagos trip-journey walkthrough. Real pricing
+              needs an owner-created Travelpayouts account (see
+              lib/flightPricing.ts); this renders honestly either way. */}
+          {selectedCountry && (
+            <div className="mt-4">
+              <FlightPriceChip destinationIATA={selectedCountry.nearestAirportIATA} destinationName={selectedCountry.name} />
+            </div>
+          )}
+
           {!selectedCountry && (
             <div className="relative">
               <input
@@ -463,6 +534,15 @@ export function TripPlanner({ countries, attractions, events }: Props) {
             <h2 className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/50 dark-flip-muted mb-3">
               3. Your day-by-day itinerary
             </h2>
+
+            {/* Batch 4 — map view. Colour-coded by day, drawn with a
+                dashed route line so a multi-stop day reads as a route, not
+                a scatter of pins. Add/remove/reorder items above and this
+                updates immediately, no separate refresh step. */}
+            <div className="mb-4">
+              <ItineraryMap pins={mapPins} />
+            </div>
+
             <div className="space-y-3">
               {days.map((date, i) => {
                 const items = itemsByDate.get(date) ?? []
@@ -513,27 +593,86 @@ export function TripPlanner({ countries, attractions, events }: Props) {
                         )}
                       </div>
                     </div>
-                    <div className="p-5">
+                    <div
+                      className="p-5"
+                      onDragOver={e => { if (dragItem) e.preventDefault() }}
+                      onDrop={e => {
+                        e.preventDefault()
+                        if (dragItem) moveItem(dragItem.date, dragItem.key, date, items.length)
+                        setDragItem(null)
+                      }}
+                    >
                       {items.length === 0 ? (
-                        <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">Nothing added yet.</p>
+                        <p className="font-sans text-[14px] text-charcoal/65 dark-flip-muted">
+                          Nothing added yet{dragItem ? ' — drop here to move it to this day' : '.'}
+                        </p>
                       ) : (
                         <ul className="space-y-2">
-                          {items.map(item => {
+                          {items.map((item, idx) => {
                             const display = itemDisplay(item)
                             if (!display) return null
                             return (
-                              <li key={item.key} className="flex items-center justify-between gap-3 bg-sand dark-flip-surf border border-line dark-flip-border rounded-xl px-3.5 py-2.5">
-                                <div className="min-w-0">
+                              <li
+                                key={item.key}
+                                draggable
+                                onDragStart={() => setDragItem({ date, key: item.key })}
+                                onDragEnd={() => setDragItem(null)}
+                                onDragOver={e => { if (dragItem) e.preventDefault() }}
+                                onDrop={e => {
+                                  e.preventDefault()
+                                  e.stopPropagation()
+                                  if (dragItem) moveItem(dragItem.date, dragItem.key, date, idx)
+                                  setDragItem(null)
+                                }}
+                                className={`flex items-center gap-2 bg-sand dark-flip-surf border border-line dark-flip-border rounded-xl px-2 py-2.5 cursor-grab active:cursor-grabbing transition-opacity ${
+                                  dragItem?.key === item.key ? 'opacity-40' : ''
+                                }`}
+                              >
+                                <span className="shrink-0 text-charcoal/35 dark-flip-muted px-1" aria-hidden>
+                                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>
+                                </span>
+                                <div className="min-w-0 flex-1">
                                   <p className="font-sans text-sm text-charcoal dark-flip-text truncate">{display.name}</p>
                                   <p className="font-sans text-[14px] uppercase tracking-[0.08em] text-charcoal/65 dark-flip-muted">
                                     {item.kind === 'event' ? 'Event' : (display.sub ?? 'Attraction')}
                                   </p>
                                 </div>
-                                <button type="button" onClick={() => removeItem(date, item.key)}
-                                  aria-label={`Remove ${display.name}`}
-                                  className="shrink-0 text-charcoal/65 dark-flip-muted hover:text-crimson transition-colors">
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
-                                </button>
+
+                                {/* Keyboard/touch-friendly alternative to drag-and-drop —
+                                    reorder within the day, or relocate to another day
+                                    entirely. Every button here routes through the same
+                                    moveItem() the drag handlers use. */}
+                                <div className="shrink-0 flex items-center gap-0.5">
+                                  <button type="button" onClick={() => moveItem(date, item.key, date, idx - 1)}
+                                    disabled={idx === 0}
+                                    aria-label={`Move ${display.name} earlier`}
+                                    className="p-1 text-charcoal/45 dark-flip-muted hover:text-crimson disabled:opacity-25 disabled:hover:text-charcoal/45 transition-colors">
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7"/></svg>
+                                  </button>
+                                  <button type="button" onClick={() => moveItem(date, item.key, date, idx + 2)}
+                                    disabled={idx === items.length - 1}
+                                    aria-label={`Move ${display.name} later`}
+                                    className="p-1 text-charcoal/45 dark-flip-muted hover:text-crimson disabled:opacity-25 disabled:hover:text-charcoal/45 transition-colors">
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/></svg>
+                                  </button>
+                                  {days.length > 1 && (
+                                    <select
+                                      aria-label={`Move ${display.name} to a different day`}
+                                      value={date}
+                                      onChange={e => moveItem(date, item.key, e.target.value, (itemsByDate.get(e.target.value) ?? []).length)}
+                                      className="font-sans text-[14px] bg-transparent border border-line dark-flip-border rounded-lg px-1.5 py-1 text-charcoal/65 dark-flip-muted focus:outline-none focus:border-crimson"
+                                    >
+                                      {days.map((d, di) => (
+                                        <option key={d} value={d}>Day {di + 1}</option>
+                                      ))}
+                                    </select>
+                                  )}
+                                  <button type="button" onClick={() => removeItem(date, item.key)}
+                                    aria-label={`Remove ${display.name}`}
+                                    className="shrink-0 p-1 text-charcoal/65 dark-flip-muted hover:text-crimson transition-colors">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
+                                  </button>
+                                </div>
                               </li>
                             )
                           })}

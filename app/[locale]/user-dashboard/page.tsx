@@ -13,6 +13,7 @@ import { TravelPassport } from '@/components/TravelPassport'
 import { MyContributions, type Contribution } from '@/components/MyContributions'
 import { getTranslations } from 'next-intl/server'
 import { attractionStockImage } from '@/lib/stockImageCredits'
+import { DEFAULT_COLLECTION } from '@/lib/collections'
 import imageUrlBuilder from '@sanity/image-url'
 
 const builder = imageUrlBuilder(client)
@@ -40,6 +41,7 @@ const attractionImageUrl = attractionStockImage
 interface SavedEntry {
   attractionSlug: string
   savedAt: string
+  collectionName: string
   attraction?: {
     name: string
     slug: string
@@ -157,12 +159,21 @@ export default async function UserDashboardPage() {
   const saved = await client.fetch<SavedEntry[]>(
     `*[_type == "savedAttraction" && userId == $userId] | order(savedAt desc) {
       attractionSlug, savedAt,
+      "collectionName": coalesce(collectionName, "${DEFAULT_COLLECTION}"),
       "attraction": *[_type == "attraction" && slug.current == ^.attractionSlug][0] {
         name, "slug": slug.current, type, editorialSummary, "country": country->{ name }
       }
     }`,
     { userId: user.id }
   ).catch(() => [] as SavedEntry[])
+
+  // Batch 1 — group the flat saved list into named "collection shelves"
+  // (General first, since that's where a plain one-click Save lands),
+  // matching the picker's own model in components/SaveButton.tsx.
+  const collectionOrder = [DEFAULT_COLLECTION, ...Array.from(new Set(saved.map(s => s.collectionName))).filter(n => n !== DEFAULT_COLLECTION)]
+  const savedByCollection = collectionOrder
+    .map(name => ({ name, items: saved.filter(s => s.collectionName === name) }))
+    .filter(shelf => shelf.items.length > 0)
 
   const [profile, allCountries] = await Promise.all([
     client.fetch<FullProfile | null>(
@@ -351,53 +362,67 @@ export default async function UserDashboardPage() {
               </Link>
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {saved.map(entry => {
-                const a = entry.attraction
-                if (!a) return null
-                const typeLabel = a.type?.[0]?.replace('UNESCO World Heritage Site | ', '') ?? ''
-                return (
-                  <Link
-                    key={entry.attractionSlug}
-                    href={`/attractions/${a.slug}`}
-                    className="group block rounded-2xl overflow-hidden border border-line dark-flip-border hover:border-gold-300 hover:shadow-[0_6px_24px_rgba(0,0,0,0.10)] transition-all bg-cream dark-flip-card"
-                  >
-                    {/* Image area */}
-                    <div className="relative h-40 overflow-hidden bg-sand dark-flip-surf">
-                      {/* Session 6.3 — image-redundant-alt: a.name is a visible heading in this same card below. */}
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={attractionImageUrl(a.slug)}
-                        alt=""
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      {typeLabel && (
-                        <span className="absolute top-3 left-3 font-sans text-[14px] uppercase tracking-[0.16em] bg-ink/70 text-cream/90 px-2.5 py-1 rounded-full backdrop-blur-sm">
-                          {typeLabel}
-                        </span>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent"/>
-                    </div>
+            <div className="space-y-8">
+              {savedByCollection.map(shelf => (
+                <div key={shelf.name}>
+                  <div className="flex items-center gap-2.5 mb-3.5">
+                    <h3 className="font-display font-bold text-[14px] uppercase tracking-[0.14em] text-charcoal/70 dark-flip-muted">
+                      {shelf.name}
+                    </h3>
+                    <span className="font-sans text-[14px] text-charcoal/45 dark-flip-muted bg-charcoal/6 dark-flip-surf px-2 py-0.5 rounded-full">
+                      {shelf.items.length}
+                    </span>
+                  </div>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {shelf.items.map(entry => {
+                      const a = entry.attraction
+                      if (!a) return null
+                      const typeLabel = a.type?.[0]?.replace('UNESCO World Heritage Site | ', '') ?? ''
+                      return (
+                        <Link
+                          key={`${shelf.name}-${entry.attractionSlug}`}
+                          href={`/attractions/${a.slug}`}
+                          className="group block rounded-2xl overflow-hidden border border-line dark-flip-border hover:border-gold-300 hover:shadow-[0_6px_24px_rgba(0,0,0,0.10)] transition-all bg-cream dark-flip-card"
+                        >
+                          {/* Image area */}
+                          <div className="relative h-40 overflow-hidden bg-sand dark-flip-surf">
+                            {/* Session 6.3 — image-redundant-alt: a.name is a visible heading in this same card below. */}
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={attractionImageUrl(a.slug)}
+                              alt=""
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                            {typeLabel && (
+                              <span className="absolute top-3 left-3 font-sans text-[14px] uppercase tracking-[0.16em] bg-ink/70 text-cream/90 px-2.5 py-1 rounded-full backdrop-blur-sm">
+                                {typeLabel}
+                              </span>
+                            )}
+                            <div className="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent"/>
+                          </div>
 
-                    <div className="p-4">
-                      <h3 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors mb-0.5"
-                        style={{ fontSize: 'clamp(13px, 1.4vw, 15px)', letterSpacing: '-0.012em' }}>
-                        {a.name}
-                      </h3>
-                      {a.country && (
-                        <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/55 dark-flip-muted">
-                          {a.country.name}
-                        </p>
-                      )}
-                      {a.editorialSummary && (
-                        <p className="font-sans text-[14px] text-charcoal/60 dark-flip-muted leading-relaxed line-clamp-2 mt-2.5">
-                          {a.editorialSummary}
-                        </p>
-                      )}
-                    </div>
-                  </Link>
-                )
-              })}
+                          <div className="p-4">
+                            <h3 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors mb-0.5"
+                              style={{ fontSize: 'clamp(13px, 1.4vw, 15px)', letterSpacing: '-0.012em' }}>
+                              {a.name}
+                            </h3>
+                            {a.country && (
+                              <p className="font-sans text-[14px] uppercase tracking-[0.1em] text-charcoal/55 dark-flip-muted">
+                                {a.country.name}
+                              </p>
+                            )}
+                            {a.editorialSummary && (
+                              <p className="font-sans text-[14px] text-charcoal/60 dark-flip-muted leading-relaxed line-clamp-2 mt-2.5">
+                                {a.editorialSummary}
+                              </p>
+                            )}
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </section>

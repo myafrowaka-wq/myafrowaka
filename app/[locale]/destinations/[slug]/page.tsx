@@ -12,12 +12,13 @@ import { CountryOverview } from '@/components/CountryOverview'
 import { Flag } from '@/components/Flag'
 import { countryStockImage, attractionStockImage } from '@/lib/stockImageCredits'
 import { AffiliateLinkList, type AffiliateLinkData } from '@/components/AffiliateLinkList'
+import { FlightPriceChip } from '@/components/FlightPriceChip'
 import { hreflangAlternates } from '@/lib/hreflang'
 import { twitterCard } from '@/lib/twitterCard'
 
 interface AttractionSummary {
   name: string; slug: string; type?: string[]; editorialSummary?: string
-  lastVerifiedDate?: string; city?: { name: string }
+  lastVerifiedDate?: string; city?: { name: string }; nearestAirportIATA?: string
 }
 
 interface Destination {
@@ -101,6 +102,9 @@ export default async function DestinationPage({
   const start      = (safePage - 1) * ITEMS_PER_PAGE
   const pageItems  = filtered.slice(start, start + ITEMS_PER_PAGE)
   const popularPills = dest.attractions.slice(0, 12).map(a => ({ label: a.name, slug: a.slug }))
+  // Batch 3 (flight-price scaffolding) — whichever published attraction
+  // has a nearestAirportIATA set stands in for the country's own gateway.
+  const destinationIATA = dest.attractions.find(a => a.nearestAirportIATA)?.nearestAirportIATA
 
   const jsonLd = [
     {
@@ -205,6 +209,27 @@ export default async function DestinationPage({
         startHereAttractions={dest.startHereAttractions}
         attractionImageUrl={attractionImageUrl}
       />
+
+      {/* Batch 3 (UX audit, 2026-09-06) — "Where to Stay" moved up from
+          the bottom of the page to right after the practical "Before You
+          Go" info, alongside the new flight-fare chip: a visitor deciding
+          whether/how to visit a country reaches lodging and flight cost
+          before they've scrolled through every individual attraction
+          card, not after. Only renders the cells that have real content —
+          no empty "Where to Stay" card when a country has no affiliate
+          links yet. */}
+      {(dest.affiliateLinks && dest.affiliateLinks.length > 0) || destinationIATA ? (
+        <div className="bg-cream dark-flip-bg">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-2 pb-10 grid sm:grid-cols-2 gap-6">
+            {dest.affiliateLinks && dest.affiliateLinks.length > 0 && (
+              <AffiliateLinkList links={dest.affiliateLinks} title={`Where to Stay in ${dest.name}`} />
+            )}
+            {destinationIATA && (
+              <FlightPriceChip destinationIATA={destinationIATA} destinationName={dest.name} />
+            )}
+          </div>
+        </div>
+      ) : null}
 
       {/* Attractions Grid */}
       <div className="bg-cream dark-flip-bg">
@@ -321,7 +346,6 @@ export default async function DestinationPage({
               carries, not hand-curated (Session 5.2). */}
           {((dest.upcomingEvents && dest.upcomingEvents.length > 0) ||
             (dest.relatedArticles && dest.relatedArticles.length > 0) ||
-            (dest.affiliateLinks && dest.affiliateLinks.length > 0) ||
             dest.tourismBoard) && (
             <div className="mt-16 pt-12 border-t border-line dark-flip-border grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {dest.upcomingEvents && dest.upcomingEvents.length > 0 && (
@@ -360,10 +384,6 @@ export default async function DestinationPage({
                     ))}
                   </div>
                 </div>
-              )}
-
-              {dest.affiliateLinks && dest.affiliateLinks.length > 0 && (
-                <AffiliateLinkList links={dest.affiliateLinks} title={`Where to Stay in ${dest.name}`} />
               )}
 
               {/* Session 5.3 — the real outreach mechanism: a tourism

@@ -236,6 +236,8 @@ export const ALL_ATTRACTIONS_QUERY = `
     "slug": slug.current,
     type,
     editorialSummary,
+    latitude,
+    longitude,
     "country": country->{ name, "slug": slug.current, countryCode },
     "city": city->{ name }
   }
@@ -428,6 +430,7 @@ export const DESTINATION_BY_SLUG_QUERY = `
     },
     "attractions": *[_type == "attraction" && references(^._id) && contentStatus == "Published"]{
       name, "slug": slug.current, type, continentRegion, editorialSummary, lastVerifiedDate,
+      nearestAirportIATA,
       "city": city->{ name }
     } | order(name asc),
     // Session 6.3 (WDOS Content Integrity gate, X-32 — every link resolves)
@@ -486,7 +489,14 @@ export const TRIP_PLANNER_COUNTRIES_QUERY = `
     // "small at this scale" reasoning as the comment above this query.
     "affiliateLinks": *[_type == "affiliateLink" && active != false && country._ref == ^._id]{
       label, partnerName, linkType, "slug": slug.current
-    }
+    },
+    // Batch 3 (flight-price scaffolding) — the destination side of a fare
+    // lookup. Whichever published attraction in this country has a
+    // nearestAirportIATA set first stands in for the country's own
+    // gateway airport; small at this scale, same reasoning as above.
+    "nearestAirportIATA": *[
+      _type == "attraction" && references(^._id) && contentStatus == "Published" && defined(nearestAirportIATA)
+    ][0].nearestAirportIATA
   }
 `
 

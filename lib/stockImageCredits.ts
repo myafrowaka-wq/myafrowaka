@@ -145,9 +145,20 @@ export const HERO_SAVANNA_POSTER = 'hero-savanna-poster'
 // key here predates the "-{country}" slug convention, so attractionStockImage()
 // silently fell through to the generic default photo below for every one
 // of these landmarks on their real, live pages. Renamed 8 keys to their
-// real Published slug. Djemaa el-Fna, Volcanoes National Park, Cape Point,
-// and Maasai Mara National Reserve stay under their working-title key —
-// each is Draft-only in Sanity, so there's no live slug yet to rename to.
+// real Published slug. Djemaa el-Fna, Volcanoes National Park, and Cape
+// Point stay under their working-title key — each is still Draft-only in
+// Sanity, so there's no live slug yet to rename to.
+//
+// Batch 2 (2026-09-06 UX audit) — 'maasai-mara-national-reserve' was the
+// same X-32 bug, gone stale a second time: this attraction has since been
+// Published under 'masai-mara-national-reserve-kenya' (single 'a', a
+// "-kenya" suffix, neither of which matches the old key), so the site's
+// single most-searched safari page was silently showing the generic
+// default the whole time. Renamed. Also added two real, verified-content
+// matches found while auditing every published attraction's image against
+// this map: Nairobi and Cairo were both showing the generic default (a
+// Tanzania savanna elephant) on a capital-city page — genuine mismatches,
+// now pointing at real, identifiable skyline photos of each city.
 export const ATTRACTION_IMAGE_IDS: Record<string, string> = {
   'pyramids-of-giza-egypt':                  '1736443830251-dda3cb6df76c',
   'serengeti-national-park-tanzania':        '1542729841-c5af4aed2152',
@@ -158,9 +169,37 @@ export const ATTRACTION_IMAGE_IDS: Record<string, string> = {
   'volcanoes-national-park-rwanda':    '1682773083896-95176d8aecf8',
   'cape-point-south-africa':           '1746876269545-c23ecff55722',
   'lalibela-rock-hewn-churches-ethiopia-att-0103': '1782283849015-df78517d4765',
-  'maasai-mara-national-reserve':      '1531872036218-4e8a6828e339',
+  'masai-mara-national-reserve-kenya': '1531872036218-4e8a6828e339',
   'stone-town-zanzibar-tanzania':            '1678042955980-c173f0460d0a',
   'ngorongoro-crater-tanzania':               '1635865897833-38bc0f8aee44',
+  'nairobi-kenya':                            '1741991110666-88115e724741',
+  'cairo-egypt':                              '1746310783422-16df7622e7c9',
+  // Genuinely the right building for the wrong Ghanaian city: this is
+  // Black Star Square / Independence Arch in Accra (verified by sight —
+  // the "BLACK STAR SQUA[RE]" lettering is legible on the arch itself),
+  // not Cape Coast Castle 150km away. Reused here for Accra's own page,
+  // which had the same generic-default mismatch; Cape Coast Castle stays
+  // unmapped rather than force a wrong match — it still needs its own
+  // real photo, flagged, not silently left showing a savanna photo
+  // (that part of the bug is now at least visible instead of hidden).
+  'accra-ghana':                              '1727023663928-1772e2c7e679',
+
+  // Batch 2 (2026-09-06) — real Lagos attractions added after the owner's
+  // Lagos trip-planner test found Nigeria had zero published attractions.
+  // No dedicated per-venue photography exists yet, so these reuse the two
+  // most Lagos-specific images already in the pool above: a Lagos Island
+  // skyline (the same one used for Nigeria's own country card) for the two
+  // Lagos-Island sites, and a Lagos mainland rooftop scene for the two
+  // Lekki-area sites. Genuinely mismatched defaults (a savanna photo on an
+  // art gallery page) would be worse than an honest reuse — see
+  // COUNTRY_IMAGE_IDS's own comment on the same tradeoff. Real interior/
+  // exterior photography for each venue is still a flagged gap, not
+  // resolved by this mapping.
+  'freedom-park-lagos-nigeria':               '1618828665011-0abd973f7bb8',
+  'national-museum-lagos-nigeria':            '1618828665011-0abd973f7bb8',
+  'nike-art-gallery-lagos-nigeria':           '1559833064-6f4573ec1ac9',
+  'lekki-conservation-centre-lagos-nigeria':  '1673624522244-8de0d50b8492',
+  'tarkwa-bay-beach-lagos-nigeria':           '1577455486223-089171b4572f',
 }
 
 /** Local, self-hosted cover image for an attraction slug (legacy placeholder pending real photography). */

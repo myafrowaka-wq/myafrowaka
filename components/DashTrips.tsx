@@ -57,6 +57,36 @@ export function DashTrips() {
 
   useEffect(() => { refresh() }, [])
 
+  // Batch 4 (collaboration, honestly scoped) — a shared trip has no
+  // owner/member push channel, so this is a plain 30s poll rather than
+  // real-time sync: cheap, no new infrastructure, and it means a member
+  // watching the dashboard while a co-traveller adds a suggestion or
+  // accepts an invite sees it within half a minute instead of needing a
+  // manual reload. Paused whenever the tab isn't visible so it doesn't
+  // poll in the background, and it refreshes immediately on return —
+  // covers the common case of switching back to a tab that's been open
+  // for a while. This is not the same thing as live co-editing (two
+  // people editing the same day's itinerary at the same moment can still
+  // momentarily overwrite each other) — a real CRDT/WebSocket sync layer
+  // is a materially bigger build than this batch scoped, and is flagged
+  // as a real, separate follow-on rather than silently left unbuilt.
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval> | null = null
+    function start() {
+      if (interval) return
+      interval = setInterval(() => { if (document.visibilityState === 'visible') refresh() }, 30_000)
+    }
+    function onVisibility() {
+      if (document.visibilityState === 'visible') refresh()
+    }
+    start()
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => {
+      if (interval) clearInterval(interval)
+      document.removeEventListener('visibilitychange', onVisibility)
+    }
+  }, [])
+
   async function deleteTrip(id: string) {
     setDeleting(id)
     const res = await fetch('/api/user/trips', {
