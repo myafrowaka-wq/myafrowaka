@@ -78,7 +78,12 @@ function CountryCard({ d }: { d: Country }) {
   )
 }
 
-const ARROW_BTN = 'w-10 h-10 rounded-full border border-line dark-flip-border bg-cream dark-flip-card flex items-center justify-center text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-line disabled:hover:text-charcoal/50 shrink-0'
+// Owner review (2026-09-06, third pass) — "very difficult to see": a
+// 50%-opacity icon on a 1px near-white border was too low-contrast for a
+// thin chevron stroke at this size. Full-opacity charcoal + a visibly
+// darker border fixes it without going full-black or losing the quiet,
+// editorial feel every other secondary control on the site has.
+const ARROW_BTN = 'w-10 h-10 rounded-full border-2 border-charcoal/35 dark-flip-border bg-cream dark-flip-card flex items-center justify-center text-charcoal dark-flip-text hover:bg-crimson hover:border-crimson hover:text-cream transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-cream disabled:hover:border-charcoal/35 disabled:hover:text-charcoal shrink-0'
 
 // User-controlled horizontal carousel — moves only in direct response to a
 // click, a touch swipe, or a keyboard arrow key while a card is focused

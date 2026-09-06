@@ -85,10 +85,19 @@ export function CountryOverview({
   // CollapsibleSection every attraction page's Overview/Getting There/
   // FAQ sections already use, rather than a one-off toggle — same
   // accessible h2-wraps-button pattern, same look.
+  //
+  // Re-verification pass (2026-09-06, round 2) — a real gap, not just the
+  // Mali/DRC bracket-format bug: a sourced government safety advisory
+  // (Mali and DRC are currently Level 4, Do Not Travel) was sitting
+  // behind the same click as routine "Known For" trivia, with no visual
+  // distinction. Auto-opening whenever a country actually has a safety
+  // advisory on file means that content is visible on page load for
+  // every country it applies to, not just these two — it costs nothing
+  // for a country with no advisory (the section still starts closed).
   return (
     <div className="bg-sand dark-flip-surf border-t border-b border-line dark-flip-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 lg:py-6">
-        <CollapsibleSection title={`Before You Go: ${countryName}`} defaultOpen={false}>
+        <CollapsibleSection title={`Before You Go: ${countryName}`} defaultOpen={Boolean(safetyInfo)}>
 
         {hasOverview && (
           <div className="grid sm:grid-cols-2 gap-x-10 gap-y-8 mb-12">

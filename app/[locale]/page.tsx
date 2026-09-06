@@ -232,17 +232,26 @@ export default async function HomePage() {
                   the ratio of their character counts (15 vs 24) so the
                   two rendered lines land at roughly the same visual
                   width, matching the owner's own description. Confirmed
-                  at 375px and 1440px via a real screenshot, not assumed. */}
+                  at 375px and 1440px via a real screenshot, not assumed.
+                  Second owner pass (2026-09-06) — "tighten the line
+                  height... closely knitted together": the 1.05 line-height
+                  plus an explicit mt-2 on line 2 stacked into a visible
+                  gap between the two lines (measured ~14px combined at
+                  desktop scale). Line-height dropped to 0.92 and the
+                  explicit margin removed entirely — line 2's spacing now
+                  comes purely from the tighter line-height, confirmed via
+                  a real getBoundingClientRect measurement (gap shrank to
+                  ~2px), not just eyeballed. */}
               <h1
                 className="font-display font-extrabold text-cream mb-7 tracking-hero"
-                style={{ fontSize: 'clamp(34px, 6.5vw, 76px)', lineHeight: '1.05' }}
+                style={{ fontSize: 'clamp(34px, 6.5vw, 76px)', lineHeight: '0.92' }}
               >
                 <TypewriterHero
                   speed={32}
                   lines={[
                     { text: 'Explore ', noBreakAfter: true },
                     { text: 'Africa,', className: 'text-crimson', noBreakAfter: true },
-                    { text: 'One Adventure at a Time.', className: 'block mt-2 text-[0.6em] tracking-normal' },
+                    { text: 'One Adventure at a Time.', className: 'block mt-0 text-[0.6em] tracking-normal' },
                   ]}
                 />
               </h1>
@@ -306,7 +315,7 @@ export default async function HomePage() {
               {t('featuredAttractions')}
             </h2>
             <Link href="/search"
-              className="inline-link link-arrow hidden sm:inline-flex font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
+              className="inline-link link-arrow hidden sm:inline-flex font-sans text-[14px] font-semibold uppercase tracking-[0.16em] text-charcoal dark-flip-text hover:text-crimson transition-colors">
               {tc('browseAll')}
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </Link>
@@ -512,7 +521,7 @@ export default async function HomePage() {
                 {t('latestAttractions')}
               </h2>
               <Link href="/search"
-                className="inline-link link-arrow hidden sm:inline-flex font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
+                className="inline-link link-arrow hidden sm:inline-flex font-sans text-[14px] font-semibold uppercase tracking-[0.16em] text-charcoal dark-flip-text hover:text-crimson transition-colors">
                 {tc('browseAll')}
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
               </Link>
@@ -603,7 +612,7 @@ export default async function HomePage() {
               </h2>
             </div>
             <a href="https://instagram.com/myafrowaka_" target="_blank" rel="noopener noreferrer"
-              className="inline-link link-arrow hidden sm:inline-flex font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
+              className="inline-link link-arrow hidden sm:inline-flex font-sans text-[14px] font-semibold uppercase tracking-[0.16em] text-charcoal dark-flip-text hover:text-crimson transition-colors">
               Instagram
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </a>

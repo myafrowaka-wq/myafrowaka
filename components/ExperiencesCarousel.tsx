@@ -42,7 +42,10 @@ function ExperienceCard({ e }: { e: (typeof EXPERIENCES)[number] }) {
   )
 }
 
-const ARROW_BTN = 'w-10 h-10 rounded-full border border-line dark-flip-border bg-cream dark-flip-card flex items-center justify-center text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-line disabled:hover:text-charcoal/50 shrink-0'
+// Owner review (2026-09-06, third pass) — same low-contrast arrow fix as
+// DestinationsGrid.tsx's identical constant: full-opacity icon, a
+// visibly darker border, and a filled crimson hover state.
+const ARROW_BTN = 'w-10 h-10 rounded-full border-2 border-charcoal/35 dark-flip-border bg-cream dark-flip-card flex items-center justify-center text-charcoal dark-flip-text hover:bg-crimson hover:border-crimson hover:text-cream transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-cream disabled:hover:border-charcoal/35 disabled:hover:text-charcoal shrink-0'
 
 // Owner review (2026-09-06) — was two separate static grids (a 2-col
 // mobile grid and a fixed 6-col desktop grid, both showing every item at
