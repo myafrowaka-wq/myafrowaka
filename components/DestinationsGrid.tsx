@@ -44,16 +44,25 @@ function CountryCard({ d }: { d: Country }) {
   return (
     <Link
       href={`/destinations/${d.slug}`}
-      className="card-zoom group relative rounded-2xl overflow-hidden shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500 block shrink-0"
+      // Owner review (2026-09-06) — the flat colour-tint overlay
+      // (d.color background + mix-blend-multiply + 60% opacity) is gone:
+      // plain photography now, per direct feedback. Dropped .card-zoom's
+      // hover-triggered scale(1.06) too, since it targets the same
+      // `transform` property as the new continuous ambient zoom below —
+      // running both would fight each other on hover. overflow-hidden
+      // stays local so the zoomed image never spills past the card's
+      // rounded corners.
+      className="group relative rounded-2xl overflow-hidden shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500 block shrink-0"
       style={{ aspectRatio: '3/4', width: 'clamp(140px, 30vw, 220px)', scrollSnapAlign: 'start' }}
     >
-      <div className="absolute inset-0" style={{ backgroundColor: d.color }}/>
       {/* Session 6.3 — image-redundant-alt: d.name is a visible heading in this same card below. */}
       <Image src={d.image} alt="" fill
         sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 17vw"
-        className="object-cover img-editorial mix-blend-multiply opacity-60 img-inner"
+        className="object-cover img-editorial img-slow-zoom"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-transparent"/>
+      {/* Kept, lighter: the flag + country name below still need real
+          contrast against a busy photo — this is legibility, not a tint. */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"/>
       <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
         <p className="font-sans text-[14px] lg:text-[14px] uppercase tracking-[0.12em] text-cream/55 mb-1 flex items-center gap-1.5">
           <Flag code={d.code} />
@@ -78,7 +87,7 @@ const ARROW_BTN = 'w-10 h-10 rounded-full border border-line dark-flip-border bg
 // The previous version of this section (Session 1.3) was a static grid with
 // no carousel at all; before that, a CSS marquee + an auto-advancing mobile
 // slider, both deleted as banned AI-site motion (M-05, M-09).
-export function DestinationsGrid() {
+export function DestinationsGrid({ heading }: { heading: string }) {
   const trackRef = useRef<HTMLDivElement>(null)
   const [atStart, setAtStart] = useState(true)
   const [atEnd, setAtEnd]     = useState(false)
@@ -110,6 +119,40 @@ export function DestinationsGrid() {
 
   return (
     <div className="relative">
+      {/* Owner review (2026-09-06) — the arrow row used to sit BELOW the
+          card track (its own mt-4 row), which was the real source of the
+          extra whitespace the owner flagged above this section: two
+          stacked gaps (heading→cards, cards→arrows) plus the "All
+          Destinations" button's own mt-10, none of which needed to be
+          three separate gaps. The heading now owns this row and the
+          arrows move up beside it, matching every other carousel-header
+          pattern on the site (Featured Attractions, Explore by
+          Experience). */}
+      <div className="flex items-center justify-between gap-4 mb-9">
+        <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
+          style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
+          {heading}
+        </h2>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            type="button" onClick={() => scrollByPage(-1)} disabled={atStart}
+            aria-label="Previous destinations" className={ARROW_BTN}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <button
+            type="button" onClick={() => scrollByPage(1)} disabled={atEnd}
+            aria-label="Next destinations" className={ARROW_BTN}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
       <div
         ref={trackRef}
         role="region"
@@ -120,25 +163,6 @@ export function DestinationsGrid() {
         {ALL_COUNTRIES.map(d => (
           <CountryCard key={d.slug} d={d} />
         ))}
-      </div>
-
-      <div className="flex items-center justify-end gap-2 mt-4">
-        <button
-          type="button" onClick={() => scrollByPage(-1)} disabled={atStart}
-          aria-label="Previous destinations" className={ARROW_BTN}
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
-          </svg>
-        </button>
-        <button
-          type="button" onClick={() => scrollByPage(1)} disabled={atEnd}
-          aria-label="Next destinations" className={ARROW_BTN}
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
-          </svg>
-        </button>
       </div>
     </div>
   )

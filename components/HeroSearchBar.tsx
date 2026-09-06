@@ -41,7 +41,7 @@ export function HeroSearchBar() {
           ariaLabel="Search attractions and countries"
         />
         <button type="submit"
-          className="m-1.5 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] px-5 py-3 rounded-xl transition-all">
+          className="shrink-0 m-1.5 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.10em] px-5 py-3 rounded-xl transition-all">
           Search
         </button>
       </div>

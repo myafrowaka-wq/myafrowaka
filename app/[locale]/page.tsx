@@ -1,7 +1,7 @@
 ﻿import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { client } from '@/sanity/lib/client'
-import { EditorialSlider } from '@/components/EditorialSlider'
+import { EditorialSlider, type EditorialSlide } from '@/components/EditorialSlider'
 import { TypewriterHero } from '@/components/TypewriterHero'
 import { PlanTripCard } from '@/components/PlanTripCard'
 import { HeroSearchBar } from '@/components/HeroSearchBar'
@@ -9,8 +9,11 @@ import { HeroBackgroundMedia } from '@/components/HeroBackgroundMedia'
 import { DestinationsGrid } from '@/components/DestinationsGrid'
 import { PopularPills } from '@/components/PopularPills'
 import { ExperiencesCarousel } from '@/components/ExperiencesCarousel'
+import { Flag } from '@/components/Flag'
 import { FALLBACK_POSTS } from '@/lib/fallbackPosts'
 import { stockImage, attractionStockImage, blogStockImage, HERO_VIDEO_CREDIT } from '@/lib/stockImageCredits'
+import { ALL_POSTS_QUERY } from '@/sanity/lib/queries'
+import { dailyShuffle } from '@/lib/dailyRandom'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { hreflangAlternates } from '@/lib/hreflang'
@@ -45,41 +48,35 @@ const HOME_JSON_LD = [
   },
 ]
 
+// Owner review (2026-09-06) — both queries used to slice to the exact
+// count the section renders (top 8 / top 4 by recency), so the homepage
+// showed the same attractions to every visitor, forever, until something
+// new got published. Widened to a real pool; app/[locale]/page.tsx now
+// draws a same-day-stable random sample from each via lib/dailyRandom.ts
+// instead of just taking the query's own order.
 const FEATURED_QUERY = `
-  *[_type == "attraction" && contentStatus == "Published"] | order(_updatedAt desc)[0..7]{
+  *[_type == "attraction" && contentStatus == "Published"] | order(_updatedAt desc)[0..39]{
     name, "slug": slug.current, type, continentRegion, editorialSummary,
-    "country": country->{ name, "slug": slug.current }
+    "country": country->{ name, "slug": slug.current, countryCode }
   }
 `
 const GUIDES_QUERY = `
   *[_type == "attraction" && contentStatus == "Published" && defined(articleBody) && length(articleBody) > 0]
-  | order(_updatedAt desc)[0..3]{
+  | order(_updatedAt desc)[0..19]{
     name, "slug": slug.current, editorialSummary, continentRegion, type, _updatedAt,
-    "country": country->{ name, "slug": slug.current }
+    "country": country->{ name, "slug": slug.current, countryCode }
   }
 `
 const POPULAR_QUERY = `*[_type == "attraction" && contentStatus == "Published"][0..29]{ name, "slug": slug.current }`
-const LATEST_POSTS_QUERY = `
-  *[_type == "post" && contentStatus == "Published"] | order(publishedAt desc)[0..2]{
-    title, "slug": slug.current, publishedAt, excerpt, category, tags,
-    "author": author->{ name }
-  }
-`
 
 type GuideItem = {
   name: string; slug: string; continentRegion: string
-  editorialSummary: string; image: string; country: string
+  editorialSummary: string; image: string; country: string; countryCode?: string
 }
-type AttrItem = { slug: string; name: string; editorialSummary?: string; continentRegion?: string; country?: { name: string } }
-
-const EXPERIENCES = [
-  { label: 'Safari',    slug: 'safari',  desc: 'The Big Five and beyond',               image: stockImage('1741850820849-1b63a5911606')  },
-  { label: 'Culture',   slug: 'culture', desc: 'Living traditions across the continent', image: stockImage('1597212618440-806262de4f6b')  },
-  { label: 'Beach',     slug: 'beach',   desc: 'Indian Ocean and Atlantic shores',       image: stockImage('1577455486223-089171b4572f')  },
-  { label: 'History',   slug: 'history', desc: 'Ancient kingdoms and World Heritage',    image: stockImage('1640005438758-861043e64aa5')  },
-  { label: 'Hiking',    slug: 'hiking',  desc: 'Trails from Simien to Table Mountain',   image: stockImage('1563985336376-568060942b80')  },
-  { label: 'Food',      slug: 'food',    desc: 'Tagines, jollof, nyama choma',           image: stockImage('1664992960082-0ea299a9c53e')  },
-]
+type AttrItem = {
+  slug: string; name: string; editorialSummary?: string; continentRegion?: string
+  type?: string[]; country?: { name: string; countryCode?: string }
+}
 
 // Session 6.3 (WDOS Content Integrity gate, X-32 — every link resolves) —
 // real bug, found by crawling the homepage's own rendered links: all 4
@@ -91,25 +88,25 @@ const EXPERIENCES = [
 const FALLBACK_GUIDES: GuideItem[] = [
   {
     name: 'Pyramids of Giza: The Complete Travel Guide',
-    slug: 'pyramids-of-giza-egypt', continentRegion: 'North Africa', country: 'Egypt',
+    slug: 'pyramids-of-giza-egypt', continentRegion: 'North Africa', country: 'Egypt', countryCode: 'eg',
     editorialSummary: 'The last surviving Wonder of the Ancient World, standing on the Giza Plateau outside Cairo. Everything you need to know before you visit.',
     image: stockImage('1736443830251-dda3cb6df76c'),
   },
   {
     name: 'Bwindi Impenetrable Forest: Mountain Gorilla Encounter',
-    slug: 'bwindi-impenetrable-forest-uganda', continentRegion: 'East Africa', country: 'Uganda',
+    slug: 'bwindi-impenetrable-forest-uganda', continentRegion: 'East Africa', country: 'Uganda', countryCode: 'ug',
     editorialSummary: 'Home to half the world mountain gorilla population, Bwindi covers 321 square kilometres of southwestern Uganda.',
     image: stockImage('1673624522244-8de0d50b8492'),
   },
   {
     name: 'Table Mountain: Everything You Need to Know',
-    slug: 'table-mountain-south-africa', continentRegion: 'Southern Africa', country: 'South Africa',
+    slug: 'table-mountain-south-africa', continentRegion: 'Southern Africa', country: 'South Africa', countryCode: 'za',
     editorialSummary: 'Cape Town iconic flat-topped summit rises 1,085 metres above sea level and harbours more plant species than the entire United Kingdom.',
     image: stockImage('1746876269545-c23ecff55722'),
   },
   {
     name: 'Serengeti National Park: The Migration Guide',
-    slug: 'serengeti-national-park-tanzania', continentRegion: 'East Africa', country: 'Tanzania',
+    slug: 'serengeti-national-park-tanzania', continentRegion: 'East Africa', country: 'Tanzania', countryCode: 'tz',
     editorialSummary: 'The Great Migration moves 1.5 million wildebeest and 250,000 zebras in a continuous annual circuit across Tanzania and Kenya.',
     image: stockImage('1542729841-c5af4aed2152'),
   },
@@ -123,26 +120,51 @@ const GALLERY_IDS = ['hero-savanna-poster', '1760681554227-d7aad73cd57f', '15442
 const attractionImageUrl = attractionStockImage
 
 export default async function HomePage() {
-  const [t, tc, [featured, guides, popularRaw, latestPosts]] = await Promise.all([
+  const [t, tc, [featuredRaw, guidesRaw, popularRaw, allPosts]] = await Promise.all([
     getTranslations('home'),
     getTranslations('common'),
     Promise.all([
       client.fetch(FEATURED_QUERY).catch(() => []),
       client.fetch(GUIDES_QUERY).catch(() => []),
       client.fetch<{ name: string; slug: string }[]>(POPULAR_QUERY).catch(() => []),
-      client.fetch<typeof FALLBACK_POSTS>(LATEST_POSTS_QUERY).catch(() => []),
+      client.fetch<typeof FALLBACK_POSTS>(ALL_POSTS_QUERY).catch(() => []),
     ]),
   ])
 
-  const displayPosts = latestPosts.length > 0 ? latestPosts : FALLBACK_POSTS.slice(0, 3)
+  // Owner review (2026-09-06) — "if I come to the site tomorrow, it
+  // should not show me the same list." Each of these queries now fetches
+  // a real pool (up to 40 attractions, 20 guides, every published post)
+  // instead of exactly the count the section renders; dailyShuffle
+  // (lib/dailyRandom.ts) picks a same-day-stable random sample from each,
+  // with a different salt per pool so featured/guides/editorial/journal
+  // don't all land on a correlated order from the same day-seed.
+  const featured = dailyShuffle(featuredRaw as AttrItem[], 1)
+  const guides = dailyShuffle(guidesRaw as {
+    name: string; slug: string; continentRegion: string; editorialSummary: string; country?: { name: string; countryCode?: string }
+  }[], 2)
+
+  const postsPool = allPosts.length > 0 ? allPosts : FALLBACK_POSTS
+  const shuffledPosts = dailyShuffle(postsPool, 3)
+  const editorialCount = Math.min(4, shuffledPosts.length)
+  const editorialPosts = shuffledPosts.slice(0, editorialCount)
+  const remainingPosts = shuffledPosts.slice(editorialCount)
+  const displayPosts = (remainingPosts.length >= 3 ? remainingPosts : shuffledPosts).slice(0, 3)
+
+  const editorialSlides: EditorialSlide[] = editorialPosts.map(p => ({
+    headline: p.title,
+    body: p.excerpt ?? '',
+    slug: p.slug,
+    img: blogStockImage(p.slug),
+    category: p.category,
+  }))
 
   const popularAttractions = popularRaw.map((a: { name: string; slug: string }) => ({ label: a.name, slug: a.slug }))
 
   const displayGuides: GuideItem[] = guides.length > 0
     ? guides.slice(0, 4).map(
-        (g: { name: string; slug: string; continentRegion: string; editorialSummary: string; country?: { name: string } }, i: number): GuideItem => ({
+        (g: { name: string; slug: string; continentRegion: string; editorialSummary: string; country?: { name: string; countryCode?: string } }, i: number): GuideItem => ({
           name: g.name, slug: g.slug, continentRegion: g.continentRegion, editorialSummary: g.editorialSummary,
-          image: FALLBACK_GUIDES[i % 4].image, country: g.country?.name ?? 'Africa',
+          image: FALLBACK_GUIDES[i % 4].image, country: g.country?.name ?? 'Africa', countryCode: g.country?.countryCode,
         })
       )
     : FALLBACK_GUIDES
@@ -188,25 +210,39 @@ export default async function HomePage() {
               sibling that has nothing to do with it. */}
           <div className="grid lg:grid-cols-7 gap-10 lg:gap-16 items-start">
 
-            <div className="lg:col-span-4">
-              {/* Headline — 2 lines on desktop AND mobile */}
+            {/* min-w-0: real bug found by owner review — this grid item was
+                blowing out past its own track on mobile (384px content in
+                a 341px column, no scrollbar since the section clips
+                overflow, so it just silently cut off the search bar's
+                right edge) because a CSS Grid item's default min-width is
+                "auto" — it won't shrink below its content's natural width
+                unless told to. HeroSearchBar's own form (max-w-lg) was
+                that content. Confirmed via getBoundingClientRect before
+                and after, not assumed. */}
+            <div className="lg:col-span-4 min-w-0">
+              {/* Headline — exactly 2 lines on both mobile and desktop.
+                  Owner review (2026-09-06): the earlier "2x bigger" pass
+                  put both lines at ONE uniform size, which made "Explore
+                  Africa," alone wrap across 2 lines at typical viewport
+                  widths (4 lines total, not 2) — a single clamp() on the
+                  <h1> can't give each line its own size. Fixed by moving
+                  size onto each TypewriterHero line instead: "Explore
+                  Africa," stays large (line 1), "One Adventure at a
+                  Time." drops to ~63% of that size (line 2) — close to
+                  the ratio of their character counts (15 vs 24) so the
+                  two rendered lines land at roughly the same visual
+                  width, matching the owner's own description. Confirmed
+                  at 375px and 1440px via a real screenshot, not assumed. */}
               <h1
                 className="font-display font-extrabold text-cream mb-7 tracking-hero"
-                // "2x bigger" per the owner's request — but a flat 2x on
-                // every clamp() value (previously 46/4.2vw/64) also doubled
-                // the MOBILE floor to 92px, which broke small screens (a
-                // single word barely fit). Keeping the mobile-safe floor
-                // and only scaling the vw term + desktop ceiling gets the
-                // requested ~2x at desktop widths this was asked about
-                // without breaking 375px — confirmed in both sizes below.
-                style={{ fontSize: 'clamp(40px, 9vw, 128px)', lineHeight: '0.94' }}
+                style={{ fontSize: 'clamp(34px, 6.5vw, 76px)', lineHeight: '1.05' }}
               >
                 <TypewriterHero
                   speed={32}
                   lines={[
                     { text: 'Explore ', noBreakAfter: true },
-                    { text: 'Africa,', className: 'text-crimson' },
-                    { text: ' One Adventure at a Time.' },
+                    { text: 'Africa,', className: 'text-crimson', noBreakAfter: true },
+                    { text: 'One Adventure at a Time.', className: 'block mt-2 text-[0.6em] tracking-normal' },
                   ]}
                 />
               </h1>
@@ -234,19 +270,20 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ══ DESTINATIONS — 6 random countries, 1 row desktop, 2 col mobile ════ */}
-      <section className="py-14 lg:py-20 bg-cream dark-flip-bg">
+      {/* ══ DESTINATIONS — 6 random countries, 1 row desktop, 2 col mobile ════
+          Owner review (2026-09-06) — top padding intentionally smaller
+          than the bottom: the gap above this section's own heading
+          should read tighter than the gap between the cards and the
+          "All Destinations" button below them, per direct feedback.
+          Confirmed both gaps via a real screenshot after this change. */}
+      <section className="pt-8 lg:pt-12 pb-14 lg:pb-20 bg-cream dark-flip-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-          <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial mb-9"
-            style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
-            {t('whereNext')}
-          </h2>
+          {/* Heading + arrows now render together inside DestinationsGrid
+              — see that component's own comment on why. */}
+          <DestinationsGrid heading={t('whereNext')} />
 
-          {/* Client component handles random selection on each load */}
-          <DestinationsGrid />
-
-          <div className="mt-10 flex justify-center">
+          <div className="mt-10 lg:mt-12 flex justify-center">
             <Link href="/attractions"
               className="inline-flex items-center gap-2.5 bg-action hover:bg-action-hover text-cream font-display font-bold text-[14px] uppercase tracking-[0.12em] px-10 py-4 rounded-full transition-all shadow-[0_4px_24px_rgba(180,30,30,0.28)] hover:shadow-[0_8px_36px_rgba(180,30,30,0.38)]">
               {t('allDestinations')}
@@ -257,7 +294,7 @@ export default async function HomePage() {
       </section>
 
       {/* ══ EDITORIAL SPOTLIGHT ════════════════════════════════════════════════ */}
-      <EditorialSlider />
+      <EditorialSlider slides={editorialSlides} />
 
       {/* ══ FEATURED ATTRACTIONS (was: Latest Travel Guides) ══════════════════ */}
       <section className="py-14 lg:py-20 bg-sand dark-flip-surf" id="guides">
@@ -277,16 +314,23 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
 
-            {/* Card 1: Tall photo-first */}
+            {/* Card 1: Tall photo-first.
+                Owner review (2026-09-06) — added the flag (real visual
+                recognition, not just a text label — matches the pattern
+                already used in DestinationsGrid/Nav/CountryOverview) and
+                the hover lift the other 3 cards already had; this one had
+                been left with a shadow-only hover, an inconsistency
+                nobody had actually caught by looking at all 4 side by side. */}
             <Link href={`/attractions/${displayGuides[0].slug}`}
-              className="card-zoom group relative rounded-3xl overflow-hidden lg:row-span-2 min-h-[400px] lg:min-h-[580px] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500 flex flex-col">
+              className="card-zoom group relative rounded-3xl overflow-hidden lg:row-span-2 min-h-[400px] lg:min-h-[580px] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300 flex flex-col">
               {/* Session 6.3 — image-redundant-alt: the guide's name is a visible heading in this same card below. */}
               <Image src={displayGuides[0].image} alt="" fill
                 sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw"
                 className="object-cover img-editorial img-inner"/>
               <div className="absolute inset-0 bg-gradient-to-t from-ink/97 via-ink/50 to-transparent"/>
               <div className="relative mt-auto p-7 lg:p-8">
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-2 mb-3">
+                  {displayGuides[0].countryCode && <Flag code={displayGuides[0].countryCode} />}
                   <span className="font-display font-bold text-[14px] uppercase tracking-[0.12em] text-gold-400">{displayGuides[0].country}</span>
                 </div>
                 <h3 className="font-display font-bold text-xl sm:text-2xl text-cream group-hover:text-gold-300 transition-colors leading-snug mb-3"
@@ -313,7 +357,8 @@ export default async function HomePage() {
                     className="object-cover img-editorial img-inner"/>
                 </div>
                 <div className="p-6 flex flex-col flex-1">
-                  <div className="flex items-center gap-2.5 mb-3">
+                  <div className="flex items-center gap-2 mb-3">
+                    {g.countryCode && <Flag code={g.countryCode} />}
                     <span className="font-display font-bold text-[14px] uppercase tracking-[0.12em] text-crimson">{g.country}</span>
                   </div>
                   <h3 className="font-display font-bold text-lg text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-2 flex-1"
@@ -342,7 +387,8 @@ export default async function HomePage() {
                   className="object-cover img-editorial img-inner"/>
               </div>
               <div className="p-7 lg:p-8 flex flex-col justify-center flex-1">
-                <div className="flex items-center gap-2.5 mb-3">
+                <div className="flex items-center gap-2 mb-3">
+                  {displayGuides[3].countryCode && <Flag code={displayGuides[3].countryCode} />}
                   <span className="font-display font-bold text-[14px] uppercase tracking-[0.12em] text-crimson">{displayGuides[3].country}</span>
                 </div>
                 <h3 className="font-display font-bold text-xl sm:text-2xl text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-3"
@@ -373,91 +419,14 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ══ EXPLORE BY EXPERIENCE — 1 row 6 cols desktop, 2 col mobile ════════ */}
+      {/* ══ EXPLORE BY EXPERIENCE — 10-item carousel, heading + arrows on
+          one row (owner review, 2026-09-06 — see that component's own
+          comment) ═══════════════════════════════════════════════════ */}
       <section className="py-14 lg:py-20 bg-cream dark-flip-bg" id="experiences">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-
-          <div className="flex items-end justify-between mb-9">
-            <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
-              style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
-              {t('exploreByExperience')}
-            </h2>
-          </div>
-
-          <ExperiencesCarousel />
+          <ExperiencesCarousel heading={t('exploreByExperience')} />
         </div>
       </section>
-
-      {/* ══ LATEST TRAVEL ATTRACTIONS (was: Featured Attractions) ════════════════ */}
-      {(featured as AttrItem[]).length > 0 && (
-        <section className="py-14 lg:py-20 bg-sand dark-flip-surf">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-
-            <div className="flex items-end justify-between mb-9">
-              <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
-                style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
-                {t('latestAttractions')}
-              </h2>
-              <Link href="/search"
-                className="inline-link link-arrow hidden sm:inline-flex font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
-                {tc('browseAll')}
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-              </Link>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
-              {(featured as AttrItem[]).slice(0, 8).map((a) => (
-                <Link key={a.slug} href={`/attractions/${a.slug}`}
-                  className="card-zoom group relative rounded-2xl overflow-hidden aspect-[4/5] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-shadow duration-500">
-                  {/* Session 6.3 — image-redundant-alt: a.name is a visible heading in this same card below. */}
-                  <Image
-                    src={attractionImageUrl(a.slug)}
-                    alt="" fill
-                    sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,25vw"
-                    className="object-cover img-editorial img-inner"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/97 via-ink/35 to-transparent"/>
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <h3 className="font-display font-bold text-base text-cream group-hover:text-gold-300 transition-colors leading-tight mb-1"
-                      style={{ letterSpacing: '-0.015em' }}>
-                      {a.name}
-                    </h3>
-                    {a.editorialSummary && (
-                      <p className="font-sans text-[14px] text-cream/70 leading-snug line-clamp-2 mt-1">{a.editorialSummary}</p>
-                    )}
-                    {a.country?.name && (
-                      <p className="font-sans text-[14px] text-cream/60 mt-2">{a.country.name}</p>
-                    )}
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            <div className="mt-12 flex items-center justify-center gap-2">
-              <button disabled aria-label="Previous page"
-                className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/65 disabled:opacity-40">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
-              </button>
-              {[1, 2, 3, 4, 5].map(n => (
-                <Link key={n} href={n === 1 ? '/search' : `/search?page=${n}`}
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-display font-semibold text-[14px] transition-all
-                    ${n === 1 ? 'bg-ink text-cream shadow-[var(--shadow-soft)]' : 'border border-line dark-flip-border text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson'}`}>
-                  {n}
-                </Link>
-              ))}
-              <span className="font-sans text-[14px] text-charcoal/65 px-1">...</span>
-              <Link href="/search?page=9"
-                className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center font-display font-semibold text-[14px] text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson transition-all">
-                9
-              </Link>
-              <Link href="/search?page=2" aria-label="Next page"
-                className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/50 dark-flip-muted hover:text-crimson hover:border-crimson transition-all">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/></svg>
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* ══ FROM THE JOURNAL ════════════════════════════════════════════════════ */}
       <section className="py-14 lg:py-20 bg-sand dark-flip-surf border-t border-line dark-flip-border">
@@ -531,6 +500,96 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ══ LATEST TRAVEL ATTRACTIONS (was: Featured Attractions) ════════════════ */}
+      {(featured as AttrItem[]).length > 0 && (
+        <section className="py-14 lg:py-20 bg-sand dark-flip-surf">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+
+            <div className="flex items-end justify-between mb-9">
+              <h2 className="font-display font-bold text-charcoal dark-flip-text tracking-editorial"
+                style={{ fontSize: 'clamp(22px, 2.8vw, 38px)', lineHeight: '1.0' }}>
+                {t('latestAttractions')}
+              </h2>
+              <Link href="/search"
+                className="inline-link link-arrow hidden sm:inline-flex font-sans text-[14px] uppercase tracking-[0.16em] text-charcoal/55 dark-flip-muted hover:text-crimson transition-colors">
+                {tc('browseAll')}
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+              </Link>
+            </div>
+
+            {/* Owner review (2026-09-06) — real improvements, not just a
+                shadow change: a hover lift to match every other card grid
+                on the page (this one had shadow-only, so it visually
+                "did less" than its neighbours), a type badge (National
+                Park / UNESCO Site / etc. — real data already in `a.type`,
+                just never surfaced here) so a card says something before
+                you click it, and the country flag for the same reason
+                the Featured Attractions cards above got one. */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+              {(featured as AttrItem[]).slice(0, 8).map((a) => {
+                const typeLabel = a.type?.[0]?.replace('UNESCO World Heritage Site | ', '')
+                return (
+                  <Link key={a.slug} href={`/attractions/${a.slug}`}
+                    className="card-zoom group relative rounded-2xl overflow-hidden aspect-[4/5] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
+                    {/* Session 6.3 — image-redundant-alt: a.name is a visible heading in this same card below. */}
+                    <Image
+                      src={attractionImageUrl(a.slug)}
+                      alt="" fill
+                      sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,25vw"
+                      className="object-cover img-editorial img-inner"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink/97 via-ink/35 to-transparent"/>
+                    {typeLabel && (
+                      <span className="absolute top-3 left-3 bg-ink/70 backdrop-blur font-sans text-[14px] uppercase tracking-[0.1em] text-cream/90 px-2.5 py-1 rounded-full">
+                        {typeLabel}
+                      </span>
+                    )}
+                    <div className="absolute bottom-0 left-0 right-0 p-5">
+                      <h3 className="font-display font-bold text-base text-cream group-hover:text-gold-300 transition-colors leading-tight mb-1"
+                        style={{ letterSpacing: '-0.015em' }}>
+                        {a.name}
+                      </h3>
+                      {a.editorialSummary && (
+                        <p className="font-sans text-[14px] text-cream/70 leading-snug line-clamp-2 mt-1">{a.editorialSummary}</p>
+                      )}
+                      {a.country?.name && (
+                        <p className="font-sans text-[14px] text-cream/60 mt-2 flex items-center gap-1.5">
+                          {a.country.countryCode && <Flag code={a.country.countryCode} />}
+                          {a.country.name}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+
+            <div className="mt-12 flex items-center justify-center gap-2">
+              <button disabled aria-label="Previous page"
+                className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/65 disabled:opacity-40">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
+              </button>
+              {[1, 2, 3, 4, 5].map(n => (
+                <Link key={n} href={n === 1 ? '/search' : `/search?page=${n}`}
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-display font-semibold text-[14px] transition-all
+                    ${n === 1 ? 'bg-ink text-cream shadow-[var(--shadow-soft)]' : 'border border-line dark-flip-border text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson'}`}>
+                  {n}
+                </Link>
+              ))}
+              <span className="font-sans text-[14px] text-charcoal/65 px-1">...</span>
+              <Link href="/search?page=9"
+                className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center font-display font-semibold text-[14px] text-charcoal/50 dark-flip-muted hover:border-crimson hover:text-crimson transition-all">
+                9
+              </Link>
+              <Link href="/search?page=2" aria-label="Next page"
+                className="w-10 h-10 rounded-xl border border-line dark-flip-border flex items-center justify-center text-charcoal/50 dark-flip-muted hover:text-crimson hover:border-crimson transition-all">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/></svg>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ══ INSTAGRAM GALLERY ══════════════════════════════════════════════════ */}
       <section className="py-24 lg:py-28 bg-cream dark-flip-bg">

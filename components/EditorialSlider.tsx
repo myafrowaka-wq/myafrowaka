@@ -1,80 +1,66 @@
-﻿'use client'
+'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
-import { stockImage } from '@/lib/stockImageCredits'
 
-const SLIDES = [
-  {
-    tag:      'Nigeria',
-    tagSlug:  'nigeria',
-    // Session 6.3 (WDOS Content Integrity gate, X-32 — every link
-    // resolves) — real bug: /destinations/nigeria 404s (zero published
-    // attractions, no country overview yet — confirmed live), so
-    // "Explore Nigeria" below would have 404'd on every rotation this
-    // slide comes up. Points at the West Africa region page instead:
-    // real, working, and still genuinely relevant to a Lagos story.
-    destinationHref: '/destinations/regions/west-africa',
-    headline: 'What Lagos Rush Hour Teaches You About African City Life.',
-    body:     'Five million journeys a day. The danfo, the okada, the man selling credit through your car window. Lagos traffic is not dysfunction. It is an improvised system that works.',
-    slug:     'lagos-rush-hour-city-life',
-    img:      stockImage('1618828665011-0abd973f7bb8'),
-  },
-  {
-    tag:      'Ghana',
-    tagSlug:  'ghana',
-    headline: 'Kumasi Central Market: The Heartbeat of West African Trade.',
-    body:     'Kejetia market in Kumasi is one of the largest open-air markets in West Africa. Kente cloth, spices, secondhand goods, live poultry. Every aisle tells a different story.',
-    slug:     'kumasi-central-market-west-africa',
-    img:      stockImage('1776153380872-108ba14dc63d'),
-  },
-  {
-    tag:      'Rwanda',
-    tagSlug:  'rwanda',
-    headline: 'Slow Travel in Rwanda: The Country That Made You Stop Rushing.',
-    body:     'Rwanda rewards patience. The rolling hills, the mist over Lake Kivu, the silence of Nyungwe Forest. If you move too fast, you will miss everything that makes this country extraordinary.',
-    slug:     'slow-travel-rwanda',
-    img:      stockImage('1682773083896-95176d8aecf8'),
-  },
-  {
-    tag:      'Tanzania',
-    tagSlug:  'tanzania',
-    headline: 'Zanzibar Stone Town: What the Carved Doors Are Actually Saying.',
-    body:     "Every carved wooden door in Stone Town tells its owner's story. Indian brass studs, Omani chain carving, Swahili latticework. The architecture of the old town is a record of four centuries of trade.",
-    slug:     'zanzibar-stone-town-doors',
-    img:      stockImage('1678042955980-c173f0460d0a'),
-  },
-]
-
-// Which slide opens first changes once a week, not on every page load — a
-// timer-driven auto-advance is exactly what WDOS M-09 bans (see
-// DestinationsGrid.tsx's matching comment), and re-randomizing on every
-// visit isn't "spins every 7 days," it's just noise. Deriving the index from
-// the real calendar date instead means every visitor sees the same featured
-// pick for a given week, and it moves on to the next one on its own after
-// 7 days — with the existing prev/next controls untouched for anyone who
-// wants to browse the other three regardless.
-function weeklyStartIndex(length: number) {
-  const daysSinceEpoch = Math.floor(Date.now() / 86_400_000)
-  const weeksSinceEpoch = Math.floor(daysSinceEpoch / 7)
-  return weeksSinceEpoch % length
+export interface EditorialSlide {
+  headline: string
+  body: string
+  slug: string
+  img: string
+  category?: string
 }
 
-export function EditorialSlider() {
-  const [current, setCurrent] = useState(() => weeklyStartIndex(SLIDES.length))
+// Owner review (2026-09-06) — this used to be 4 hand-written slides with a
+// fixed slug/image/country baked in, so the section never changed no
+// matter how many real articles got published. It now renders whatever
+// slides the page passes in — see app/[locale]/page.tsx, which draws a
+// same-day-stable random sample from the real published post list (or
+// FALLBACK_POSTS if Sanity is unreachable) using lib/dailyRandom.ts, so a
+// visitor sees something different once the date rolls over, not a
+// hand-curated set that never moves.
+export function EditorialSlider({ slides }: { slides: EditorialSlide[] }) {
+  const [current, setCurrent] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const next = useCallback(() => {
-    setCurrent(c => (c + 1) % SLIDES.length)
-  }, [])
+    setCurrent(c => (c + 1) % slides.length)
+  }, [slides.length])
   const prev = useCallback(() => {
-    setCurrent(c => (c - 1 + SLIDES.length) % SLIDES.length)
-  }, [])
+    setCurrent(c => (c - 1 + slides.length) % slides.length)
+  }, [slides.length])
 
-  const slide = SLIDES[current]
+  // Owner review (2026-09-06) — explicit request: "it swipes on its own
+  // every 10 seconds." This is a deliberate, direct reversal of Session
+  // 1.3's WDOS M-09 read on auto-advancing carousels (see this file's
+  // git history) — the owner is the one person whose call that actually
+  // is. Kept as safe as a timed auto-advance can be: a real
+  // prefers-reduced-motion check stops the timer outright (X-11/M-08,
+  // same standard as everywhere else on the site — the global CSS
+  // override in globals.css can't reach a JS setInterval, so it has to be
+  // checked here directly), and it pauses on hover/focus so a visitor
+  // reading a slide never has it change under them. The manual prev/next/
+  // dot controls are untouched.
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (mq.matches || paused || slides.length <= 1) return
+    timerRef.current = setInterval(next, 10_000)
+    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+  }, [next, paused, slides.length])
+
+  if (slides.length === 0) return null
+  const slide = slides[Math.min(current, slides.length - 1)]
 
   return (
-    <section className="bg-ink relative overflow-hidden">
+    <section
+      className="bg-ink relative overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+    >
       <div
         key={`img-${current}`}
         className="absolute inset-0 lg:inset-y-0 lg:left-[45%] lg:right-0 animate-fade-in"
@@ -91,23 +77,14 @@ export function EditorialSlider() {
         <div className="lg:hidden absolute inset-0 bg-ink/88 pointer-events-none"/>
       </div>
 
+      {/* Owner review (2026-09-06) — top/bottom padding tightened
+          (py-20/28 -> py-14/20) and the eyebrow badge above the headline
+          removed outright: it only ever showed a country name that real
+          posts don't reliably carry (none of the 11 live posts have
+          featuredCountry set), and the owner asked for it gone regardless. */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-0 min-h-[580px]">
-          <div className="py-20 lg:py-28 pr-0 lg:pr-20 flex flex-col justify-center">
-
-            {/* Session 6.3 (WDOS Human Pass, X-46 — Tier 0, eyebrow count
-                ≤2 per page, no informal override) — this was styled
-                identically to the site's own eyebrow convention (uppercase,
-                wide tracking, small, positioned right above the H2), which
-                pushed the homepage to 3 eyebrows total (this + "The
-                Journal" + "@myafrowaka_"). Restyled as a badge/pill: it's
-                functionally a country tag, not a section title, so this is
-                honest as well as compliant. */}
-            {/* self-start: without it this stretches full-width, since it's
-                a direct child of the flex-col column above (flex items
-                stretch on the cross axis by default) — confirmed live via
-                getBoundingClientRect before adding this. */}
-            <span className="self-start inline-block font-sans text-[14px] font-semibold text-gold-400 bg-gold-400/10 border border-gold-400/25 rounded-full px-3 py-1 mb-5">{slide.tag}</span>
+        <div className="grid lg:grid-cols-2 gap-0 min-h-[520px]">
+          <div className="py-14 lg:py-20 pr-0 lg:pr-20 flex flex-col justify-center">
 
             <h2
               key={`title-${current}`}
@@ -129,10 +106,12 @@ export function EditorialSlider() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
               </Link>
-              <Link href={slide.destinationHref ?? `/destinations/${slide.tagSlug}`}
-                className="inline-flex items-center border border-white/20 hover:border-white/40 text-cream/70 hover:text-cream font-sans text-[14px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-colors">
-                Explore {slide.tag}
-              </Link>
+              {slide.category && (
+                <Link href={`/blog?category=${encodeURIComponent(slide.category)}`}
+                  className="inline-flex items-center border border-white/20 hover:border-white/40 text-cream/70 hover:text-cream font-sans text-[14px] uppercase tracking-[0.13em] px-6 py-3.5 rounded-full transition-colors">
+                  More {slide.category}
+                </Link>
+              )}
             </div>
 
             <div className="flex items-center gap-4">
@@ -143,7 +122,7 @@ export function EditorialSlider() {
                 </svg>
               </button>
               <div className="flex gap-2 items-center">
-                {SLIDES.map((_, i) => (
+                {slides.map((_, i) => (
                   <button key={i} onClick={() => setCurrent(i)} aria-label={`Slide ${i + 1}`}
                     className={`h-px rounded-full transition-all duration-500 ${i === current ? 'w-10 bg-gold-400' : 'w-3 bg-white/25 hover:bg-white/45'}`}
                   />
@@ -156,7 +135,7 @@ export function EditorialSlider() {
                 </svg>
               </button>
               <span className="font-sans text-[14px] text-cream/55 tabular-nums ml-1">
-                {String(current + 1).padStart(2, '0')} / {String(SLIDES.length).padStart(2, '0')}
+                {String(current + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
               </span>
             </div>
           </div>

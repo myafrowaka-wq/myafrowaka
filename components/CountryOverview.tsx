@@ -1,5 +1,6 @@
 import { Link } from '@/i18n/navigation'
 import Image from 'next/image'
+import { CollapsibleSection } from '@/components/CollapsibleSection'
 
 type StartHereAttraction = {
   name: string; slug: string; type?: string[]; editorialSummary?: string
@@ -78,13 +79,16 @@ export function CountryOverview({
 
   if (!hasOverview && !hasPractical && !hasStartHere) return null
 
+  // Owner review (2026-09-06) — this whole block ("everything before the
+  // attractions grid") is now a real collapsible accordion, stays closed
+  // until someone clicks it, per direct feedback. Reuses the same
+  // CollapsibleSection every attraction page's Overview/Getting There/
+  // FAQ sections already use, rather than a one-off toggle — same
+  // accessible h2-wraps-button pattern, same look.
   return (
     <div className="bg-sand dark-flip-surf border-t border-b border-line dark-flip-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 lg:py-18">
-        <h2 className="font-display font-bold text-charcoal dark-flip-text mb-10"
-          style={{ fontSize: 'clamp(20px, 2.5vw, 30px)', letterSpacing: '-0.018em' }}>
-          Before You Go: {countryName}
-        </h2>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 lg:py-6">
+        <CollapsibleSection title={`Before You Go: ${countryName}`} defaultOpen={false}>
 
         {hasOverview && (
           <div className="grid sm:grid-cols-2 gap-x-10 gap-y-8 mb-12">
@@ -111,29 +115,49 @@ export function CountryOverview({
             <h3 className="font-display font-bold text-[17px] text-charcoal dark-flip-text mb-6">
               Start Here
             </h3>
+            {/* Owner review (2026-09-06) — real content added, not just a
+                restyle: each card's own editorialSummary existed in the
+                data this whole time and was never shown here, so every
+                card said only a name and a city. Taller image + type
+                badge (matching the pattern already used on the homepage's
+                attraction grids) plus that summary line gives someone a
+                real reason to click before they do. */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {startHereAttractions.map(a => (
-                <Link key={a.slug} href={`/attractions/${a.slug}`}
-                  className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
-                  <div className="relative h-40 overflow-hidden bg-cream">
-                    {/* Session 6.3 — image-redundant-alt: a.name is a visible heading in this same card below. */}
-                    <Image
-                      src={attractionImageUrl(a.slug)}
-                      alt="" fill
-                      sizes="(max-width:640px)100vw,(max-width:1024px)50vw,33vw"
-                      className="object-cover img-editorial img-inner"
-                    />
-                  </div>
-                  <div className="p-4">
-                    {a.city && (
-                      <p className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson mb-1.5">{a.city.name}</p>
-                    )}
-                    <h3 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug text-[15px]">
-                      {a.name}
-                    </h3>
-                  </div>
-                </Link>
-              ))}
+              {startHereAttractions.map(a => {
+                const typeLabel = a.type?.[0]?.replace('UNESCO World Heritage Site | ', '')
+                return (
+                  <Link key={a.slug} href={`/attractions/${a.slug}`}
+                    className="group block bg-white dark-flip-card rounded-3xl overflow-hidden border border-line dark-flip-border hover:shadow-[var(--shadow-lift)] hover:-translate-y-1 transition-all duration-300">
+                    <div className="relative h-48 overflow-hidden bg-cream">
+                      {/* Session 6.3 — image-redundant-alt: a.name is a visible heading in this same card below. */}
+                      <Image
+                        src={attractionImageUrl(a.slug)}
+                        alt="" fill
+                        sizes="(max-width:640px)100vw,(max-width:1024px)50vw,33vw"
+                        className="object-cover img-editorial img-inner"
+                      />
+                      {typeLabel && (
+                        <span className="absolute top-3 left-3 bg-ink/70 backdrop-blur font-sans text-[14px] uppercase tracking-[0.1em] text-cream/90 px-2.5 py-1 rounded-full">
+                          {typeLabel}
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      {a.city && (
+                        <p className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson mb-1.5">{a.city.name}</p>
+                      )}
+                      <h3 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug text-[15px] mb-1.5">
+                        {a.name}
+                      </h3>
+                      {a.editorialSummary && (
+                        <p className="font-sans text-[14px] text-charcoal/60 dark-flip-muted leading-snug line-clamp-2">
+                          {a.editorialSummary}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                )
+              })}
             </div>
             {startHereAttractions.length < 3 && (
               <Link href={`/destinations/${countrySlug}`}
@@ -144,6 +168,7 @@ export function CountryOverview({
             )}
           </div>
         )}
+        </CollapsibleSection>
       </div>
     </div>
   )

@@ -73,7 +73,19 @@ export function SearchTypeahead({
   }
 
   return (
-    <div className="relative flex-1">
+    // Owner review (2026-09-06) — real bug found on mobile: this wrapper
+    // carries flex-1 to shrink correctly as a flex item in the callers'
+    // row, but without min-w-0 a flex item won't shrink below its
+    // content's natural width, and its content here (the input below)
+    // has no explicit width of its own — an <input> with no width falls
+    // back to the browser's default intrinsic size (~20ch, ~200px+),
+    // regardless of how narrow its actual parent is. On desktop there was
+    // always room for that default so it went unnoticed; on mobile it
+    // forced the whole hero search bar row past its container, clipped
+    // by the row's own overflow-hidden (the search button was cut off in
+    // a real screenshot, not a mock-up). w-full makes the input actually
+    // track its resolved parent width instead of its own default.
+    <div className="relative flex-1 min-w-0">
       <input
         id={id}
         type="text"
@@ -85,7 +97,7 @@ export function SearchTypeahead({
         aria-label={ariaLabel}
         value={value}
         placeholder={placeholder}
-        className={className}
+        className={`w-full min-w-0 ${className}`}
         onChange={e => { onChange(e.target.value); setOpen(true); setActiveIndex(-1) }}
         onFocus={() => setOpen(true)}
         onBlur={() => { blurTimer.current = setTimeout(() => setOpen(false), 120) }}

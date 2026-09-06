@@ -402,6 +402,19 @@ h6 {
   50% { opacity: 0; }
 }
 
+/* Owner review (2026-09-06) — slow ambient zoom for card imagery
+   (destinations carousel): a deliberate, restrained "Ken Burns" effect
+   requested to replace a flat colour-tint overlay, not the jarring/
+   auto-advancing motion WDOS bans (M-05/M-09 target marquees and
+   timer-driven slide changes, not a still photo breathing slowly in
+   place). Neutralised by the reduced-motion block below like every
+   other animation on the site. */
+@keyframes slow-zoom {
+  from { transform: scale(1); }
+  to   { transform: scale(1.15); }
+}
+.img-slow-zoom { animation: slow-zoom 16s ease-in-out infinite alternate; }
+
 /* Custom gold-dot cursor (CustomCursor.tsx) deleted in Session 1.3 —
    M-10 bans cursor-reactive effects, and it forced `cursor: none` on
    every element for every fine-pointer visitor, real accessibility cost
