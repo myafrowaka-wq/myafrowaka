@@ -241,20 +241,18 @@ export default async function HomePage() {
             <div className="lg:col-span-4 min-w-0">
               {/* Headline — exactly 2 lines on both mobile and desktop.
                   Line 1 "Explore Africa" is the big line; line 2 "One
-                  Adventure at a Time." renders at 0.5em of it. Measured
-                  at 375px: line 1 = 331px, line 2 = 322px, search bar /
-                  sub-headline = 341px — so line 1 is the slightly larger
-                  line and the whole block fills the column to about the
-                  width of the search bar, which is what the owner asked
-                  for. Owner review (2026-09-10, round 2): "same length as
-                  the search bar" — stepped up (clamp 44 / 16.2vw / 82)
-                  and line 1's tracking tightened to -0.055em so it can
-                  reach that width on a phone without "Africa" wrapping to
-                  a third line. Range-measured across 320-414px, not
-                  eyeballed. */}
+                  Adventure at a Time." renders at 0.5em of it. The clamp
+                  ceiling (92px) is set so line 1 reaches ~the width of
+                  the search bar / sub-headline on BOTH ends of the range:
+                  measured mobile 375px — line 1 331 / line 2 322 / search
+                  bar 341; desktop 1280px — line 1 ~500 / search bar ~512.
+                  16.2vw keeps the mobile size unchanged from the previous
+                  82px ceiling (they only diverge above ~570px viewport).
+                  Owner review 2026-09-10 rounds 2-3. Range-measured
+                  320-1440px, not eyeballed. */}
               <h1
                 className="font-display font-extrabold text-cream mb-7"
-                style={{ fontSize: 'clamp(44px, 16.2vw, 82px)', lineHeight: '0.9', letterSpacing: '-0.055em' }}
+                style={{ fontSize: 'clamp(44px, 16.2vw, 98px)', lineHeight: '0.9', letterSpacing: '-0.055em' }}
               >
                 <TypewriterHero
                   speed={32}
@@ -566,7 +564,7 @@ export default async function HomePage() {
                       </span>
                     )}
                     <div className="absolute bottom-0 left-0 right-0 p-5">
-                      <h3 className="font-display font-bold text-base text-cream group-hover:text-gold-300 transition-colors leading-tight mb-1"
+                      <h3 className="font-display font-bold text-[18px] sm:text-[19px] text-cream group-hover:text-gold-300 transition-colors leading-tight mb-1"
                         style={{ letterSpacing: '-0.015em' }}>
                         {a.name}
                       </h3>

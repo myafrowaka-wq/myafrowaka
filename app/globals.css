@@ -282,57 +282,60 @@ body {
    the brief's "H3 22px/600 Outfit" — headings don't need to escalate the
    display face all the way down the hierarchy.
 
-   NOTE (2026-09-10): these rules are deliberately unlayered, so they beat
-   Tailwind utilities. A component that needs a different heading size
-   sets it with an inline `style={{ fontSize }}` (see the attraction and
-   blog article renderers), which is the one thing that reliably wins
-   here. Moving them into `@layer base` was tried and reverted — it also
-   shrank every card/carousel heading that had been visually tuned
-   against the 22px default, i.e. a site-wide reflow with no regression
-   pass behind it. */
-h1 {
-  font-family: var(--font-display);
-  font-size: var(--font-size-h1);   /* 48px */
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.015em;
-  font-feature-settings: "kern" 1, "liga" 1;
-  text-rendering: optimizeLegibility;
-}
-h2 {
-  font-family: var(--font-display);
-  font-size: var(--font-size-h2);   /* 32px */
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  font-feature-settings: "kern" 1, "liga" 1;
-  text-rendering: optimizeLegibility;
-}
-h3 {
-  font-family: var(--font-sans);
-  font-size: var(--font-size-h3);   /* 22px */
-  font-weight: 600;
-  line-height: 1.25;
-  font-feature-settings: "kern" 1, "liga" 1;
-  text-rendering: optimizeLegibility;
-}
-h4 {
-  font-size: var(--font-size-h4);   /* 18px */
-  line-height: 1.35;
-  font-feature-settings: "kern" 1, "liga" 1;
-  text-rendering: optimizeLegibility;
-}
-h5 {
-  font-size: var(--font-size-h5);   /* 16px */
-  line-height: 1.4;
-  font-feature-settings: "kern" 1, "liga" 1;
-  text-rendering: optimizeLegibility;
-}
-h6 {
-  font-size: var(--font-size-h6);   /* 14px — the floor */
-  line-height: 1.4;
-  font-feature-settings: "kern" 1, "liga" 1;
-  text-rendering: optimizeLegibility;
+   Owner review (2026-09-10, round 4) — these live in `@layer base` so a
+   Tailwind font-size utility on a heading actually wins. Unlayered (the
+   old setup) they beat every utility, so `<h3 className="text-[15px]">`
+   in ~55 places across the site silently rendered at 22px — the root of
+   every "the fonts are different / inconsistent" report. In `base` they
+   are the default scale and any explicit `text-*` on the element takes
+   over. The two homepage carousels that had been tuned against the 22px
+   default (DestinationsGrid, ExperiencesCarousel) were re-set to a real
+   size in the same pass so they didn't shrink to their stale class. */
+@layer base {
+  h1 {
+    font-family: var(--font-display);
+    font-size: var(--font-size-h1);   /* 48px */
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-size: var(--font-size-h2);   /* 32px */
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+  }
+  h3 {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-h3);   /* 22px */
+    font-weight: 600;
+    line-height: 1.25;
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+  }
+  h4 {
+    font-size: var(--font-size-h4);   /* 18px */
+    line-height: 1.35;
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+  }
+  h5 {
+    font-size: var(--font-size-h5);   /* 16px */
+    line-height: 1.4;
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+  }
+  h6 {
+    font-size: var(--font-size-h6);   /* 14px — the floor */
+    line-height: 1.4;
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+  }
 }
 
 /* Hero display size — the one place the scale goes above H1.

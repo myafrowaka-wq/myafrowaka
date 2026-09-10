@@ -40,7 +40,7 @@ function CountryCard({ d }: { d: HomeCountry }) {
           <Flag code={d.code} />
         </p>
         <h3
-          className="font-display font-bold text-cream group-hover:text-gold-300 transition-colors leading-tight text-sm lg:text-[14px]"
+          className="font-display font-bold text-cream group-hover:text-gold-300 transition-colors leading-tight text-[17px] sm:text-[18px]"
           style={{ letterSpacing: '-0.015em' }}
         >
           {d.name}

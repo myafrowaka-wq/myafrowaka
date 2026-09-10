@@ -205,8 +205,8 @@ export default function AboutPage() {
                   },
                 ].map(a => (
                   <div key={a.title} className="bg-sand dark-flip-surf rounded-2xl p-6">
-                    <h3 className="font-display font-bold text-sm text-charcoal dark-flip-text mb-3">{a.title}</h3>
-                    <p className="font-sans text-xs text-charcoal/60 dark-flip-muted leading-relaxed">{a.body}</p>
+                    <h3 className="font-display font-bold text-[17px] text-charcoal dark-flip-text mb-3">{a.title}</h3>
+                    <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-relaxed">{a.body}</p>
                   </div>
                 ))}
               </div>

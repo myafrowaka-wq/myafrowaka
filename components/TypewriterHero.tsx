@@ -1,6 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useLayoutEffect } from 'react'
+
+// SSR-safe layout effect: on the client we want the rewind-to-0 to land
+// before the browser paints the full SSR headline (no flash); on the
+// server useLayoutEffect would warn, so fall back to useEffect there.
+const useIsoLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 export function TypewriterHero({
   lines,
@@ -12,33 +17,50 @@ export function TypewriterHero({
   className?: string
 }) {
   const fullText = lines.map(l => l.text).join('\n')
-  const [charIndex, setCharIndex] = useState(0)
-  const [done, setDone] = useState(false)
-  const [reducedMotion, setReducedMotion] = useState(false)
 
-  // X-11 / M-08: the per-character reveal is driven by setTimeout, not CSS
-  // animation, so the global prefers-reduced-motion override in globals.css
-  // can't stop it — it has to be checked here and skipped entirely.
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducedMotion(mq.matches)
-    const onChange = () => setReducedMotion(mq.matches)
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
-  }, [])
+  // Start on the FULL text: that's what SSR sends and what a no-JS / slow
+  // -hydration visitor sees (no blank headline, clean LCP). The effect
+  // below rewinds to 0 and types it out — but only once, only client-side,
+  // and only when it's worth doing.
+  const [charIndex, setCharIndex] = useState(fullText.length)
+  const [done, setDone] = useState(true)
 
-  useEffect(() => {
-    if (reducedMotion) {
-      setCharIndex(fullText.length)
-      setDone(true)
+  useIsoLayoutEffect(() => {
+    // X-11 / M-08: the reveal is JS, not CSS, so the global
+    // prefers-reduced-motion override can't reach it — check it here.
+    // Also skip entirely if the tab is hidden at load: an animation
+    // nobody is watching would otherwise be frozen by rAF throttling and
+    // "finish" only when the visitor finally looks, which is worse than
+    // just showing the headline.
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      document.visibilityState === 'hidden'
+    ) {
       return
     }
-    if (charIndex < fullText.length) {
-      const t = setTimeout(() => setCharIndex(i => i + 1), speed)
-      return () => clearTimeout(t)
+
+    // Time-based, driven by requestAnimationFrame off wall-clock elapsed —
+    // NOT one setTimeout per character rescheduled through React state,
+    // which on a heavy page ran ~5x slower than speed×length under timer
+    // throttling and re-render cost. A dropped frame just means the next
+    // frame jumps to the right position, so the reveal always completes
+    // in fullText.length × speed ms (≈1.3s for the homepage headline).
+    setCharIndex(0)
+    setDone(false)
+    let raf = 0
+    const start = performance.now()
+    const tick = (now: number) => {
+      const target = Math.min(fullText.length, Math.floor((now - start) / speed))
+      setCharIndex(target)
+      if (target < fullText.length) {
+        raf = requestAnimationFrame(tick)
+      } else {
+        setDone(true)
+      }
     }
-    setDone(true)
-  }, [charIndex, fullText, speed, reducedMotion])
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [fullText, speed])
 
   // Split the typed chars back into lines
   let remaining = charIndex

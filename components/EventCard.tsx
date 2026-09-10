@@ -91,7 +91,7 @@ export function EventCard({ event }: { event: EventSummary }) {
             here was a genuine skipped-level violation (axe: heading-order)
             on every one of those pages, not just one. h2 is correct for
             all of them. */}
-        <h2 className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-2"
+        <h2 className="font-display font-bold text-[18px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-2"
           style={{ letterSpacing: '-0.012em' }}>
           {event.name}
         </h2>

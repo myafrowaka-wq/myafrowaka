@@ -16,7 +16,7 @@ function ExperienceCard({ e }: { e: (typeof HOME_EXPERIENCES)[number] }) {
         className="object-cover img-editorial img-inner"/>
       <div className="absolute inset-0 bg-gradient-to-t from-ink/92 via-ink/25 to-transparent"/>
       <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-        <h3 className="font-display font-bold text-sm sm:text-[15px] text-cream group-hover:text-gold-300 transition-colors leading-tight"
+        <h3 className="font-display font-bold text-[16px] sm:text-[17px] text-cream group-hover:text-gold-300 transition-colors leading-tight"
           style={{ letterSpacing: '-0.01em' }}>{e.label}</h3>
         <p className="font-sans text-[14px] text-cream/70 mt-0.5 sm:mt-1 leading-tight">{e.desc}</p>
       </div>

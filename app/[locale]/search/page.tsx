@@ -294,7 +294,7 @@ function SearchInner() {
                         <div className="absolute bottom-0 left-0 right-0 h-[3px]" style={{ backgroundColor: accentColor }}/>
                       </div>
                       <div className="p-5">
-                        <h3 className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-1.5"
+                        <h3 className="font-display font-bold text-[18px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug mb-1.5"
                           style={{ letterSpacing: '-0.012em' }}>
                           {a.name}
                         </h3>

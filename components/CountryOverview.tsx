@@ -155,7 +155,7 @@ export function CountryOverview({
                       {a.city && (
                         <p className="font-sans text-[14px] uppercase tracking-[0.12em] text-crimson mb-1.5">{a.city.name}</p>
                       )}
-                      <h3 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug text-[15px] mb-1.5">
+                      <h3 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug text-[17px] mb-1.5">
                         {a.name}
                       </h3>
                       {a.editorialSummary && (
