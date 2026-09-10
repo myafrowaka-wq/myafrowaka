@@ -195,7 +195,16 @@
 
 /* ── Foundational rendering ──────────────────────────────────── */
 html {
-  scroll-behavior: smooth;
+  /* Owner review (2026-09-10) — "when I load this page it kind of loads
+     from the bottom and scrolls up. I want it to just load to the top."
+     Root cause: a global `scroll-behavior: smooth` here made Next.js's
+     own scroll-to-top on every route change ANIMATE from the previous
+     page's scroll position up to 0 — so a client-side navigation looked
+     like the page loaded mid-way down and then slid up. Removed. The one
+     place that genuinely wants a smooth glide (the ScrollToTop button)
+     already asks for it explicitly in JS. In-page anchor jumps (the
+     About page's section links) now land instantly, which is the correct,
+     predictable behaviour for a navigation. */
   font-optical-sizing: auto;
   text-size-adjust: 100%;
   font-size: var(--font-size-body); /* 17px base */

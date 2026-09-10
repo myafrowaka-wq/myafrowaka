@@ -127,11 +127,13 @@ const ptComponents = {
     ),
   },
   list: {
+    /* Owner review (2026-09-10) — list text matched to the 15px body
+       paragraphs above; it was 14px, one notch smaller for no reason. */
     bullet: ({ children }: { children?: React.ReactNode }) => (
-      <ul className="font-sans text-[14px] text-charcoal/70 dark-flip-muted leading-relaxed space-y-1.5 mb-5 pl-5 list-disc">{children}</ul>
+      <ul className="font-sans text-[15px] text-charcoal/78 dark-flip-muted leading-[1.8] space-y-1.5 mb-5 pl-5 list-disc">{children}</ul>
     ),
     number: ({ children }: { children?: React.ReactNode }) => (
-      <ol className="font-sans text-[14px] text-charcoal/70 dark-flip-muted leading-relaxed space-y-1.5 mb-5 pl-5 list-decimal">{children}</ol>
+      <ol className="font-sans text-[15px] text-charcoal/78 dark-flip-muted leading-[1.8] space-y-1.5 mb-5 pl-5 list-decimal">{children}</ol>
     ),
   },
   listItem: {
@@ -317,7 +319,9 @@ export default async function BlogPostPage(
             {/* ── Article (2/3) ────────────────────────────────────── */}
             <div className="lg:col-span-2">
               {post.excerpt && (
-                <p className="font-sans text-[17px] text-charcoal/65 dark-flip-muted leading-relaxed mb-8 italic border-t border-b py-5"
+                /* Owner review (2026-09-10) — not italic; same font as the
+                   rest of the page, just the standfirst. */
+                <p className="font-sans text-[17px] text-charcoal/70 dark-flip-muted leading-relaxed mb-8 border-t border-b py-5"
                   style={{ borderColor: accent + '33' }}>
                   {post.excerpt}
                 </p>

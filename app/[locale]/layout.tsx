@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SessionProviderWrapper } from "@/components/SessionProviderWrapper";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { ScrollReset } from "@/components/ScrollReset";
 import { NewsletterPopup } from "@/components/NewsletterPopup";
 import { NextIntlClientProvider, hasLocale } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
@@ -111,6 +112,7 @@ export default async function LocaleLayout({
       <SessionProviderWrapper>
         <ThemeProvider>
           <Nav />
+          <ScrollReset />
           <main id="main-content" className="flex-1">{children}</main>
           <Footer />
           <ScrollToTop />

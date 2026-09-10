@@ -5,7 +5,6 @@ import { PortableText } from 'next-sanity'
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { ATTRACTION_BY_SLUG_QUERY, ALL_PUBLISHED_SLUGS_QUERY } from '@/sanity/lib/queries'
-import { Badge } from '@/components/Badge'
 import { FaqAccordion } from '@/components/FaqAccordion'
 import { SaveButton } from '@/components/SaveButton'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
@@ -226,10 +225,11 @@ function buildJsonLd(a: Attraction) {
 
 // ── Prose classes (shared, with dark mode) ─────────────────────────────────────
 
+// Heading colour/size/family for h2-h4 is set explicitly in
+// attractionBodyComponents below (a bare `prose-headings:` utility can't
+// reliably beat the global `h3 {}` rule) — so this string deliberately
+// does NOT set prose-headings colour.
 const PROSE = `prose prose-lg max-w-none
-  prose-headings:font-display prose-headings:tracking-tight prose-headings:leading-tight
-  prose-headings:text-charcoal dark:prose-headings:text-cream
-  prose-h3:text-xl prose-h3:text-crimson dark:prose-h3:text-crimson
   prose-p:text-charcoal/75 dark:prose-p:text-cream/70 prose-p:leading-relaxed prose-p:font-sans
   prose-a:text-crimson prose-a:no-underline hover:prose-a:underline
   prose-strong:text-charcoal dark:prose-strong:text-cream prose-strong:font-semibold
@@ -237,6 +237,33 @@ const PROSE = `prose prose-lg max-w-none
   prose-blockquote:border-l-0 prose-blockquote:bg-sand dark:prose-blockquote:bg-ink-surf
   prose-blockquote:rounded-2xl prose-blockquote:px-6 prose-blockquote:py-5
   prose-blockquote:italic prose-blockquote:text-charcoal/70 dark:prose-blockquote:text-cream/60`
+
+// Owner review (2026-09-10) — "maintain one font style and one font
+// size" for the headings. The article body's h3 sub-headings were
+// rendering at 22px (the global `h3` element rule in globals.css), i.e.
+// BIGGER than the section title above them — inverted hierarchy that
+// made "Quick Overview" look smaller than "What Is Alexandria?". A
+// Tailwind `prose-h3:` utility can't beat the bare `h3` element rule
+// reliably, so the sizes are set explicitly on the rendered elements
+// here. Every section now reads: section title (19-24px, CollapsibleSection)
+// > sub-head (16-19px) > body. h2 sits just under the section title in
+// case an author's content ever nests one.
+const attractionBodyComponents = {
+  block: {
+    h2: ({ children }: { children?: React.ReactNode }) => (
+      <h2 className="font-display font-bold text-charcoal dark:text-cream tracking-tight leading-tight mt-8 mb-3"
+        style={{ fontSize: 'clamp(18px, 2.1vw, 21px)', letterSpacing: '-0.012em' }}>{children}</h2>
+    ),
+    h3: ({ children }: { children?: React.ReactNode }) => (
+      <h3 className="font-sans font-semibold text-crimson dark:text-crimson leading-snug mt-7 mb-2"
+        style={{ fontSize: 'clamp(16px, 1.7vw, 19px)' }}>{children}</h3>
+    ),
+    h4: ({ children }: { children?: React.ReactNode }) => (
+      <h4 className="font-sans font-semibold text-charcoal dark:text-cream leading-snug mt-6 mb-2"
+        style={{ fontSize: '16px' }}>{children}</h4>
+    ),
+  },
+}
 
 // ── Smart FAQ answer generator ────────────────────────────────────────────────
 
@@ -465,6 +492,17 @@ export default async function AttractionPage(
   const jsonLd = buildJsonLd(a)
   const locationParts = [a.city?.name, a.subRegionProvince, a.country?.name].filter(Boolean)
 
+  // Owner review (2026-09-10) — the two type tags embedded in the hero
+  // image corners. Left = first type; right = the UNESCO marker if the
+  // site has that status, otherwise the second type. The corner labels
+  // use just the first segment of a compound type ("City / Town /
+  // Neighbourhood" → "City") so the two pills never collide across a
+  // narrow phone; the full type still shows in the body's Tagged / At a
+  // Glance sections.
+  const heroLabel = (s: string) => s.replace('UNESCO World Heritage Site | ', '').split(' / ')[0]
+  const heroTagLeft = a.type?.[0] ? heroLabel(a.type[0]) : null
+  const heroTagRight = a.unescoStatus ? 'UNESCO' : (a.type?.[1] ? heroLabel(a.type[1]) : null)
+
   const secondaryKws = a.secondaryKeywords
     ? a.secondaryKeywords.split('|').map(s => s.trim()).filter(Boolean)
     : []
@@ -512,17 +550,27 @@ export default async function AttractionPage(
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/65 to-ink/97"/>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">
-
-          {/* Badges */}
-          {(a.unescoStatus || (a.type && a.type.length > 0)) && (
-            <div className="flex flex-wrap gap-2 mb-5">
-              {a.unescoStatus && <Badge variant="unesco">UNESCO</Badge>}
-              {a.type?.slice(0, 3).map(t => (
-                <Badge key={t} variant="tag">{t.replace('UNESCO World Heritage Site | ', '')}</Badge>
-              ))}
+        {/* Type tags — owner review (2026-09-10): "smaller, and at the top
+            left and right, embedded into the image." First type sits
+            top-left, the second (or the UNESCO marker) top-right, aligned
+            to the same column as the H1 below. A third type, if any,
+            still shows in the body's "Tagged" section. */}
+        {(heroTagLeft || heroTagRight) && (
+          <div className="absolute inset-x-0 top-4 sm:top-5 z-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-start justify-between gap-3">
+              <span className={`font-sans text-[11px] font-semibold uppercase tracking-[0.13em] text-cream/90 bg-ink/65 backdrop-blur-sm px-2.5 py-1 rounded-full ${heroTagLeft ? '' : 'invisible'}`}>
+                {heroTagLeft ?? '—'}
+              </span>
+              {heroTagRight && (
+                <span className={`font-sans text-[11px] font-semibold uppercase tracking-[0.13em] px-2.5 py-1 rounded-full backdrop-blur-sm shrink-0 ${a.unescoStatus ? 'text-ink bg-gold-300/90' : 'text-cream/90 bg-ink/65'}`}>
+                  {heroTagRight}
+                </span>
+              )}
             </div>
-          )}
+          </div>
+        )}
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pb-12 pt-24">
 
           {/* H1 */}
           <h1
@@ -539,10 +587,13 @@ export default async function AttractionPage(
             </p>
           )}
 
-          {/* Summary */}
+          {/* Summary — owner review (2026-09-10): "I don't want you to
+              make it the meta information... don't make it italics." Now
+              plain intro copy: no italic, same font as the body, a touch
+              larger and more present than the old muted caption style. */}
           {a.editorialSummary && (
-            <p className="font-sans italic text-cream/70 leading-relaxed max-w-2xl"
-              style={{ fontSize: 'clamp(14px, 1.4vw, 17px)' }}>
+            <p className="font-sans text-cream/80 leading-relaxed max-w-2xl"
+              style={{ fontSize: 'clamp(15px, 1.5vw, 18px)' }}>
               {a.editorialSummary}
             </p>
           )}
@@ -686,6 +737,7 @@ export default async function AttractionPage(
                       >
                         <div className={PROSE}>
                           <PortableText
+                            components={attractionBodyComponents}
                             value={section.content as Parameters<typeof PortableText>[0]['value']}
                           />
                         </div>

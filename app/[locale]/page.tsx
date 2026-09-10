@@ -9,14 +9,25 @@ import { HeroBackgroundMedia } from '@/components/HeroBackgroundMedia'
 import { DestinationsGrid } from '@/components/DestinationsGrid'
 import { PopularPills } from '@/components/PopularPills'
 import { ExperiencesCarousel } from '@/components/ExperiencesCarousel'
+import { HOME_COUNTRIES, HOME_EXPERIENCES } from '@/lib/homeSections'
 import { Flag } from '@/components/Flag'
 import { FALLBACK_POSTS } from '@/lib/fallbackPosts'
 import { stockImage, attractionStockImage, blogStockImage, HERO_VIDEO_CREDIT } from '@/lib/stockImageCredits'
 import { ALL_POSTS_QUERY } from '@/sanity/lib/queries'
-import { dailyShuffle } from '@/lib/dailyRandom'
+import { shuffle } from '@/lib/dailyRandom'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { hreflangAlternates } from '@/lib/hreflang'
+
+// Owner review (2026-09-10) — "I can load it again later today, and it's
+// supposed to start from Nigeria." Every randomised section on this page
+// (Where Will You Go Next?, the editorial slider, Featured Attractions,
+// Explore by Experience, From the Journal) now reshuffles on every single
+// load. That only works if the page is re-rendered per request rather
+// than served from the prerender cache — hence force-dynamic. Latest
+// Travel Attractions is deliberately NOT shuffled: it's a real
+// "most-recently-added" list and the owner asked to leave it that way.
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'MyAfroWaka – Discover Africa Beyond the Stereotype',
@@ -48,18 +59,18 @@ const HOME_JSON_LD = [
   },
 ]
 
-// Owner review (2026-09-06) — both queries used to slice to the exact
-// count the section renders (top 8 / top 4 by recency), so the homepage
-// showed the same attractions to every visitor, forever, until something
-// new got published. Widened to a real pool; app/[locale]/page.tsx now
-// draws a same-day-stable random sample from each via lib/dailyRandom.ts
-// instead of just taking the query's own order.
+// Owner review (2026-09-10) — this feeds "Latest Travel Attractions",
+// which the owner explicitly asked to leave un-randomised ("it just comes
+// from the latest attractions being added"). So it orders by real
+// creation date and the page takes the top 8 as-is, no shuffle.
 const FEATURED_QUERY = `
-  *[_type == "attraction" && contentStatus == "Published"] | order(_updatedAt desc)[0..39]{
+  *[_type == "attraction" && contentStatus == "Published"] | order(coalesce(_createdAt, _updatedAt) desc)[0..11]{
     name, "slug": slug.current, type, continentRegion, editorialSummary,
     "country": country->{ name, "slug": slug.current, countryCode }
   }
 `
+// Feeds "Featured Attractions" — a real pool of up to 20, shuffled fresh
+// on every load (owner review 2026-09-10).
 const GUIDES_QUERY = `
   *[_type == "attraction" && contentStatus == "Published" && defined(articleBody) && length(articleBody) > 0]
   | order(_updatedAt desc)[0..19]{
@@ -120,31 +131,39 @@ const GALLERY_IDS = ['hero-savanna-poster', '1760681554227-d7aad73cd57f', '15442
 const attractionImageUrl = attractionStockImage
 
 export default async function HomePage() {
+  // Because the page is force-dynamic (per-load reshuffle), a Sanity
+  // outage would otherwise stall every homepage request through the
+  // client's full retry/backoff cycle. Each query already falls back to
+  // [] on error; this also caps it at 3s so a slow/unreachable Sanity
+  // degrades to the fallback content fast instead of hanging the render.
+  const safe = <T,>(p: Promise<T>): Promise<T | []> =>
+    Promise.race([
+      p.catch(() => [] as []),
+      new Promise<[]>(resolve => setTimeout(() => resolve([]), 3000)),
+    ])
+
   const [t, tc, [featuredRaw, guidesRaw, popularRaw, allPosts]] = await Promise.all([
     getTranslations('home'),
     getTranslations('common'),
     Promise.all([
-      client.fetch(FEATURED_QUERY).catch(() => []),
-      client.fetch(GUIDES_QUERY).catch(() => []),
-      client.fetch<{ name: string; slug: string }[]>(POPULAR_QUERY).catch(() => []),
-      client.fetch<typeof FALLBACK_POSTS>(ALL_POSTS_QUERY).catch(() => []),
+      safe(client.fetch(FEATURED_QUERY)),
+      safe(client.fetch(GUIDES_QUERY)),
+      safe(client.fetch<{ name: string; slug: string }[]>(POPULAR_QUERY)),
+      safe(client.fetch<typeof FALLBACK_POSTS>(ALL_POSTS_QUERY)),
     ]),
   ])
 
-  // Owner review (2026-09-06) — "if I come to the site tomorrow, it
-  // should not show me the same list." Each of these queries now fetches
-  // a real pool (up to 40 attractions, 20 guides, every published post)
-  // instead of exactly the count the section renders; dailyShuffle
-  // (lib/dailyRandom.ts) picks a same-day-stable random sample from each,
-  // with a different salt per pool so featured/guides/editorial/journal
-  // don't all land on a correlated order from the same day-seed.
-  const featured = dailyShuffle(featuredRaw as AttrItem[], 1)
-  const guides = dailyShuffle(guidesRaw as {
+  // Owner review (2026-09-10) — reshuffled fresh on every load (see the
+  // force-dynamic note at the top of this file). `featured` is the one
+  // exception: it feeds "Latest Travel Attractions" and stays in the
+  // query's real most-recent-first order, no shuffle.
+  const featured = (featuredRaw as AttrItem[])
+  const guides = shuffle(guidesRaw as {
     name: string; slug: string; continentRegion: string; editorialSummary: string; country?: { name: string; countryCode?: string }
-  }[], 2)
+  }[])
 
   const postsPool = allPosts.length > 0 ? allPosts : FALLBACK_POSTS
-  const shuffledPosts = dailyShuffle(postsPool, 3)
+  const shuffledPosts = shuffle(postsPool)
   const editorialCount = Math.min(4, shuffledPosts.length)
   const editorialPosts = shuffledPosts.slice(0, editorialCount)
   const remainingPosts = shuffledPosts.slice(editorialCount)
@@ -221,37 +240,27 @@ export default async function HomePage() {
                 and after, not assumed. */}
             <div className="lg:col-span-4 min-w-0">
               {/* Headline — exactly 2 lines on both mobile and desktop.
-                  Owner review (2026-09-06): the earlier "2x bigger" pass
-                  put both lines at ONE uniform size, which made "Explore
-                  Africa," alone wrap across 2 lines at typical viewport
-                  widths (4 lines total, not 2) — a single clamp() on the
-                  <h1> can't give each line its own size. Fixed by moving
-                  size onto each TypewriterHero line instead: "Explore
-                  Africa," stays large (line 1), "One Adventure at a
-                  Time." drops to ~63% of that size (line 2) — close to
-                  the ratio of their character counts (15 vs 24) so the
-                  two rendered lines land at roughly the same visual
-                  width, matching the owner's own description. Confirmed
-                  at 375px and 1440px via a real screenshot, not assumed.
-                  Second owner pass (2026-09-06) — "tighten the line
-                  height... closely knitted together": the 1.05 line-height
-                  plus an explicit mt-2 on line 2 stacked into a visible
-                  gap between the two lines (measured ~14px combined at
-                  desktop scale). Line-height dropped to 0.92 and the
-                  explicit margin removed entirely — line 2's spacing now
-                  comes purely from the tighter line-height, confirmed via
-                  a real getBoundingClientRect measurement (gap shrank to
-                  ~2px), not just eyeballed. */}
+                  Line 1 "Explore Africa" is the big line; line 2 "One
+                  Adventure at a Time." renders at 0.5em of it, which — its
+                  24 chars against line 1's 14, minus line 1's tighter
+                  tracking — lands the two rendered lines within ~10px of
+                  the same width (measured: 301 vs 291 at 375px). The
+                  block sits close to the width of the sub-headline and
+                  search bar below it. Owner review (2026-09-10): dropped
+                  the comma after "Africa" (desktop and mobile), stepped
+                  the size up (clamp 40 / 14vw / 80), line-height 0.9 so
+                  the two lines read as one knitted unit. Range-measured
+                  at 375px and 1280px, not eyeballed. */}
               <h1
                 className="font-display font-extrabold text-cream mb-7 tracking-hero"
-                style={{ fontSize: 'clamp(34px, 6.5vw, 76px)', lineHeight: '0.92' }}
+                style={{ fontSize: 'clamp(40px, 14vw, 80px)', lineHeight: '0.9' }}
               >
                 <TypewriterHero
                   speed={32}
                   lines={[
                     { text: 'Explore ', noBreakAfter: true },
-                    { text: 'Africa,', className: 'text-crimson', noBreakAfter: true },
-                    { text: 'One Adventure at a Time.', className: 'block mt-0 text-[0.6em] tracking-normal' },
+                    { text: 'Africa', className: 'text-crimson', noBreakAfter: true },
+                    { text: 'One Adventure at a Time.', className: 'block mt-0 text-[0.5em] tracking-normal' },
                   ]}
                 />
               </h1>
@@ -289,8 +298,9 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
           {/* Heading + arrows now render together inside DestinationsGrid
-              — see that component's own comment on why. */}
-          <DestinationsGrid heading={t('whereNext')} />
+              — see that component's own comment on why. Order reshuffled
+              per load (owner review 2026-09-10). */}
+          <DestinationsGrid heading={t('whereNext')} countries={shuffle(HOME_COUNTRIES)} />
 
           <div className="mt-10 lg:mt-12 flex justify-center">
             <Link href="/attractions"
@@ -433,7 +443,7 @@ export default async function HomePage() {
           comment) ═══════════════════════════════════════════════════ */}
       <section className="py-14 lg:py-20 bg-cream dark-flip-bg" id="experiences">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <ExperiencesCarousel heading={t('exploreByExperience')} />
+          <ExperiencesCarousel heading={t('exploreByExperience')} experiences={shuffle(HOME_EXPERIENCES)} />
         </div>
       </section>
 
@@ -600,8 +610,12 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ══ INSTAGRAM GALLERY ══════════════════════════════════════════════════ */}
-      <section className="py-24 lg:py-28 bg-cream dark-flip-bg">
+      {/* ══ INSTAGRAM GALLERY ══════════════════════════════════════════════════
+          Owner review (2026-09-10) — "the padding on top of that section,
+          reduce it... divide the padding into two." Top padding halved
+          (py-24/28 → pt-12/14); the bottom keeps its full breathing room
+          before the closing CTA banner. */}
+      <section className="pt-12 lg:pt-14 pb-24 lg:pb-28 bg-cream dark-flip-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-end justify-between mb-8">
             <div>

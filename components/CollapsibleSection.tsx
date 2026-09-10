@@ -34,8 +34,15 @@ export function CollapsibleSection({
           aria-expanded={open}
         >
           <span
+            /* Owner review (2026-09-10) — on mobile this maxed out at
+               15px, which was SMALLER than the body copy and the crimson
+               h3 sub-headings inside each section: the section title read
+               as less important than its own contents. Bumped so it's
+               clearly the dominant heading in its block at every width
+               (21px floor on mobile — above the ~19px body — up to 25px
+               on desktop), and it's bold against 400-weight body. */
             className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors"
-            style={{ fontSize: 'clamp(15px, 1.7vw, 20px)', letterSpacing: '-0.013em' }}
+            style={{ fontSize: 'clamp(21px, 4vw, 25px)', letterSpacing: '-0.015em' }}
           >
             {title}
           </span>

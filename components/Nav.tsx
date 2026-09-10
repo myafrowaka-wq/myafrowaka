@@ -30,9 +30,9 @@ import { stockImage } from '@/lib/stockImageCredits'
 // add its slug here.
 const READY_COUNTRY_SLUGS = new Set([
   'kenya', 'tanzania', 'ethiopia', 'uganda', 'rwanda',
-  'ghana', 'senegal', 'mali',
+  'ghana', 'senegal', 'mali', 'nigeria', 'cape-verde',
   'egypt', 'morocco',
-  'south-africa', 'zimbabwe', 'botswana', 'namibia',
+  'south-africa', 'zimbabwe', 'botswana', 'namibia', 'lesotho', 'malawi',
   'drc',
   'seychelles',
 ])
@@ -54,7 +54,7 @@ const REGIONS = [
   },
   {
     region: 'West Africa', color: REGION_COLOR['West Africa'], href: '/destinations/regions/west-africa',
-    countries: ['Nigeria', 'Ghana', 'Senegal', 'Ivory Coast', 'Mali', 'Benin'],
+    countries: ['Nigeria', 'Ghana', 'Senegal', 'Cape Verde', 'Ivory Coast', 'Mali', 'Benin'],
     image: stockImage('1727023663928-1772e2c7e679'),
   },
   {
@@ -64,7 +64,7 @@ const REGIONS = [
   },
   {
     region: 'Southern Africa', color: REGION_COLOR['Southern Africa'], href: '/destinations/regions/southern-africa',
-    countries: ['South Africa', 'Zimbabwe', 'Zambia', 'Botswana', 'Namibia'],
+    countries: ['South Africa', 'Zimbabwe', 'Botswana', 'Namibia', 'Malawi', 'Lesotho', 'Zambia'],
     image: stockImage('1744604030401-b24c5975a574'),
   },
   {
@@ -323,7 +323,12 @@ export default function Nav() {
     if (panelRef.current) trapFocus(panelRef.current, e)
   }
 
-  const ni = 'flex items-center gap-1 px-3 py-2 text-[18px] font-display font-semibold text-cream hover:text-cream transition-colors rounded-lg hover:bg-white/8 whitespace-nowrap cursor-pointer'
+  // Owner review (2026-09-10) — the desktop CTA text went from "Plan" to
+  // "Plan a Trip", which overflowed the bar in the 1024-1150px range.
+  // Nav items step from 16px to 18px at xl and carry tighter padding
+  // below xl so the full row (five items + the wider pill + the right
+  // cluster) fits at exactly the lg breakpoint.
+  const ni = 'flex items-center gap-1 px-2.5 xl:px-3 py-2 text-[16px] xl:text-[18px] font-display font-semibold text-cream hover:text-cream transition-colors rounded-lg hover:bg-white/8 whitespace-nowrap cursor-pointer'
 
   const chevron = (active: boolean) => (
     <svg className={`w-3 h-3 mt-0.5 transition-transform duration-150 ${active ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -467,7 +472,7 @@ export default function Nav() {
             ref={el => { triggerRefs.current.plan = el }}
             href="/plan-a-trip" onClick={close}
             onKeyDown={e => handleTriggerKeyDown(e, 'plan')}
-            className="inline-flex items-center bg-action hover:bg-action-hover text-cream font-display font-bold uppercase tracking-[0.10em] rounded-full transition-colors whitespace-nowrap text-[14px] px-5 py-2.5 ml-2"
+            className="inline-flex items-center bg-action hover:bg-action-hover text-cream font-display font-bold uppercase tracking-[0.08em] xl:tracking-[0.10em] rounded-full transition-colors whitespace-nowrap text-[13px] xl:text-[14px] px-3.5 xl:px-5 py-2.5 ml-1.5 xl:ml-2"
           >
             {t('planATrip')}
           </Link>
@@ -475,6 +480,17 @@ export default function Nav() {
 
         {/* Right cluster */}
         <div className="flex items-center gap-1 shrink-0">
+
+          {/* Mobile-only Plan a Trip CTA — owner review (2026-09-10): the
+              primary conversion action should be one tap from any page on
+              mobile, not buried behind the hamburger. The desktop nav has
+              always had this pill; mobile only had it inside the drawer. */}
+          <Link
+            href="/plan-a-trip" onClick={close}
+            className="lg:hidden inline-flex items-center bg-action hover:bg-action-hover text-cream font-display font-bold uppercase tracking-[0.08em] rounded-full transition-colors whitespace-nowrap text-[13px] px-3.5 py-2"
+          >
+            {t('planATrip')}
+          </Link>
 
           {/* Desktop-only: search icon, language, theme, sign in */}
           <Link href="/search" aria-label="Search"
@@ -484,7 +500,11 @@ export default function Nav() {
             </svg>
           </Link>
 
-          <div className="hidden lg:block relative">
+          {/* Language selector hides below xl — owner review (2026-09-10):
+              the wider "Plan a Trip" pill needs the room in the 1024-1200
+              band, and language is also switchable from the full menu and
+              the footer. */}
+          <div className="hidden xl:block relative">
             <button onClick={() => setLangOpen(v => !v)}
               className="flex items-center gap-1.5 px-3 py-1.5 text-[14px] font-display font-semibold text-cream/60 hover:text-cream hover:bg-white/10 rounded-full transition-all">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

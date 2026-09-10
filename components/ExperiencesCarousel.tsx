@@ -3,27 +3,9 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
-import { stockImage } from '@/lib/stockImageCredits'
+import { HOME_EXPERIENCES } from '@/lib/homeSections'
 
-// Owner review (2026-09-06) — widened from 6 to 10 experiences per direct
-// request. The 4 new IDs aren't new licensing: each is already a real,
-// vetted Unsplash photo used elsewhere in the codebase for the matching
-// subject (lib/stockImageCredits.ts's ATTRACTION_IMAGE_IDS / an earlier
-// DestinationsGrid.tsx country card), not a fresh, unreviewed image.
-const EXPERIENCES = [
-  { label: 'Safari',    slug: 'safari',    desc: 'The Big Five and beyond',                image: stockImage('1741850820849-1b63a5911606')  },
-  { label: 'Culture',   slug: 'culture',   desc: 'Living traditions across the continent', image: stockImage('1597212618440-806262de4f6b')  },
-  { label: 'Beach',     slug: 'beach',     desc: 'Indian Ocean and Atlantic shores',        image: stockImage('1577455486223-089171b4572f')  },
-  { label: 'History',   slug: 'history',   desc: 'Ancient kingdoms and World Heritage',     image: stockImage('1640005438758-861043e64aa5')  },
-  { label: 'Hiking',    slug: 'hiking',    desc: 'Trails from Simien to Table Mountain',    image: stockImage('1563985336376-568060942b80')  },
-  { label: 'Food',      slug: 'food',      desc: 'Tagines, jollof, nyama choma',            image: stockImage('1664992960082-0ea299a9c53e')  },
-  { label: 'Wildlife',  slug: 'wildlife',  desc: 'National parks and migration corridors',  image: stockImage('1635865897833-38bc0f8aee44')  },
-  { label: 'Desert',    slug: 'desert',    desc: 'Dunes, salt pans, and starlit nights',    image: stockImage('1666837147745-1c9dea9908a4')  },
-  { label: 'Islands',   slug: 'islands',   desc: 'Archipelagos across the Indian Ocean',    image: stockImage('1513415277900-a62401e19be4')  },
-  { label: 'Markets',   slug: 'markets',   desc: 'Open-air trade, centuries in the making', image: stockImage('1776153380872-108ba14dc63d')  },
-]
-
-function ExperienceCard({ e }: { e: (typeof EXPERIENCES)[number] }) {
+function ExperienceCard({ e }: { e: (typeof HOME_EXPERIENCES)[number] }) {
   return (
     <Link
       href={`/search?q=${encodeURIComponent(e.label)}`}
@@ -56,7 +38,7 @@ const ARROW_BTN = 'w-10 h-10 rounded-full border-2 border-charcoal/35 dark-flip-
 // arrows sharing the heading's row, since 10 cards no longer fit in one
 // static row at any reasonable width. This component now owns its own
 // heading for the same reason DestinationsGrid does.
-export function ExperiencesCarousel({ heading }: { heading: string }) {
+export function ExperiencesCarousel({ heading, experiences = HOME_EXPERIENCES }: { heading: string; experiences?: typeof HOME_EXPERIENCES }) {
   const trackRef = useRef<HTMLDivElement>(null)
   const [atStart, setAtStart] = useState(true)
   const [atEnd, setAtEnd] = useState(false)
@@ -116,7 +98,7 @@ export function ExperiencesCarousel({ heading }: { heading: string }) {
         className="flex gap-3 lg:gap-4 overflow-x-auto scrollbar-hide"
         style={{ scrollSnapType: 'x mandatory' }}
       >
-        {EXPERIENCES.map(e => (
+        {experiences.map(e => (
           <ExperienceCard key={e.slug} e={e} />
         ))}
       </div>
