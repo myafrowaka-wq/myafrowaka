@@ -93,21 +93,28 @@ function formatDate(iso?: string) {
 
 // ── PortableText components ───────────────────────────────────────────────────
 
+// Owner review (2026-09-10) — "no too-small font", "maintain one font
+// style and one font size" for headings. Body copy was 15px (cramped for
+// long-form on a phone); every heading was a different clamp. Now a flat,
+// consistent scale on every viewport: h2 24px > h3 19px > body/list/quote
+// 17px. The section headings further down this file ("Explore X", "More
+// from X", "Also Read") are pinned to the same 24px.
+const BLOG_BODY = 'font-sans text-[17px] text-charcoal/80 dark-flip-muted leading-[1.75]'
 const ptComponents = {
   block: {
     normal: ({ children }: { children?: React.ReactNode }) => (
-      <p className="font-sans text-[15px] text-charcoal/78 dark-flip-muted leading-[1.8] mb-5">{children}</p>
+      <p className={`${BLOG_BODY} mb-5`}>{children}</p>
     ),
     h2: ({ children }: { children?: React.ReactNode }) => (
       <h2 className="font-display font-bold text-charcoal dark-flip-text mt-10 mb-4"
-        style={{ fontSize: 'clamp(18px, 2.2vw, 26px)', letterSpacing: '-0.015em' }}>{children}</h2>
+        style={{ fontSize: '24px', letterSpacing: '-0.015em' }}>{children}</h2>
     ),
     h3: ({ children }: { children?: React.ReactNode }) => (
       <h3 className="font-display font-bold text-charcoal dark-flip-text mt-8 mb-3"
-        style={{ fontSize: 'clamp(16px, 1.8vw, 20px)', letterSpacing: '-0.012em' }}>{children}</h3>
+        style={{ fontSize: '19px', letterSpacing: '-0.012em' }}>{children}</h3>
     ),
     blockquote: ({ children }: { children?: React.ReactNode }) => (
-      <blockquote className="bg-sand dark-flip-surf rounded-2xl px-6 py-5 my-6 italic text-charcoal/70 dark-flip-muted font-sans text-[15px] leading-relaxed">
+      <blockquote className="bg-sand dark-flip-surf rounded-2xl px-6 py-5 my-6 text-charcoal/70 dark-flip-muted font-sans text-[17px] leading-relaxed border-l-4 border-gold-300">
         {children}
       </blockquote>
     ),
@@ -127,13 +134,13 @@ const ptComponents = {
     ),
   },
   list: {
-    /* Owner review (2026-09-10) — list text matched to the 15px body
-       paragraphs above; it was 14px, one notch smaller for no reason. */
+    /* Owner review (2026-09-10) — list text matches the body paragraphs
+       above (17px), not a notch smaller. */
     bullet: ({ children }: { children?: React.ReactNode }) => (
-      <ul className="font-sans text-[15px] text-charcoal/78 dark-flip-muted leading-[1.8] space-y-1.5 mb-5 pl-5 list-disc">{children}</ul>
+      <ul className={`${BLOG_BODY} space-y-1.5 mb-5 pl-5 list-disc`}>{children}</ul>
     ),
     number: ({ children }: { children?: React.ReactNode }) => (
-      <ol className="font-sans text-[15px] text-charcoal/78 dark-flip-muted leading-[1.8] space-y-1.5 mb-5 pl-5 list-decimal">{children}</ol>
+      <ol className={`${BLOG_BODY} space-y-1.5 mb-5 pl-5 list-decimal`}>{children}</ol>
     ),
   },
   listItem: {
@@ -333,7 +340,7 @@ export default async function BlogPostPage(
                   <PortableText value={post.body as Parameters<typeof PortableText>[0]['value']} components={ptComponents} />
                 </div>
               ) : (
-                <p className="font-sans text-sm text-charcoal/65 dark-flip-muted italic">
+                <p className="font-sans text-[17px] text-charcoal/65 dark-flip-muted">
                   Article body coming soon.
                 </p>
               )}
@@ -357,7 +364,7 @@ export default async function BlogPostPage(
                 (post.relatedEvents && post.relatedEvents.length > 0)) && post.featuredCountry && (
                 <div className="mt-12 border-t border-line dark-flip-border pt-10">
                   <h2 className="font-display font-bold text-charcoal dark-flip-text mb-6"
-                    style={{ fontSize: 'clamp(16px, 2vw, 22px)', letterSpacing: '-0.015em' }}>
+                    style={{ fontSize: '24px', letterSpacing: '-0.015em' }}>
                     Explore {post.featuredCountry.name}
                   </h2>
                   <div className="grid sm:grid-cols-2 gap-3">
@@ -385,7 +392,7 @@ export default async function BlogPostPage(
               {related.length > 0 && (
                 <div className="mt-12">
                   <h2 className="font-display font-bold text-charcoal dark-flip-text mb-6"
-                    style={{ fontSize: 'clamp(16px, 2vw, 22px)', letterSpacing: '-0.015em' }}>
+                    style={{ fontSize: '24px', letterSpacing: '-0.015em' }}>
                     More from {post.category}
                   </h2>
                   <div className="grid sm:grid-cols-3 gap-4">
@@ -409,8 +416,8 @@ export default async function BlogPostPage(
                           />
                         </div>
                         <div className="p-4">
-                          <h3 className="font-display font-bold text-[14px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors line-clamp-2"
-                            style={{ letterSpacing: '-0.01em' }}>
+                          <h3 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors line-clamp-2"
+                            style={{ fontSize: '15px', letterSpacing: '-0.01em' }}>
                             {r.title}
                           </h3>
                         </div>
@@ -446,7 +453,7 @@ export default async function BlogPostPage(
                         room to spare. Rather than arbitrarily pick 2 to
                         keep among 5 near-identical small utility cards,
                         all 5 are now real headings; see Override #3. */}
-                    <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4">Written by</h3>
+                    <h3 className="font-display font-bold text-charcoal dark-flip-text mb-4" style={{ fontSize: '15px' }}>Written by</h3>
                     {authorSlug ? (
                       <Link href={`/authors/${authorSlug}`} className="flex items-center gap-3 mb-3 group/author">
                         {avatar}
@@ -480,7 +487,7 @@ export default async function BlogPostPage(
 
               {/* Follow MyAfroWaka */}
               <div className="bg-sand dark-flip-surf border border-line dark-flip-border rounded-3xl p-6">
-                <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-4">Follow MyAfroWaka</h3>
+                <h3 className="font-display font-bold text-charcoal dark-flip-text mb-4" style={{ fontSize: '15px' }}>Follow MyAfroWaka</h3>
                 <div className="flex items-center gap-3">
                   {SOCIAL_LINKS.map(s => (
                     <a
@@ -504,7 +511,7 @@ export default async function BlogPostPage(
                 <Link href={`/destinations/${post.featuredCountry.slug}`}
                   className="flex items-center justify-between bg-cream dark-flip-card border border-line dark-flip-border hover:border-crimson rounded-3xl p-6 group transition-all">
                   <div>
-                    <h3 className="font-display font-bold text-[15px] text-charcoal dark-flip-text mb-1">Destination</h3>
+                    <h3 className="font-display font-bold text-charcoal dark-flip-text mb-1" style={{ fontSize: '15px' }}>Destination</h3>
                     <p className="font-display font-bold text-base text-charcoal dark-flip-text group-hover:text-crimson transition-colors">
                       {post.featuredCountry.name}
                     </p>
@@ -529,7 +536,7 @@ export default async function BlogPostPage(
               <Link href="/search"
                 className="flex items-center justify-between bg-ink rounded-3xl p-6 group transition-all">
                 <div>
-                  <h3 className="font-display font-bold text-[15px] text-gold-400 mb-1">Explore</h3>
+                  <h3 className="font-display font-bold text-gold-400 mb-1" style={{ fontSize: '15px' }}>Explore</h3>
                   <p className="font-display font-bold text-base text-cream group-hover:text-gold-400 transition-colors">
                     Browse Attractions
                   </p>
@@ -556,7 +563,7 @@ export default async function BlogPostPage(
         <div className="bg-sand dark-flip-surf border-t border-line dark-flip-border">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
             <h2 className="font-display font-bold text-charcoal dark-flip-text mb-6"
-              style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', letterSpacing: '-0.018em' }}>
+              style={{ fontSize: '24px', letterSpacing: '-0.018em' }}>
               Also Read
             </h2>
             <div className="grid sm:grid-cols-3 gap-4">
@@ -575,8 +582,8 @@ export default async function BlogPostPage(
                     {r.category && (
                       <p className="font-sans text-[14px] uppercase tracking-[0.14em] text-crimson mb-2">{r.category}</p>
                     )}
-                    <h3 className="font-display font-bold text-[14px] text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug line-clamp-2"
-                      style={{ letterSpacing: '-0.01em' }}>
+                    <h3 className="font-display font-bold text-charcoal dark-flip-text group-hover:text-crimson transition-colors leading-snug line-clamp-2"
+                      style={{ fontSize: '15px', letterSpacing: '-0.01em' }}>
                       {r.title}
                     </h3>
                     {r.excerpt && (

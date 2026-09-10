@@ -280,7 +280,16 @@ body {
 /* Declared scale, WDOS Brief §3.5. Weight and tracking on h1/h2 use the
    display face (Familjen Grotesk, Session 1.2); h3 is already on Outfit, matching
    the brief's "H3 22px/600 Outfit" — headings don't need to escalate the
-   display face all the way down the hierarchy. */
+   display face all the way down the hierarchy.
+
+   NOTE (2026-09-10): these rules are deliberately unlayered, so they beat
+   Tailwind utilities. A component that needs a different heading size
+   sets it with an inline `style={{ fontSize }}` (see the attraction and
+   blog article renderers), which is the one thing that reliably wins
+   here. Moving them into `@layer base` was tried and reverted — it also
+   shrank every card/carousel heading that had been visually tuned
+   against the 22px default, i.e. a site-wide reflow with no regression
+   pass behind it. */
 h1 {
   font-family: var(--font-display);
   font-size: var(--font-size-h1);   /* 48px */

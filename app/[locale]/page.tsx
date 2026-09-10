@@ -241,26 +241,27 @@ export default async function HomePage() {
             <div className="lg:col-span-4 min-w-0">
               {/* Headline — exactly 2 lines on both mobile and desktop.
                   Line 1 "Explore Africa" is the big line; line 2 "One
-                  Adventure at a Time." renders at 0.5em of it, which — its
-                  24 chars against line 1's 14, minus line 1's tighter
-                  tracking — lands the two rendered lines within ~10px of
-                  the same width (measured: 301 vs 291 at 375px). The
-                  block sits close to the width of the sub-headline and
-                  search bar below it. Owner review (2026-09-10): dropped
-                  the comma after "Africa" (desktop and mobile), stepped
-                  the size up (clamp 40 / 14vw / 80), line-height 0.9 so
-                  the two lines read as one knitted unit. Range-measured
-                  at 375px and 1280px, not eyeballed. */}
+                  Adventure at a Time." renders at 0.5em of it. Measured
+                  at 375px: line 1 = 331px, line 2 = 322px, search bar /
+                  sub-headline = 341px — so line 1 is the slightly larger
+                  line and the whole block fills the column to about the
+                  width of the search bar, which is what the owner asked
+                  for. Owner review (2026-09-10, round 2): "same length as
+                  the search bar" — stepped up (clamp 44 / 16.2vw / 82)
+                  and line 1's tracking tightened to -0.055em so it can
+                  reach that width on a phone without "Africa" wrapping to
+                  a third line. Range-measured across 320-414px, not
+                  eyeballed. */}
               <h1
-                className="font-display font-extrabold text-cream mb-7 tracking-hero"
-                style={{ fontSize: 'clamp(40px, 14vw, 80px)', lineHeight: '0.9' }}
+                className="font-display font-extrabold text-cream mb-7"
+                style={{ fontSize: 'clamp(44px, 16.2vw, 82px)', lineHeight: '0.9', letterSpacing: '-0.055em' }}
               >
                 <TypewriterHero
                   speed={32}
                   lines={[
                     { text: 'Explore ', noBreakAfter: true },
                     { text: 'Africa', className: 'text-crimson', noBreakAfter: true },
-                    { text: 'One Adventure at a Time.', className: 'block mt-0 text-[0.5em] tracking-normal' },
+                    { text: 'One Adventure at a Time.', className: 'block mt-0 text-[0.5em] tracking-[-0.02em]' },
                   ]}
                 />
               </h1>

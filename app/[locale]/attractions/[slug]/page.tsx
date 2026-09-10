@@ -5,7 +5,6 @@ import { PortableText } from 'next-sanity'
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { ATTRACTION_BY_SLUG_QUERY, ALL_PUBLISHED_SLUGS_QUERY } from '@/sanity/lib/queries'
-import { FaqAccordion } from '@/components/FaqAccordion'
 import { SaveButton } from '@/components/SaveButton'
 import { CollapsibleSection } from '@/components/CollapsibleSection'
 import { Flag } from '@/components/Flag'
@@ -239,162 +238,38 @@ const PROSE = `prose prose-lg max-w-none
   prose-blockquote:italic prose-blockquote:text-charcoal/70 dark:prose-blockquote:text-cream/60`
 
 // Owner review (2026-09-10) — "maintain one font style and one font
-// size" for the headings. The article body's h3 sub-headings were
-// rendering at 22px (the global `h3` element rule in globals.css), i.e.
-// BIGGER than the section title above them — inverted hierarchy that
-// made "Quick Overview" look smaller than "What Is Alexandria?". A
-// Tailwind `prose-h3:` utility can't beat the bare `h3` element rule
-// reliably, so the sizes are set explicitly on the rendered elements
-// here. Every section now reads: section title (19-24px, CollapsibleSection)
-// > sub-head (16-19px) > body. h2 sits just under the section title in
-// case an author's content ever nests one.
+// size" for the headings, and "no too-small font". A Tailwind
+// `prose-h3:` utility can't beat the bare `h3` element rule in
+// globals.css reliably, so every body heading size is pinned here as a
+// flat pixel value (no clamp — the clamp *minimum* was landing the
+// sub-heads at 16px on a phone, i.e. SMALLER than the 19px body, an
+// inverted hierarchy). Fixed order now, every viewport: section title
+// (21px, CollapsibleSection) ≳ h2 (22px, only if an author nests one)
+// > h3 sub-head (20px) > body (~19px) > h4 (18px). Nothing below 18px.
 const attractionBodyComponents = {
   block: {
     h2: ({ children }: { children?: React.ReactNode }) => (
       <h2 className="font-display font-bold text-charcoal dark:text-cream tracking-tight leading-tight mt-8 mb-3"
-        style={{ fontSize: 'clamp(18px, 2.1vw, 21px)', letterSpacing: '-0.012em' }}>{children}</h2>
+        style={{ fontSize: '22px', letterSpacing: '-0.012em' }}>{children}</h2>
     ),
     h3: ({ children }: { children?: React.ReactNode }) => (
       <h3 className="font-sans font-semibold text-crimson dark:text-crimson leading-snug mt-7 mb-2"
-        style={{ fontSize: 'clamp(16px, 1.7vw, 19px)' }}>{children}</h3>
+        style={{ fontSize: '20px' }}>{children}</h3>
     ),
     h4: ({ children }: { children?: React.ReactNode }) => (
       <h4 className="font-sans font-semibold text-charcoal dark:text-cream leading-snug mt-6 mb-2"
-        style={{ fontSize: '16px' }}>{children}</h4>
+        style={{ fontSize: '18px' }}>{children}</h4>
     ),
   },
 }
 
-// ── Smart FAQ answer generator ────────────────────────────────────────────────
-
-function generateFaqAnswer(question: string, a: Attraction): string {
-  const q = question.toLowerCase()
-  const name = a.name
-  const typeLabel = (a.type?.[0]?.replace('UNESCO World Heritage Site | ', '') || 'attraction').toLowerCase()
-  const location = [a.city?.name, a.country?.name].filter(Boolean).join(', ') || a.continentRegion || 'Africa'
-
-  if ((q.includes('best time') || q.includes('when to visit') || q.includes('when should')) && a.bestTimeToVisit) {
-    return `The best time to visit ${name} is ${a.bestTimeToVisit}. Planning your trip around this window ensures the most favourable conditions and a more rewarding experience.`
-  }
-  if ((q.includes('how long') || q.includes('how much time') || q.includes('duration') || q.includes('hours')) && a.timeNeeded != null) {
-    const hrs = a.timeNeeded === 1 ? 'one hour' : `${a.timeNeeded} hours`
-    return `Plan to spend approximately ${hrs} at ${name}. Visitors with a deeper interest in ${typeLabel} history and context may wish to allow more time to fully absorb what the site offers.`
-  }
-  if (q.includes('entry fee') || q.includes('ticket') || (q.includes('how much') && q.includes('cost')) || q.includes('admission') || q.includes('price')) {
-    if (a.entryFeeDisplayText) return a.entryFeeDisplayText.split('\n')[0]
-    if (a.entryFeeInternational === 0) return `Entry to ${name} is free of charge for all visitors.`
-    if (a.entryFeeInternational != null) {
-      let ans = `Entry for international visitors to ${name} starts from $${a.entryFeeInternational} USD.`
-      if (a.entryFeeLocal != null) ans += ` Local and resident visitors pay a reduced rate.`
-      return ans
-    }
-    return `Entry fee information for ${name} is best confirmed directly with the site or local tourist authority before your visit, as prices can change seasonally.`
-  }
-  if ((q.includes('how to get') || q.includes('getting there') || q.includes('transport') || q.includes('directions') || q.includes('reach')) && a.gettingThere) {
-    return a.gettingThere.split('\n')[0]
-  }
-  if ((q.includes('airport') || q.includes('fly') || q.includes('nearest airport') || q.includes('closest airport')) && a.nearestAirportIATA) {
-    return `The nearest major airport to ${name} is ${a.nearestAirportIATA}${a.nearestAirportDistanceKm ? `, approximately ${a.nearestAirportDistanceKm} km from the site` : ''}. Onward travel is typically by road, and local transfer options vary by season.`
-  }
-  if ((q.includes('suitable') || q.includes('family') || q.includes('children') || q.includes('kids') || q.includes('who can') || q.includes('who is')) && a.suitableFor) {
-    return `${name} is recommended for ${a.suitableFor.join(', ').toLowerCase()}. Access is rated ${a.difficultyAccessLevel?.toLowerCase() || 'moderate'}, so visitors should plan accordingly.`
-  }
-  if ((q.includes('unesco') || q.includes('world heritage') || q.includes('heritage status')) && a.unescoStatus) {
-    return `${name} holds ${a.unescoStatus} status, recognised by UNESCO for its outstanding universal value. It is among Africa's most significant protected ${typeLabel} sites.`
-  }
-  if ((q.includes('overview') || q.includes('what is') || q.includes('about') || q.includes('describe')) && a.editorialSummary) {
-    return a.editorialSummary
-  }
-  // Generic fallback using what we know
-  return `${name} is a ${typeLabel} in ${location}. ${a.editorialSummary || `It is one of ${a.country?.name || a.continentRegion || "Africa"}'s most notable visitor sites.`} For the most current visitor information, contact info@myafrowaka.com.`
-}
-
-// ── Rich overview generator (used when no Sanity article body exists) ─────────
-
-function generateOverview(a: Attraction): { p1: string; p2: string; p3?: string } {
-  const typeLabel = (a.type?.[0]?.replace('UNESCO World Heritage Site | ', '') || 'attraction').toLowerCase()
-  const location = [a.city?.name, a.country?.name].filter(Boolean).join(', ') || a.continentRegion || 'Africa'
-  const region = a.continentRegion || a.country?.name || 'Africa'
-
-  // ── Paragraph 1: Identity + significance + context ───────────────────────
-  const s1: string[] = []
-
-  if (a.editorialSummary) {
-    s1.push(a.editorialSummary.replace(/\.$/, '') + '.')
-  } else {
-    s1.push(`${a.name} is a ${typeLabel} located in ${location}.`)
-  }
-
-  if (a.unescoStatus && a.unescoStatus !== 'Not UNESCO Listed') {
-    s1.push(`Designated as a ${a.unescoStatus}, it is recognised by UNESCO among the world's outstanding cultural and natural sites.`)
-  }
-
-  if (a.heritageEra && a.heritageEra.length > 0) {
-    const eras = a.heritageEra.join(' and ')
-    s1.push(`The site traces its roots to ${eras} civilisation, making it one of the most historically significant landmarks in ${region}.`)
-  } else if (a.primaryBrandPillar && !a.unescoStatus) {
-    s1.push(`Positioned at the intersection of ${a.primaryBrandPillar.toLowerCase()} and authentic discovery, it draws visitors seeking genuine ${typeLabel} experiences in ${a.country?.name || region}.`)
-  }
-
-  if (a.experienceTags && a.experienceTags.length > 0 && s1.length < 3) {
-    const tags = a.experienceTags.slice(0, 3).join(', ')
-    s1.push(`Key experiences here include ${tags.toLowerCase()}.`)
-  }
-
-  const p1 = s1.join(' ')
-
-  // ── Paragraph 2: Visitor practicalities ──────────────────────────────────
-  const s2: string[] = []
-
-  if (a.bestTimeToVisit) {
-    s2.push(`The best time to visit ${a.name} is ${a.bestTimeToVisit}.`)
-  }
-
-  if (a.timeNeeded != null && a.timeNeeded > 0) {
-    const hrs = a.timeNeeded === 1 ? 'one hour' : `${a.timeNeeded} hours`
-    s2.push(`Budget approximately ${hrs} to experience the site properly.`)
-  }
-
-  if (a.difficultyAccessLevel) {
-    const accessMap: Record<string, string> = {
-      'Easy': 'Access is straightforward and suitable for all fitness levels, including families with young children.',
-      'Moderate': 'Access requires a moderate level of fitness, manageable for most visitors in reasonable health.',
-      'Challenging': 'Access is physically challenging. Good fitness and appropriate footwear are essential.',
-      'Very Challenging': 'Access is demanding. Strong physical fitness, proper equipment, and guided assistance are strongly recommended.',
-    }
-    s2.push(accessMap[a.difficultyAccessLevel] || `Access is rated ${a.difficultyAccessLevel}.`)
-  }
-
-  if (a.nearestAirportIATA) {
-    const dist = a.nearestAirportDistanceKm ? `, approximately ${a.nearestAirportDistanceKm} km from the site` : ''
-    s2.push(`The nearest major airport is ${a.nearestAirportIATA}${dist}.`)
-  }
-
-  if (a.suitableFor && a.suitableFor.length > 0) {
-    s2.push(`This site is particularly well suited to ${a.suitableFor.slice(0, 3).join(', ').toLowerCase()}.`)
-  }
-
-  const p2 = s2.length > 0
-    ? s2.join(' ')
-    : `Comprehensive visitor information for ${a.name}, including transport options, booking guidance, and on-site logistics, is maintained by the MyAfroWaka editorial team. Contact info@myafrowaka.com for time-sensitive queries.`
-
-  // ── Paragraph 3: Entry fees (only rendered if data is available) ──────────
-  let p3: string | undefined
-  if (a.entryFeeDisplayText) {
-    p3 = a.entryFeeDisplayText.split('\n').slice(0, 2).join(' ')
-  } else if (a.entryFeeInternational === 0) {
-    p3 = `Entry to ${a.name} is free of charge for all visitors.`
-  } else if (a.entryFeeInternational != null) {
-    let t = `International visitor entry starts from $${a.entryFeeInternational} USD`
-    if (a.entryFeeLocal != null && a.entryFeeLocal < a.entryFeeInternational) {
-      t += `. Local and resident visitors pay a reduced rate of $${a.entryFeeLocal} USD`
-    }
-    t += '. Prices are verified at time of publication and are subject to change.'
-    p3 = t
-  }
-
-  return { p1, p2, p3 }
-}
+// Owner review (2026-09-10) — "no AI features on the attraction page."
+// generateFaqAnswer() and generateOverview() used to synthesise a FAQ
+// (from secondaryKeywords) and a "Quick Overview" (from the structured
+// fields) whenever the CMS copy was thin. Both are gone. FAQs are now
+// authored inside articleBody as a "Frequently Asked Questions" section;
+// the overview is either a hand-written QUICK_OVERVIEWS blurb or the
+// one-line editorialSummary, or the section is simply omitted.
 
 // ── Fallback country attractions (used when Sanity returns empty) ─────────────
 //
@@ -492,25 +367,15 @@ export default async function AttractionPage(
   const jsonLd = buildJsonLd(a)
   const locationParts = [a.city?.name, a.subRegionProvince, a.country?.name].filter(Boolean)
 
-  // Owner review (2026-09-10) — the two type tags embedded in the hero
-  // image corners. Left = first type; right = the UNESCO marker if the
-  // site has that status, otherwise the second type. The corner labels
-  // use just the first segment of a compound type ("City / Town /
-  // Neighbourhood" → "City") so the two pills never collide across a
-  // narrow phone; the full type still shows in the body's Tagged / At a
-  // Glance sections.
-  const heroLabel = (s: string) => s.replace('UNESCO World Heritage Site | ', '').split(' / ')[0]
+  // Owner review (2026-09-10, round 2) — the two type tags embedded in
+  // the hero image corners, showing the FULL category ("City / Town /
+  // Neighbourhood" left, "Historical / Archaeological Site" right). Each
+  // pill is capped at 46% of the width and wraps rather than colliding
+  // with the other. Left = first type; right = the UNESCO marker if the
+  // site has that status, otherwise the second type.
+  const heroLabel = (s: string) => s.replace('UNESCO World Heritage Site | ', '')
   const heroTagLeft = a.type?.[0] ? heroLabel(a.type[0]) : null
   const heroTagRight = a.unescoStatus ? 'UNESCO' : (a.type?.[1] ? heroLabel(a.type[1]) : null)
-
-  const secondaryKws = a.secondaryKeywords
-    ? a.secondaryKeywords.split('|').map(s => s.trim()).filter(Boolean)
-    : []
-
-  const faqItems = secondaryKws.slice(0, 6).map(kw => {
-    const question = kw.charAt(0).toUpperCase() + kw.slice(1) + '?'
-    return { question, answer: generateFaqAnswer(question, a) }
-  })
 
   const hasContent = Array.isArray(a.articleBody) && a.articleBody.length > 0
 
@@ -521,12 +386,25 @@ export default async function AttractionPage(
   const filteredBody = hasContent ? filterSeparators(a.articleBody!) : []
   const sections = hasContent ? groupByH2(filteredBody) : []
 
-  // True when the first section is a 'Quick Overview' that actually has readable text.
-  // If it's empty (blank preamble or empty QO h2), we inject generated content instead.
-  const firstIsQO      = sections[0]?.title === 'Quick Overview'
-  const firstHasText   = firstIsQO && hasMeaningfulContent(sections[0].content)
-  const needsInjection = hasContent && !firstHasText
-  const generatedOv    = needsInjection && !QUICK_OVERVIEWS[slug] ? generateOverview(a) : null
+  // Owner review (2026-09-10): "no AI features on the attraction page."
+  // Nothing on this page is machine-written any more. The old code
+  // synthesised a "Quick Overview" with generateOverview() whenever an
+  // article opened on a bare heading — that's gone. What survives:
+  //  - real CMS content (a genuine lead paragraph, or text under a
+  //    "Quick Overview" h2) renders as-is;
+  //  - the hand-written QUICK_OVERVIEWS[slug] editorial blurb still fills
+  //    an otherwise-empty "Quick Overview" h2 (8 published attractions
+  //    depend on it — it is authored copy, not generated);
+  //  - a stray empty heading with neither is dropped.
+  const staticOverview = QUICK_OVERVIEWS[slug] ?? null
+  const renderSections = sections.filter(
+    s => hasMeaningfulContent(s.content) || (s.title === 'Quick Overview' && staticOverview),
+  )
+  // groupByH2 flags the first *raw* section defaultOpen; if that one was
+  // just dropped, promote the first surviving section instead.
+  if (renderSections.length > 0 && !renderSections.some(s => s.defaultOpen)) {
+    renderSections[0] = { ...renderSections[0], defaultOpen: true }
+  }
 
   return (
     <>
@@ -551,18 +429,19 @@ export default async function AttractionPage(
         <div className="absolute inset-0 bg-gradient-to-b from-ink/40 via-ink/65 to-ink/97"/>
 
         {/* Type tags — owner review (2026-09-10): "smaller, and at the top
-            left and right, embedded into the image." First type sits
-            top-left, the second (or the UNESCO marker) top-right, aligned
-            to the same column as the H1 below. A third type, if any,
-            still shows in the body's "Tagged" section. */}
+            left and right, embedded into the image", full category text.
+            First type top-left, the second (or the UNESCO marker)
+            top-right, aligned to the H1's column. Each pill is capped at
+            46% of the width and wraps rather than overlapping the other.
+            A third type, if any, still shows in the body's "Tagged". */}
         {(heroTagLeft || heroTagRight) && (
           <div className="absolute inset-x-0 top-4 sm:top-5 z-20">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-start justify-between gap-3">
-              <span className={`font-sans text-[11px] font-semibold uppercase tracking-[0.13em] text-cream/90 bg-ink/65 backdrop-blur-sm px-2.5 py-1 rounded-full ${heroTagLeft ? '' : 'invisible'}`}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-start justify-between gap-2">
+              <span className={`max-w-[52%] sm:max-w-none font-sans text-[14px] font-semibold leading-[1.25] text-left text-cream/95 bg-ink/70 backdrop-blur-sm px-2.5 py-1 rounded-lg ${heroTagLeft ? '' : 'invisible'}`}>
                 {heroTagLeft ?? '—'}
               </span>
               {heroTagRight && (
-                <span className={`font-sans text-[11px] font-semibold uppercase tracking-[0.13em] px-2.5 py-1 rounded-full backdrop-blur-sm shrink-0 ${a.unescoStatus ? 'text-ink bg-gold-300/90' : 'text-cream/90 bg-ink/65'}`}>
+                <span className={`max-w-[52%] sm:max-w-none font-sans text-[14px] font-semibold leading-[1.25] text-right px-2.5 py-1 rounded-lg backdrop-blur-sm ${a.unescoStatus ? 'text-ink bg-gold-300/95' : 'text-cream/95 bg-ink/70'}`}>
                   {heroTagRight}
                 </span>
               )}
@@ -592,8 +471,8 @@ export default async function AttractionPage(
               plain intro copy: no italic, same font as the body, a touch
               larger and more present than the old muted caption style. */}
           {a.editorialSummary && (
-            <p className="font-sans text-cream/80 leading-relaxed max-w-2xl"
-              style={{ fontSize: 'clamp(15px, 1.5vw, 18px)' }}>
+            <p className="font-sans text-cream/90 leading-relaxed max-w-2xl"
+              style={{ fontSize: 'clamp(16px, 1.6vw, 18px)' }}>
               {a.editorialSummary}
             </p>
           )}
@@ -709,38 +588,36 @@ export default async function AttractionPage(
 
               {hasContent ? (
                 <div className="divide-y divide-line dark-flip-border border-t border-line dark-flip-border">
-                  {/* Inject generated Quick Overview when article has none (or an empty one) */}
-                  {needsInjection && (
-                    <CollapsibleSection title="Quick Overview" defaultOpen={true}>
-                      {QUICK_OVERVIEWS[slug] ? (
-                        <div className="space-y-4">
-                          {QUICK_OVERVIEWS[slug].map((p, pi) => (
-                            <p key={pi} className={`font-sans text-[15px] leading-[1.8] ${pi === 0 ? 'text-charcoal/75 dark-flip-muted' : 'text-charcoal/60 dark-flip-muted'}`}>{p}</p>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="space-y-4">
-                          <p className="font-sans text-[15px] text-charcoal/75 dark-flip-muted leading-[1.8]">{generatedOv!.p1}</p>
-                          <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{generatedOv!.p2}</p>
-                          {generatedOv!.p3 && <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{generatedOv!.p3}</p>}
-                        </div>
-                      )}
-                    </CollapsibleSection>
-                  )}
-                  {sections.map((section, i) => {
-                    if (needsInjection && section.title === 'Quick Overview') return null
+                  {renderSections.map((section, i) => {
+                    const useStaticOverview =
+                      section.title === 'Quick Overview' &&
+                      !hasMeaningfulContent(section.content) &&
+                      staticOverview
                     return (
                       <CollapsibleSection
                         key={i}
                         title={section.title}
                         defaultOpen={section.defaultOpen}
                       >
-                        <div className={PROSE}>
-                          <PortableText
-                            components={attractionBodyComponents}
-                            value={section.content as Parameters<typeof PortableText>[0]['value']}
-                          />
-                        </div>
+                        {useStaticOverview ? (
+                          <div className="space-y-4">
+                            {staticOverview!.map((p, pi) => (
+                              <p
+                                key={pi}
+                                className={`font-sans text-[17px] leading-[1.75] ${pi === 0 ? 'text-charcoal/80 dark:text-cream/75' : 'text-charcoal/70 dark:text-cream/65'}`}
+                              >
+                                {p}
+                              </p>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className={PROSE}>
+                            <PortableText
+                              components={attractionBodyComponents}
+                              value={section.content as Parameters<typeof PortableText>[0]['value']}
+                            />
+                          </div>
+                        )}
                       </CollapsibleSection>
                     )
                   })}
@@ -749,25 +626,24 @@ export default async function AttractionPage(
                 /* ── Fallback: structured data sections ────────────────── */
                 <div className="divide-y divide-line dark-flip-border border-t border-line dark-flip-border">
 
-                  {/* Quick Overview — always open */}
-                  <CollapsibleSection title="Quick Overview" defaultOpen={true}>
-                    {QUICK_OVERVIEWS[slug] ? (
-                      <div className="space-y-4">
-                        {QUICK_OVERVIEWS[slug].map((p, pi) => (
-                          <p key={pi} className={`font-sans text-[15px] leading-[1.8] ${pi === 0 ? 'text-charcoal/75 dark-flip-muted' : 'text-charcoal/60 dark-flip-muted'}`}>{p}</p>
-                        ))}
-                      </div>
-                    ) : (() => {
-                      const { p1, p2, p3 } = generateOverview(a)
-                      return (
+                  {/* Quick Overview — hand-written editorial blurb or the
+                      one-line editorial summary. Owner review (2026-09-10):
+                      no machine-written prose — if neither exists the
+                      section is simply omitted and the structured fields
+                      below carry the page. */}
+                  {(QUICK_OVERVIEWS[slug] || a.editorialSummary) && (
+                    <CollapsibleSection title="Quick Overview" defaultOpen={true}>
+                      {QUICK_OVERVIEWS[slug] ? (
                         <div className="space-y-4">
-                          <p className="font-sans text-[15px] text-charcoal/75 dark-flip-muted leading-[1.8]">{p1}</p>
-                          <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{p2}</p>
-                          {p3 && <p className="font-sans text-[15px] text-charcoal/60 dark-flip-muted leading-[1.8]">{p3}</p>}
+                          {QUICK_OVERVIEWS[slug].map((p, pi) => (
+                            <p key={pi} className={`font-sans text-[17px] leading-[1.75] ${pi === 0 ? 'text-charcoal/80 dark:text-cream/75' : 'text-charcoal/70 dark:text-cream/65'}`}>{p}</p>
+                          ))}
                         </div>
-                      )
-                    })()}
-                  </CollapsibleSection>
+                      ) : (
+                        <p className="font-sans text-[17px] text-charcoal/80 dark:text-cream/75 leading-[1.75]">{a.editorialSummary}</p>
+                      )}
+                    </CollapsibleSection>
+                  )}
 
                   {/* How to Get There */}
                   {a.gettingThere && (
@@ -1163,23 +1039,10 @@ export default async function AttractionPage(
         </div>
       </div>
 
-      {/* ── FAQ — separate full-width container ──────────────────────── */}
-      {faqItems.length > 0 && (
-        <div className="bg-sand dark-flip-surf border-t border-line dark-flip-border">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 md:py-20">
-            <p className="font-sans text-[14px] uppercase tracking-[0.22em] text-charcoal/55 dark-flip-muted mb-3">
-              Common Questions
-            </p>
-            <h2
-              className="font-display font-bold text-charcoal dark-flip-text mb-8"
-              style={{ fontSize: 'clamp(20px, 2.5vw, 32px)', letterSpacing: '-0.018em' }}
-            >
-              Frequently Asked Questions
-            </h2>
-            <FaqAccordion items={faqItems} />
-          </div>
-        </div>
-      )}
+      {/* FAQ lives inside the article body now (a "Frequently Asked
+          Questions" h2 section, authored per attraction) — owner review
+          (2026-09-10) removed the old keyword-generated FAQ block that
+          used to sit here. */}
 
       {/* Explore More in Country */}
       {a.country && displayRelated.length > 0 && (
