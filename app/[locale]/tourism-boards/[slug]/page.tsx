@@ -91,8 +91,8 @@ export default async function TourismBoardPage({ params }: { params: Promise<{ s
             {board.name}
           </h1>
           {board.coverage && (
-            <p className="font-sans text-cream/55 mt-4 max-w-xl leading-relaxed"
-              style={{ fontSize: 'clamp(13px, 1.3vw, 16px)' }}>
+            <p className="font-sans text-cream/70 mt-4 max-w-xl leading-relaxed"
+              style={{ fontSize: 'clamp(15px, 1.4vw, 17px)' }}>
               {board.coverage}
             </p>
           )}
@@ -146,8 +146,8 @@ export default async function TourismBoardPage({ params }: { params: Promise<{ s
                 ))}
               </div>
             ) : (
-              <p className="font-sans text-sm text-charcoal/45 dark-flip-muted italic">
-                {board.name}{' '}hasn&rsquo;t verified any events on MyAfroWaka yet. This is exactly the relationship a real profile page exists to start.
+              <p className="font-sans text-[15px] text-charcoal/55 dark-flip-muted leading-relaxed">
+                {board.name}{' '}hasn&rsquo;t verified any events on MyAfroWaka yet.
               </p>
             )}
           </div>
